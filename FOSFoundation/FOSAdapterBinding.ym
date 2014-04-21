@@ -1,0 +1,687 @@
+%{
+    #include <stdio.h>
+    #include <stdlib.h>
+
+    #import "FOSAdapterBinding.h"
+
+    extern void yyerror(char* s, ...);
+    extern int yylex();
+    extern FOSAdapterBinding *parsedAdapterBinding;
+    extern id parsedBinding;
+
+    #undef YYMAXDEPTH
+    #define YYMAXDEPTH 900000
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wconversion"
+#pragma clang diagnostic ignored "-Wunused-function"
+#pragma clang diagnostic ignored "-Wunneeded-internal-declaration"
+
+// Bison doesn't like '@' symbols in the source
+#define AT_ @
+
+#define CAPTURE_ORDERED_VAL(result, val)  result = ((__bridge void *)[NSMutableArray arrayWithObject:(__bridge id)(val)])
+#define COMBINE_ORDERED_VALS(result, val) {\
+    if (![(__bridge id)(result) isKindOfClass:[NSMutableArray class]]) { \
+        result = (__bridge void *)[NSMutableArray array]; \
+    } \
+\
+    NSMutableArray *array = (__bridge NSMutableArray *)(result); \
+    [array addObject:(__bridge id)(val)]; }
+#define COMBINE_ORDERED_VALS2(result, val1, val2) {\
+    BOOL isNew = NO; \
+    if (![(__bridge id)(result) isKindOfClass:[NSMutableArray class]]) { \
+        result = (__bridge void *)[NSMutableArray array]; \
+        isNew = YES; \
+    } \
+\
+    NSMutableArray *array = (__bridge NSMutableArray *)(result); \
+    if (!isNew) { [array addObject:(__bridge id)(val2)]; } \
+    [array addObject:(__bridge id)(val1)]; }
+
+#define CAPTURE_UNORDERED_VAL(result, val)  result = ((__bridge void *)[NSMutableSet setWithObject:(__bridge id)(val)])
+#define COMBINE_UNORDERED_VALS(result, val) {\
+    if (![(__bridge id)(result) isKindOfClass:[NSSet class]]) { \
+        result = (__bridge void *)[NSMutableSet set]; \
+    } \
+\
+    NSMutableSet *set = (__bridge NSMutableSet *)(result); \
+    [set addObject:(__bridge id)(val)]; }
+
+%}
+
+%union {
+	char *string;
+    FOSLifecyclePhase lifecyclePhase;
+    FOSRequestMethod requestMethod;
+    FOSRequestFormat requestFormat;
+    FOSBindingOptions bindingOptions;
+    void *object;
+}
+
+%token<string> SHARED_BINDING_IDENTIFIER IDENTIFIER
+%token<string> STRING_LITERAL INTEGER_LITERAL STRING_CONSTANT
+%token SEP SEMI COLON COMMA LPAREN RPAREN LBRACE RBRACE DOT PLUS TIC
+%token ADAPTER URL_BINDINGS SHARED_BINDINGS
+%token URL_BINDING BASE_URL HEADER_FIELDS TIMEOUT_INTERVAL
+%token LIFECYCLE REQUEST_METHOD REQUEST_FORMAT END_POINT END_POINT_PARAMETERS CMO_BINDING
+%token BINDING_OPTIONS ONE_TO_ONE ONE_TO_MANY UNORDERED ORDERED
+%token ENTITIES ATTRIBUTES ALL ALL_EXCEPT
+%token LOGIN LOGOUT PASSWORD_RESET
+%token CREATE UPDATE DESTROY RETRIEVE_SERVER_RECORD RETRIEVE_SERVER_RECORDS
+%token RETRIEVE_SERVER_RECORD_COUNT RETRIEVE_RELATIONSHIP
+%token JSON WEBFORM NO_DATA
+%token GET POST PUT DELETE
+%token ATTRIBUTE_BINDINGS ID_ATTRIBUTE READ_ONLY_ATTRIBUTE
+%token RELATIONSHIP_BINDINGS RELATIONSHIP_BINDING
+%token JSON_BINDING JSON_ID_BINDING RELATIONSHIPS
+
+%type<object> binding
+%type<object> adapter adapter_fields
+%type<object> url_bindings url_binding_list url_binding
+%type<object> shared_bindings shared_bindings_list shared_binding
+%type<lifecyclePhase> lifecycle lifecycle_phase
+%type<bindingOptions> binding_options binding_options_list binding_option
+%type<object> header_fields
+%type<object> base_url
+%type<requestMethod> request_method request_method_spec
+%type<object> end_point_parameters end_point_url
+%type<object> cmo_binding
+%type<object> attribute_bindings attribute_binding
+%type<object> attribute_binding_spec attribute_binding_list
+
+%type<object> relationship_bindings relationship_binding relationship_binding_list
+%type<object> optional_json_binding json_binding json_id_binding optional_relationships relationships
+
+%type<object> matching_attributes
+%type<object> timeout_interval
+%type<requestFormat> request_format request_format_spec
+%type<object> optional_matching_entities matching_entities
+%type<object> keypath_expression keypath_expression_list
+%type<object> keypath_dot_element keypath_element
+%type<object> concat_expression concat_expression_list
+%type<object> expression_list expression_set expression
+%type<object> key_value_pair_list key_value_pair_desc_list key_value_pair_desc key_value_pair
+%type<object> string_literal integer_literal identifier string_constant shared_binding_identifer
+
+%start begin
+
+%locations
+
+%%
+
+/***
+ * NOTE: Arc cannot be used inside of this file due to to values being stored in a
+ *       'C' union. Additionally, there seems to be no mechanism to disable ARC in
+ *       a .lm file.  If you add the flag to the file in the project's Build Phases list,
+ *       the flag is handed to bison, which, of course, has no clue what to do with it.
+ *
+ *       So, the code employs ARC's __bridge functionality and all allocated instances
+ *       in the graph are created using autorelease constructors as we cannot call
+ *       autorelease in this file because it really is managed by ARC.
+ */
+
+begin
+    : /* empty */
+    | adapter { parsedAdapterBinding = (__bridge FOSAdapterBinding *)($1); }
+    | binding { parsedBinding = $1 ? (__bridge id)($1) : nil; }
+    ;
+
+binding
+    : url_bindings { $$ = $1; }
+    | header_fields { $$ = $1; }
+    | base_url { $$ = $1; }
+    | request_method { $$ = (__bridge void *)AT_($1); }
+    | end_point_url { $$ = $1; }
+    | attribute_bindings { $$ = $1; }
+    | relationship_bindings { $$ = $1; }
+    | cmo_binding { $$ = $1; }
+    | relationship_binding { $$ = $1; }
+    | timeout_interval { $$ = $1; }
+    | request_format { $$ = (__bridge void *)AT_($1); }
+    | matching_entities { $$ = $1; }
+    ;
+
+adapter
+    : ADAPTER SEP adapter_fields url_bindings shared_bindings SEMI {
+        NSDictionary *adapterFields = (__bridge NSDictionary *)($3);
+        NSSet *urlBindings = (__bridge NSSet *)($4);
+        NSArray *sharedBindingsArray = (__bridge NSArray *)($5);
+
+        // The shared bindings come in an array of dictionaries, merge them
+        NSMutableDictionary *sharedBindings = [NSMutableDictionary dictionary];
+        for (NSDictionary *nextDict in sharedBindingsArray) {
+            for (id nextKey in nextDict.allKeys) {
+                id nextValue = nextDict[nextKey];
+
+                sharedBindings[nextKey] = nextValue;
+            }
+        }
+
+        $$ = (__bridge void *)[FOSAdapterBinding adapterBindingWithFields:adapterFields
+                                                              urlBindings:urlBindings
+                                                     andSharedBindings:sharedBindings];
+    }
+    ;
+
+adapter_fields
+    : header_fields base_url timeout_interval {
+        NSArray *headerFields = (__bridge NSArray *)($1);
+        id<FOSExpression> baseURLExpr = (__bridge id<FOSExpression>)($2);
+        id<FOSExpression> timeoutIntervalExpr = (__bridge id<FOSExpression>)($3);
+
+        $$ = (__bridge void *)AT_{
+            AT_"header_fields" : (headerFields ? headerFields : AT_[]) ,
+            AT_"base_url" : baseURLExpr,
+            AT_"timeout_interval" : timeoutIntervalExpr
+        };
+    }
+    ;
+
+url_bindings
+    : URL_BINDINGS SEP url_binding_list SEMI { $$ = $3; }
+    ;
+
+url_binding_list
+    : url_binding {
+        CAPTURE_UNORDERED_VAL($$, $1); CFBridgingRelease($1);
+    }
+    | url_binding_list url_binding {
+        COMBINE_UNORDERED_VALS($$, $2); CFBridgingRelease($2);
+    }
+    ;
+
+url_binding
+    :  URL_BINDING SEP
+        /*  3 */ lifecycle                  /* required */
+        /*  4 */ binding_options            /* optional */
+        /*  5 */ header_fields              /* optional */
+        /*  6 */ request_method             /* optional */
+        /*  7 */ request_format             /* optional */
+        /*  8 */ timeout_interval           /* optional */
+        /*  9 */ base_url                   /* optional */
+        /* 10 */ end_point_url              /* required */
+        /* 11 */ end_point_parameters       /* optional */
+        /* 12 */ optional_json_binding      /* optional */
+        /* 13 */ cmo_binding                /* optional */
+        /* 14 */ optional_relationships     /* optional */
+        /* 15 */ optional_matching_entities /* optional */ {
+
+        FOSLifecyclePhase lifecyclePhase = ($3);
+        FOSBindingOptions bindingOptions = ($4);
+        NSDictionary *headerFields = (__bridge NSDictionary *)($5);
+        FOSRequestMethod requestMethod = ($6);
+        FOSRequestFormat requestFormat = ($7);
+        NSNumber *timeoutInterval = (__bridge NSNumber *)($8);
+        id<FOSExpression> baseURLExpr = (__bridge id<FOSExpression>)($9);
+        id<FOSExpression> endPoint = (__bridge id<FOSExpression>)($10);
+        NSArray *endPointParameters = (__bridge NSArray *)($11);
+        NSArray *jsonBindingExpressions = (__bridge NSArray *)($12);
+        id binder = (__bridge id)($13);
+        FOSCMOBinding *cmoBinder = [binder isKindOfClass:[FOSCMOBinding class]]
+            ? (FOSCMOBinding *)binder
+            : nil;
+        FOSSharedBindingReference *bindingReference = [binder isKindOfClass:[FOSSharedBindingReference class]]
+            ? (FOSSharedBindingReference *)binder
+            : nil;
+        FOSItemMatcher *relationshipMatcher = (__bridge FOSItemMatcher *)($14);
+        FOSItemMatcher *entityMatcher = (__bridge FOSItemMatcher *)($15);
+
+        FOSURLBinding *binding = nil;
+        if (cmoBinder != nil) {
+            binding = [FOSURLBinding bindingForLifeCyclePhase:lifecyclePhase
+                                                     endPoint:endPoint
+                                                    cmoBinder:cmoBinder
+                                             andEntityMatcher:entityMatcher];
+        }
+        else if (bindingReference != nil) {
+           binding = [FOSURLBinding bindingForLifeCyclePhase:lifecyclePhase
+                                                    endPoint:endPoint
+                                         cmoBindingReference:bindingReference
+                                            andEntityMatcher:entityMatcher];
+        }
+        else if (
+            lifecyclePhase != FOSLifecyclePhaseCreateServerRecord &&
+            lifecyclePhase != FOSLifecyclePhaseUpdateServerRecord &&
+            lifecyclePhase != FOSLifecyclePhaseRetrieveServerRecord &&
+            requestFormat == FOSRequestFormatNoData
+        ) {
+            binding = [FOSURLBinding bindingForLifeCyclePhase:lifecyclePhase
+                                                     endPoint:endPoint
+                                                requestFormat:requestFormat
+                                             andEntityMatcher:entityMatcher];
+        } else if (jsonBindingExpressions != nil) {
+            binding = [FOSURLBinding bindingForLifeCyclePhase:lifecyclePhase
+                                                     endPoint:endPoint
+                                                requestFormat:requestFormat
+                                           andJSONExpressions:jsonBindingExpressions];
+        }
+        else {
+            yyerror("Missing CMO binding reference.");
+            YYERROR;
+        }
+
+        if (lifecyclePhase == FOSLifecyclePhaseRetrieveServerRecordRelationship) {
+            if (relationshipMatcher != nil) {
+                binding.relationshipMatcher = relationshipMatcher;
+            }
+            else {
+                yyerror("Missing RELATIONSHIPS specification.");
+                YYERROR;
+            }
+        }
+
+        binding.lifecyclePhase = lifecyclePhase;
+        binding.requestMethod = requestMethod;
+        binding.requestFormat = requestFormat;
+        binding.headerFields = headerFields;
+        binding.timeoutInterval = (NSTimeInterval)[timeoutInterval unsignedIntegerValue];
+        binding.bindingOptions = bindingOptions;
+        binding.baseURLExpr = baseURLExpr;
+        binding.endPointParameters = endPointParameters;
+
+        // TODO : Figure out why without this we get a release of binding on exit of this function
+        CFBridgingRetain(binding);
+
+        $$ = (__bridge void *)binding;
+    }
+
+shared_bindings
+    : SHARED_BINDINGS SEP shared_bindings_list SEMI { $$ = $3; }
+    ;
+
+shared_bindings_list
+    : shared_binding { CAPTURE_ORDERED_VAL($$, $1); }
+    | shared_bindings_list shared_binding { COMBINE_ORDERED_VALS($$, $2); }
+    ;
+
+shared_binding
+    : shared_binding_identifer SEP binding {
+        $$ = (__bridge void *)AT_{ (__bridge NSString *)$1 : (__bridge id)($3) };
+    }
+    ;
+
+lifecycle
+    : LIFECYCLE SEP lifecycle_phase SEMI { $$ = $3; }
+    ;
+
+lifecycle_phase
+    : LOGIN { $$ = FOSLifecyclePhaseLogin; }
+    | LOGOUT { $$ = FOSLifecyclePhaseLogout; }
+    | PASSWORD_RESET { $$ = FOSLifecyclePhasePasswordReset; }
+    | CREATE { $$ = FOSLifecyclePhaseCreateServerRecord; }
+    | UPDATE { $$ = FOSLifecyclePhaseUpdateServerRecord; }
+    | DESTROY { $$ = FOSLifecyclePhaseDestroyServerRecord; }
+    | RETRIEVE_SERVER_RECORD { $$ = FOSLifecyclePhaseRetrieveServerRecord; }
+    | RETRIEVE_SERVER_RECORDS { $$ = FOSLifecyclePhaseRetrieveServerRecords; }
+    | RETRIEVE_SERVER_RECORD_COUNT { $$ = FOSLifecyclePhaseRetrieveServerRecordCount; }
+    | RETRIEVE_RELATIONSHIP { $$ = FOSLifecyclePhaseRetrieveServerRecordRelationship; }
+    ;
+
+binding_options
+    : /* empty */ { $$ = FOSBindingOptionsNone; }
+    | BINDING_OPTIONS SEP binding_options_list SEMI { $$ = $3; }
+    ;
+
+binding_options_list
+    : binding_option { $$ = $1; }
+    | binding_options_list binding_option { $$ |= $2; }
+    ;
+
+binding_option
+    : ONE_TO_ONE { $$ = FOSBindingOptionsOneToOneRelationship; }
+    | ONE_TO_MANY { $$ = FOSBindingOptionsOneToManyRelationship; }
+    | UNORDERED { $$ = FOSBindingOptionsUnorderedRelationship; }
+    | ORDERED { $$ = FOSBindingOptionsOrderedRelationship; }
+    ;
+
+header_fields
+    : /* empty */ { $$ = nil; }
+    | HEADER_FIELDS SEP key_value_pair_list SEMI { $$ = $3; }
+    ;
+
+base_url
+    : /* empty */ { $$ = nil; }
+    | BASE_URL SEP expression SEMI { $$ = $3; }
+    ;
+
+request_method
+    : /* empty */ { $$ = FOSRequestMethodGET; }
+    | REQUEST_METHOD SEP request_method_spec SEMI { $$ = $3; }
+    ;
+
+request_method_spec
+    : GET { $$ = FOSRequestMethodGET; }
+    | POST { $$ = FOSRequestMethodPOST; }
+    | PUT { $$ = FOSRequestMethodPUT; }
+    | DELETE { $$ = FOSRequestMethodDELETE; }
+    ;
+
+end_point_url
+    : END_POINT SEP expression SEMI { $$ = $3; }
+    ;
+
+end_point_parameters
+    : /* empty */ { $$ = nil; }
+    | END_POINT_PARAMETERS SEP expression_list SEMI { $$ = $3; }
+    ;
+
+cmo_binding
+    : /* empty */ { $$ = nil; }
+    | CMO_BINDING SEP attribute_bindings relationship_bindings matching_entities SEMI {
+        NSSet *attributeBindings = (__bridge NSSet *)($3);
+        NSSet *relationshipBindings = (__bridge NSSet *)($4);
+        FOSItemMatcher *matchingEntities = (__bridge FOSItemMatcher *)($5);
+
+        $$ = (__bridge void *)[FOSCMOBinding bindingWithAttributeBindings:attributeBindings
+                                                     relationshipBindings:relationshipBindings
+                                                         andEntityMatcher:matchingEntities];
+    }
+    | CMO_BINDING SEP shared_binding_identifer SEMI {
+        $$ = (__bridge void *)[FOSSharedBindingReference referenceWithBindingType:AT_"CMO_BINDING" andIdentifier:(__bridge NSString *)$3];
+    }
+    ;
+
+attribute_bindings
+    : ATTRIBUTE_BINDINGS SEP attribute_binding_list SEMI { $$ = $3; }
+    ;
+
+attribute_binding_list
+    : attribute_binding { CAPTURE_UNORDERED_VAL($$, $1); }
+    | attribute_binding_list COMMA attribute_binding { COMBINE_UNORDERED_VALS($$, $3); }
+    ;
+
+attribute_binding
+    : ID_ATTRIBUTE attribute_binding_spec {
+        [(__bridge FOSAttributeBinding *)$2 setIsIdentityProperty:YES];
+
+        $$ = $2;
+    }
+    | READ_ONLY_ATTRIBUTE attribute_binding_spec {
+        [(__bridge FOSAttributeBinding *)$2 setIsReadOnlyProperty:YES];
+
+        $$ = $2;
+    }
+    | attribute_binding_spec { $$ = $1; }
+    ;
+
+attribute_binding_spec
+    : LBRACE expression COLON expression RBRACE matching_attributes {
+        $$ = (__bridge void *)[FOSAttributeBinding bindingWithJsonKeyExpression:(__bridge id)($2)
+                                                          cmoKeyPathExpression:(__bridge id)($4)
+                                                            andPropertyMatcher:(__bridge id)($6)];
+    }
+    ;
+
+matching_attributes
+    : ATTRIBUTES SEP ALL {
+        $$ = (__bridge void *)[FOSItemMatcher matcherMatchingAllItems];
+    }
+    | ATTRIBUTES SEP ALL_EXCEPT LPAREN expression_set RPAREN {
+        $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchAllExcept
+                                             forItemExpressions:(__bridge NSSet *)($5)];
+    }
+    | ATTRIBUTES SEP LPAREN expression_set RPAREN {
+        $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchItems
+                                             forItemExpressions:(__bridge NSSet *)($4)];
+    }
+    ;
+
+relationship_bindings
+    : /* empty */ { $$ = nil; }
+    | RELATIONSHIP_BINDINGS SEP relationship_binding_list SEMI { $$ = $3; }
+    ;
+
+relationship_binding_list
+    : relationship_binding { CAPTURE_UNORDERED_VAL($$, $1); }
+    | relationship_binding_list COMMA relationship_binding { COMBINE_UNORDERED_VALS($$, $3); }
+    ;
+
+relationship_binding
+    : RELATIONSHIP_BINDING SEP json_binding json_id_binding relationships matching_entities {
+        NSArray *jsonBindingExpressions = (__bridge NSArray *)$3;
+        id<FOSExpression> destCMOBindingExpr = (__bridge id<FOSExpression>)$4;
+        FOSItemMatcher *relationshipMatcher = (__bridge FOSItemMatcher *)$5;
+        FOSItemMatcher *entityMatcher = (__bridge FOSItemMatcher *)$6;
+
+        $$ = (__bridge void *)
+            [FOSRelationshipBinding bindingWithJsonBindings:jsonBindingExpressions
+                                    jsonIdBindingExpression:destCMOBindingExpr
+                                        relationshipMatcher:relationshipMatcher
+                                              entityMatcher:entityMatcher];
+    }
+    ;
+
+optional_json_binding
+    : /* empty */ { $$ = nil; }
+    | json_binding { $$ = $1; }
+    ;
+
+json_binding
+    : JSON_BINDING SEP key_value_pair_list SEMI{ $$ = $3; }
+    ;
+
+json_id_binding
+    : JSON_ID_BINDING SEP expression SEMI { $$ = $3; }
+    ;
+
+optional_relationships
+    : /* empty */ { $$ = nil; }
+    | relationships { $$ = $1; }
+    ;
+
+relationships
+    : RELATIONSHIPS SEP ALL SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcherMatchingAllItems];
+    }
+    | RELATIONSHIPS SEP ALL_EXCEPT LPAREN expression_set RPAREN SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchAllExcept
+                                             forItemExpressions:(__bridge NSSet *)($5)];
+    }
+    | RELATIONSHIPS SEP LPAREN expression_set RPAREN SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchItems
+                                             forItemExpressions:(__bridge NSSet *)($4)];
+    }
+    ;
+
+timeout_interval
+    : /* empty */ { $$ = nil; }
+    | TIMEOUT_INTERVAL SEP integer_literal SEMI { $$ = $3; }
+    ;
+
+request_format
+    : /* empty */ { $$ = FOSRequestFormatJSON; }
+    | REQUEST_FORMAT SEP request_format_spec SEMI { $$ = $3; }
+    ;
+
+request_format_spec
+    : JSON { $$ = FOSRequestFormatJSON; }
+    | WEBFORM { $$ = FOSRequestFormatWebform; }
+    | NO_DATA  { $$ = FOSRequestFormatNoData; }
+    ;
+
+optional_matching_entities
+    : /* empty */ { $$ = nil; }
+    | matching_entities { $$ = $1; }
+
+matching_entities
+    : ENTITIES SEP ALL SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcherMatchingAllItems];
+    }
+    | ENTITIES SEP ALL_EXCEPT LPAREN expression_set RPAREN SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchAllExcept
+                                             forItemExpressions:(__bridge NSSet *)($5)];
+    }
+    | ENTITIES SEP LPAREN expression_set RPAREN SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchItems
+                                             forItemExpressions:(__bridge NSSet *)($4)];
+    }
+    ;
+
+expression
+    : string_literal
+    | integer_literal
+    | identifier
+    | keypath_expression
+    | concat_expression
+// TODO : Consider having a JSON builder syntax
+    ;
+
+keypath_expression
+    : identifier DOT keypath_expression_list {
+        NSArray *exprList = (__bridge NSArray *)$3;
+        id<FOSExpression> rhsExpr = nil;
+
+        // This is a simple optimization; not strictly necessary.
+        if (exprList.count == 1) {
+            rhsExpr = exprList.lastObject;
+        }
+        else {
+            rhsExpr = [FOSConcatExpression concatExpressionWithExpressions:exprList];
+        }
+
+        $$ = (__bridge void *)[FOSKeyPathExpression keyPathExpressionWithLHS:(__bridge id<FOSExpression>)$1
+                                                                    andRHS:rhsExpr];
+    }
+    ;
+
+keypath_expression_list
+    : keypath_element { CAPTURE_ORDERED_VAL($$, $1); }
+    | keypath_expression_list keypath_dot_element keypath_element {
+        COMBINE_ORDERED_VALS2($$, $3, $2);
+    }
+    ;
+
+keypath_dot_element
+    : DOT {
+        $$ = (__bridge void *)[FOSConstantExpression constantExpressionWithValue:AT_"."];
+    }
+    ;
+
+keypath_element
+    : string_constant {
+        $$ = (__bridge void *) [FOSConstantExpression constantExpressionWithValue:(__bridge id)$1];
+    }
+    | TIC keypath_expression TIC { $$ = $2; }
+    ;
+
+concat_expression
+    : LPAREN concat_expression_list RPAREN {
+        $$ = (__bridge void *)[FOSConcatExpression concatExpressionWithExpressions:(__bridge NSArray*)$2];
+    }
+    ;
+    
+concat_expression_list
+    : expression { CAPTURE_ORDERED_VAL($$, $1); }
+    | concat_expression_list PLUS expression { COMBINE_ORDERED_VALS($$, $3); }
+    ;
+
+expression_list
+    : expression { CAPTURE_ORDERED_VAL($$, $1); }
+    | expression_list COMMA expression { COMBINE_ORDERED_VALS($$, $3); }
+    ;
+
+expression_set
+    : expression_list {
+        $$ = (__bridge void *)[NSMutableSet setWithArray:(__bridge NSArray *)($1)];
+    }
+    ;
+
+key_value_pair_list
+    : key_value_pair { CAPTURE_ORDERED_VAL($$, $1); }
+    | key_value_pair_list COMMA key_value_pair { COMBINE_ORDERED_VALS($$, $3); }
+    ;
+
+key_value_pair
+    : LBRACE key_value_pair_desc RBRACE { $$ = $2; }
+    ;
+
+key_value_pair_desc_list
+    : key_value_pair_desc { CAPTURE_ORDERED_VAL($$, $1); }
+    | key_value_pair_desc_list COMMA key_value_pair_desc { COMBINE_ORDERED_VALS($$, $3); }
+    ;
+
+key_value_pair_desc
+    : expression COLON expression {
+        $$ = (__bridge void *)AT_[(__bridge id)$1, ((__bridge id)$3)];
+    }
+    ;
+
+string_literal
+    : STRING_LITERAL {
+        char *cStr = &((char *)$1)[1];
+        cStr[strlen(cStr)-1] = '\0';
+
+        NSString *str = [NSString stringWithCString:cStr encoding:NSASCIIStringEncoding];
+        $$ = (__bridge void *)[FOSConstantExpression constantExpressionWithValue:str];
+    }
+    ;
+
+integer_literal
+    : INTEGER_LITERAL {
+        NSString *intStr = [NSString stringWithCString:$1 encoding:NSASCIIStringEncoding];
+        int intVal = intStr.integerValue;
+
+        $$ = (__bridge void *)[FOSConstantExpression constantExpressionWithValue:AT_(intVal)];
+    }
+    ;
+
+string_constant
+    : STRING_CONSTANT {
+        $$ = (__bridge void *)[NSString stringWithCString:$1 encoding:NSASCIIStringEncoding];
+    }
+    ;
+
+identifier
+    : IDENTIFIER {
+        NSString *identifier = [NSString stringWithCString:&($1[1]) encoding:NSASCIIStringEncoding];
+        $$ = (__bridge void *)[FOSVariableExpression variableExpressionWithIdentifier:identifier];
+    }
+    ;
+
+shared_binding_identifer
+    : SHARED_BINDING_IDENTIFIER {
+        $$ = (__bridge void *)[NSString stringWithCString:$1 encoding:NSASCIIStringEncoding];
+    }
+    ;
+
+%%
+
+extern NSError *parser_error;
+extern NSMutableString *currentLine;
+
+void yyerror(char *s, ...) {
+
+    va_list ap;
+    va_start(ap, s);
+
+    char buf1[4096];
+    char buf2[4096];
+
+    buf1[0] = '\0';
+    buf2[0] = '\0';
+
+    if (yylloc.first_line) {
+        sprintf(buf1, "Error: %d:%d - ", yylloc.first_line, yylloc.first_column);
+    }
+    vsprintf(buf2, s, ap);
+
+    NSString *buf1Str = [NSString stringWithCString:buf1 encoding:NSASCIIStringEncoding];
+    NSString *buf2Str = [NSString stringWithCString:buf2 encoding:NSASCIIStringEncoding];
+    NSString *errorMessage = [buf1Str stringByAppendingString:buf2Str];
+
+    // Remove linebreaks from line
+    NSRange range = NSMakeRange(0, currentLine.length);
+    [currentLine replaceOccurrencesOfString:@"\n" withString:@"" options:NSLiteralSearch range:range];
+
+    NSString *msg = [NSString stringWithFormat:@"%@ IN: '%@'", errorMessage, currentLine];
+
+    parser_error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+
+    NSLog(@"***************************************");
+    NSLog(@"*** PARSER ERROR: %@", msg);
+    NSLog(@"***************************************");
+}
+
+
+#pragma clang diagnostic pop

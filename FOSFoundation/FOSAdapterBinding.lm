@@ -1,0 +1,151 @@
+%{
+    #import "y.tab.h"
+    #include <stdio.h>
+
+    #undef YYSIZE_T
+    #define YYSIZE_T yytype_int16
+
+extern void yyerror(char* s, ...);
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wconversion"
+#pragma clang diagnostic ignored "-Wunused-function"
+#pragma clang diagnostic ignored "-Wunneeded-internal-declaration"
+
+int yycolumn = 1;
+
+NSMutableString *currentLine = nil;
+
+static void update_loc() {
+    static int curr_line = 1;
+    static int curr_col  = 1;
+
+    yylloc.first_line   = curr_line;
+    yylloc.first_column = curr_col;
+
+    {
+        char * s;
+        for (s = yytext; *s != '\0'; s++){
+            if (*s == '\n'){
+                curr_line++;
+                curr_col = 1;
+
+                currentLine = [NSMutableString string];
+            }
+            else {
+                curr_col++;
+            }
+        }
+    }
+
+    yylloc.last_line   = curr_line;
+    yylloc.last_column = curr_col-1;
+
+    NSString *curText = [NSString stringWithCString:yytext encoding:NSASCIIStringEncoding];
+
+    if (currentLine == nil) {
+        currentLine = [NSMutableString string];
+    }
+
+    [currentLine appendString:curText];
+}
+
+#define YY_USER_ACTION update_loc();
+
+%}
+
+%%
+
+#.*\n                          { /* skip comments */ }
+[ \t\n]                        { /* skip spaces */ }
+
+\$\$([a-zA-Z_][a-zA-Z0-9_]*)   { yylval.string = yytext; return SHARED_BINDING_IDENTIFIER; }
+\$([a-zA-Z_][a-zA-Z0-9_]*)     { yylval.string = yytext; return IDENTIFIER; }
+\'([^\']*)\'                   { yylval.string = yytext; return STRING_LITERAL; }
+\"([^\"]*)\"                   { yylval.string = yytext; return STRING_LITERAL; }
+[0-9]*                         { yylval.string = yytext; return INTEGER_LITERAL; }
+[a-z_][a-zA-Z0-9_]*            { yylval.string = yytext; return STRING_CONSTANT; }
+
+::                             { return SEP; }
+;                              { return SEMI; }
+:                              { return COLON; }
+,                              { return COMMA; }
+\(                             { return LPAREN; }
+\)                             { return RPAREN; }
+\{                             { return LBRACE; }
+\}                             { return RBRACE; }
+\.                             { return DOT; }
+\+                             { return PLUS; }
+`                              { return TIC; }
+
+ADAPTER                        { return ADAPTER; }
+URL_BINDINGS                   { return URL_BINDINGS; }
+SHARED_BINDINGS                { return SHARED_BINDINGS; }
+
+URL_BINDING                    { return URL_BINDING; }
+BASE_URL                       { return BASE_URL; }
+HEADER_FIELDS                  { return HEADER_FIELDS; }
+TIMEOUT_INTERVAL               { return TIMEOUT_INTERVAL; }
+
+LIFECYCLE                      { return LIFECYCLE; }
+REQUEST_METHOD                 { return REQUEST_METHOD; }
+REQUEST_FORMAT                 { return REQUEST_FORMAT; }
+END_POINT                      { return END_POINT; }
+END_POINT_PARAMETERS           { return END_POINT_PARAMETERS; }
+CMO_BINDING                    { return CMO_BINDING; }
+
+ENTITIES                       { return ENTITIES; }
+ATTRIBUTES                     { return ATTRIBUTES; }
+ALL                            { return ALL; }
+ALL_EXCEPT                     { return ALL_EXCEPT; }
+
+LOGIN                          { return LOGIN; }
+LOGOUT                         { return LOGOUT; }
+PASSWORD_RESET                 { return PASSWORD_RESET; }
+CREATE                         { return CREATE; }
+UPDATE                         { return UPDATE; }
+DESTROY                        { return DESTROY; }
+RETRIEVE_SERVER_RECORD         { return RETRIEVE_SERVER_RECORD; }
+RETRIEVE_SERVER_RECORDS        { return RETRIEVE_SERVER_RECORDS; }
+RETRIEVE_SERVER_RECORD_COUNT   { return RETRIEVE_SERVER_RECORD_COUNT; }
+RETRIEVE_RELATIONSHIP          { return RETRIEVE_RELATIONSHIP; }
+
+BINDING_OPTIONS                { return BINDING_OPTIONS; }
+ONE_TO_ONE                     { return ONE_TO_ONE; }
+ONE_TO_MANY                    { return ONE_TO_MANY; }
+UNORDERED                      { return UNORDERED; }
+ORDERED                        { return ORDERED; }
+
+JSON                           { return JSON; }
+WEBFORM                        { return WEBFORM; }
+NO_DATA                        { return NO_DATA; }
+
+GET                            { return GET; }
+POST                           { return POST; }
+PUT                            { return PUT; }
+DELETE                         { return DELETE; }
+
+ATTRIBUTE_BINDINGS             { return ATTRIBUTE_BINDINGS; }
+ID_ATTRIBUTE                   { return ID_ATTRIBUTE; }
+READ_ONLY_ATTRIBUTE            { return READ_ONLY_ATTRIBUTE; }
+
+RELATIONSHIP_BINDINGS          { return RELATIONSHIP_BINDINGS; }
+RELATIONSHIP_BINDING           { return RELATIONSHIP_BINDING; }
+
+JSON_BINDING                   { return JSON_BINDING; }
+JSON_ID_BINDING                { return JSON_ID_BINDING; }
+RELATIONSHIPS                  { return RELATIONSHIPS; }
+
+.                              { yyerror("Unknown token: %s", yytext); yyterminate(); }
+
+%%
+
+int yywrap() {
+    return -1;
+}
+
+void yyreset_state() {
+    BEGIN(INITIAL);
+}
+
+#pragma clang diagnostic pop
