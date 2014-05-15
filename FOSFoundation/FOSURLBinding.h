@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FOSCachedManagedObject.h"
+#import "FOSWebServiceRequest.h"
 
 @class FOSConcatExpression;
 @class FOSCMOBinding;

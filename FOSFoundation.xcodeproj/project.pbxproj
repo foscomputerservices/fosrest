@@ -43,8 +43,6 @@
 		630E249E19035254008F0C95 /* FOSDeletedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 630E249A19035254008F0C95 /* FOSDeletedObject.m */; };
 		630E24A1190379C3008F0C95 /* FOSUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 630E249F190379C3008F0C95 /* FOSUser.h */; };
 		630E24A2190379C3008F0C95 /* FOSUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 630E249F190379C3008F0C95 /* FOSUser.h */; };
-		630E24A3190379C3008F0C95 /* FOSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 630E24A0190379C3008F0C95 /* FOSUser.m */; };
-		630E24A4190379C3008F0C95 /* FOSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 630E24A0190379C3008F0C95 /* FOSUser.m */; };
 		6310F94A169908A900981E85 /* FOSWebServiceRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6310F949169908A900981E85 /* FOSWebServiceRequestTests.m */; };
 		6310F94D16991F3900981E85 /* FOSManagedObject+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6310F94B16991F3900981E85 /* FOSManagedObject+FOS_Internal.h */; };
 		6310F94E16991F3900981E85 /* FOSManagedObject+FOS_Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6310F94C16991F3900981E85 /* FOSManagedObject+FOS_Internal.m */; };
@@ -83,7 +81,6 @@
 		633467E11686C12000ACD4EA /* FOSDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 633467DF1686C12000ACD4EA /* FOSDatabaseManager.m */; };
 		633467E41686C18800ACD4EA /* FOSMergePolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 633467E21686C18700ACD4EA /* FOSMergePolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		633467E51686C18800ACD4EA /* FOSMergePolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 633467E31686C18800ACD4EA /* FOSMergePolicy.m */; };
-		633467F71687784100ACD4EA /* FOSUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 633467F51687784100ACD4EA /* FOSUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		633467F81687784100ACD4EA /* FOSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 633467F61687784100ACD4EA /* FOSUser.m */; };
 		6335897418DA315D008EEFE2 /* FOSItemMatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 6335897218DA315D008EEFE2 /* FOSItemMatcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6335897518DA315D008EEFE2 /* FOSItemMatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 6335897218DA315D008EEFE2 /* FOSItemMatcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -319,7 +316,6 @@
 		63A313EE16E5B59000DDE117 /* FOSParseUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 6300F38B169621AA003D9E26 /* FOSParseUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63A313EF16E5B59000DDE117 /* FOSParseUser+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6390777A1694FA63006DC589 /* FOSParseUser+FOS_Internal.h */; };
 		63A313F016E5B59000DDE117 /* FOSRefreshUserOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 639077441693EC44006DC589 /* FOSRefreshUserOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		63A313F216E5B59000DDE117 /* FOSUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 633467F51687784100ACD4EA /* FOSUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63A313F416E5B59000DDE117 /* FOSCacheManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C343AD1686BBDB003D10B5 /* FOSCacheManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63A313F516E5B5B200DDE117 /* FOSCacheManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C343AC1686BBDB003D10B5 /* FOSCacheManager_Internal.h */; };
 		63A313F616E5B5B200DDE117 /* FOSDatabaseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 633467DE1686C12000ACD4EA /* FOSDatabaseManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1469,7 +1465,6 @@
 				63A313EE16E5B59000DDE117 /* FOSParseUser.h in Headers */,
 				63A313F016E5B59000DDE117 /* FOSRefreshUserOperation.h in Headers */,
 				63FD73DE18D39F3600DCD982 /* FOSParseServiceAdapter.h in Headers */,
-				63A313F216E5B59000DDE117 /* FOSUser.h in Headers */,
 				634F072518AADF530093FCDF /* FOSProcessServiceRequest.h in Headers */,
 				6384F7C918F79E1C0038AEB7 /* FOSSendToManyRelationshipOperation.h in Headers */,
 				63FD73DA18D39DDA00DCD982 /* FOSRESTServiceAdapter.h in Headers */,
@@ -1587,7 +1582,6 @@
 				63742E7B1691D5D300541200 /* FOSRetrieveCMOOperation.h in Headers */,
 				633467E41686C18800ACD4EA /* FOSMergePolicy.h in Headers */,
 				63986F3018DD31C100D89CFD /* FOSBoundServiceAdapter.h in Headers */,
-				633467F71687784100ACD4EA /* FOSUser.h in Headers */,
 				63127DB71688D70600F70BF9 /* NSObject+FOS.h in Headers */,
 				CB7458F517E6585300485B2A /* FOSAnalytics.h in Headers */,
 				CB7458FB17E6598400485B2A /* FOSParseAnalyticsManager.h in Headers */,
@@ -1716,7 +1710,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = FOS;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "FOS Computer Services";
 				TargetAttributes = {
 					63A3134716E5B3FC00DDE117 = {
@@ -1873,7 +1867,6 @@
 				63A3139516E5B43D00DDE117 /* FOSFlushCachesOperation.m in Sources */,
 				634F072218AADF0A0093FCDF /* FOSParseFileService.m in Sources */,
 				63A3139716E5B43D00DDE117 /* FOSMergePolicy.m in Sources */,
-				630E24A4190379C3008F0C95 /* FOSUser.m in Sources */,
 				6384F7CB18F79E1C0038AEB7 /* FOSSendToManyRelationshipOperation.m in Sources */,
 				63432DC417FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m in Sources */,
 				63F11E4918D890750070D19A /* FOSKeyPathExpression.m in Sources */,
@@ -2056,7 +2049,6 @@
 				63A08FD418D40A1C003F14E0 /* FOSAdapterBindingParser.m in Sources */,
 				637EE2761721EC72009F8C98 /* FOSRelationshipFault+FOS_Internal.m in Sources */,
 				6335897618DA315D008EEFE2 /* FOSItemMatcher.m in Sources */,
-				630E24A3190379C3008F0C95 /* FOSUser.m in Sources */,
 				63986F4918DEA64300D89CFD /* FOSSharedBindingReference.m in Sources */,
 				6376C65A18D7BC100075FAE1 /* FOSVariableExpression.m in Sources */,
 				63B14EDD172720FC00A631C4 /* FOSPullStaticTablesOperation.m in Sources */,
@@ -2228,7 +2220,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = GoldMaster;
 		};
@@ -2254,6 +2246,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = GoldMaster;
 		};
@@ -2640,7 +2633,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -2682,7 +2675,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};
@@ -2707,6 +2700,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -2732,6 +2726,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};
@@ -2797,7 +2792,7 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = AdHoc;
 		};
@@ -2822,6 +2817,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = AdHoc;
 		};

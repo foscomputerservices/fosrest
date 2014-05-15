@@ -14,6 +14,8 @@
 @class FOSRetrieveCMOOperation;
 @class FOSSendServerRecordOperation;
 
+typedef id<NSObject,NSCopying> FOSJsonId;
+
 @interface FOSCachedManagedObject : FOSManagedObject {
 @protected
     BOOL reentrancyBit;

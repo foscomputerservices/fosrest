@@ -25,8 +25,6 @@ typedef void (^FOSCacheSearchHandler)(NSSet *results, NSError *error);
 typedef void (^FOSBackgroundRequest)(BOOL cancelled, NSError *error);
 typedef FOSRecorveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSError *error);
 
-typedef id<NSObject,NSCopying> FOSJsonId;
-
 @class FOSUser;
 
 @interface FOSCacheManager : NSObject
