@@ -14,6 +14,7 @@
 				63A26A55168B3B9000771EB3 /* Build Framework */,
 			);
 			dependencies = (
+				639B0FB51925A4540028009C /* PBXTargetDependency */,
 				63A26A54168B3B6C00771EB3 /* PBXTargetDependency */,
 			);
 			name = Framework;
@@ -48,14 +49,14 @@
 		6310F94E16991F3900981E85 /* FOSManagedObject+FOS_Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6310F94C16991F3900981E85 /* FOSManagedObject+FOS_Internal.m */; };
 		63127DB71688D70600F70BF9 /* NSObject+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 63127DB51688D70600F70BF9 /* NSObject+FOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63127DB81688D70600F70BF9 /* NSObject+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 63127DB61688D70600F70BF9 /* NSObject+FOS.m */; };
-		6315724719042E7C0044CC90 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6315724519042E7C0044CC90 /* FOSFoundation.xcdatamodeld */; };
-		6315724819042E7C0044CC90 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6315724519042E7C0044CC90 /* FOSFoundation.xcdatamodeld */; };
+		6315136C1925A59E004A55A6 /* FOSFoundationResources-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6315136A1925A59E004A55A6 /* FOSFoundationResources-Info.plist */; };
+		6315136F1925A5B6004A55A6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6315136D1925A5B6004A55A6 /* InfoPlist.strings */; };
+		631513731925A968004A55A6 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 631513711925A93C004A55A6 /* FOSFoundation.xcdatamodeld */; };
+		631513741925A989004A55A6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632B5403168E06BE003AD474 /* CoreData.framework */; };
 		6315724B190432420044CC90 /* NSManagedObjectModel+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 63157249190432420044CC90 /* NSManagedObjectModel+FOS.h */; };
 		6315724C190432420044CC90 /* NSManagedObjectModel+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 63157249190432420044CC90 /* NSManagedObjectModel+FOS.h */; };
 		6315724D190432420044CC90 /* NSManagedObjectModel+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 6315724A190432420044CC90 /* NSManagedObjectModel+FOS.m */; };
 		6315724E190432420044CC90 /* NSManagedObjectModel+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 6315724A190432420044CC90 /* NSManagedObjectModel+FOS.m */; };
-		63157251190434980044CC90 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6315724F190434980044CC90 /* FOSFoundation.xcdatamodeld */; };
-		63157252190434980044CC90 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6315724F190434980044CC90 /* FOSFoundation.xcdatamodeld */; };
 		6320C31C174BE4EA00A38256 /* FOSStaticTableSearchOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6320C31A174BE4EA00A38256 /* FOSStaticTableSearchOperation.h */; };
 		6320C31D174BE4EA00A38256 /* FOSStaticTableSearchOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6320C31A174BE4EA00A38256 /* FOSStaticTableSearchOperation.h */; };
 		6320C31E174BE4EA00A38256 /* FOSStaticTableSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6320C31B174BE4EA00A38256 /* FOSStaticTableSearchOperation.m */; };
@@ -121,6 +122,12 @@
 		634FA6691803828F00389821 /* FOSSearchOperation+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FA6651803828F00389821 /* FOSSearchOperation+Internal.m */; };
 		634FA66B18038D8700389821 /* FOSPullStaticTablesOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FA66A18038D8700389821 /* FOSPullStaticTablesOperationTests.m */; };
 		634FA66C18038D8700389821 /* FOSPullStaticTablesOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FA66A18038D8700389821 /* FOSPullStaticTablesOperationTests.m */; };
+		635020AA19259A0000A78EED /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635020A919259A0000A78EED /* CoreFoundation.framework */; };
+		635020BC19259C3900A78EED /* NSBundle+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 635020BA19259C3900A78EED /* NSBundle+FOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		635020BD19259C3900A78EED /* NSBundle+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 635020BA19259C3900A78EED /* NSBundle+FOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		635020BE19259C3900A78EED /* NSBundle+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 635020BB19259C3900A78EED /* NSBundle+FOS.m */; };
+		635020BF19259C3900A78EED /* NSBundle+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 635020BB19259C3900A78EED /* NSBundle+FOS.m */; };
+		635020C219259DA900A78EED /* libFOSFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63BFA3771481A85700FE1C0C /* libFOSFoundation.a */; };
 		6356F2AE168B593D00F0BFED /* FOSTimeFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 6356F2AC168B593D00F0BFED /* FOSTimeFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6356F2AF168B593D00F0BFED /* FOSTimeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6356F2AD168B593D00F0BFED /* FOSTimeFilter.m */; };
 		635BA67F16F8DB3500777092 /* FOSOperationQueue+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 635BA67D16F8DB3400777092 /* FOSOperationQueue+FOS_Internal.h */; };
@@ -137,7 +144,6 @@
 		636763A916B7288100A9B268 /* FOSOperation+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 636763A716B7288100A9B268 /* FOSOperation+FOS_Internal.h */; };
 		636763AA16B7288100A9B268 /* FOSOperation+FOS_Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 636763A816B7288100A9B268 /* FOSOperation+FOS_Internal.m */; };
 		636AC8C017FCBD19005C0D46 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 636AC8BF17FCBD19005C0D46 /* XCTest.framework */; };
-		636AC8C217FCBD92005C0D46 /* libFOSFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63BFA3771481A85700FE1C0C /* libFOSFoundation.a */; };
 		636AC8C417FCC310005C0D46 /* FOSLoginManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 632B5414168E1D7C003AD474 /* FOSLoginManagerTests.m */; };
 		636AC8C617FCC310005C0D46 /* FOSCacheManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6300F38116960F39003D9E26 /* FOSCacheManagerTests.m */; };
 		636AC8C817FCC310005C0D46 /* FOSCachedManagedObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 632B5418168E2533003AD474 /* FOSCachedManagedObjectTests.m */; };
@@ -226,6 +232,7 @@
 		63986F4818DEA64300D89CFD /* FOSSharedBindingReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 63986F4518DEA64300D89CFD /* FOSSharedBindingReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63986F4918DEA64300D89CFD /* FOSSharedBindingReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 63986F4618DEA64300D89CFD /* FOSSharedBindingReference.m */; };
 		63986F4A18DEA64300D89CFD /* FOSSharedBindingReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 63986F4618DEA64300D89CFD /* FOSSharedBindingReference.m */; };
+		639B0FB61925A47D0028009C /* FOSFoundation.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 635020A819259A0000A78EED /* FOSFoundation.bundle */; };
 		639DFD451708ABA70005DAFF /* FOSNetworkStatusMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E74E411708A9D300BD61FC /* FOSNetworkStatusMonitor.m */; };
 		63A08FCF18D403A2003F14E0 /* FOSAdapterBinding.lm in Sources */ = {isa = PBXBuildFile; fileRef = 63A08FCD18D403A2003F14E0 /* FOSAdapterBinding.lm */; };
 		63A08FD018D403A2003F14E0 /* FOSAdapterBinding.ym in Sources */ = {isa = PBXBuildFile; fileRef = 63A08FCE18D403A2003F14E0 /* FOSAdapterBinding.ym */; };
@@ -488,6 +495,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		639B0FB21925A44B0028009C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63BFA36E1481A85600FE1C0C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 635020A719259A0000A78EED;
+			remoteInfo = FOSFoundationResources;
+		};
+		639B0FB41925A4540028009C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63BFA36E1481A85600FE1C0C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 635020A719259A0000A78EED;
+			remoteInfo = FOSFoundationResources;
+		};
 		63A26A53168B3B6C00771EB3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 63BFA36E1481A85600FE1C0C /* Project object */;
@@ -535,10 +556,11 @@
 		6310F94C16991F3900981E85 /* FOSManagedObject+FOS_Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FOSManagedObject+FOS_Internal.m"; sourceTree = "<group>"; };
 		63127DB51688D70600F70BF9 /* NSObject+FOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+FOS.h"; sourceTree = "<group>"; };
 		63127DB61688D70600F70BF9 /* NSObject+FOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+FOS.m"; sourceTree = "<group>"; };
-		6315724619042E7C0044CC90 /* FOSFoundation.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FOSFoundation.xcdatamodel; sourceTree = "<group>"; };
+		6315136A1925A59E004A55A6 /* FOSFoundationResources-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "FOSFoundationResources-Info.plist"; path = "FOSFoundationResources/FOSFoundationResources-Info.plist"; sourceTree = SOURCE_ROOT; };
+		6315136B1925A59E004A55A6 /* FOSFoundationResources-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "FOSFoundationResources-Prefix.pch"; path = "FOSFoundationResources/FOSFoundationResources-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		6315136E1925A5B6004A55A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = FOSFoundationResources/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		63157249190432420044CC90 /* NSManagedObjectModel+FOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+FOS.h"; sourceTree = "<group>"; };
 		6315724A190432420044CC90 /* NSManagedObjectModel+FOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+FOS.m"; sourceTree = "<group>"; };
-		63157250190434980044CC90 /* FOSFoundation.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FOSFoundation.xcdatamodel; sourceTree = "<group>"; };
 		6320C31A174BE4EA00A38256 /* FOSStaticTableSearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSStaticTableSearchOperation.h; sourceTree = "<group>"; };
 		6320C31B174BE4EA00A38256 /* FOSStaticTableSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSStaticTableSearchOperation.m; sourceTree = "<group>"; };
 		63247F27169B36EF00A729A2 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -591,6 +613,10 @@
 		634FA6641803828F00389821 /* FOSSearchOperation+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FOSSearchOperation+Internal.h"; sourceTree = "<group>"; };
 		634FA6651803828F00389821 /* FOSSearchOperation+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FOSSearchOperation+Internal.m"; sourceTree = "<group>"; };
 		634FA66A18038D8700389821 /* FOSPullStaticTablesOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSPullStaticTablesOperationTests.m; sourceTree = "<group>"; };
+		635020A819259A0000A78EED /* FOSFoundation.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FOSFoundation.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		635020A919259A0000A78EED /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		635020BA19259C3900A78EED /* NSBundle+FOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+FOS.h"; sourceTree = "<group>"; };
+		635020BB19259C3900A78EED /* NSBundle+FOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+FOS.m"; sourceTree = "<group>"; };
 		6356F2AC168B593D00F0BFED /* FOSTimeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSTimeFilter.h; sourceTree = "<group>"; };
 		6356F2AD168B593D00F0BFED /* FOSTimeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSTimeFilter.m; sourceTree = "<group>"; };
 		635BA67D16F8DB3400777092 /* FOSOperationQueue+FOS_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FOSOperationQueue+FOS_Internal.h"; sourceTree = "<group>"; };
@@ -796,6 +822,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		635020A519259A0000A78EED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				631513741925A989004A55A6 /* CoreData.framework in Frameworks */,
+				635020AA19259A0000A78EED /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63A3132E16E5B3FB00DDE117 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -828,7 +863,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				636AC8C217FCBD92005C0D46 /* libFOSFoundation.a in Frameworks */,
+				635020C219259DA900A78EED /* libFOSFoundation.a in Frameworks */,
 				636AC8C017FCBD19005C0D46 /* XCTest.framework in Frameworks */,
 				63455B4616EF7FD8007B0383 /* SystemConfiguration.framework in Frameworks */,
 				63247F38169B412100A729A2 /* CoreGraphics.framework in Frameworks */,
@@ -863,10 +898,17 @@
 			name = "Web Interaction Tests";
 			sourceTree = "<group>";
 		};
+		631513701925A7DA004A55A6 /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				631513711925A93C004A55A6 /* FOSFoundation.xcdatamodeld */,
+			);
+			name = "Data Model";
+			sourceTree = "<group>";
+		};
 		632B53F3168E0104003AD474 /* Test Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				6315724F190434980044CC90 /* FOSFoundation.xcdatamodeld */,
 				637B7AF316C1C8E3007EBA92 /* Note.h */,
 				637B7AF416C1C8E3007EBA92 /* Note.m */,
 				636F0BED168F91CA00F5E442 /* RESTTests.xcdatamodeld */,
@@ -967,7 +1009,6 @@
 				637EE2731721EC72009F8C98 /* FOSRelationshipFault+FOS_Internal.m */,
 				63E9CF4617208A5000EC28A8 /* FOSRelationshipFault.h */,
 				63E9CF4717208A5000EC28A8 /* FOSRelationshipFault.m */,
-				6315724519042E7C0044CC90 /* FOSFoundation.xcdatamodeld */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -1053,6 +1094,25 @@
 				633467F61687784100ACD4EA /* FOSUser.m */,
 			);
 			name = Authentication;
+			sourceTree = "<group>";
+		};
+		635020AB19259A0000A78EED /* FOSFrameworkResources */ = {
+			isa = PBXGroup;
+			children = (
+				631513701925A7DA004A55A6 /* Data Model */,
+				635020AC19259A0000A78EED /* Supporting Files */,
+			);
+			path = FOSFrameworkResources;
+			sourceTree = "<group>";
+		};
+		635020AC19259A0000A78EED /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6315136D1925A5B6004A55A6 /* InfoPlist.strings */,
+				6315136A1925A59E004A55A6 /* FOSFoundationResources-Info.plist */,
+				6315136B1925A59E004A55A6 /* FOSFoundationResources-Prefix.pch */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		6356F2AA168B591400F0BFED /* Search Support */ = {
@@ -1262,6 +1322,8 @@
 				63127DB61688D70600F70BF9 /* NSObject+FOS.m */,
 				63BFA3E71482815400FE1C0C /* NSString+FOS.h */,
 				63BFA3E81482815400FE1C0C /* NSString+FOS.m */,
+				635020BA19259C3900A78EED /* NSBundle+FOS.h */,
+				635020BB19259C3900A78EED /* NSBundle+FOS.m */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1273,6 +1335,7 @@
 				63BFA3901481A85700FE1C0C /* FOSFoundationTests */,
 				63A3133916E5B3FC00DDE117 /* FOSFoundationOSX */,
 				63A3134E16E5B3FC00DDE117 /* FOSFoundationOSXTests */,
+				635020AB19259A0000A78EED /* FOSFrameworkResources */,
 				63BFA3791481A85700FE1C0C /* Frameworks */,
 				63BFA3781481A85700FE1C0C /* Products */,
 			);
@@ -1285,6 +1348,7 @@
 				63BFA3871481A85700FE1C0C /* FOSFoundationTests.xctest */,
 				63A3133216E5B3FB00DDE117 /* FOSFoundation.framework */,
 				63A3134816E5B3FC00DDE117 /* FOSFoundationOSXTests.octest */,
+				635020A819259A0000A78EED /* FOSFoundation.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1300,6 +1364,7 @@
 				632B5403168E06BE003AD474 /* CoreData.framework */,
 				63BFA37A1481A85700FE1C0C /* Foundation.framework */,
 				63A3133316E5B3FB00DDE117 /* Cocoa.framework */,
+				635020A919259A0000A78EED /* CoreFoundation.framework */,
 				63A3133516E5B3FC00DDE117 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -1510,6 +1575,7 @@
 				63E9CF4917208A5000EC28A8 /* FOSRelationshipFault.h in Headers */,
 				637EE2751721EC72009F8C98 /* FOSRelationshipFault+FOS_Internal.h in Headers */,
 				634953FF18DA831400DDCB45 /* FOSAdapterBinding.h in Headers */,
+				635020BD19259C3900A78EED /* NSBundle+FOS.h in Headers */,
 				6370756B18F4B72F00D28B3F /* FOSUpdateServerRecordOperation.h in Headers */,
 				63B14EDC172720FC00A631C4 /* FOSPullStaticTablesOperation.h in Headers */,
 				6320C31D174BE4EA00A38256 /* FOSStaticTableSearchOperation.h in Headers */,
@@ -1614,6 +1680,7 @@
 				63247F29169B36EF00A729A2 /* NSData+Base64.h in Headers */,
 				63A08FDF18D5254C003F14E0 /* FOSAttributeBinding.h in Headers */,
 				634F071F18AADF0A0093FCDF /* FOSParseFileService.h in Headers */,
+				635020BC19259C3900A78EED /* NSBundle+FOS.h in Headers */,
 				6370756A18F4B72F00D28B3F /* FOSUpdateServerRecordOperation.h in Headers */,
 				636763A916B7288100A9B268 /* FOSOperation+FOS_Internal.h in Headers */,
 				630036F316B9E78D0062BDED /* FOSWebServiceRequest+FOS_Internal.h in Headers */,
@@ -1629,6 +1696,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		635020A719259A0000A78EED /* FOSFoundationResources */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 635020B219259A0000A78EED /* Build configuration list for PBXNativeTarget "FOSFoundationResources" */;
+			buildPhases = (
+				635020A419259A0000A78EED /* Sources */,
+				635020A519259A0000A78EED /* Frameworks */,
+				635020A619259A0000A78EED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FOSFoundationResources;
+			productName = FOSFrameworkResources;
+			productReference = 635020A819259A0000A78EED /* FOSFoundation.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		63A3133116E5B3FB00DDE117 /* FOSFoundationOSX */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63A3135D16E5B3FC00DDE117 /* Build configuration list for PBXNativeTarget "FOSFoundationOSX" */;
@@ -1696,6 +1780,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				639B0FB31925A44B0028009C /* PBXTargetDependency */,
 				63BFA38E1481A85700FE1C0C /* PBXTargetDependency */,
 			);
 			name = FOSFoundationTests;
@@ -1717,7 +1802,7 @@
 						TestTargetID = 63A3133116E5B3FB00DDE117;
 					};
 					63BFA3861481A85700FE1C0C = {
-						TestTargetID = 63BFA3761481A85700FE1C0C;
+						TestTargetID = 63A3133116E5B3FB00DDE117;
 					};
 				};
 			};
@@ -1738,11 +1823,21 @@
 				63A26A4E168B3B5500771EB3 /* Framework */,
 				63A3133116E5B3FB00DDE117 /* FOSFoundationOSX */,
 				63A3134716E5B3FC00DDE117 /* FOSFoundationOSXTests */,
+				635020A719259A0000A78EED /* FOSFoundationResources */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		635020A619259A0000A78EED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6315136C1925A59E004A55A6 /* FOSFoundationResources-Info.plist in Resources */,
+				6315136F1925A5B6004A55A6 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63A3133016E5B3FB00DDE117 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1764,6 +1859,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63BFA3951481A85700FE1C0C /* InfoPlist.strings in Resources */,
+				639B0FB61925A47D0028009C /* FOSFoundation.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1796,7 +1892,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# From: https://github.com/jverkoey/iOS-Framework#walkthrough\n\nset -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=${PROJECT_NAME}\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}.a\"\nSF_WRAPPER_NAME=\"${SF_TARGET_NAME}.framework\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\n# Build the other platform.\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nlipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n";
+			shellScript = "# From: https://github.com/jverkoey/iOS-Framework#walkthrough\n\nset -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=${PROJECT_NAME}\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}.a\"\nSF_WRAPPER_NAME=\"${SF_TARGET_NAME}.framework\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\n  SF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\n  echo \"Could not find platform name from SDK_NAME: $SDK_NAME\"\n  exit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\n  SF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\n  echo \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\n  exit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\n  SF_OTHER_PLATFORM=iphonesimulator\nelse\n  SF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\n  SF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\n  echo \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\n  exit 1\nfi\n\n# Build the other platform.\nxcrun xcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nxcrun lipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n";
 		};
 		63A3134616E5B3FC00DDE117 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1827,6 +1923,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		635020A419259A0000A78EED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				631513731925A968004A55A6 /* FOSFoundation.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63A3132D16E5B3FB00DDE117 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1840,7 +1944,6 @@
 				63A3136816E5B43D00DDE117 /* NSMutableString+FOS.m in Sources */,
 				6315724E190432420044CC90 /* NSManagedObjectModel+FOS.m in Sources */,
 				63A3136A16E5B43D00DDE117 /* NSObject+FOS.m in Sources */,
-				63157252190434980044CC90 /* FOSFoundation.xcdatamodeld in Sources */,
 				63A3136C16E5B43D00DDE117 /* NSString+FOS.m in Sources */,
 				6376C65518D7BADA0075FAE1 /* FOSConcatExpression.m in Sources */,
 				63A3137016E5B43D00DDE117 /* FOSRESTConfig.m in Sources */,
@@ -1869,6 +1972,7 @@
 				63A3139716E5B43D00DDE117 /* FOSMergePolicy.m in Sources */,
 				6384F7CB18F79E1C0038AEB7 /* FOSSendToManyRelationshipOperation.m in Sources */,
 				63432DC417FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m in Sources */,
+				635020BF19259C3900A78EED /* NSBundle+FOS.m in Sources */,
 				63F11E4918D890750070D19A /* FOSKeyPathExpression.m in Sources */,
 				63A3139B16E5B43D00DDE117 /* FOSPushCacheChangesOperation.m in Sources */,
 				63A08FDC18D51DD0003F14E0 /* FOSCMOBinding.m in Sources */,
@@ -1905,7 +2009,6 @@
 				63A313C816E5B43D00DDE117 /* FOSWebService.m in Sources */,
 				63A313CC16E5B43D00DDE117 /* FOSWebServiceRequest+FOS_Internal.m in Sources */,
 				634FA6691803828F00389821 /* FOSSearchOperation+Internal.m in Sources */,
-				6315724819042E7C0044CC90 /* FOSFoundation.xcdatamodeld in Sources */,
 				637C440D18D78D6A009C64BC /* FOSURLBinding.m in Sources */,
 				63A313CE16E5B43D00DDE117 /* FOSWebServiceRequest.m in Sources */,
 				6365D5DA171C69CE0023D45A /* FOSRetrieveCMOOperation+FOS_Internal.m in Sources */,
@@ -1999,7 +2102,6 @@
 				63A08FD018D403A2003F14E0 /* FOSAdapterBinding.ym in Sources */,
 				633CECC818F87FCD00D12E4A /* FOSRelationshipBinding.m in Sources */,
 				633467E51686C18800ACD4EA /* FOSMergePolicy.m in Sources */,
-				6315724719042E7C0044CC90 /* FOSFoundation.xcdatamodeld in Sources */,
 				633467F81687784100ACD4EA /* FOSUser.m in Sources */,
 				63127DB81688D70600F70BF9 /* NSObject+FOS.m in Sources */,
 				63EDFAA7168A06540086F588 /* FOSRESTConfig.m in Sources */,
@@ -2036,6 +2138,7 @@
 				63A08FE118D5254C003F14E0 /* FOSAttributeBinding.m in Sources */,
 				63FD73DF18D39F3600DCD982 /* FOSParseServiceAdapter.m in Sources */,
 				636763AA16B7288100A9B268 /* FOSOperation+FOS_Internal.m in Sources */,
+				635020BE19259C3900A78EED /* NSBundle+FOS.m in Sources */,
 				630036F416B9E78D0062BDED /* FOSWebServiceRequest+FOS_Internal.m in Sources */,
 				6374CABD1709F239001E08FA /* FOSNetworkStatusMonitor.m in Sources */,
 				635BA68016F8DB3500777092 /* FOSOperationQueue+FOS_Internal.m in Sources */,
@@ -2070,7 +2173,6 @@
 				63C9D378189D6D710022F518 /* FOSOperationQueueTests.m in Sources */,
 				632B5415168E1D7C003AD474 /* FOSLoginManagerTests.m in Sources */,
 				632B5419168E2533003AD474 /* FOSCachedManagedObjectTests.m in Sources */,
-				63157251190434980044CC90 /* FOSFoundation.xcdatamodeld in Sources */,
 				632B5421168E2721003AD474 /* FOSSearchOperationTests.m in Sources */,
 				634FA66B18038D8700389821 /* FOSPullStaticTablesOperationTests.m in Sources */,
 				632B5424168E2834003AD474 /* WidgetSearchOperation.m in Sources */,
@@ -2110,6 +2212,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		639B0FB31925A44B0028009C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 635020A719259A0000A78EED /* FOSFoundationResources */;
+			targetProxy = 639B0FB21925A44B0028009C /* PBXContainerItemProxy */;
+		};
+		639B0FB51925A4540028009C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 635020A719259A0000A78EED /* FOSFoundationResources */;
+			targetProxy = 639B0FB41925A4540028009C /* PBXContainerItemProxy */;
+		};
 		63A26A54168B3B6C00771EB3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 63BFA3761481A85700FE1C0C /* FOSFoundation */;
@@ -2128,6 +2240,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		6315136D1925A5B6004A55A6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6315136E1925A5B6004A55A6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		63A3133C16E5B3FC00DDE117 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2155,12 +2275,158 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		635020B319259A0000A78EED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundationResources/FOSFoundationResources-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FOSFoundationResources/FOSFoundationResources-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = FOSFoundation;
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		635020B419259A0000A78EED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundationResources/FOSFoundationResources-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FOSFoundationResources/FOSFoundationResources-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = FOSFoundation;
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		635020B519259A0000A78EED /* GoldMaster */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundationResources/FOSFoundationResources-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FOSFoundationResources/FOSFoundationResources-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = FOSFoundation;
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = GoldMaster;
+		};
+		635020B619259A0000A78EED /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundationResources/FOSFoundationResources-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FOSFoundationResources/FOSFoundationResources-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = FOSFoundation;
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = AdHoc;
+		};
 		638FD306185248C8007B97BA /* GoldMaster */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"CONFIGURATION_$(CONFIGURATION)",
@@ -2176,8 +2442,10 @@
 				INSTALL_MODE_FLAG = "";
 				INSTALL_OWNER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = GoldMaster;
@@ -2226,6 +2494,7 @@
 		638FD308185248C8007B97BA /* GoldMaster */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2243,6 +2512,7 @@
 				INFOPLIST_FILE = "FOSFoundationTests/FOSFoundationTests-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
@@ -2542,6 +2812,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2562,8 +2833,10 @@
 				INSTALL_OWNER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 			};
 			name = Debug;
 		};
@@ -2572,7 +2845,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"CONFIGURATION_$(CONFIGURATION)",
@@ -2588,8 +2862,10 @@
 				INSTALL_MODE_FLAG = "";
 				INSTALL_OWNER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -2679,6 +2955,7 @@
 		63BFA39F1481A85700FE1C0C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2696,6 +2973,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
@@ -2704,6 +2982,7 @@
 		63BFA3A01481A85700FE1C0C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2721,6 +3000,7 @@
 				INFOPLIST_FILE = "FOSFoundationTests/FOSFoundationTests-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
@@ -2732,6 +3012,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "CONFIGURATION_$(CONFIGURATION)";
@@ -2745,8 +3026,10 @@
 				INSTALL_MODE_FLAG = "";
 				INSTALL_OWNER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = AdHoc;
@@ -2794,6 +3077,7 @@
 		63E3C42714ABE74200E83F95 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2810,6 +3094,7 @@
 				INFOPLIST_FILE = "FOSFoundationTests/FOSFoundationTests-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
@@ -2818,6 +3103,17 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		635020B219259A0000A78EED /* Build configuration list for PBXNativeTarget "FOSFoundationResources" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				635020B319259A0000A78EED /* Debug */,
+				635020B419259A0000A78EED /* Release */,
+				635020B519259A0000A78EED /* GoldMaster */,
+				635020B619259A0000A78EED /* AdHoc */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		63A26A4F168B3B5500771EB3 /* Build configuration list for PBXAggregateTarget "Framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2887,24 +3183,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		6315724519042E7C0044CC90 /* FOSFoundation.xcdatamodeld */ = {
+		631513711925A93C004A55A6 /* FOSFoundation.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				6315724619042E7C0044CC90 /* FOSFoundation.xcdatamodel */,
 			);
-			currentVersion = 6315724619042E7C0044CC90 /* FOSFoundation.xcdatamodel */;
-			path = FOSFoundation.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-		6315724F190434980044CC90 /* FOSFoundation.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				63157250190434980044CC90 /* FOSFoundation.xcdatamodel */,
-			);
-			currentVersion = 63157250190434980044CC90 /* FOSFoundation.xcdatamodel */;
 			name = FOSFoundation.xcdatamodeld;
-			path = ../../FOSFoundation/FOSFoundation.xcdatamodeld;
+			path = ../FOSFoundationResources/FOSFoundation.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

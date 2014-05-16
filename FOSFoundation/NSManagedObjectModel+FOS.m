@@ -22,6 +22,7 @@
                            ignoringPlaceholder:(NSString *)placeholder {
     NSManagedObjectModel *result = [[NSManagedObjectModel alloc] init];
 
+    // Set placeholder
     [NSEntityDescription setPlaceholder:placeholder];
 
     NSArray *oldEntities = [self _orderedAndFilteredEntities:models];
@@ -65,6 +66,9 @@
 
         NSLog(@"%@", logStr);
     }
+
+    // Clear the placeholder
+    [NSEntityDescription setPlaceholder:nil];
 
     return result;
 }

@@ -343,6 +343,10 @@ header_fields
 base_url
     : /* empty */ { $$ = nil; }
     | BASE_URL SEP expression SEMI { $$ = $3; }
+    | BASE_URL SEP shared_binding_identifer SEMI {
+        $$ = (__bridge void *)[FOSSharedBindingReference referenceWithBindingType:AT_"BASE_URL"
+                                                                    andIdentifier:(__bridge NSString *)$3];
+    }
     ;
 
 request_method

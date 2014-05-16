@@ -20,6 +20,7 @@
 #import <FOSFoundation/NSManagedObjectModel+FOS.h>
 #import <FOSFoundation/NSMutableDictionary+FOS.h>
 #import <FOSFoundation/NSMutableString+FOS.h>
+#import <FOSFoundation/NSBundle+FOS.h>
 #import <FOSFoundation/NSObject+FOS.h>
 #import <FOSFoundation/NSRelationshipDescription+FOS.h>
 #import <FOSFoundation/NSString+FOS.h>

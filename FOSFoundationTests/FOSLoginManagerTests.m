@@ -376,7 +376,6 @@
 
 #pragma mark - Private Methods
 + (NSPersistentStoreCoordinator *)_setupDB {
-
     NSURL *appDocsDirURL =
         [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
                                                 inDomains:NSUserDomainMask] lastObject];
@@ -415,17 +414,19 @@
 }
 
 + (NSManagedObjectModel *)_mergeModels {
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSArray *modelNames = @[ @"FOSFoundation", @"RESTTests" ];
+    NSMutableArray *models = [NSMutableArray array];
 
-    NSMutableArray *models = [NSMutableArray arrayWithCapacity:modelNames.count];
+    // FOSFoundation
+    NSBundle *fosBundle = [NSBundle fosFrameworkBundle];
+    NSURL *modelURL = [fosBundle URLForResource:@"FOSFoundation" withExtension:@"momd"];
+    NSManagedObjectModel *model = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    [models addObject:model];
 
-    for (NSString *modelName in modelNames) {
-        NSURL *modelURL = [bundle URLForResource:modelName withExtension:@"momd"];
-        NSManagedObjectModel *model = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-
-        [models addObject:model];
-    }
+    // RESTTests
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    modelURL = [testBundle URLForResource:@"RESTTests" withExtension:@"momd"];
+    model = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    [models addObject:model];
 
     NSManagedObjectModel *mergedModel =
         [NSManagedObjectModel modelByMergingModels:models ignoringPlaceholder:@"isPlaceholder"];

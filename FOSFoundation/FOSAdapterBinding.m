@@ -163,6 +163,23 @@
             NSAssert(urlBinding.cmoBinding != nil, @"Missing binding???");
         }
     }
+
+    NSMutableDictionary *updatedAdapterFields = [self.adapterFields mutableCopy];
+    for (NSString *adapterKey in self.adapterFields.allKeys) {
+        id adapterField = updatedAdapterFields[adapterKey];
+
+        if ([adapterField isKindOfClass:[FOSSharedBindingReference class]]) {
+            FOSSharedBindingReference *bindingRef = adapterField;
+
+            adapterField = [self _cmoBinderForSharedBindingRef:bindingRef];
+
+            // TODO : This should turn into a user-visible error
+            NSAssert(adapterField != nil, @"Missing binding???");
+
+            updatedAdapterFields[adapterKey] = adapterField;
+        }
+    }
+    self.adapterFields = updatedAdapterFields;
 }
 
 - (FOSCMOBinding *)_cmoBinderForSharedBindingRef:(FOSSharedBindingReference *)bindingRef {

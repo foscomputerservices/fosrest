@@ -41,7 +41,6 @@
     }
 
     return self;
-
 }
 
 - (id)initFromBindingDescription:(NSString *)description error:(NSError **)error {
