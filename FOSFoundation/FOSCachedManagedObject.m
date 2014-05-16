@@ -174,7 +174,7 @@ static NSMutableDictionary *_processingFaults = nil;
     BOOL result = NO;
 
     NSEntityDescription *entity = [self entityDescription];
-    NSString *cmoKeyPath = [self _cmoKeyPath:[FOSRESTConfig sharedInstance]];
+    NSString *cmoKeyPath = [self _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
 
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@",
                          cmoKeyPath, jsonId];
@@ -191,7 +191,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSParameterAssert(jsonId != nil);
     id result = nil;
 
-    NSString *cmoKeyPath = [self _cmoKeyPath:[FOSRESTConfig sharedInstance]];
+    NSString *cmoKeyPath = [self _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@", cmoKeyPath, jsonId];
 
     NSString *entityName = [self entityName];
@@ -211,7 +211,7 @@ static NSMutableDictionary *_processingFaults = nil;
 + (NSSet *)fetchWithIds:(id<NSFastEnumeration>)jsonIds {
     NSSet *result = nil;
 
-    NSString *cmoKeyPath = [self _cmoKeyPath:[FOSRESTConfig sharedInstance]];
+    NSString *cmoKeyPath = [self _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K IN %@", cmoKeyPath, jsonIds];
 
     NSString *entityName = [self entityName];
@@ -753,7 +753,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
 - (FOSJsonId)jsonIdValue {
     // REVIEW : I'm not positive that this is the best way to accomplish this...
-    NSString *idProp = [[self class] _cmoKeyPath:[FOSRESTConfig sharedInstance]];
+    NSString *idProp = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
     NSString *result = [self primitiveValueForKey:idProp];
 
     return result;
@@ -762,7 +762,7 @@ static NSMutableDictionary *_processingFaults = nil;
 - (void)setJsonIdValue:(FOSJsonId)jsonIdValue {
     NSParameterAssert(jsonIdValue != nil);
 
-    NSString *idProp = [[self class] _cmoKeyPath:[FOSRESTConfig sharedInstance]];
+    NSString *idProp = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
     [self setValue:jsonIdValue forKeyPath:idProp];
 
     [self setPrimitiveIsFaultObject:@NO];
@@ -932,7 +932,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
 #pragma mark - Private methods
 
-+ (NSString *)_cmoKeyPath:(FOSRESTConfig *)restConfig {
++ (NSString *)_cmoIdentityKeyPath:(FOSRESTConfig *)restConfig {
     NSParameterAssert(restConfig != nil);
 
     NSEntityDescription *entity = [self entityDescription];
@@ -944,13 +944,53 @@ static NSMutableDictionary *_processingFaults = nil;
                                                      forRelationship:nil
                                                        forEntity:entity];
 
-    id<FOSExpression> expr = urlBinding.cmoBinding.identityBinding.cmoKeyPathExpression;
+    // Any errors encountered by this method are yielded as exceptions as they're something
+    // very wrong with the adapter's configuration.
+    if (urlBinding == nil) {
+        NSString *msgFmt = @"Missing ULR_BINDING for the RETRIEVE_SERVER_RECORD lifecycle of entity '%@' managed by %@.";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         entity.name, NSStringFromClass([adapter class])];
+        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+
+        @throw e;
+    }
+
+    FOSCMOBinding *cmoBinding = urlBinding.cmoBinding;
+
+    if (cmoBinding == nil) {
+        NSString *msgFmt = @"Missing CMO_BINDING for entity '%@' managed by %@.";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         entity.name, NSStringFromClass([adapter class])];
+        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+
+        @throw e;
+    }
+
+    FOSAttributeBinding *identityBinding = cmoBinding.identityBinding;
+
+    if (identityBinding == nil) {
+        NSString *msgFmt = @"Missing ID_ATTRIBUTE in the ATTRIBUTE_BINDINGS for entity '%@' managed by %@.";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         entity.name, NSStringFromClass([adapter class])];
+        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+
+        @throw e;
+    }
+
+    id<FOSExpression> expr = identityBinding.cmoKeyPathExpression;
     NSError *localError = nil;
-    NSString *cmoKeyPath = [expr evaluateWithContext:context error:&localError];
+    NSString *result = [expr evaluateWithContext:context error:&localError];
 
-    NSAssert(localError == nil, @"Error??? %@", localError.localizedDescription);
+    if (localError != nil) {
+        NSString *msgFmt = @"Error evaluating the ID_ATTRIBUTE's CMO expression for entity '%@' managed by the %@ adapter.";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         entity.name, NSStringFromClass([adapter class])];
+        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
 
-    return cmoKeyPath;
+        @throw e;
+    }
+
+    return result;
 }
 
 + (NSSet *)_mappedRelationshipNames:(FOSRESTConfig *)restConfig
@@ -1027,7 +1067,7 @@ static NSMutableDictionary *_processingFaults = nil;
             context[@"ATTRDESC"] = propDesc;
 
             for (FOSAttributeBinding *attrBinding in attrBindings) {
-                if (!attrBinding.isIdentityProperty &&
+                if (!attrBinding.isIdentityAttribute &&
                     [attrBinding.attributeMatcher itemIsIncluded:propDesc.name
                                                          context:context]) {
                     [result addObject:propDesc.name];
@@ -1183,7 +1223,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSString *idRelationshipKeyPath = nil;
     NSSet *knownRelNames = [[self class] _mappedRelationshipNames:[FOSRESTConfig sharedInstance]
                                                    idRelationship:&idRelationshipKeyPath];
-    NSString *primaryKey = [[self class] _cmoKeyPath:[FOSRESTConfig sharedInstance]];
+    NSString *primaryKey = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
 
     // Remember which properties have been modified
     for (NSString *nextProp in changedVals) {

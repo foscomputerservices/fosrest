@@ -26,12 +26,19 @@
 #pragma mark - Class Methods
 
 /*!
- * @method bindingWithJsonKeyExpression:cmoKeyPathExpression:andPropertyMatcher:
+ * @method constantBindingWithJsonKeyExpression:cmoKeyPathExpression
+ *
+ */
++ (instancetype)sendOnlyBindingWithJsonKeyExpression:(id<FOSExpression>)jsonKeyExpression
+                                cmoKeyPathExpression:(id<FOSExpression>)cmoKeyPathExpression;
+
+/*!
+ * @method bindingWithJsonKeyExpression:cmoKeyPathExpression:andAttributeMatcher:
  *
  */
 + (instancetype)bindingWithJsonKeyExpression:(id<FOSExpression>)jsonKeyExpression
                         cmoKeyPathExpression:(id<FOSExpression>)cmoKeyPathExpression
-                          andPropertyMatcher:(FOSItemMatcher *)propertyMatcher;
+                         andAttributeMatcher:(FOSItemMatcher *)attributeMatcher;
 
 /*!
  * @group Public Properties
@@ -39,19 +46,35 @@
 #pragma mark - Public Properties
 
 /*!
- * @property isIdentityProperty
+ * @property isIdentityAttribute
  *
  * The property that holds the Server Identity of the instance.
  */
-@property (nonatomic, assign) BOOL isIdentityProperty;
+@property (nonatomic, assign) BOOL isIdentityAttribute;
 
 /*!
- * @property isReadOnlyProperty
+ * @property isReceiveOnlyAttribute
  *
  * Identifies that this property cannot be sent to the server, only
  * pulled down.
+ *
+ * @discussion
+ *
+ * Both isReceiveOnlyAttribute and isSendOnlyAttribute cannot be true.
  */
-@property (nonatomic, assign) BOOL isReadOnlyProperty;
+@property (nonatomic, assign) BOOL isReceiveOnlyAttribute;
+
+/*!
+ * @property isSendOnlyAttribute
+ *
+ * Identifies that this property cannot be received from the server, only
+ * sent to it.
+ *
+ * @discussion
+ *
+ * Both isReceiveOnlyAttribute and isSendOnlyAttribute cannot be true.
+ */
+@property (nonatomic, assign) BOOL isSendOnlyAttribute;
 
 /*!
  * @property jsonKeyExpression
@@ -59,7 +82,7 @@
  * A FOSBindingExpression that, when evaluated, yields a keyPath string that
  * can be applied to the JSON to get/set a value.
  *
- * Setting this property is required;
+ * Setting this property is required.
  */
 @property (nonatomic, strong) id<FOSExpression> jsonKeyExpression;
 
@@ -78,7 +101,8 @@
  *
  * The matcher that describes the attributes that can be bound by this description
  *
- * Setting this property is required;
+ * Setting this property is required, unless isSendOnlyAttribute is true.  In this
+ * case, setting attributeMatcher to nil indicates that the value is a constant.
  */
 @property (nonatomic, strong) FOSItemMatcher *attributeMatcher;
 

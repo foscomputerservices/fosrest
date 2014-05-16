@@ -54,6 +54,13 @@
     return result;
 }
 
+#pragma mark - Overrides
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"KeyPathExpression - LHS : %@ - RHS : %@",
+            self.lhs.description, self.rhs.description ];
+}
+
 #pragma mark - Private Methods
 - (id)_evaluateWithContext:(NSDictionary *)context error:(NSError **)error {
     NSParameterAssert(error != nil);

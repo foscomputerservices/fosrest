@@ -34,7 +34,7 @@
 
     _attributeBindings = attributeBindings;
 
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"isIdentityProperty == YES"];
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"isIdentityAttribute == YES"];
     NSSet *identityProps = [_attributeBindings filteredSetUsingPredicate:pred];
 
     // TODO : This should be a compilation error
@@ -139,7 +139,7 @@
         }
 
         // Use all property bindings
-        for (id<FOSTwoWayPropertyBinding> propBinding in [self _propertyBindings]) {
+        for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
 
             NSSet *propDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
             for (NSPropertyDescription *propDesc in propDescriptions) {
@@ -164,20 +164,33 @@
                                              fromCMO:cmo
                                          forProperty:propDesc
                                    forLifecyclePhase:lifecyclePhase
-                                               error:error];
+                                               error:&localError];
                 }
 
-                if (!result) {
+                if (!result || localError != nil) {
                     break;
                 }
             }
+
+            if (localError == nil) {
+                // Handle constant attribute descriptions
+                if ([propBinding isKindOfClass:[FOSAttributeBinding class]] &&
+                    ((FOSAttributeBinding *)propBinding).isSendOnlyAttribute) {
+
+                }
+            }
+            else {
+                break;
+            }
         }
 
-        // There's one extra special property on FOSUser...the password.
-        // We don't store this in the data model as we don't want to store
-        // the password in the database, so we'll handle it manually.
-        if ([cmo isKindOfClass:[FOSUser class]] && ((FOSUser *)cmo).password.length > 0) {
-            json[@"password"] = ((FOSUser *)cmo).password;
+        if (localError == nil) {
+            // There's one extra special property on FOSUser...the password.
+            // We don't store this in the data model as we don't want to store
+            // the password in the database, so we'll handle it manually.
+            if ([cmo isKindOfClass:[FOSUser class]] && ((FOSUser *)cmo).password.length > 0) {
+                json[@"password"] = ((FOSUser *)cmo).password;
+            }
         }
     }
 
@@ -201,7 +214,7 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
     BOOL result = [self _ensureCMO:cmo error:&localError];
     if (result) {
         // Use all property bindings
-        for (id<FOSTwoWayPropertyBinding> propBinding in [self _propertyBindings]) {
+        for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
 
             // Bind all properties
             NSSet *propertyDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
@@ -213,8 +226,8 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                 // to be cleared.
                 if (lifecyclePhase & FOSLifecycleDirectionRetrieve ||
                     ([propBinding isKindOfClass:[FOSAttributeBinding class]] &&
-                     (((FOSAttributeBinding *)propBinding).isIdentityProperty ||
-                      ((FOSAttributeBinding *)propBinding).isReadOnlyProperty)
+                     (((FOSAttributeBinding *)propBinding).isIdentityAttribute ||
+                      ((FOSAttributeBinding *)propBinding).isReceiveOnlyAttribute)
                     )) {
                     result = [propBinding updateCMO:cmo
                                            fromJSON:json
@@ -242,21 +255,21 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
 
 #pragma mark - Private Methods
 
-- (NSSet *)_propertyBindings {
-    NSMutableSet *propBindings = [self.attributeBindings mutableCopy];
-    [propBindings unionSet:self.relationshipBindings];
+- (NSSet *)_attributeBindings {
+    NSMutableSet *attrBindings = [self.attributeBindings mutableCopy];
+    [attrBindings unionSet:self.relationshipBindings];
 
-    return propBindings;
+    return attrBindings;
 }
 
-- (NSMutableSet *)_propertyDescriptionsForCMO:(FOSCachedManagedObject *)cmo {
+- (NSMutableSet *)_attributeDescriptionsForCMO:(FOSCachedManagedObject *)cmo {
     NSMutableSet *result = [NSMutableSet setWithCapacity:20];
 
 
-    for (id<FOSTwoWayPropertyBinding> propBinding in [self _propertyBindings]) {
-        NSSet *propertyDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
+    for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
+        NSSet *attributeDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
 
-        [result unionSet:propertyDescriptions];
+        [result unionSet:attributeDescriptions];
     }
 
     return result;
@@ -270,10 +283,13 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
     NSDictionary *context = @{ @"CMO" : cmo };
 
     // Verify propertyDescriptions match entityDescriptions
-    NSMutableSet *propEntityDescriptions = [[self _propertyDescriptionsForCMO:cmo] valueForKey:@"entity"];
-    if (![self.entityMatcher itemsAreIncluded:propEntityDescriptions context:context]) {
+    NSMutableSet *attrEntityDescriptions =
+        [[self _attributeDescriptionsForCMO:cmo] valueForKeyPath:@"entity.name"];
 
-        NSString *msg = @"The propertyBindings are out of sync with the entityDescriptions.";
+    if (![self.entityMatcher itemsAreIncluded:attrEntityDescriptions context:context]) {
+        NSString *msgFmt = @"The ATTRIBUTE_BINDINGS entities (%@) for the CMO_BINDING don't match the CMO '%@'.";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         [attrEntityDescriptions valueForKeyPath:@"self"], cmo.entity.name];
 
         *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
         result = NO;

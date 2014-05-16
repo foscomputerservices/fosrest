@@ -209,6 +209,8 @@ TEARDOWN_LOGIN
     // TODO : For now we must save the record for things to work in the createOp.  That is,
     //        the createOp will use the objectID to locate the entity after execution and
     //        opQueue MOCs will not be able to locate the instance unless it's saved.
+    //
+    // http://fosmain.foscomputerservices.com:8080/browse/FF-4
     [[FOSRESTConfig sharedInstance].databaseManager saveChanges];
 
     FOSSendServerRecordOperation *createOp = [testCreate sendServerRecord];

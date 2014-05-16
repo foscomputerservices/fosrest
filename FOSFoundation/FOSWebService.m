@@ -154,6 +154,15 @@ const NSTimeInterval kQueueingDelay = 0.26f;
     NSString *requestMethod = urlRequest.HTTPMethod;
     NSString *requestURLString = urlRequest.URL.absoluteString;
 
+    NSString *requestJSON = nil;
+    if ([urlRequest.allHTTPHeaderFields[@"Content-Type"] rangeOfString:@"application/json"].location != NSNotFound && urlRequest.HTTPBody != nil) {
+        id<NSObject> json = [NSJSONSerialization JSONObjectWithData:urlRequest.HTTPBody
+                                                            options:0
+                                                              error:nil];
+
+        requestJSON = json.description;
+    }
+
     if (synchronous) {
         NSURLResponse *response = nil;
         NSError *error = nil;
@@ -161,9 +170,10 @@ const NSTimeInterval kQueueingDelay = 0.26f;
                                              returningResponse:&response
                                                          error:&error];
 
-        NSLog(@"FOSWebService (%li) Sync: %@ - %@",
+        NSLog(@"FOSWebService (%li) Sync: %@ - %@%@",
               (long)currentRequestId, requestMethod,
-              [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]);
+              [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+              requestJSON == nil ? @"" : [NSString stringWithFormat:@"\nJSON: %@", requestJSON]);
         
         [self _completionHandlerForRequest:webServiceRequest
                             withURLRequest:urlRequest

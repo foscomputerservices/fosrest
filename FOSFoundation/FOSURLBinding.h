@@ -24,29 +24,35 @@ typedef NS_OPTIONS(NSUInteger, FOSLifecycleDirection) {
 /*!
  * @enum FOSLifecyclePhase
  *
- * @constant FOSLifecyclePhaseLogin Logs a user in to the REST Service.
+ * @constant FOSLifecyclePhaseLogin Logs a user in to the REST Service (Adapter binding: LOGIN).
  *
- * @constant FOSLifecyclePhaseLogout Logs a user out of the REST Service.
+ * @constant FOSLifecyclePhaseLogout Logs a user out of the REST Service (Adapter binding: LOGOUT).
  *
- * @constant FOSLifecyclePhasePasswordReset Resets the password for a user.
+ * @constant FOSLifecyclePhasePasswordReset Resets the password for a user
+ *           (Adapter binding: PASSWORD_RESET).
  *
- * @constant FOSLifecyclePhaseCreateServerRecord Create a record on the REST Service.
+ * @constant FOSLifecyclePhaseCreateServerRecord Create a record on the REST Service
+ *           (Adapter binding: CREATE).
  *
- * @constant FOSLifecyclePhaseUpdateServerRecord Update a record on the REST Service.
+ * @constant FOSLifecyclePhaseUpdateServerRecord Update a record on the REST Service
+ *           (Adapter binding: UPDATE).
  *
- * @constant FOSLifecyclePhaseDestroyServerRecord Destroy a record on the REST Service.
+ * @constant FOSLifecyclePhaseDestroyServerRecord Destroy a record on the REST Service
+ *           (Adapter binding: DESTROY).
  *
  * @constant FOSLifecyclePhaseRetrieveServerRecord Retrieves information from the
- *           REST Service and creates or updates a CMO.
+ *           REST Service and creates or updates a CMO  (Adapter binding: RETRIEVE_SERVER_RECORD).
  *
  * @constant FOSLifecyclePhaseRetrieveServerRecords Retrieves information from the
- *           REST Service and creates or updates one or more CMOs.
+ *           REST Service and creates or updates one or more CMOs
+ *           (Adapter binding: RETRIEVE_SERVER_RECORDS).
  *
  * @constant FOSLifecyclePhaseRetrieveServerRecordCount Retrieves the count of
- *           records from the REST Service.
+ *           records from the REST Service  (Adapter binding: RETRIEVE_SERVER_RECORD_COUNT).
  *
  * @constant FOSLifecyclePhaseRetrieveServerRecordRelationship Retrieves information from
- *           the REST service and creates or updates a relationship of a CMO.
+ *           the REST service and creates or updates a relationship of a CMO
+ *           (Adapter binding: RETRIEVE_RELATIONSHIP).
  */
 typedef NS_ENUM(NSUInteger, FOSLifecyclePhase) {
     FOSLifecyclePhaseLogin                            = 0x01,
@@ -91,15 +97,17 @@ typedef NS_OPTIONS(NSUInteger, FOSBindingOptions) {
 /*!
  * @enum FOSRESTRequestFormat
  *
- * @constant FOSRequestFormatJSON  The data will be transmitted as JSON in the body of the message
- *           with a body type of 'application/json'.  This is the default for FOSRequestMethodPOST,
- *           FOSRequestMethodGET and FOSRequestMethodDELETE.
+ * @constant FOSRequestFormatJSON  (Adapter binding: 'JSON') The data will be transmitted as JSON
+ *           in the body of the message with a body type of 'application/json'.  This is the
+ *           default for FOSRequestMethodPOST, FOSRequestMethodGET and FOSRequestMethodDELETE.
  *
- * @constant FOSRequestFormatWebform The data will be transmited as parameters. For
- *           FOSRequestMethodGET they are embedded in the URL; for all other request types, they
- *           are embedded in the body with a content type of 'application/x-www-form-urlencoded'.
+ * @constant FOSRequestFormatWebform (Adapter binding: 'WEBFORM') The data will be transmited
+ *           as parameters. For FOSRequestMethodGET they are embedded in the URL; for all
+ *           other request types, they are embedded in the body with a content type
+ *           of 'application/x-www-form-urlencoded'.
  *
- * @constant FOSRequestFormatNoData No object data will be transmitted in the request.
+ * @constant FOSRequestFormatNoData (Adapter binding: 'NO_DATA') No object data will be
+ *           transmitted in the request.
  */
 typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
     FOSRequestFormatJSON = 0,

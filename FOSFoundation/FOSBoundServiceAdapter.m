@@ -335,8 +335,13 @@
     }
 
     if (localError != nil) {
-        NSAssert(localError == nil, @"Bad expression???");
-        result = nil;
+        // TODO : Add line/col info http://fosmain.foscomputerservices.com:8080/browse/FF-3
+        NSString *msgFmt = @"Error (%d:%d): %@ for adapter";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         0, 0, localError.description];
+
+        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        @throw e;
     }
     
     return result;

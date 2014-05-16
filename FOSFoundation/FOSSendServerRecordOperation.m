@@ -9,9 +9,11 @@
 #import "FOSSendServerRecordOperation.h"
 #import "FOSSendToOneRelationshipOperation.h"
 #import "FOSSendToManyRelationshipOperation.h"
+#import "FOSLoginManager_Internal.h"
 
 @implementation FOSSendServerRecordOperation {
     NSManagedObjectID *_cmoID;
+    BOOL _isLoginUserRecord;
     __block FOSURLBinding *_urlBinding;
     __block FOSWebServiceRequest *_webServiceRequest;
     __block NSError *_error;
@@ -20,8 +22,11 @@
 #pragma mark - Property Overrides
 
 - (FOSCachedManagedObject *)cmo {
-    FOSCachedManagedObject *result =
-        (FOSCachedManagedObject *)[self.managedObjectContext objectWithID:_cmoID];
+    NSManagedObjectContext *moc = _isLoginUserRecord
+        ? [FOSLoginManager loginUserContext]
+        : self.managedObjectContext;
+
+    FOSCachedManagedObject *result = (FOSCachedManagedObject *)[moc objectWithID:_cmoID];
 
     NSAssert(result != nil, @"No cmo???");
     NSAssert([result isKindOfClass:[FOSCachedManagedObject class]], @"Wrong class??");
@@ -61,6 +66,12 @@
         if ([self.managedObjectContext obtainPermanentIDsForObjects:@[ cmo ] error:&error]) {
             _cmoID = cmo.objectID;
             _lifecyclePhase = lifecyclePhase;
+
+            if ((lifecyclePhase == FOSLifecyclePhaseCreateServerRecord ||
+                lifecyclePhase == FOSLifecyclePhaseLogin) &&
+                [cmo isKindOfClass:[FOSUser class]]) {
+                _isLoginUserRecord = ((FOSUser *)cmo).isLoginUser;
+            }
 
             // Delay creation of webServiceRequest to BG thread.  We want to do this as there
             // might be a fair amount of overhead in creating the entire hieararchy and we don't want
@@ -104,9 +115,9 @@
             FOSCachedManagedObject *cmo = blockSelf.cmo;
             FOSRESTConfig *restConfig = blockSelf.restConfig;
             FOSURLBinding *urlBinding =
-            [restConfig.restServiceAdapter urlBindingForLifecyclePhase:blockSelf.lifecyclePhase
-                                                       forRelationship:nil
-                                                             forEntity:cmo.entity];
+                [restConfig.restServiceAdapter urlBindingForLifecyclePhase:blockSelf.lifecyclePhase
+                                                           forRelationship:nil
+                                                                 forEntity:cmo.entity];
             FOSWebServiceRequest *webServiceRequest = nil;
             NSError *localError = nil;
 

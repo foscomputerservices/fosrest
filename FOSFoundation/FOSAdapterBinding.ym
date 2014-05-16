@@ -72,7 +72,7 @@
 %token RETRIEVE_SERVER_RECORD_COUNT RETRIEVE_RELATIONSHIP
 %token JSON WEBFORM NO_DATA
 %token GET POST PUT DELETE
-%token ATTRIBUTE_BINDINGS ID_ATTRIBUTE READ_ONLY_ATTRIBUTE
+%token ATTRIBUTE_BINDINGS ID_ATTRIBUTE RECEIVE_ONLY_ATTRIBUTE SEND_ONLY_ATTRIBUTE
 %token RELATIONSHIP_BINDINGS RELATIONSHIP_BINDING
 %token JSON_BINDING JSON_ID_BINDING RELATIONSHIPS
 
@@ -397,14 +397,18 @@ attribute_binding_list
 
 attribute_binding
     : ID_ATTRIBUTE attribute_binding_spec {
-        [(__bridge FOSAttributeBinding *)$2 setIsIdentityProperty:YES];
+        [(__bridge FOSAttributeBinding *)$2 setIsIdentityAttribute:YES];
 
         $$ = $2;
     }
-    | READ_ONLY_ATTRIBUTE attribute_binding_spec {
-        [(__bridge FOSAttributeBinding *)$2 setIsReadOnlyProperty:YES];
+    | RECEIVE_ONLY_ATTRIBUTE attribute_binding_spec {
+        [(__bridge FOSAttributeBinding *)$2 setIsSendOnlyAttribute:YES];
 
         $$ = $2;
+    }
+    | SEND_ONLY_ATTRIBUTE LBRACE expression COLON expression RBRACE {
+        $$ = (__bridge void *)[FOSAttributeBinding sendOnlyBindingWithJsonKeyExpression:(__bridge id)($3)
+                                                                   cmoKeyPathExpression:(__bridge id)($5)];
     }
     | attribute_binding_spec { $$ = $1; }
     ;
@@ -413,7 +417,7 @@ attribute_binding_spec
     : LBRACE expression COLON expression RBRACE matching_attributes {
         $$ = (__bridge void *)[FOSAttributeBinding bindingWithJsonKeyExpression:(__bridge id)($2)
                                                           cmoKeyPathExpression:(__bridge id)($4)
-                                                            andPropertyMatcher:(__bridge id)($6)];
+                                                           andAttributeMatcher:(__bridge id)($6)];
     }
     ;
 

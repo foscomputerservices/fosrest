@@ -39,10 +39,22 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "FOSCachedManagedObjectReadOnlyTests/testUploadWithRefToNonUploadable">
+               </Test>
+               <Test
                   Identifier = "FOSCachedManagedObjectTests/testAtomicCreate">
                </Test>
                <Test
                   Identifier = "FOSCachedManagedObjectTests/testAtomicCreateOffline">
+               </Test>
+               <Test
+                  Identifier = "FOSCachedManagedObjectTests/testDeleteFromServerToClient_ToMany_SingleItem">
+               </Test>
+               <Test
+                  Identifier = "FOSCachedManagedObjectTests/testDeleteFromServerToClient_ToMany_SingleItemOfMultiple">
+               </Test>
+               <Test
+                  Identifier = "FOSSearchOperationTests/testSaveIndividualResults">
                </Test>
             </SkippedTests>
          </TestableReference>

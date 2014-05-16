@@ -135,6 +135,10 @@
                     }
                 }
             }
+
+            if (localError != nil) {
+                break;
+            }
         }
     }
 

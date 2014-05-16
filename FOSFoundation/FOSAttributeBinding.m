@@ -12,13 +12,31 @@
 
 #pragma mark - Class Methods
 
-+ (instancetype)bindingWithJsonKeyExpression:(id<FOSExpression>)jsonKeyExpression
-                        cmoKeyPathExpression:(id<FOSExpression>)cmoKeyPathExpression
-                          andPropertyMatcher:(FOSItemMatcher *)propertyMatcher {
++ (instancetype)sendOnlyBindingWithJsonKeyExpression:(id<FOSExpression>)jsonKeyExpression
+                                cmoKeyPathExpression:(id<FOSExpression>)cmoKeyPathExpression {
+    NSParameterAssert(jsonKeyExpression != nil);
+    NSParameterAssert(cmoKeyPathExpression != nil);
+
     FOSAttributeBinding *result = [[self alloc] init];
     result.jsonKeyExpression = jsonKeyExpression;
     result.cmoKeyPathExpression = cmoKeyPathExpression;
-    result.attributeMatcher = propertyMatcher;
+    result.isReceiveOnlyAttribute = NO;
+    result.isSendOnlyAttribute = YES;
+
+    return result;
+}
+
++ (instancetype)bindingWithJsonKeyExpression:(id<FOSExpression>)jsonKeyExpression
+                        cmoKeyPathExpression:(id<FOSExpression>)cmoKeyPathExpression
+                          andAttributeMatcher:(FOSItemMatcher *)attributeMatcher {
+    NSParameterAssert(jsonKeyExpression != nil);
+    NSParameterAssert(cmoKeyPathExpression != nil);
+    NSParameterAssert(attributeMatcher != nil);
+
+    FOSAttributeBinding *result = [[self alloc] init];
+    result.jsonKeyExpression = jsonKeyExpression;
+    result.cmoKeyPathExpression = cmoKeyPathExpression;
+    result.attributeMatcher = attributeMatcher;
 
     return result;
 }
@@ -35,7 +53,7 @@
     FOSJsonId result = nil;
     NSError *localError = nil;
 
-    if (self.isIdentityProperty) {
+    if (self.isIdentityAttribute) {
 
         NSString *jsonKeyPath = [self.jsonKeyExpression evaluateWithContext:context
                                                                       error:&localError];
@@ -95,7 +113,9 @@
     NSError *localError = nil;
 
     BOOL result = [self _ensureCMO:cmo andProp:propDesc error:error];
-    if (result && !self.isReadOnlyProperty) {
+    if (result && !self.isReceiveOnlyAttribute &&
+        // Don't push the identity property on create, there won't be one...
+        !(lifecyclePhase == FOSLifecyclePhaseCreateServerRecord && self.isIdentityAttribute)) {
         NSDictionary *context = @{ @"CMO" : cmo, @"ATTRDESC" : propDesc };
 
         // Evaluate the cmoKeyPath
@@ -119,7 +139,11 @@
 
                 // Udpate the JSON dictionary (handling nested dictionaries)
                 if (localError == nil) {
-                    [[self class] setValue:value ofJson:json forKeyPath:jsonKeyPath];
+                    // Don't set nil values on create
+                    if (!(lifecyclePhase == FOSLifecyclePhaseCreateServerRecord &&
+                          value == [NSNull null])) {
+                        [[self class] setValue:value ofJson:json forKeyPath:jsonKeyPath];
+                    }
                 }
             }
         }
@@ -179,7 +203,7 @@
                                                      forKeyPath:cmoKeyPath
                                                     andProperty:propDesc];
                         if (result) {
-                            NSAssert(!self.isIdentityProperty || value != nil,
+                            NSAssert(!self.isIdentityAttribute || value != nil,
                                      @"Why are we clearing out the identity property???");
                             [cmo setValue:value forKeyPath:cmoKeyPath];
                         }
@@ -208,30 +232,32 @@
     NSParameterAssert(error != nil);
     BOOL result = YES;
 
-    NSDictionary *context = @{ @"CMO" : cmo, @"ATTRDESC" : propDesc };
+    if (self.attributeMatcher != nil) {
+        NSDictionary *context = @{ @"CMO" : cmo, @"ATTRDESC" : propDesc };
 
-    if (![self.attributeMatcher itemIsIncluded:propDesc.name context:context]) {
-        NSString *msg = [NSString stringWithFormat:@"The property %@ does not match any property descriptions for the property binding.", propDesc.name];
+        if (![self.attributeMatcher itemIsIncluded:propDesc.name context:context]) {
+            NSString *msg = [NSString stringWithFormat:@"The property %@ does not match any property descriptions for the property binding.", propDesc.name];
 
-        *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
-        result = NO;
-    }
-
-    if (result) {
-
-        NSSet *attributeDescriptions = [self.attributeMatcher matchedItems:cmo.entity.properties
-                                                             matchSelector:NSSelectorFromString(@"name")
-                                                                   context:context];
-        NSArray *entityDescriptions = [attributeDescriptions valueForKey:@"entity"];
-
-        if (![entityDescriptions containsObject:cmo.entity]) {
-            if (error) {
-                NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
-
-                *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
-            }
-
+            *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
             result = NO;
+        }
+
+        if (result) {
+
+            NSSet *attributeDescriptions = [self.attributeMatcher matchedItems:cmo.entity.properties
+                                                                 matchSelector:NSSelectorFromString(@"name")
+                                                                       context:context];
+            NSArray *entityDescriptions = [attributeDescriptions valueForKey:@"entity"];
+
+            if (![entityDescriptions containsObject:cmo.entity]) {
+                if (error) {
+                    NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
+
+                    *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                }
+
+                result = NO;
+            }
         }
     }
 

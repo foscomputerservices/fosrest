@@ -117,6 +117,10 @@
     return result;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"$%@", self.identifier];
+}
+
 #pragma mark - Private Methods
 
 - (id)_evaluateWithContext:(NSDictionary *)context
