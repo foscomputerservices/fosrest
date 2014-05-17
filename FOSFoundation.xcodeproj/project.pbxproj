@@ -34,6 +34,7 @@
 		6300F38E169621AA003D9E26 /* FOSParseUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6300F38C169621AA003D9E26 /* FOSParseUser.m */; };
 		6301CE0C186E339D00E07664 /* FOSPullStaticTablesOperation+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6301CE0A186E339D00E07664 /* FOSPullStaticTablesOperation+FOS_Internal.h */; };
 		6301CE0D186E339D00E07664 /* FOSPullStaticTablesOperation+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6301CE0A186E339D00E07664 /* FOSPullStaticTablesOperation+FOS_Internal.h */; };
+		6303CC9E1926C33E00BB5346 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6303CC9D1926C33E00BB5346 /* FOSFoundation.xcdatamodeld */; };
 		630BB99C18F6E710009EF09D /* FOSCreateServerRecordOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 630BB99A18F6E710009EF09D /* FOSCreateServerRecordOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		630BB99D18F6E710009EF09D /* FOSCreateServerRecordOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 630BB99A18F6E710009EF09D /* FOSCreateServerRecordOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		630BB99E18F6E710009EF09D /* FOSCreateServerRecordOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 630BB99B18F6E710009EF09D /* FOSCreateServerRecordOperation.m */; };
@@ -51,7 +52,6 @@
 		63127DB81688D70600F70BF9 /* NSObject+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 63127DB61688D70600F70BF9 /* NSObject+FOS.m */; };
 		6315136C1925A59E004A55A6 /* FOSFoundationResources-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6315136A1925A59E004A55A6 /* FOSFoundationResources-Info.plist */; };
 		6315136F1925A5B6004A55A6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6315136D1925A5B6004A55A6 /* InfoPlist.strings */; };
-		631513731925A968004A55A6 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 631513711925A93C004A55A6 /* FOSFoundation.xcdatamodeld */; };
 		631513741925A989004A55A6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632B5403168E06BE003AD474 /* CoreData.framework */; };
 		6315724B190432420044CC90 /* NSManagedObjectModel+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 63157249190432420044CC90 /* NSManagedObjectModel+FOS.h */; };
 		6315724C190432420044CC90 /* NSManagedObjectModel+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 63157249190432420044CC90 /* NSManagedObjectModel+FOS.h */; };
@@ -901,7 +901,7 @@
 		631513701925A7DA004A55A6 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				631513711925A93C004A55A6 /* FOSFoundation.xcdatamodeld */,
+				6303CC9D1926C33E00BB5346 /* FOSFoundation.xcdatamodeld */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -1927,7 +1927,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				631513731925A968004A55A6 /* FOSFoundation.xcdatamodeld in Sources */,
+				6303CC9E1926C33E00BB5346 /* FOSFoundation.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3183,13 +3183,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		631513711925A93C004A55A6 /* FOSFoundation.xcdatamodeld */ = {
+		6303CC9D1926C33E00BB5346 /* FOSFoundation.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 			);
 			name = FOSFoundation.xcdatamodeld;
-			path = ../FOSFoundationResources/FOSFoundation.xcdatamodeld;
-			sourceTree = "<group>";
+			path = FOSFoundationResources/FOSFoundation.xcdatamodeld;
+			sourceTree = SOURCE_ROOT;
 			versionGroupType = wrapper.xcdatamodel;
 		};
 		636F0BED168F91CA00F5E442 /* RESTTests.xcdatamodeld */ = {

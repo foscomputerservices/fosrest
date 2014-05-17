@@ -122,7 +122,6 @@
 
                 // Evaluate the cmoKeyPath
                 id value = [cmoKeyPathExpression evaluateWithContext:context error:&localError];
-                if (value == nil) { value = [NSNull null]; }
 
                 if (localError == nil) {
 

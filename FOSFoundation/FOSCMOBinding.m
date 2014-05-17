@@ -138,49 +138,88 @@
             modifiedProps = cmo.propertiesModifiedSinceLastUpload;
         }
 
-        // Use all property bindings
-        for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
+        NSDictionary *context = @{ @"CMO" : cmo };
+        if (localError == nil && self.jsonBindingExpressions != nil) {
+            for (NSArray *jsonBindingExpr in self.jsonBindingExpressions) {
+                id<FOSExpression> jsonKeyExpression = jsonBindingExpr[0];
+                id<FOSExpression> jsonValueExpression = jsonBindingExpr[1];
 
-            NSSet *propDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
-            for (NSPropertyDescription *propDesc in propDescriptions) {
+                // Evaluate the jsonValue
+                id value = [jsonValueExpression evaluateWithContext:context error:&localError];
 
-                // We always add the property during creation, but we only want
-                // to add changed props on updates
-                BOOL addProp = (lifecyclePhase == FOSLifecyclePhaseCreateServerRecord);
-
-                if (lifecyclePhase == FOSLifecyclePhaseUpdateServerRecord) {
-                    // Let's see if this property actually changed
-                    for (FOSModifiedProperty *modProp in modifiedProps) {
-                        if ([modProp.propertyName isEqualToString:propDesc.name]) {
-                            addProp = YES;
-                            break;
-                        }
+                if (localError == nil) {
+                    // Evaluate the jsonKeyPath
+                    NSString *jsonKeyPath = [jsonKeyExpression evaluateWithContext:context
+                                                                             error:&localError];
+                    if (jsonKeyPath && localError == nil) {
+                        // Udpate the JSON dictionary (handling nested dictionaries)
+                        [[FOSPropertyBinding class] setValue:value ofJson:json forKeyPath:jsonKeyPath];
                     }
                 }
 
-                // Bind the property
-                if (addProp) {
-                    result = [propBinding updateJSON:json
-                                             fromCMO:cmo
-                                         forProperty:propDesc
-                                   forLifecyclePhase:lifecyclePhase
-                                               error:&localError];
-                }
-
-                if (!result || localError != nil) {
+                if (localError != nil) {
                     break;
                 }
             }
+        }
 
-            if (localError == nil) {
-                // Handle constant attribute descriptions
-                if ([propBinding isKindOfClass:[FOSAttributeBinding class]] &&
-                    ((FOSAttributeBinding *)propBinding).isSendOnlyAttribute) {
+        if (localError == nil && self.jsonWrapperKey != nil) {
 
-                }
+            NSString *wrapperKey = [self.jsonWrapperKey evaluateWithContext:context
+                                                                      error:&localError];
+
+            if (wrapperKey != nil && localError == nil) {
+                NSMutableDictionary *innerDict = [NSMutableDictionary dictionary];
+                json[wrapperKey] = innerDict;
+                json = innerDict;
             }
-            else {
-                break;
+        }
+        
+        if (localError == nil) {
+            // Use all property bindings
+            for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
+
+                NSSet *propDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
+                for (NSPropertyDescription *propDesc in propDescriptions) {
+
+                    // We always add the property during creation, but we only want
+                    // to add changed props on updates
+                    BOOL addProp = (lifecyclePhase == FOSLifecyclePhaseCreateServerRecord);
+
+                    if (lifecyclePhase == FOSLifecyclePhaseUpdateServerRecord) {
+                        // Let's see if this property actually changed
+                        for (FOSModifiedProperty *modProp in modifiedProps) {
+                            if ([modProp.propertyName isEqualToString:propDesc.name]) {
+                                addProp = YES;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Bind the property
+                    if (addProp) {
+                        result = [propBinding updateJSON:json
+                                                 fromCMO:cmo
+                                             forProperty:propDesc
+                                       forLifecyclePhase:lifecyclePhase
+                                                   error:&localError];
+                    }
+
+                    if (!result || localError != nil) {
+                        break;
+                    }
+                }
+
+                if (localError == nil) {
+                    // Handle constant attribute descriptions
+                    if ([propBinding isKindOfClass:[FOSAttributeBinding class]] &&
+                        ((FOSAttributeBinding *)propBinding).isSendOnlyAttribute) {
+
+                    }
+                }
+                else {
+                    break;
+                }
             }
         }
 
@@ -189,7 +228,22 @@
             // We don't store this in the data model as we don't want to store
             // the password in the database, so we'll handle it manually.
             if ([cmo isKindOfClass:[FOSUser class]] && ((FOSUser *)cmo).password.length > 0) {
-                json[@"password"] = ((FOSUser *)cmo).password;
+
+                // 1st let's see if there is an attribute binding for 'password'.
+                NSString *attrName = @"password";
+                for (FOSAttributeBinding *nextBinding in self.attributeBindings) {
+                    if ([[nextBinding attributeMatcher] itemIsIncluded:@"password" context:nil]) {
+
+                        id<FOSExpression> keyExpr = nextBinding.jsonKeyExpression;
+
+                        attrName = [keyExpr evaluateWithContext:nil error:&localError];
+                        break;
+                    }
+                }
+
+                if (localError == nil) {
+                    json[attrName] = ((FOSUser *)cmo).password;
+                }
             }
         }
     }
@@ -213,30 +267,43 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
 
     BOOL result = [self _ensureCMO:cmo error:&localError];
     if (result) {
-        // Use all property bindings
-        for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
+        if (self.jsonWrapperKey) {
+            NSDictionary *context = @{ @"CMO" : cmo };
 
-            // Bind all properties
-            NSSet *propertyDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
-            for (NSPropertyDescription *propDesc in propertyDescriptions) {
+            NSString *wrapperKey = [self.jsonWrapperKey evaluateWithContext:context
+                                                                      error:&localError];
+
+            if (wrapperKey != nil && localError == nil) {
+                json = json[wrapperKey];
+            }
+        }
+
+        if (localError == nil) {
+            // Use all property bindings
+            for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
+
+                // Bind all properties
+                NSSet *propertyDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
+                for (NSPropertyDescription *propDesc in propertyDescriptions) {
 
 
-                // Bind the property, but only the id & read-only properties on non-retrieve phases.
-                // In other phases, the JSON may be missing values, which would cause them
-                // to be cleared.
-                if (lifecyclePhase & FOSLifecycleDirectionRetrieve ||
-                    ([propBinding isKindOfClass:[FOSAttributeBinding class]] &&
-                     (((FOSAttributeBinding *)propBinding).isIdentityAttribute ||
-                      ((FOSAttributeBinding *)propBinding).isReceiveOnlyAttribute)
-                    )) {
-                    result = [propBinding updateCMO:cmo
-                                           fromJSON:json
-                                        forProperty:propDesc
-                                              error:&localError];
-                }
+                    // Bind the property, but only the id & read-only properties on non-retrieve phases.
+                    // In other phases, the JSON may be missing values, which would cause them
+                    // to be cleared.
+                    if (lifecyclePhase & FOSLifecycleDirectionRetrieve ||
+                        ([propBinding isKindOfClass:[FOSAttributeBinding class]] &&
+                         (((FOSAttributeBinding *)propBinding).isIdentityAttribute ||
+                          ((FOSAttributeBinding *)propBinding).isReceiveOnlyAttribute)
+                        )) {
+                        result = [propBinding updateCMO:cmo
+                                               fromJSON:json
+                                            forProperty:propDesc
+                                                  error:&localError];
+                    }
 
-                if (!result) {
-                    break;
+                    if (!result) {
+                        break;
+                    }
                 }
             }
         }

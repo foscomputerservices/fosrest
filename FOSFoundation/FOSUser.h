@@ -27,9 +27,37 @@
 
 #pragma mark - Public Properties
 
+/*!
+ * @property uid
+ *
+ * The unique identifier of the user according to the server.
+ */
 @property (nonatomic, readonly) FOSJsonId uid;
-@property (nonatomic, readonly) BOOL isLoginUser;
+
 @property (nonatomic, strong) NSString *username;
+
+/*!
+ * @property isLoginUser
+ *
+ * Indicates that this instance is being used to login.  This property
+ * is set when createLoginUser is used to create the instance.
+ *
+ * @discussion
+ *
+ * This property is *not* stored in the database.
+ */
+@property (nonatomic, readonly) BOOL isLoginUser;
+
+/*!
+ * @property password
+ *
+ * The password to use for authentication when isLoginUser is
+ * set to YES.
+ *
+ * @discussion
+ *
+ * This property is *not* stored in the database.
+ */
 @property (nonatomic, strong) NSString *password;
 
 @end

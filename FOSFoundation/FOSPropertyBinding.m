@@ -18,7 +18,7 @@
     NSUInteger keyCount = 1;
     for (NSString *innerKey in keyFields) {
         if (keyCount++ == keyFields.count) {
-            innerDict[innerKey] = value;
+            innerDict[innerKey] = (value == nil ? [NSNull null] : value);
         }
         else {
             NSMutableDictionary *nextInnerDict = innerDict[innerKey];

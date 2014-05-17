@@ -135,8 +135,6 @@
                                                     ofType:(NSAttributeDescription *)propDesc
                                                      error:&localError];
 
-                if (value == nil) { value = [NSNull null]; }
-
                 // Udpate the JSON dictionary (handling nested dictionaries)
                 if (localError == nil) {
                     // Don't set nil values on create

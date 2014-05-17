@@ -36,6 +36,39 @@
 #pragma mark - Public Properties
 
 /*!
+ * @property jsonWrapperKey
+ *
+ * The key that server expects objects to be wrapped under.  If the object is
+ * not under any key, this value should be nil.
+ *
+ * Setting this property is optional.
+ */
+@property (nonatomic, strong) id<FOSExpression> jsonWrapperKey;
+
+/*!
+ * @property jsonBindingExpressions
+ *
+ * An array of arrays that describe additional key/value pairs to be added
+ * to the resulting json.
+ *
+ * Each sub array of the primary array is a pair of id<FOSExpression> instances.
+ *
+ * The first entry in the sub array is an expression that describes the key in
+ * the JSON dictionary.
+ *
+ * The second entry in the sub array is an expression that describes a keyPath
+ * to apply to the CMO to retrieve the value to store in the JSON dictionary.
+ *
+ * Setting this property is optional.
+ *
+ * @discussion
+ *
+ * This is a SEND-ONLY binding to add information to the JSON as additional
+ * parameterization of the request.
+ */
+@property (nonatomic, strong) NSArray *jsonBindingExpressions;
+
+/*!
  * @property identityBinding
  *
  */

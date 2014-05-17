@@ -125,10 +125,11 @@ POST                           { return POST; }
 PUT                            { return PUT; }
 DELETE                         { return DELETE; }
 
+JSON_WRAPPER_KEY               { return JSON_WRAPPER_KEY; }
 ATTRIBUTE_BINDINGS             { return ATTRIBUTE_BINDINGS; }
 ID_ATTRIBUTE                   { return ID_ATTRIBUTE; }
-RECEIVE_ONLY_ATTRIBUTE            { return RECEIVE_ONLY_ATTRIBUTE; }
-SEND_ONLY_ATTRIBUTE           { return SEND_ONLY_ATTRIBUTE; }
+RECEIVE_ONLY_ATTRIBUTE         { return RECEIVE_ONLY_ATTRIBUTE; }
+SEND_ONLY_ATTRIBUTE            { return SEND_ONLY_ATTRIBUTE; }
 
 RELATIONSHIP_BINDINGS          { return RELATIONSHIP_BINDINGS; }
 RELATIONSHIP_BINDING           { return RELATIONSHIP_BINDING; }
