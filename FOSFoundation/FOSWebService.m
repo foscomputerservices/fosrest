@@ -154,13 +154,23 @@ const NSTimeInterval kQueueingDelay = 0.26f;
     NSString *requestMethod = urlRequest.HTTPMethod;
     NSString *requestURLString = urlRequest.URL.absoluteString;
 
-    NSString *requestJSON = nil;
-    if ([urlRequest.allHTTPHeaderFields[@"Content-Type"] rangeOfString:@"application/json"].location != NSNotFound && urlRequest.HTTPBody != nil) {
-        id<NSObject> json = [NSJSONSerialization JSONObjectWithData:urlRequest.HTTPBody
-                                                            options:0
-                                                              error:nil];
+    NSString *requestDebugData = nil;
+    if (urlRequest.HTTPBody != nil) {
+        NSString *contentType = urlRequest.allHTTPHeaderFields[@"Content-Type"];
+        NSRange jsonTypeRange = [contentType rangeOfString:@"application/json"];
+        NSRange webformTypeRange = [contentType rangeOfString:@"application/x-www-form-urlencoded"];
 
-        requestJSON = json.description;
+        if (jsonTypeRange.location != NSNotFound) {
+            id<NSObject> json = [NSJSONSerialization JSONObjectWithData:urlRequest.HTTPBody
+                                                                options:0
+                                                                  error:nil];
+
+            requestDebugData = json.description;
+        }
+        else if (webformTypeRange.location != NSNotFound) {
+            requestDebugData = [[NSString alloc] initWithData:urlRequest.HTTPBody
+                                                     encoding:NSUTF8StringEncoding];
+        }
     }
 
     if (synchronous) {
@@ -173,7 +183,9 @@ const NSTimeInterval kQueueingDelay = 0.26f;
         NSLog(@"FOSWebService (%li) Sync: %@ - %@%@",
               (long)currentRequestId, requestMethod,
               [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-              requestJSON == nil ? @"" : [NSString stringWithFormat:@"\nJSON: %@", requestJSON]);
+              requestDebugData == nil
+                ? @""
+                : [NSString stringWithFormat:@"\nHTTPData: %@", requestDebugData]);
         
         [self _completionHandlerForRequest:webServiceRequest
                             withURLRequest:urlRequest

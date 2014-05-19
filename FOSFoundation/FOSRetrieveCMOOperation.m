@@ -280,14 +280,14 @@
     return self;
 }
 
-- (id)initWithDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
+- (id)initWithDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchDataOp
             isTopLevelFetch:(BOOL)isTopLevelFetch
                withBindings:(NSMutableDictionary *)bindings
     andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
-    NSParameterAssert(fetchOp != nil);
+    NSParameterAssert(fetchDataOp != nil);
     NSParameterAssert(bindings != nil);
 
-    if ((self = [self initForEntity:fetchOp.entity
+    if ((self = [self initForEntity:fetchDataOp.entity
                              withId:nil
                     isTopLevelFetch:isTopLevelFetch
                        withBindings:bindings
@@ -295,16 +295,16 @@
         __block FOSRetrieveCMOOperation *blockSelf = self;
 
         FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-            if (fetchOp.error == nil) {
-                NSAssert(fetchOp.jsonId != nil, @"Missing jsonId???");
-                NSAssert(fetchOp.jsonResult != nil, @"Missing json???");
+            if (fetchDataOp.error == nil) {
+                NSAssert(fetchDataOp.jsonId != nil, @"Missing jsonId???");
+                NSAssert(fetchDataOp.jsonResult != nil, @"Missing json???");
 
                 NSError *error = nil;
-                if (![[blockSelf class] _checkItemDeleted:fetchOp.jsonId
+                if (![[blockSelf class] _checkItemDeleted:fetchDataOp.jsonId
                                                 forEntity:blockSelf->_entity
                                                     error:&error]) {
-                    blockSelf->_jsonId = fetchOp.jsonId;
-                    blockSelf.json = (NSDictionary *)fetchOp.jsonResult;
+                    blockSelf->_jsonId = fetchDataOp.jsonId;
+                    blockSelf.json = (NSDictionary *)fetchDataOp.jsonResult;
                 }
                 else {
                     blockSelf->_error = error;
@@ -316,7 +316,7 @@
             }
         }];
 
-        [bgOp addDependency:fetchOp];
+        [bgOp addDependency:fetchDataOp];
         [self addDependency:bgOp];
     }
 
@@ -796,7 +796,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
         // Did we short-circuit to an existing object?  If not, create it now.
         BOOL markClean = YES;
         if (_managedObjectID == nil) {
-            NSError *error = nil;
+            NSError *localError = nil;
 
             id<FOSTwoWayRecordBinding> recordBinder = _urlBinding.cmoBinding;
 
@@ -807,11 +807,11 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                                                            forEntity:_entity
                                                         withBindings:_bindings
                                                       serviceAdapter:recordBinder
-                                                               error:&error];
-            if (error == nil) {
+                                                               error:&localError];
+            if (localError == nil) {
                 newOwner.hasRelationshipFaults = _createdFaults;
 
-                if ([moc obtainPermanentIDsForObjects:@[ newOwner ] error:&error]) {
+                if ([moc obtainPermanentIDsForObjects:@[ newOwner ] error:&localError]) {
                     _managedObjectID = newOwner.objectID;
 
                     // The jsonId and managed object's jsonId should now align
@@ -822,11 +822,11 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                     _bindings[newOwner.jsonIdValue] = _managedObjectID;
                 }
                 else {
-                    _error = error;
+                    _error = localError;
                 }
             }
             else {
-                _error = error;
+                _error = localError;
             }
         }
 
@@ -961,37 +961,34 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
         FOSCachedManagedObject *cmo = nil;
         NSError *localError = nil;
 
-        if (jsonId != nil) {
+        // If the item has been locally deleted, we don't want to restore it back to our
+        // parent's context, just skip it.
+        if (![[self class] _checkItemDeleted:jsonId forEntity:entity error:&localError]) {
+            // Does the fragment have a jsonId?  If not, then we can only pull
+            // using the given jsonId.
 
-            // If the item has been locally deleted, we don't want to restore it back to our
-            // parent's context, just skip it.
-            if (![[self class] _checkItemDeleted:jsonId forEntity:entity error:&localError]) {
-                // Does the fragment have a jsonId?  If not, then we can only pull
-                // using the given jsonId.
+            FOSJsonId localJsonId = [_urlBinding.cmoBinding jsonIdFromJSON:json
+                                                                 forEntity:entity
+                                                                     error:&localError];
 
-                FOSJsonId localJsonId = [_urlBinding.cmoBinding jsonIdFromJSON:json
-                                                                     forEntity:entity
-                                                                         error:&localError];
+            if (localError == nil) {
+                if (localJsonId == nil) {
+                    cmo = [[self class] cmoForEntity:entity
+                                          withJsonId:jsonId
+                                        fromBindings:bindings
+                           respectingPreviousLookups:NO];
+                }
+                else {
+                    NSAssert([(NSString *)localJsonId isEqualToString:(NSString *)jsonId],
+                             @"Why are these different???");
 
-                if (localError == nil) {
-                    if (localJsonId == nil) {
-                        cmo = [[self class] cmoForEntity:entity
-                                              withJsonId:jsonId
-                                            fromBindings:bindings
-                               respectingPreviousLookups:NO];
-                    }
-                    else {
-                        NSAssert([(NSString *)localJsonId isEqualToString:(NSString *)jsonId],
-                                 @"Why are these different???");
-
-                        // We'll use the JSON form, if possible, to handle the case that we cannot
-                        // find a local instance with the id set; then we can search using
-                        // "data equality".
-                        cmo = [self cmoForEntity:entity
-                                        withJson:json
-                                    fromBindings:bindings
-                       respectingPreviousLookups:NO];
-                    }
+                    // We'll use the JSON form, if possible, to handle the case that we cannot
+                    // find a local instance with the id set; then we can search using
+                    // "data equality".
+                    cmo = [self cmoForEntity:entity
+                                    withJson:json
+                                fromBindings:bindings
+                   respectingPreviousLookups:NO];
                 }
             }
         }
@@ -1016,8 +1013,12 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
             }
         }
 
-        if (localError != nil && error != nil) {
-            *error = localError;
+        if (localError != nil) {
+            if (error != nil) {
+                *error = localError;
+            }
+
+            result = nil;
         }
     }
     
@@ -1060,7 +1061,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                 if ([json isKindOfClass:[NSDictionary class]]) {
 
                     // Don't check counts between static table classes and non-static table entities.
-                    if (!entity.isStaticTableEntity || relDesc.destinationEntity.isStaticTableEntity) {
+                    if (!entity.jsonIsStaticTableEntity || relDesc.destinationEntity.jsonIsStaticTableEntity) {
                         NSString *childCountKey = [NSString stringWithFormat:@"%@ChildCount_",
                                                    relDesc.name];
                         id childCountJson = ((NSDictionary *)json)[childCountKey];

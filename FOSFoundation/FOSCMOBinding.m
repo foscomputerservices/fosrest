@@ -63,9 +63,12 @@
     if (identityBinding != nil) {
         NSDictionary *context = @{ @"ENTITY" : entity };
 
-        result = [identityBinding jsonIdFromJSON:json
-                                     withContext:context
-                                           error:&localError];
+        json = [self _unwrappedJSON:json context:context error:&localError];
+        if (json && localError == nil) {
+            result = [identityBinding jsonIdFromJSON:json
+                                         withContext:context
+                                               error:&localError];
+        }
     }
     else {
         NSString *msg = @"Missing identity binding!";
@@ -104,9 +107,12 @@
     }
 
     if (identityBinding != nil) {
-        result = [identityBinding jsonIdFromJSON:json
-                                     withContext:context
-                                           error:&localError];
+        json = [self _unwrappedJSON:json context:context error:&localError];
+        if (json && localError == nil) {
+            result = [identityBinding jsonIdFromJSON:json
+                                         withContext:context
+                                               error:&localError];
+        }
     }
     else {
         NSString *msg = @"Missing identity binding!";
@@ -373,6 +379,30 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
         }
     }
     
+    return result;
+}
+
+- (NSDictionary *)_unwrappedJSON:(NSDictionary *)json
+                       context:(NSDictionary *)context
+                         error:(NSError **)error {
+    NSParameterAssert(json != nil);
+    NSParameterAssert(context != nil);
+    NSParameterAssert(error != nil);
+
+    *error = nil;
+    NSDictionary *result = json;
+
+    if (self.jsonWrapperKey != nil) {
+        NSString *wrapperKey = [self.jsonWrapperKey evaluateWithContext:context error:error];
+        if (wrapperKey != nil && *error == nil) {
+            result = json[wrapperKey];
+        }
+    }
+
+    if (*error != nil) {
+        result = nil;
+    }
+
     return result;
 }
 

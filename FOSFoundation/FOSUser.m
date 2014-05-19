@@ -11,8 +11,6 @@
 
 @implementation FOSUser
 
-@dynamic username;
-
 @synthesize isLoginUser = _isLoginUser;
 @synthesize password = _password;
 
@@ -32,6 +30,22 @@
 
 - (FOSJsonId)uid {
     return self.jsonIdValue;
+}
+
+- (NSString *)jsonUsername {
+    NSString *msgFmt = @"The %@ property must be overridden by subclasses of FOSUser.";
+    NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromSelector(_cmd)];
+
+    NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+    @throw e;
+}
+
+- (void)setJsonUsername:(NSString *)username {
+    NSString *msgFmt = @"The %@ property must be overridden by subclasses of FOSUser.";
+    NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromSelector(_cmd)];
+
+    NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+    @throw e;
 }
 
 @end

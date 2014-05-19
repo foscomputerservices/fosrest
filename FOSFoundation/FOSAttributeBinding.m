@@ -203,7 +203,22 @@
                         if (result) {
                             NSAssert(!self.isIdentityAttribute || value != nil,
                                      @"Why are we clearing out the identity property???");
-                            [cmo setValue:value forKeyPath:cmoKeyPath];
+
+                            // It's not required that the CMO implement all keys that
+                            // might be received from the server.
+                            @try {
+                                [cmo setValue:value forKeyPath:cmoKeyPath];
+                            }
+                            @catch (NSException *e) {
+                                if (e != nil) {
+                                    NSString *msgFmt = @"The CMO doesn't implement the specified CMO KeyPath: '%@' in the mapping from JSON Key: %@.";
+                                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                                     cmoKeyPath, jsonKeyPath];
+
+                                    localError = [NSError errorWithDomain:@"FOSFoundation"
+                                                               andMessage:msg];
+                                }
+                            }
                         }
                     }
                 }

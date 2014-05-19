@@ -195,6 +195,9 @@
 
                 [blockSelf.restConfig.cacheManager requeueOperation:blockSelf];
             }
+            else {
+                blockSelf->_error = localError;
+            }
         }
     }];
     

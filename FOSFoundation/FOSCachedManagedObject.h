@@ -216,6 +216,12 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  *
  * Returns the receiver's id value to use to identify itself
  * in JSON objects.
+ *
+ * @discussion
+ *
+ * The implementation of this property uses the adapter map's ID_ATTRIBUTE
+ * mapping.  Thus, this property must not be used to specify the adapter map's
+ * ID_ATTRIBUTE.
  */
 @property (nonatomic, strong) FOSJsonId jsonIdValue;
 

@@ -188,6 +188,7 @@
 		6376C65918D7BC100075FAE1 /* FOSVariableExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 6376C65618D7BC100075FAE1 /* FOSVariableExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6376C65A18D7BC100075FAE1 /* FOSVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 6376C65718D7BC100075FAE1 /* FOSVariableExpression.m */; };
 		6376C65B18D7BC100075FAE1 /* FOSVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 6376C65718D7BC100075FAE1 /* FOSVariableExpression.m */; };
+		6377914E192A69C800E42C89 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6377914C192A69C800E42C89 /* FOSFoundation.xcdatamodeld */; };
 		637B7AE316C1B728007EBA92 /* Widget.m in Sources */ = {isa = PBXBuildFile; fileRef = 637B7AE216C1B728007EBA92 /* Widget.m */; };
 		637B7AE616C1B728007EBA92 /* WidgetInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 637B7AE516C1B728007EBA92 /* WidgetInfo.m */; };
 		637B7AE916C1B728007EBA92 /* Role.m in Sources */ = {isa = PBXBuildFile; fileRef = 637B7AE816C1B728007EBA92 /* Role.m */; };
@@ -644,6 +645,7 @@
 		6376C65118D7BADA0075FAE1 /* FOSConcatExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSConcatExpression.m; sourceTree = "<group>"; };
 		6376C65618D7BC100075FAE1 /* FOSVariableExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSVariableExpression.h; sourceTree = "<group>"; };
 		6376C65718D7BC100075FAE1 /* FOSVariableExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSVariableExpression.m; sourceTree = "<group>"; };
+		6377914D192A69C800E42C89 /* FOSFoundation.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FOSFoundation.xcdatamodel; sourceTree = "<group>"; };
 		637B7AE116C1B728007EBA92 /* Widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Widget.h; sourceTree = "<group>"; };
 		637B7AE216C1B728007EBA92 /* Widget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Widget.m; sourceTree = "<group>"; };
 		637B7AE416C1B728007EBA92 /* WidgetInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetInfo.h; sourceTree = "<group>"; };
@@ -989,16 +991,15 @@
 		633467F0168774C300ACD4EA /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				630E249F190379C3008F0C95 /* FOSUser.h */,
-				630E24A0190379C3008F0C95 /* FOSUser.m */,
-				630E249919035254008F0C95 /* FOSDeletedObject.h */,
-				630E249A19035254008F0C95 /* FOSDeletedObject.m */,
 				63E46504168F930C00E96C07 /* FOSCachedManagedObject+FOS_Internal.h */,
 				63742E7D1692460E00541200 /* FOSCachedManagedObject+FOS_Internal.m */,
 				63E9CF4017208A5000EC28A8 /* FOSCachedManagedObject.h */,
 				63E9CF4117208A5000EC28A8 /* FOSCachedManagedObject.m */,
 				63EF391B1800AD76007D6226 /* FOSDeletedObject+FOS_Internal.h */,
 				63EF391C1800AD76007D6226 /* FOSDeletedObject+FOS_Internal.m */,
+				630E249919035254008F0C95 /* FOSDeletedObject.h */,
+				630E249A19035254008F0C95 /* FOSDeletedObject.m */,
+				6377914C192A69C800E42C89 /* FOSFoundation.xcdatamodeld */,
 				6310F94B16991F3900981E85 /* FOSManagedObject+FOS_Internal.h */,
 				6310F94C16991F3900981E85 /* FOSManagedObject+FOS_Internal.m */,
 				63BFA3E11482815400FE1C0C /* FOSManagedObject.h */,
@@ -1009,6 +1010,8 @@
 				637EE2731721EC72009F8C98 /* FOSRelationshipFault+FOS_Internal.m */,
 				63E9CF4617208A5000EC28A8 /* FOSRelationshipFault.h */,
 				63E9CF4717208A5000EC28A8 /* FOSRelationshipFault.m */,
+				630E249F190379C3008F0C95 /* FOSUser.h */,
+				630E24A0190379C3008F0C95 /* FOSUser.m */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -2093,6 +2096,7 @@
 				63F11E4818D890750070D19A /* FOSKeyPathExpression.m in Sources */,
 				63C343DC1686BBDB003D10B5 /* FOSSaveOperation.m in Sources */,
 				6376C65418D7BADA0075FAE1 /* FOSConcatExpression.m in Sources */,
+				6377914E192A69C800E42C89 /* FOSFoundation.xcdatamodeld in Sources */,
 				63C343DE1686BBDB003D10B5 /* FOSSearchOperation.m in Sources */,
 				63C343E01686BBDB003D10B5 /* FOSSleepOperation.m in Sources */,
 				63C343E41686BBDB003D10B5 /* FOSWebService.m in Sources */,
@@ -3200,6 +3204,17 @@
 			currentVersion = 636F0BEE168F91CA00F5E442 /* RESTTests.xcdatamodel */;
 			path = RESTTests.xcdatamodeld;
 			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		6377914C192A69C800E42C89 /* FOSFoundation.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6377914D192A69C800E42C89 /* FOSFoundation.xcdatamodel */,
+			);
+			currentVersion = 6377914D192A69C800E42C89 /* FOSFoundation.xcdatamodel */;
+			name = FOSFoundation.xcdatamodeld;
+			path = FOSFoundationResources/FOSFoundation.xcdatamodeld;
+			sourceTree = SOURCE_ROOT;
 			versionGroupType = wrapper.xcdatamodel;
 		};
 /* End XCVersionGroup section */

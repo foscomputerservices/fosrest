@@ -55,6 +55,20 @@
     return result;
 }
 
+- (BOOL)jsonIsStaticTableEntity {
+    BOOL result = NO;
+
+    NSString *jsonValue = [self _bindPropertyForSelector:_cmd throwIfMissing:NO];
+    if (jsonValue != nil) {
+        result = ([jsonValue caseInsensitiveCompare:@"YES"] == NSOrderedSame);
+    }
+    else {
+        result = [self _isStaticTableEntityWithRestConfig:[FOSRESTConfig sharedInstance]];
+    }
+
+    return result;
+}
+
 - (NSString *)jsonAbstractRelationshipMaps {
     NSString *result = [self _bindPropertyForSelector:_cmd throwIfMissing:YES];
 
@@ -233,6 +247,47 @@
         }
     }
 
+    return result;
+}
+
+- (BOOL)_isStaticTableEntityWithRestConfig:(FOSRESTConfig *)restConfig {
+    BOOL result = NO;
+
+    NSString *modelCacheKey = self.name;
+    NSMutableDictionary *entityCache = [restConfig modelCacheForModelKey:modelCacheKey];
+
+    BOOL retrievedFromCache = NO;
+    NSString *selName = NSStringFromSelector(_cmd);
+    NSNumber *numResult = entityCache[selName];
+
+    if (numResult != nil) {
+        result = numResult.boolValue;
+        retrievedFromCache = YES;
+    }
+
+    else {
+        NSPredicate *ownerPropertyPred = [NSPredicate predicateWithBlock:^BOOL(NSPropertyDescription *property, NSDictionary *bindings) {
+
+            BOOL result =
+            [property isKindOfClass:[NSRelationshipDescription class]] &&
+            !((NSRelationshipDescription *)property).isCMORelationship &&
+            ((NSRelationshipDescription *)property).inverseRelationship.isOwnershipRelationship;
+
+            return result;
+        }];
+
+        Class entityClass = NSClassFromString(self.managedObjectClassName);
+
+        result =
+        ![self isFOSEntityWithRestConfig:restConfig] &&
+        ([entityClass isSubclassOfClass:[FOSCachedManagedObject class]]) &&
+        (![entityClass isSubclassOfClass:[FOSUser class]]) &&
+        (self.subentities.count == 0) &&
+        ([self.properties filteredArrayUsingPredicate:ownerPropertyPred].count == 0);
+
+        entityCache[selName] = result ? @YES : @NO;
+    }
+    
     return result;
 }
 

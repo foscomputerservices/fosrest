@@ -252,15 +252,17 @@ url_binding
                                                      endPoint:endPoint
                                                 requestFormat:requestFormat
                                              andEntityMatcher:entityMatcher];
-        } else if (jsonBindingExpressions != nil) {
-            binding = [FOSURLBinding bindingForLifeCyclePhase:lifecyclePhase
-                                                     endPoint:endPoint
-                                                requestFormat:requestFormat
-                                           andJSONExpressions:jsonBindingExpressions];
         }
-        else {
+        else if (jsonBindingExpressions == nil) {
             yyerror("Missing CMO binding reference.");
             YYERROR;
+        }
+
+        if (jsonBindingExpressions != nil) {
+            binding = [FOSURLBinding bindingForLifeCyclePhase:lifecyclePhase
+            endPoint:endPoint
+            requestFormat:requestFormat
+            andJSONExpressions:jsonBindingExpressions];
         }
 
         if (lifecyclePhase == FOSLifecyclePhaseRetrieveServerRecordRelationship) {

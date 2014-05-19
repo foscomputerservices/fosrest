@@ -488,44 +488,14 @@
             result.timeoutInterval = self._timeoutInterval;
             
             // Assign the body
-            if (self.requestFormat == FOSRequestFormatJSON) {
-                // TODO : This is really hacked up and needs to be straightend out with
-                //        a top-level expression.
-                NSMutableDictionary *json = [NSMutableDictionary dictionary];
-
-                for (NSArray *keyValueArray in self.jsonBindingExpressions) {
-                    id<FOSExpression> keyExpr = keyValueArray[0];
-                    id<FOSExpression> valueExpr = keyValueArray[1];
-
-                    id key = [keyExpr evaluateWithContext:context
-                                                    error:error];
-                    if (*error == nil) {
-                        id value = [valueExpr evaluateWithContext:context
-                                                            error:error];
-                        if (*error == nil) {
-                            json[key] = value;
-                        }
-                    }
-
-                    if (*error != nil) {
-                        break;
-                    }
-                }
-
-                if (*error == nil) {
-                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json
-                                                                       options:0 error:error];
-                    if (*error == nil) {
-                        result.HTTPBody = jsonData;
-                    }
-                }
-            }
+            result.HTTPBody = [self _httpBodyForCommandWithContext:context error:error];
         }
         
         if (*error != nil) {
             result = nil;
         }
     }
+    
     return result;
 }
 
@@ -629,33 +599,8 @@
 - (NSData *)_httpBodyForCMO:(FOSCachedManagedObject *)cmo error:(NSError **)error {
     NSParameterAssert(error != nil);
 
-    NSData *result = nil;
-
-    // There's only a body if the request format is going to be JSON or if it's
-    // webform and we're not using GET to send the request.
-    if (self.requestFormat == FOSRequestFormatJSON ||
-        (self.requestFormat == FOSRequestFormatWebform &&
-         self.requestMethod != FOSRequestMethodGET)) {
-        NSDictionary *json = [self _jsonBodyForCMO:cmo error:error];
-
-        if (json != nil && *error == nil) {
-            if (self.requestFormat == FOSRequestFormatJSON) {
-                result = [NSJSONSerialization dataWithJSONObject:json options:0 error:error];
-            }
-
-            // web-form
-            else {
-                NSString *webformEncodeing = [self _webformEncodeJSON:json error:error];
-
-                // Is this the correct encoding???
-                result = [webformEncodeing dataUsingEncoding:NSUTF8StringEncoding];
-            }
-        }
-    }
-
-    if (*error != nil) {
-        result = nil;
-    }
+    NSDictionary *json = [self _jsonBodyForCMO:cmo error:error];
+    NSData *result = [self _httpBodyForJSON:json error:error];
 
     return result;
 }
@@ -680,6 +625,101 @@
     return result;
 }
 
+- (NSData *)_httpBodyForCommandWithContext:(NSDictionary *)context error:(NSError **)error {
+    NSParameterAssert(error != nil);
+
+    NSDictionary *json = [self _jsonBodyForCommandWithContext:context error:error];
+    NSData *result = [self _httpBodyForJSON:json error:error];
+
+    return result;
+}
+
+- (NSData *)_httpBodyForJSON:(NSDictionary *)json error:(NSError **)error {
+    NSParameterAssert(error != nil);
+
+    NSData *result = nil;
+
+    // There's only a body if the request format is going to be JSON or if it's
+    // webform and we're not using GET to send the request.
+    if (self.requestFormat == FOSRequestFormatJSON ||
+        (self.requestFormat == FOSRequestFormatWebform &&
+         self.requestMethod != FOSRequestMethodGET)) {
+
+            if (json != nil && *error == nil) {
+                result = [self _htmlBodyForJSON:json error:error];
+            }
+        }
+
+    if (*error != nil) {
+        result = nil;
+    }
+
+    return result;
+}
+
+- (NSDictionary *)_jsonBodyForCommandWithContext:(NSDictionary *)context error:(NSError **)error {
+    NSParameterAssert(error != nil);
+
+    *error = nil;
+    NSDictionary *result = nil;
+
+    // TODO : This is really hacked up and needs to be straightend out with
+    //        a top-level expression.
+    NSMutableDictionary *json = [NSMutableDictionary dictionary];
+
+    for (NSArray *keyValueArray in self.jsonBindingExpressions) {
+        id<FOSExpression> keyExpr = keyValueArray[0];
+        id<FOSExpression> valueExpr = keyValueArray[1];
+
+        id key = [keyExpr evaluateWithContext:context error:error];
+        if (*error == nil) {
+            id value = [valueExpr evaluateWithContext:context error:error];
+            if (*error == nil) {
+                json[key] = value;
+            }
+        }
+
+        if (*error != nil) {
+            break;
+        }
+    }
+
+    if (*error == nil) {
+        result = json;
+    }
+    else {
+        result = nil;
+    }
+
+    return result;
+}
+
+- (NSData *)_htmlBodyForJSON:(NSDictionary *)json error:(NSError **)error {
+    NSParameterAssert(json != nil);
+    NSParameterAssert(error != nil);
+
+    *error = nil;
+    NSData *result = nil;
+
+    if (self.requestFormat == FOSRequestFormatJSON) {
+        result = [NSJSONSerialization dataWithJSONObject:json options:0 error:error];
+    }
+
+    // web-form
+    else {
+        NSString *webformEncoding = [self _webformEncodeJSON:json error:error];
+
+        // Is this the correct encoding???
+        result = [webformEncoding dataUsingEncoding:NSUTF8StringEncoding];
+    }
+
+    if (*error != nil) {
+        result = nil;
+    }
+
+    return result;
+}
+
 - (NSString *)_webformEncodeJSON:(NSDictionary *)json error:(NSError **)error {
     NSParameterAssert(error != nil);
     *error = nil;
@@ -689,19 +729,34 @@
     for (NSString *key in json.allKeys) {
         id<NSObject> value = json[key];
 
-        if (![value isKindOfClass:[NSArray class]] && ![value isKindOfClass:[NSDictionary class]]) {
-            if (result.length > 0) {
-                [result appendString:@"&"];
-            }
-            [result appendString:key];
-            [result appendString:@"="];
-            [result appendString:value.description];
+        if (result.length > 0) {
+            [result appendString:@"&"];
+        }
+
+        [result appendString:key];
+        [result appendString:@"="];
+
+        NSString *valueStr = nil;
+        if ([value isKindOfClass:[NSArray class]] || [value isKindOfClass:[NSDictionary class]]) {
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value options:0 error:error];
+
+            NSString *jsonStr = [[NSString alloc] initWithData:jsonData
+                                                      encoding:NSUTF8StringEncoding];
+
+            valueStr = jsonStr;
         }
         else {
-            NSString *msg = [NSString stringWithFormat:@"Unable to create a webform encoding of JSON with nested containers."];
-
-            *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            valueStr = value.description;
         }
+
+        NSString *escapedValueStr =
+            [valueStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+        [result appendString:escapedValueStr];
+    }
+
+    if (*error != nil) {
+        result = nil;
     }
 
     return result;

@@ -23,7 +23,7 @@
  * Determines if it is allowable to modify the receiver.
  *
  * It combines the receiver's isLocalOnly property, the
- * receiver's entity.isStaticTableEntity property along
+ * receiver's entity.jsonIsStaticTableEntity property along
  * with allowing subclasses to add their own logic.
  *
  * @discussion

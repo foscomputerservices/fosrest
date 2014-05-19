@@ -381,7 +381,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
 - (void)willSave {
     @autoreleasepool {
-        if (!self.entity.isStaticTableEntity) {
+        if (!self.entity.jsonIsStaticTableEntity) {
             NSDate *startLastModifiedAt = [self primitiveValueForKey:@"lastModifiedAt"];
             BOOL saveRecursed = self.willSaveHasRecursed;
             [super willSave];
@@ -432,7 +432,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSAssert((self.jsonIdValue != nil && self.updatedWithServerAt != nil) ||
              (self.jsonIdValue == nil && self.updatedWithServerAt == nil) ||
              !self.isUploadable ||
-             self.entity.isStaticTableEntity,
+             self.entity.jsonIsStaticTableEntity,
              @"jsonIdValue & updatedWithServerAt are out of sync!");
 }
 #endif
@@ -591,7 +591,7 @@ static NSMutableDictionary *_processingFaults = nil;
                     // if the destination entity is a static entity, because we've
                     // got all of those instances locally.
                     if (!found &&
-                        !relDesc.destinationEntity.isStaticTableEntity) {
+                        !relDesc.destinationEntity.jsonIsStaticTableEntity) {
                         for (NSUInteger i = 0; i < resolvers.count; i++) {
                             FOSOperation *resolver = resolvers[i];
                             FOSOperation *finalOp = finalOps[i];
@@ -754,6 +754,15 @@ static NSMutableDictionary *_processingFaults = nil;
 - (FOSJsonId)jsonIdValue {
     // REVIEW : I'm not positive that this is the best way to accomplish this...
     NSString *idProp = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
+
+    if (idProp == nil) {
+        NSString *msgFmt = @"Missing ID_ATTRIBUTE mapping for entity: %@";
+        NSString *msg = [NSString stringWithFormat:msgFmt, self.entity.name];
+
+        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        @throw e;
+    }
+
     NSString *result = [self primitiveValueForKey:idProp];
 
     return result;

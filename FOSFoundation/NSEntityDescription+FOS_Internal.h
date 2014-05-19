@@ -28,11 +28,9 @@
 @property (nonatomic, readonly) BOOL hasMultipleOwnerRelationships;
 @property (nonatomic, readonly) NSSet *ownerRelationships;
 @property (nonatomic, readonly) NSSet *flattenedOwnershipRelationships;
-@property (nonatomic, readonly) BOOL isStaticTableEntity;
 
 #pragma mark - Public Methods
 
 - (BOOL)isFOSEntityWithRestConfig:(FOSRESTConfig *)restConfig;
-- (BOOL)isStaticTableEntityWithRestConfig:(FOSRESTConfig *)restConfig;
 
 @end

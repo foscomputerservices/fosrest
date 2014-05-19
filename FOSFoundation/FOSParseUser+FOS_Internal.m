@@ -19,6 +19,14 @@
 
 #pragma mark - Overrides
 
+- (NSString *)jsonUsername {
+    return self.username;
+}
+
+- (void)setJsonUsername:(NSString *)jsonUsername {
+    self.username = jsonUsername;
+}
+
 - (void)willSave {
     if (!self.willSaveHasRecursed) {
         FOSRESTConfig *restConfig = [FOSRESTConfig sharedInstance];

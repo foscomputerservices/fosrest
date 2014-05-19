@@ -67,7 +67,7 @@
         NSDictionary *context = @{
                                   @"ENTITY" : loggedInUser.entity,
                                   @"CMOID" : loggedInUserId,
-                                  @"USER_NAME" : loggedInUser.username
+                                  @"USER_NAME" : loggedInUser.jsonUsername
                                 };
 
         NSURLRequest *urlRequest = [urlBinding urlRequestForServerCommandWithContext:context

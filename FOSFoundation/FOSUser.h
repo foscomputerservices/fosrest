@@ -34,7 +34,20 @@
  */
 @property (nonatomic, readonly) FOSJsonId uid;
 
-@property (nonatomic, strong) NSString *username;
+/*!
+ * @property jsonUsername
+ *
+ * A value used to identify the user from the perspective of a
+ * username/password tuple.
+ *
+ * Its value is surfaced to the adapter map via the $USER_NAME variable.
+ *
+ * @discusson
+ *
+ * This is an abstract property that must be overridden by subclasses to map
+ * to the actual property that is used by the server.
+ */
+@property (nonatomic, strong) NSString *jsonUsername;
 
 /*!
  * @property isLoginUser

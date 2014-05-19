@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="FOSCachedManagedObject" representedClassName="FOSCachedManagedObject" isAbstract="YES" parentEntity="FOSManagedObject" syncable="YES">
         <attribute name="hasModifiedProperties" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="hasRelationshipFaults" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -26,27 +26,26 @@
         <attribute name="objectId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
     <entity name="FOSParseUser" representedClassName="FOSParseUser" parentEntity="FOSUser" syncable="YES">
-        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="emailVerified" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="sessionToken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
     <entity name="FOSRelationshipFault" representedClassName="FOSRelationshipFault" parentEntity="FOSManagedObject" syncable="YES">
         <attribute name="jsonId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="managedObjectClassName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="relationshipName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="FOSUser" representedClassName="FOSUser" isAbstract="YES" parentEntity="FOSCachedManagedObject" syncable="YES">
-        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
+    <entity name="FOSUser" representedClassName="FOSUser" isAbstract="YES" parentEntity="FOSCachedManagedObject" syncable="YES"/>
     <elements>
         <element name="FOSCachedManagedObject" positionX="-47" positionY="-378" width="173" height="163"/>
         <element name="FOSDeletedObject" positionX="-423" positionY="-378" width="128" height="73"/>
         <element name="FOSManagedObject" positionX="-144" positionY="-496" width="128" height="73"/>
         <element name="FOSModifiedProperty" positionX="-423" positionY="-468" width="128" height="73"/>
-        <element name="FOSParseCachedManagedObject" positionX="-9" positionY="-180" width="189" height="58"/>
-        <element name="FOSParseUser" positionX="-216" positionY="-85" width="128" height="103"/>
+        <element name="FOSParseCachedManagedObject" positionX="-54" positionY="-180" width="189" height="58"/>
+        <element name="FOSParseUser" positionX="-216" positionY="-118" width="128" height="118"/>
         <element name="FOSRelationshipFault" positionX="-263" positionY="-378" width="164" height="88"/>
-        <element name="FOSUser" positionX="-218" positionY="-184" width="128" height="58"/>
+        <element name="FOSUser" positionX="-218" positionY="-184" width="128" height="43"/>
     </elements>
 </model>

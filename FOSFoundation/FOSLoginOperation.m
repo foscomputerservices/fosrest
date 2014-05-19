@@ -88,7 +88,7 @@
                                                      forRelationship:nil
                                                            forEntity:_user.entity];
 
-    NSDictionary *context = @{ @"USER_NAME" : _user.username, @"PASSWORD" : _user.password };
+    NSDictionary *context = @{ @"USER_NAME" : _user.jsonUsername, @"PASSWORD" : _user.password };
 
     NSError *localError = nil;
     NSURLRequest *urlRequest = [urlBinding urlRequestForServerCommandWithContext:context
