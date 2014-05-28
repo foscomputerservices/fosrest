@@ -486,7 +486,9 @@
         *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
     }
     else {
-        result = [(NSString *)exprValue mutableCopy];
+        NSString *escapedExprValue =
+            [exprValue stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        result = [escapedExprValue mutableCopy];
     }
     
     // Add any parameters that were provided
