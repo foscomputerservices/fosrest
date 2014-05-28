@@ -152,6 +152,16 @@
     else {
         NSString *msg = @"Bad server response";
 
+        if (responseData != nil &&
+            [httpResponse.MIMEType isEqualToString:@"application/json"]) {
+
+            NSError *localError = nil;
+
+            *jsonResult = [NSJSONSerialization JSONObjectWithData:responseData
+                                                          options:0
+                                                            error:&localError];
+        }
+
         localError = [NSError errorWithDomain:@"FOSFoundation"
                                     errorCode:httpResponse.statusCode
                                    andMessage:msg];
@@ -162,7 +172,6 @@
             *error = localError;
         }
 
-        *jsonResult = nil;
         result = NO;
     }
 
@@ -182,6 +191,10 @@
 - (id<NSObject>)encodeCMOValueToJSON:(id)cmoValue
                               ofType:(NSAttributeDescription *)attrDesc
                                error:(NSError **)error {
+    NSParameterAssert(attrDesc != nil);
+
+    if (error != nil) { *error = nil; }
+
     id result = cmoValue;
 
     if (cmoValue == nil || [cmoValue isKindOfClass:[NSNull class]]) {
@@ -229,29 +242,32 @@
     return result;
 }
 
-- (id)decodeJSONValueToCMOValue:(id<NSObject>)cmoValue
+- (id)decodeJSONValueToCMOValue:(id<NSObject>)jsonValue
                          ofType:(NSAttributeDescription *)attrDesc
-                          error:(NSError * *)error {
+                          error:(NSError **)error {
+    NSParameterAssert(attrDesc != nil);
 
-    id result = cmoValue;
+    if (error != nil) { *error = nil; }
 
-    if ([cmoValue isKindOfClass:[NSNull class]]) {
+    id result = jsonValue;
+
+    if ([jsonValue isKindOfClass:[NSNull class]]) {
         result = nil;
     }
-    else if (cmoValue != nil) {
+    else if (jsonValue != nil) {
         if (attrDesc.attributeType == NSTransformableAttributeType) {
             NSValueTransformer *transformer =
                 [NSValueTransformer valueTransformerForName:attrDesc.valueTransformerName];
 
-            result = [transformer reverseTransformedValue:cmoValue];
+            result = [transformer reverseTransformedValue:jsonValue];
         }
         else if ([result isKindOfClass:[NSDate class]]) {
-            NSDate *date = (NSDate *)cmoValue;
+            NSDate *date = (NSDate *)jsonValue;
 
             result = [NSNumber numberWithDouble:date.timeIntervalSince1970];
         }
         else if ([result isKindOfClass:[NSData class]]) {
-            NSData *data = (NSData *)cmoValue;
+            NSData *data = (NSData *)jsonValue;
 
             result = [data base64EncodedString];
         }

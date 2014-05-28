@@ -25,13 +25,15 @@ typedef NSManagedObjectID *(^FOSWebServiceWillProcessHandler)();
 typedef NS_ENUM(NSUInteger, FOSWSRequestState) {
     FOSWSRequestStateNotStarted = 0,
     FOSWSRequestStateExecuting = 1,
-    FOSWSRequestStateFinished = 2
+    FOSWSRequestStateFinished = 2,
+    FOSWSRequestStateCancelled = 3
 };
 
 @interface FOSWebServiceRequest : FOSOperation {
     @protected
         NSError *_error;
         id<NSObject> _jsonResult;
+        id<NSObject> _originalJsonResult;
         FOSWSRequestState _requestState;
 }
 
@@ -51,7 +53,31 @@ typedef NS_ENUM(NSUInteger, FOSWSRequestState) {
 @property (nonatomic, strong) FOSWebServiceWillProcessHandler willProcessHandler;
 @property (nonatomic, readonly) NSURL *url;
 
+/*!
+ * @property jsonResult
+ *
+ * The result of executing the request against the server.
+ *
+ * @discussion
+ *
+ * This result is 'unwrapped' automatically by the urlBinding if a urlBinding
+ * was specified.
+ */
 @property (nonatomic, readonly) id<NSObject> jsonResult;
+
+/*!
+ * @property originalJsonResult
+ *
+ * The result of executing the request against the server.
+ *
+ * @discussion
+ *
+ * This result is the original 'wrapped' version received from the server.
+ */
+@property (nonatomic, readonly) id<NSObject> originalJsonResult;
+
+@property (nonatomic, readonly) NSURLRequest *urlRequest;
+@property (nonatomic, readonly) FOSURLBinding *urlBinding;
 
 // This is managed internally by FOSCacheManager.
 @property (nonatomic, strong) id<FOSProcessServiceRequest> serviceRequestProcessor;
@@ -84,10 +110,5 @@ typedef NS_ENUM(NSUInteger, FOSWSRequestState) {
              uriFragments:(NSArray *)uriFragments;
 
 - (id)initWithURLRequest:(NSURLRequest *)urlRequest andURLBinding:(FOSURLBinding *)urlBinding;
-
-#pragma mark - Public Properties
-
-@property (nonatomic, readonly) NSURLRequest *urlRequest;
-@property (nonatomic, readonly) FOSURLBinding *urlBinding;
 
 @end

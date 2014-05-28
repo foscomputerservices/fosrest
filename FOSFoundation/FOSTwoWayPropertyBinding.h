@@ -24,7 +24,7 @@
  * @method jsonIdFromJSON:forEntity:error:
  *
  */
-- (FOSJsonId)jsonIdFromJSON:(NSDictionary *)json
+- (FOSJsonId)jsonIdFromJSON:(id<NSObject>)json
                 withContext:(NSDictionary *)context
                       error:(NSError **)error;
 

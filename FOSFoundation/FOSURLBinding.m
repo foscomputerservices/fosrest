@@ -244,6 +244,74 @@
     return result;
 }
 
+
+- (id<NSObject>)wrapJSON:(id<NSObject>)json context:(NSDictionary *)context error:(NSError **)error {
+
+    if (error != nil) { *error = nil; }
+    id<NSObject> result = json;
+
+    NSError *localError = nil;
+
+    if (self.jsonWrapperKey != nil && json != nil) {
+        NSString *jsonKey = [self.jsonWrapperKey evaluateWithContext:context error:&localError];
+
+        if (localError == nil && jsonKey.length > 0) {
+            result = @{ jsonKey : json };
+        }
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+
+        result = nil;
+    }
+
+    return result;
+}
+
+
+- (id<NSObject>)unwrapJSON:(id<NSObject>)json
+                   context:(NSDictionary *)context
+                     error:(NSError **)error {
+
+    if (error != nil) { *error = nil; }
+    id<NSObject> result = json;
+
+    NSError *localError = nil;
+
+    if (self.jsonWrapperKey != nil && json != nil) {
+        NSString *jsonKey = [self.jsonWrapperKey evaluateWithContext:context error:&localError];
+
+        if (jsonKey != nil && localError == nil) {
+            if (![json isKindOfClass:[NSDictionary class]]) {
+                NSString *msgFmt = @"The json provided to JSON_WRAPPER_KEY was of type %@, an NSDictionary was expected for ULR_BINDING %@.";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 NSStringFromClass([json class]),
+                                 self.entityMatcher.description];
+
+                localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            }
+            else {
+                NSDictionary *jsonDict = (NSDictionary *)json;
+
+                result = jsonDict[jsonKey];
+            }
+        }
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+
+        result = nil;
+    }
+
+    return result;
+}
+
 #pragma mark - Overrides
 
 - (NSString *)description {
@@ -337,7 +405,9 @@
 
     if (![self.entityMatcher itemIsIncluded:entity.name context:context]) {
         if (error) {
-            NSString *msg = [NSString stringWithFormat:@"The provided CMO is of type %@, which doesn't match any entity descriptions bound to this URLBinding.", entity.name];
+            NSString *msgFmt = @"The provided CMO is of type %@, which doesn't match any entity descriptions bound to this URLBinding (%@).";
+            NSString *msg = [NSString stringWithFormat:msgFmt,
+                             entity.name, self.entityMatcher.description];
 
             *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
         }
@@ -508,7 +578,7 @@
 
     // Ensure that the cmo is managed by this request
     NSMutableURLRequest *result= nil;
-    NSEntityDescription *entity = relDesc.entity;
+    NSEntityDescription *entity = relDesc.destinationEntity;
     if ([self _matchEntity:entity error:error] &&
         [self.relationshipMatcher itemIsIncluded:relDesc.name context:context]) {
 
@@ -600,7 +670,10 @@
     NSParameterAssert(error != nil);
 
     NSDictionary *json = [self _jsonBodyForCMO:cmo error:error];
-    NSData *result = [self _httpBodyForJSON:json error:error];
+
+    NSDictionary *context = @{ @"CMO" : cmo };
+
+    NSData *result = [self _httpBodyForJSON:json context:context error:error];
 
     return result;
 }
@@ -629,12 +702,14 @@
     NSParameterAssert(error != nil);
 
     NSDictionary *json = [self _jsonBodyForCommandWithContext:context error:error];
-    NSData *result = [self _httpBodyForJSON:json error:error];
+    NSData *result = [self _httpBodyForJSON:json context:context error:error];
 
     return result;
 }
 
-- (NSData *)_httpBodyForJSON:(NSDictionary *)json error:(NSError **)error {
+- (NSData *)_httpBodyForJSON:(id<NSObject>)json
+                     context:(NSDictionary *)context
+                       error:(NSError **)error {
     NSParameterAssert(error != nil);
 
     NSData *result = nil;
@@ -646,7 +721,13 @@
          self.requestMethod != FOSRequestMethodGET)) {
 
             if (json != nil && *error == nil) {
-                result = [self _htmlBodyForJSON:json error:error];
+
+                // See if it needs to be wrapped
+                json = [self wrapJSON:json context:context error:error];
+
+                if (*error == nil) {
+                    result = [self _htmlBodyForJSON:json error:error];
+                }
             }
         }
 
@@ -694,7 +775,7 @@
     return result;
 }
 
-- (NSData *)_htmlBodyForJSON:(NSDictionary *)json error:(NSError **)error {
+- (NSData *)_htmlBodyForJSON:(id<NSObject>)json error:(NSError **)error {
     NSParameterAssert(json != nil);
     NSParameterAssert(error != nil);
 
@@ -720,13 +801,16 @@
     return result;
 }
 
-- (NSString *)_webformEncodeJSON:(NSDictionary *)json error:(NSError **)error {
+- (NSString *)_webformEncodeJSON:(id<NSObject>)json error:(NSError **)error {
     NSParameterAssert(error != nil);
     *error = nil;
 
     NSMutableString *result = [NSMutableString stringWithCapacity:256];
 
-    for (NSString *key in json.allKeys) {
+    // TODO : Support other types
+    NSParameterAssert([json isKindOfClass:[NSDictionary class]]);
+
+    for (NSString *key in ((NSDictionary *)json).allKeys) {
         id<NSObject> value = json[key];
 
         if (result.length > 0) {

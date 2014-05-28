@@ -11,6 +11,6 @@
 @interface FOSWebServiceRequest (FOS_Internal)
 
 - (void)setError:(NSError *)error;
-- (void)setJsonResult:(id<NSObject>)jsonResult;
+- (void)setOriginalJsonResult:(id<NSObject>)jsonResult;
 
 @end

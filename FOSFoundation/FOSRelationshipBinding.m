@@ -49,7 +49,7 @@
     return result;
 }
 
-- (FOSJsonId)jsonIdFromJSON:(NSDictionary *)json
+- (FOSJsonId)jsonIdFromJSON:(id<NSObject>)json
                 withContext:(NSDictionary *)context
                       error:(NSError **)error {
     NSParameterAssert(json != nil);
@@ -64,7 +64,7 @@
         NSString *jsonKeyPath = [self.jsonIdBindingExpression evaluateWithContext:context
                                                                             error:&localError];
         if (jsonKeyPath && localError == nil) {
-            result = [json valueForKeyPath:jsonKeyPath];
+            result = [(NSObject *)json valueForKeyPath:jsonKeyPath];
         }
     }
     else {
@@ -166,6 +166,10 @@
 
     BOOL result = [self _ensureCMO:cmo andProp:propDesc error:&localError];
     if (result) {
+
+        // TODO : Today this code is located in the FOSRetrieveTo[One|Many]RelationshipOperation
+        //        classes.  We'll have to decide if it belongs there or here.
+#ifdef later
         NSDictionary *context = @{ @"CMO" : cmo, @"RELDESC" : propDesc };
 
         // TODO : Certianly these aren't always going to be the same, we'll
@@ -204,6 +208,7 @@
                 }
             }
         }
+#endif
     }
 
     if (localError != nil) {
@@ -235,7 +240,8 @@
     }
 
     if (![self.entityMatcher itemIsIncluded:cmo.entity.name context:context]) {
-        NSString *msg = [NSString stringWithFormat:@"The CMO %@ does not match any entity descriptions for the relationship binding.", cmo.entity.name];
+        NSString *msg = [NSString stringWithFormat:@"The CMO '%@' does not match any entity descriptions for the relationship binding on relationship '%@' for binding matching entities %@.",
+                         cmo.entity.name, propDesc.name, self.entityMatcher.description];
 
         *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
         result = NO;

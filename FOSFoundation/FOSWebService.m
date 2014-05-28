@@ -78,7 +78,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
         NSManagedObjectID *objectID = request.willProcessHandler();
 
         if (objectID != nil) {
-            request.jsonResult = objectID;
+            [request setOriginalJsonResult:objectID];
             sendRequest = NO;
         }
     }
@@ -270,7 +270,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
     if (localError == nil) {
         NSLog(@"    FOSWebService Success!!!");
 
-        [webServiceRequest setJsonResult:jsonResult];
+        [webServiceRequest setOriginalJsonResult:jsonResult];
     }
     else {
         NSLog(@"    FOSWebService Response ERROR: %@", localError.description);

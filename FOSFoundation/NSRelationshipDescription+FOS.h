@@ -31,92 +31,6 @@ typedef NS_ENUM(NSUInteger, FOSForcePullType) {
     FOSForcePullType_UseCount = 2,
 };
 
-/*!
- * @category NSRelationshipDescription (FOS)
- *
- * This category provides access to key-value pairs
- * provided in the NSRelationshipDescription's userInfo
- * NSDictionary.  The names of the properties in this
- * interface correspond directly to key names that
- * are to be provided in the userInfo dictionary.
- *
- * Normally these values are set in the database
- * model modified using Xcode's database modeling
- * tools.
- *
- * These properties work in conjunction with one another
- * to resolve the relationship beween an Owner Object
- * and its dependency.
- *
- * An Owner Object is the object in the relationship
- * that has its Delete Rule == (NSCascadeDeleteRule | NSDenyDeleteRule).
- *
- * There are three relationship styles to be considered:
- *    1) one-to-one
- *    2) one-to-many
- *    3) many-to-many
- *
- * Each of the samples below is based on the data model
- * provided in FOSFoundationTests/Test Data Model/RESTTests.xcdatamodeld.
- *
- * I) One-To-One Sample
- *
- * Owner Entity: User :: FOSParseUser :: FOSUser :: ...
- * Relationship: widgets
- * jsonRelationshipQuery:
- *          GET::1/classes/Role/$roleId$
- * jsonRelationshipIdProp: N/A
- *
- * Query JSON Result:
- *
- * {
- *     "results": [{    <-- jsonRelationshipArrayNames
- *         "role": "CEO",
- *         "createdAt": "2012-12-29T14:47:15.902Z",
- *         "updatedAt": "2012-12-29T14:47:29.419Z",
- *         "objectId": "ksLgJ136O6"
- *     }]
- * }
- *
- * II) One-To-Many InnerJoin Sample:
- *
- * Owner Entity: User :: FOSParseUser :: FOSUser :: ...
- * Relationship: widgets
- * jsonRelationshipQuery:
- *          GET::1/classes/Widget?where={"user":{"__type":"Pointer","className":"_User","objectId":"$[SELFID]$"}}'
- * jsonRelationshipIdProp: user.ObjectId
- *
- * Query JSON Result:
- *
- * {
- *     "results": [{    <-- jsonRelationshipArrayNames
- *         "info": {
- *             "__type": "Pointer",
- *             "className": "WidgetInfo",
- *             "objectId": "dkUNbf1roJ"
- *         },
- *         "user": <-- jsonRelationshipFragmentKey
- *         {  <-- jsonRelationshipFragment
- *             "__type": "Pointer",
- *             "className": "_User",
- *             "objectId": "JFipEfH9ko"   <-- jsonRelationshipIdProp
- *         },
- *         "name": "widget1",
- *         "ordinal" : "1", <-- jsonOrderProp
- *         "createdAt": "2012-12-28T19:04:18.560Z",
- *         "updatedAt": "2012-12-29T13:28:44.566Z",
- *         "objectId": "cTRpha2pu7"
- *     }]
- * }
- *
- * For create/update:
- *
- * jsonRelationshipFragment:  { "user" : { "__type" : "Pointer", "className" : "_User", "objectId" : "$user.objectId$" } }
- *
- * III) Many-To-Many Sample:
- *
- *  Not yet implemented
- */
 @interface NSRelationshipDescription (FOS)
 
 /*!
@@ -130,13 +44,6 @@ typedef NS_ENUM(NSUInteger, FOSForcePullType) {
  * sort key.
  */
 @property (nonatomic, readonly) NSString *jsonOrderProp;
-
-/*!
- * @property jsonRelationshipFragmentKey
- *
- * The default is the receiver's name.
- */
-@property (nonatomic, readonly) NSString *jsonRelationshipFragmentKey;
 
 /*!
  * @property jsonRelationshipForcePull

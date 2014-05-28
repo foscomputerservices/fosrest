@@ -18,7 +18,7 @@
  * Retrieves the jsonId from the given JSON for the ID_PROPERTY described
  * for the the given entity.
  */
-- (FOSJsonId)jsonIdFromJSON:(NSDictionary *)json
+- (FOSJsonId)jsonIdFromJSON:(id<NSObject>)json
                   forEntity:(NSEntityDescription *)entity
                       error:(NSError **)error;
 
@@ -28,7 +28,7 @@
  * Retrieves the jsonId from the given JSON for the related object described
  * by the given relationship.
  */
-- (FOSJsonId)jsonIdFromJSON:(NSDictionary *)json
+- (FOSJsonId)jsonIdFromJSON:(id<NSObject>)json
             forRelationship:(NSRelationshipDescription *)relationship
                       error:(NSError **)error;
 

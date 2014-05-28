@@ -284,6 +284,16 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
 @property (nonatomic, strong) NSArray *endPointParameters;
 
 /*!
+ * @property jsonWrapperKey
+ *
+ * The key that server expects objects to be wrapped under.  If the object is
+ * not under any key, this value should be nil.
+ *
+ * Setting this property is optional.
+ */
+@property (nonatomic, strong) id<FOSExpression> jsonWrapperKey;
+
+/*!
  * @property cmoBinding
  *
  * A binding that provides for two-way binding between the web services's JSON packets and
@@ -394,5 +404,27 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  */
 - (NSURLRequest *)urlRequestForServerCommandWithContext:(NSDictionary *)context
                                                   error:(NSError **)error;
+
+/*!
+ * @method wrapJSON:context:error:
+ *
+ * If the receiver's jsonWrapperKey is specified, it will be evaluated against the
+ * provided context and the resulting string will be used to wrap json in an
+ * NSDictionary under the specified key.
+ *
+ * If the recevier's jsonWrapperKey is nil, then json is returned unaltered.
+ */
+- (id<NSObject>)wrapJSON:(id<NSObject>)json context:(NSDictionary *)context error:(NSError **)error;
+
+/*!
+ * @method unwrapJSON:context:error:
+ *
+ * If the receiver's jsonWrapperKey is specified, it will be evaluated against the
+ * provided context and the resulting string will be used against (NSDictionary *)json
+ * to return the inner wrapped json.
+ *
+ * If the recevier's jsonWrapperKey is nil, then json is returned unaltered.
+ */
+- (id<NSObject>)unwrapJSON:(id<NSObject>)json context:(NSDictionary *)context error:(NSError **)error;
 
 @end

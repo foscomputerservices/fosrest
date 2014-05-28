@@ -27,17 +27,22 @@
 
 #pragma mark - Class Methods
 
-+ (instancetype)retrieveCMOUsingDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp;
++ (instancetype)retrieveCMOUsingDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
+                            forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase;
+
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                               withId:(FOSJsonId)jsonId
                   andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                               withId:(FOSJsonId)jsonId
                         withBindings:(NSMutableDictionary *)bindings
                   andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                             withJson:(NSDictionary *)json
                   andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                             withJson:(NSDictionary *)json
                         withBindings:(NSMutableDictionary *)bindings
@@ -57,21 +62,28 @@
 #pragma mark - Initialization Methods
 
 - (id)initAsTopLevelFetch:(BOOL)isTopLevelFetch
+        forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                    entity:(NSEntityDescription *)entity
              withBindings:(NSMutableDictionary *)bindings
   andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+
 - (id)initWithDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
             isTopLevelFetch:(BOOL)isTopLevelFetch
+          forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                withBindings:(NSMutableDictionary *)bindings
     andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+
 - (id)initForEntity:(NSEntityDescription *)entity
              withId:(FOSJsonId)jsonId
     isTopLevelFetch:(BOOL)isTopLevelFetch
+  forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
        withBindings:(NSMutableDictionary *)bindings
 andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+
 - (id)initForEntity:(NSEntityDescription *)entity
            withJson:(NSDictionary *)json
     isTopLevelFetch:(BOOL)isTopLevelFetch
+  forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
        withBindings:(NSMutableDictionary *)bindings
 andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
 

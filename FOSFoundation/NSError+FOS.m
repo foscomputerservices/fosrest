@@ -44,5 +44,12 @@
     return error;
 }
 
+- (void)throwError {
+    NSException *e = [NSException exceptionWithName:self.domain
+                                             reason:self.description
+                                           userInfo:self.userInfo];
+
+    @throw e;
+}
 
 @end

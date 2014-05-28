@@ -24,6 +24,10 @@
     return _jsonResult;
 }
 
+- (id<NSObject>)originalJsonResult {
+    return _originalJsonResult;
+}
+
 - (void)setServiceRequestProcessor:(id<FOSProcessServiceRequest>)serviceRequestProcessor {
     _serviceRequestProcessor = serviceRequestProcessor;
 
@@ -154,7 +158,9 @@
 
 - (BOOL)isFinished {
     @synchronized(self) {
-        BOOL result = _requestState == FOSWSRequestStateFinished;
+        BOOL result =
+            _requestState == FOSWSRequestStateFinished ||
+            self.isCancelled;
         
         return result;
     }
@@ -190,7 +196,7 @@
     @synchronized(self) {
         [self willChangeValueForKey:@"isFinished"];
         [self willChangeValueForKey:@"isExecuting"];
-        _requestState = FOSWSRequestStateFinished;
+        _requestState = FOSWSRequestStateCancelled;
         [self didChangeValueForKey:@"isExecuting"];
         [self didChangeValueForKey:@"isFinished"];
     }
@@ -200,17 +206,20 @@
     [super main];
 
     // Asyncronously queue ourself for processing.
-    // FOSWebService will then call back on either setJsonResult: or setError:
+    // FOSWebService will then call back on either setOriginalJsonResult: or setError:
     // in FOSWebServiceRequest+FOS_Internal, which will cuse things to progresss
     // from there.
 //    [self.webService queueRequest:self];
 
     if (!self.isCancelled) {
+
+        // These will cause the KVO triggers to be sent, which were
+        // previously skipped.
         if (_error != nil) {
             self.error = _error;
         }
         else if (_jsonResult != nil) {
-            self.jsonResult = _jsonResult;
+            self.originalJsonResult = _jsonResult;
         }
     }
 }
@@ -320,6 +329,7 @@
 
 - (id)initWithURLRequest:(NSURLRequest *)urlRequest andURLBinding:(FOSURLBinding *)urlBinding {
     NSParameterAssert(urlRequest != nil);
+    NSParameterAssert(urlBinding != nil);
 
     if ((self = [super init]) != nil) {
         _urlRequest = urlRequest;

@@ -82,8 +82,7 @@
         // to be already loaded by the time we're done.
         if (relDesc.isOwnershipRelationship) {
             // Retrieve the relationship id
-            NSDictionary *childFragment = ((NSDictionary *)jsonFragment)[relDesc.jsonRelationshipFragmentKey];
-            FOSJsonId jsonId = [recordBinder jsonIdFromJSON:childFragment
+            FOSJsonId jsonId = [recordBinder jsonIdFromJSON:jsonFragment
                                                   forEntity:destEntity
                                                       error:&localError];
 
@@ -113,6 +112,8 @@
 
         FOSCachedManagedObject *childObj = nil;
 
+        NSDictionary *childFragment = ((NSDictionary *)_jsonFragment);
+
         if (_fetchRelatedEntityOp != nil) {
             NSAssert(_relationship.isOwnershipRelationship,
                      @"Expected an ownership relationship, not a graph relationship.");
@@ -121,12 +122,28 @@
         }
         else {
             NSEntityDescription *childEntity = _relationship.destinationEntity;
-            NSDictionary *childFragment =
-                ((NSDictionary *)_jsonFragment)[_relationship.jsonRelationshipFragmentKey];
+
+            if (childFragment != nil) {
+                NSError *localError = nil;
+
+                FOSJsonId childId = [_urlBinding.cmoBinding jsonIdFromJSON:childFragment
+                                                           forRelationship:_relationship
+                                                                     error:&localError];
+
+                if (localError == nil && childId != nil) {
+                    childObj = [[FOSRetrieveCMOOperation class] cmoForEntity:childEntity
+                                                                  withJsonId:childId
+                                                                fromBindings:_bindings
+                                                   respectingPreviousLookups:NO];
+                }
+                else {
+                    _error = localError;
+                }
+            }
 
             // Here we have a relationship to an instance that does not exist on the
             // server.
-            if (childFragment == nil) {
+            if (_error == nil && childObj == nil) {
                 if (!_relationship.isOptional) {
                     NSManagedObjectContext *moc = self.managedObjectContext;
                     FOSCachedManagedObject *owner = (FOSCachedManagedObject *)[moc objectWithID:ownerId];
@@ -146,29 +163,11 @@
                     _ignoreDependentErrors = YES;
                 }
             }
-            else {
-                NSError *localError = nil;
-
-                FOSJsonId childId = [_urlBinding.cmoBinding jsonIdFromJSON:(NSDictionary *)_jsonFragment
-                                                           forRelationship:_relationship
-                                                                     error:&localError];
-
-                if (localError == nil) {
-                    childObj = [[FOSRetrieveCMOOperation class] cmoForEntity:childEntity
-                                                                  withJsonId:childId
-                                                                fromBindings:_bindings
-                                                   respectingPreviousLookups:NO];
-                }
-                else {
-                    _error = localError;
-                }
-            }
         }
 
         if (_error == nil && !_ignoreDependentErrors) {
             if (childObj == nil) {
-                NSDictionary *json = ((NSDictionary *)_jsonFragment)[_relationship.jsonRelationshipFragmentKey];
-                FOSJsonId jsonId = [_urlBinding.cmoBinding jsonIdFromJSON:json
+                FOSJsonId jsonId = [_urlBinding.cmoBinding jsonIdFromJSON:childFragment
                                                                 forEntity:_relationship.destinationEntity
                                                                     error:nil];
                 NSString *title = @"FOSMissingChildEntity";

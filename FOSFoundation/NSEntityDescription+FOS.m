@@ -24,7 +24,9 @@
     FOSAtomicCreateServerRecordOperation *createOp = [FOSAtomicCreateServerRecordOperation operationForEntity:entity
                                                                                 withJSON:json];
 
-    FOSRetrieveCMOOperation *result = [FOSRetrieveCMOOperation retrieveCMOUsingDataOperation:createOp];
+    FOSRetrieveCMOOperation *result =
+        [FOSRetrieveCMOOperation retrieveCMOUsingDataOperation:createOp
+                                             forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord];
 
     return result;
 }

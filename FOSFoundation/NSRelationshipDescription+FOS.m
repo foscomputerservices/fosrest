@@ -16,16 +16,6 @@
     return result;
 }
 
-- (NSString *)jsonRelationshipFragmentKey {
-    NSString *result = [self _bindValueForSelector:_cmd throwIfMissing:NO];
-
-    if (result.length == 0) {
-        result = self.name;
-    }
-
-    return result;
-}
-
 - (FOSForcePullType)jsonRelationshipForcePull {
     FOSForcePullType result = FOSForcePullType_Never;
     NSString *propValue = [self _bindValueForSelector:_cmd throwIfMissing:NO];

@@ -109,7 +109,8 @@
         }];
 
         FOSRetrieveCMOOperation *loginRequest =
-            [FOSRetrieveCMOOperation retrieveCMOUsingDataOperation:fetchDataOp];
+            [FOSRetrieveCMOOperation retrieveCMOUsingDataOperation:fetchDataOp
+                                                 forLifecyclePhase:FOSLifecyclePhaseLogin];
         [loginRequest addDependency:cmLoginOp];
 
         __block FOSLoginOperation *blockSelf = self;
@@ -121,7 +122,8 @@
                 NSManagedObjectContext *moc = blockSelf.managedObjectContext;
                 FOSUser *loggedInUser = (FOSUser *)loginRequest.managedObject;
 
-                NSAssert(!loggedInUser.isLoginUser, @"We should have a *real* user instance now, not a loginUser!");
+                NSAssert(!loggedInUser.isLoginUser,
+                         @"We should have a *real* user instance now, not a loginUser!");
 
                 NSError *error = nil;
                 if ([moc obtainPermanentIDsForObjects:@[ loggedInUser ] error:&error]) {

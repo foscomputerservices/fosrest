@@ -100,7 +100,7 @@
 
         NSError *localError = nil;
 
-        _jsonId = [recordBinding jsonIdFromJSON:(NSDictionary *)_webRequest.jsonResult
+        _jsonId = [recordBinding jsonIdFromJSON:_webRequest.jsonResult
                                       forEntity:self.entity
                                           error:&localError];
 

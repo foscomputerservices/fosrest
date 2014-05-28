@@ -43,7 +43,7 @@
 
 #pragma mark - FOSTwoWayPropertyBinding Methods
 
-- (FOSJsonId)jsonIdFromJSON:(NSDictionary *)json
+- (FOSJsonId)jsonIdFromJSON:(id<NSObject>)json
                 withContext:(NSDictionary *)context
                       error:(NSError **)error {
     NSParameterAssert(json != nil);
@@ -59,7 +59,7 @@
                                                                       error:&localError];
 
         if (jsonKeyPath && localError == nil) {
-            result = [json valueForKeyPath:jsonKeyPath];
+            result = [(NSObject *)json valueForKeyPath:jsonKeyPath];
         }
     }
     else {

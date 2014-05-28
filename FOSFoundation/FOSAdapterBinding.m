@@ -91,7 +91,7 @@
     for (FOSURLBinding *binding in self.urlBindings) {
         // Match the destination entity name, not the source for relationship bindings
         NSString *entityName = lifecyclePhase == FOSLifecyclePhaseRetrieveServerRecordRelationship
-            ? relDesc.entity.name
+            ? relDesc.destinationEntity.name
             : entity.name;
 
         if ((binding.entityMatcher == nil ||
@@ -159,8 +159,17 @@
         if (bindingRef != nil) {
             urlBinding.cmoBinding = [self _cmoBinderForSharedBindingRef:bindingRef];
 
-            // TODO : This should turn into a user-visible error
-            NSAssert(urlBinding.cmoBinding != nil, @"Missing binding???");
+            if (urlBinding.cmoBinding == nil) {
+                NSString *msgFmt = @"Unable to locate SHARED_BINDING named '%@'.";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 urlBinding.sharedBindingReference.identifier];
+
+                NSException *e = [NSException exceptionWithName:@"FOSFoundation"
+                                                         reason:msg
+                                                       userInfo:nil];
+
+                @throw e;
+            }
         }
     }
 

@@ -48,7 +48,7 @@
 
 #pragma mark - FOSTwoWayRecordBinding Methods
 
-- (FOSJsonId)jsonIdFromJSON:(NSDictionary *)json
+- (FOSJsonId)jsonIdFromJSON:(id<NSObject>)json
                   forEntity:(NSEntityDescription *)entity
                       error:(NSError **)error {
     NSParameterAssert(json != nil);
@@ -86,7 +86,7 @@
     return result;
 }
 
-- (FOSJsonId)jsonIdFromJSON:(NSDictionary *)json
+- (FOSJsonId)jsonIdFromJSON:(id<NSObject>)json
             forRelationship:(NSRelationshipDescription *)relDesc
                       error:(NSError **)error {
     NSParameterAssert(json != nil);
@@ -183,7 +183,7 @@
         
         if (localError == nil) {
             // Use all property bindings
-            for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
+            for (id<FOSTwoWayPropertyBinding> propBinding in [self _propertyBindings]) {
 
                 NSSet *propDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
                 for (NSPropertyDescription *propDesc in propDescriptions) {
@@ -286,12 +286,11 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
 
         if (localError == nil) {
             // Use all property bindings
-            for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
+            for (id<FOSTwoWayPropertyBinding> propBinding in [self _propertyBindings]) {
 
                 // Bind all properties
                 NSSet *propertyDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
                 for (NSPropertyDescription *propDesc in propertyDescriptions) {
-
 
                     // Bind the property, but only the id & read-only properties on non-retrieve phases.
                     // In other phases, the JSON may be missing values, which would cause them
@@ -328,18 +327,18 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
 
 #pragma mark - Private Methods
 
-- (NSSet *)_attributeBindings {
+- (NSSet *)_propertyBindings {
     NSMutableSet *attrBindings = [self.attributeBindings mutableCopy];
     [attrBindings unionSet:self.relationshipBindings];
 
     return attrBindings;
 }
 
-- (NSMutableSet *)_attributeDescriptionsForCMO:(FOSCachedManagedObject *)cmo {
+- (NSMutableSet *)_propertyDescriptionsForCMO:(FOSCachedManagedObject *)cmo {
     NSMutableSet *result = [NSMutableSet setWithCapacity:20];
 
 
-    for (id<FOSTwoWayPropertyBinding> propBinding in [self _attributeBindings]) {
+    for (id<FOSTwoWayPropertyBinding> propBinding in [self _propertyBindings]) {
         NSSet *attributeDescriptions = [propBinding propertyDescriptionsForEntity:cmo.entity];
 
         [result unionSet:attributeDescriptions];
@@ -357,7 +356,7 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
 
     // Verify propertyDescriptions match entityDescriptions
     NSMutableSet *attrEntityDescriptions =
-        [[self _attributeDescriptionsForCMO:cmo] valueForKeyPath:@"entity.name"];
+        [[self _propertyDescriptionsForCMO:cmo] valueForKeyPath:@"entity.name"];
 
     if (![self.entityMatcher itemsAreIncluded:attrEntityDescriptions context:context]) {
         NSString *msgFmt = @"The ATTRIBUTE_BINDINGS entities (%@) for the CMO_BINDING don't match the CMO '%@'.";
@@ -382,7 +381,7 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
     return result;
 }
 
-- (NSDictionary *)_unwrappedJSON:(NSDictionary *)json
+- (id<NSObject>)_unwrappedJSON:(id<NSObject>)json
                        context:(NSDictionary *)context
                          error:(NSError **)error {
     NSParameterAssert(json != nil);
@@ -390,12 +389,12 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
     NSParameterAssert(error != nil);
 
     *error = nil;
-    NSDictionary *result = json;
+    id<NSObject> result = json;
 
     if (self.jsonWrapperKey != nil) {
         NSString *wrapperKey = [self.jsonWrapperKey evaluateWithContext:context error:error];
         if (wrapperKey != nil && *error == nil) {
-            result = json[wrapperKey];
+            result = [(NSObject *)json valueForKeyPath:wrapperKey];
         }
     }
 

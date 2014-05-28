@@ -53,28 +53,52 @@
         NSMutableSet *requests = [NSMutableSet setWithCapacity:leafEntities.count];
 
         id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+        BOOL found = NO;
         for (NSEntityDescription *nextLeafEntity in leafEntities) {
             FOSURLBinding *urlBinding =
                 [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
                                      forRelationship:relDesc
                                        forEntity:nextLeafEntity];
 
-            NSError *localError = nil;
-            NSURLRequest *urlRequest =
-                [urlBinding urlRequestServerRecordsOfRelationship:relDesc
-                                             forDestinationEntity:nextLeafEntity
-                                                      withOwnerId:ownerJsonId
-                                                            error:&localError];
-            // TODO : Add error handling
-            NSAssert(localError == nil, @"Internal error: %@", localError.description);
+            if (urlBinding != nil) {
+                NSError *localError = nil;
+                NSURLRequest *urlRequest =
+                    [urlBinding urlRequestServerRecordsOfRelationship:relDesc
+                                                 forDestinationEntity:nextLeafEntity
+                                                          withOwnerId:ownerJsonId
+                                                                error:&localError];
 
-            FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
-                                                                          forURLBinding:urlBinding];
-            NSDictionary *requestEntry = @{
-                                           @"DestEntity" : nextLeafEntity,
-                                           @"Request" : request
-                                          };
-            [requests addObject:requestEntry];
+                if (localError != nil) {
+                    NSString *msg = localError.description;
+
+                    NSException *e = [NSException exceptionWithName:@"FOSFoundation"
+                                                             reason:msg
+                                                           userInfo:nil];
+                    @throw e;
+                }
+
+                FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                              forURLBinding:urlBinding];
+                NSDictionary *requestEntry = @{
+                                               @"DestEntity" : nextLeafEntity,
+                                               @"Request" : request
+                                              };
+                [requests addObject:requestEntry];
+
+                found = YES;
+            }
+        }
+
+        if (!found) {
+            NSString *msgFmt = @"Unable to locate a URL_BINDING for lifecycle RETRIEVE_SERVER_RECORD of entity %@ (across to-many relationship %@ of entity %@)";
+            NSString *msg = [NSString stringWithFormat:msgFmt,
+                             relDesc.destinationEntity.name, relDesc.name,
+                             relDesc.entity.name];
+
+            NSException *e = [NSException exceptionWithName:@"FOSFoundation"
+                                                     reason:msg
+                                                   userInfo:nil];
+            @throw e;
         }
 
         for (NSDictionary *nextRequestEntry in requests) {

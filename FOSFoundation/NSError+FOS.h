@@ -24,4 +24,6 @@
                      message:(NSString *)userError
                  andUserInfo:(NSDictionary *)userInfo;
 
+- (void)throwError;
+
 @end

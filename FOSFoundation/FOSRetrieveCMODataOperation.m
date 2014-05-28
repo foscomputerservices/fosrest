@@ -11,10 +11,10 @@
 
 @implementation FOSRetrieveCMODataOperation {
     NSError *_error;
+    FOSJsonId _jsonId;
 }
 
 @synthesize entity = _entity;
-@synthesize jsonId = _jsonId;
 
 #pragma mark - Class Methods
 
@@ -44,31 +44,46 @@
     return self;
 }
 
+#pragma mark - Property Overrides
+- (FOSJsonId)jsonId {
+    if (_jsonId == nil && self.jsonResult != nil) {
+        id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+        FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                                         forRelationship:nil
+                                                               forEntity:self.entity];
+
+        FOSJsonId jsonId = nil;
+        NSError *localError = nil;
+
+        NSDictionary *context = @{ @"ENTITY" : self.entity };
+
+        id<NSObject> unwrappedJson = [urlBinding unwrapJSON:self.jsonResult
+                                                    context:context
+                                                      error:&localError];
+        if (localError == nil) {
+            jsonId = [urlBinding.cmoBinding jsonIdFromJSON:unwrappedJson
+                                                       forEntity:self.entity
+                                                           error:&localError];
+        }
+
+        if (localError == nil) {
+            _jsonId = jsonId;
+
+        }
+        else {
+            _error = localError;
+        }
+    }
+
+    return _jsonId;
+}
+
 #pragma mark - FOSRetrieveCMODataOperationProtocol Methods
 
-- (void)setJsonResult:(NSDictionary *)jsonResult {
-    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
-    FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                                     forRelationship:nil
-                                                       forEntity:self.entity];
-
-    NSError *localError = nil;
-    FOSJsonId jsonId = [urlBinding.cmoBinding jsonIdFromJSON:jsonResult
-                                                   forEntity:self.entity
-                                                       error:&localError];
-
-    if (localError == nil) {
-        [self willChangeValueForKey:@"jsonId"];
-
-        _jsonId = jsonId;
-
-        [self didChangeValueForKey:@"jsonId"];
-
-        [super setJsonResult:jsonResult];
-    }
-    else {
-        _error = localError;
-    }
+- (void)setOriginalJsonResult:(NSDictionary *)jsonResult {
+    [self willChangeValueForKey:@"jsonId"];
+    [super setOriginalJsonResult:jsonResult];
+    [self didChangeValueForKey:@"jsonId"];
 }
 
 #pragma mark - Method Overrides
