@@ -38,7 +38,6 @@
 + (void)dropSharedInstace;
 + (void)clearLoggedInUserId;
 
-- (void)setUserIsLoggingIn;
 - (void)setLoggedInUserId:(NSManagedObjectID *)loggedInUserId;
 
 @end

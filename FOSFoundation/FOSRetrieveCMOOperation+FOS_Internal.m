@@ -14,6 +14,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
 @implementation FOSRetrieveCMOOperation (FOS_Internal)
 
 + (instancetype)fetchRelatedManagedObjectUsingDataOperation:(FOSRetrieveCMODataOperation *)fetchOp
+                                             ofRelationship:(NSRelationshipDescription *)relDesc
                                                withBindings:(NSMutableDictionary *)bindings
                                     andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     NSParameterAssert(fetchOp != nil);
@@ -21,24 +22,26 @@ extern NSMutableDictionary *_outstandingFEORequests;
 
     return [[self alloc] initWithDataOperation:fetchOp
                                isTopLevelFetch:NO
-                             forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                             forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
                                   withBindings:bindings
                        andParentFetchOperation:parentFetchOp];
 }
 
 + (instancetype)fetchRelatedManagedObjectForEntity:(NSEntityDescription *)entity
+                                    ofRelationship:(NSRelationshipDescription *)relDesc
                                             withId:(FOSJsonId)jsonId
                                       withBindings:(NSMutableDictionary *)bindings
                            andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
-    
+
     NSParameterAssert(entity != nil);
     NSParameterAssert(jsonId != nil);
     NSParameterAssert(bindings != nil);
 
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
+                                                   ofRelationship:relDesc
                                                            withId:jsonId
                                                   isTopLevelFetch:NO
-                                                forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                                forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
                                                      withBindings:bindings
                                           andParentFetchOperation:parentFetchOp];
 
@@ -46,6 +49,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
 }
 
 + (instancetype)fetchRelatedManagedObjectForEntity:(NSEntityDescription *)entity
+                                    ofRelationship:(NSRelationshipDescription *)relDesc
                                           withJson:(id<NSObject>)json
                                       withBindings:(NSMutableDictionary *)bindings
                            andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
@@ -55,9 +59,10 @@ extern NSMutableDictionary *_outstandingFEORequests;
     NSParameterAssert(bindings != nil);
 
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
+                                                   ofRelationship:relDesc
                                                          withJson:(NSDictionary *)json
                                                   isTopLevelFetch:NO
-                                                forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                                forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
                                                      withBindings:bindings
                                           andParentFetchOperation:parentFetchOp];
 

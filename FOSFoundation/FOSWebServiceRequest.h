@@ -24,9 +24,9 @@ typedef NSManagedObjectID *(^FOSWebServiceWillProcessHandler)();
 
 typedef NS_ENUM(NSUInteger, FOSWSRequestState) {
     FOSWSRequestStateNotStarted = 0,
-    FOSWSRequestStateExecuting = 1,
-    FOSWSRequestStateFinished = 2,
-    FOSWSRequestStateCancelled = 3
+    FOSWSRequestStateReady = 1,
+    FOSWSRequestStateExecuting = 2,
+    FOSWSRequestStateFinished = 3
 };
 
 @interface FOSWebServiceRequest : FOSOperation {

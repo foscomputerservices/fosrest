@@ -271,7 +271,6 @@
     return result;
 }
 
-
 - (id<NSObject>)unwrapJSON:(id<NSObject>)json
                    context:(NSDictionary *)context
                      error:(NSError **)error {
@@ -310,6 +309,33 @@
     }
 
     return result;
+}
+
+#pragma mark - Debug Information
+
++ (NSString *)stringForLifecycle:(FOSLifecyclePhase)lifecyclePhase {
+    switch (lifecyclePhase) {
+        case FOSLifecyclePhaseLogin:
+            return @"LOGIN";
+        case FOSLifecyclePhaseLogout:
+            return @"LOGOUT";
+        case FOSLifecyclePhasePasswordReset:
+            return @"PASSWORD_RESET";
+        case FOSLifecyclePhaseCreateServerRecord:
+            return @"CREATE";
+        case FOSLifecyclePhaseUpdateServerRecord:
+            return @"UPDATE";
+        case FOSLifecyclePhaseDestroyServerRecord:
+            return @"DESTORY";
+        case FOSLifecyclePhaseRetrieveServerRecord:
+            return @"RETRIEVE_SERVER_RECORD";
+        case FOSLifecyclePhaseRetrieveServerRecords:
+            return @"RETRIEVE_SERVER_RECORDS";
+        case FOSLifecyclePhaseRetrieveServerRecordCount:
+            return @"RETRIEVE_SERVER_RECORD_COUNT";
+        case FOSLifecyclePhaseRetrieveServerRecordRelationship:
+            return @"RETRIEVE_RELATIONSHIP";
+    }
 }
 
 #pragma mark - Overrides

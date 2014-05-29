@@ -177,6 +177,7 @@
 
                                 FOSRetrieveCMOOperation *nextFetchOp =
                                     [FOSRetrieveCMOOperation fetchRelatedManagedObjectForEntity:destEntity
+                                                                                 ofRelationship:relDesc
                                                                                        withJson:nextFragment
                                                                                    withBindings:bindings
                                                                         andParentFetchOperation:blockSelf->_parentFetchOp];

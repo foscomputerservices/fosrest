@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "FOSFoundationTests.h"
+#import "FOSOperation+FOS_Internal.h"
 
 typedef void (^FOSOpKVOHandler)(NSString *keyPath, id object, NSDictionary *change, void *context);
 
@@ -91,6 +92,76 @@ SETUP_TEARDOWN_NOLOGIN
     XCTAssertTrue(bgHandlerCalled, @"Handler not called???");
     XCTAssertTrue(capturedCancelled, @"Not cancelled");
     XCTAssertNil(capturedError, @"Error???");
+}
+
+- (void)testQueueErrorOp1 {
+    START_TEST
+
+    FOSOperation *op = [[FOSOperation alloc] init];
+    NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:@"Epic Fail!"];
+    [op setError:error];
+
+    XCTAssertNotNil(op.error, @"Setting error didn't take!");
+
+    __block BOOL bgHandlerCalled = NO;
+    __block BOOL capturedCancelled = NO;
+    __block NSError *capturedError;
+
+    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+
+        bgHandlerCalled = YES;
+        capturedCancelled = cancelled;
+        capturedError = error;
+
+        END_TEST
+    } callRequestIfCancelled:YES];
+
+    [finalOp addDependency:op];
+
+    // Queue the operations
+    [[FOSRESTConfig sharedInstance].cacheManager queueOperation:finalOp
+                                        withCompletionOperation:nil
+                                                  withGroupName:@"Testing Queueing Pre-Errored Op"];
+
+    WAIT_FOR_TEST_END
+
+    XCTAssertTrue(bgHandlerCalled, @"Handler not called???");
+    XCTAssertFalse(capturedCancelled, @"Cancelled??");
+    XCTAssertNotNil(capturedError, @"No Error???");
+}
+
+- (void)testQueueErrorOp2 {
+    START_TEST
+
+    FOSOperation *op = [[FOSOperation alloc] init];
+    NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:@"Epic Fail!"];
+    [op setError:error];
+
+    XCTAssertNotNil(op.error, @"Setting error didn't take!");
+
+    __block BOOL bgHandlerCalled = NO;
+    __block BOOL capturedCancelled = NO;
+    __block NSError *capturedError;
+
+    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+
+        bgHandlerCalled = YES;
+        capturedCancelled = cancelled;
+        capturedError = error;
+
+        END_TEST
+    } callRequestIfCancelled:YES];
+
+    // Queue the operations
+    [[FOSRESTConfig sharedInstance].cacheManager queueOperation:op
+                                        withCompletionOperation:finalOp
+                                                  withGroupName:@"Testing Queueing Pre-Errored Op"];
+
+    WAIT_FOR_TEST_END
+
+    XCTAssertTrue(bgHandlerCalled, @"Handler not called???");
+    XCTAssertFalse(capturedCancelled, @"Cancelled??");
+    XCTAssertNotNil(capturedError, @"No Error???");
 }
 
 #pragma mark - KVO Methods

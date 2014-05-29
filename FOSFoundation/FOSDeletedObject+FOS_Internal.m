@@ -12,7 +12,6 @@
 
 + (BOOL)existsDeletedObjectWithId:(FOSJsonId)jsonId andType:(Class)type {
     NSParameterAssert(jsonId != nil);
-    NSParameterAssert(((NSString *)jsonId).length > 0);
     NSParameterAssert(type != nil);
 
     NSString *typeStr = NSStringFromClass(type);

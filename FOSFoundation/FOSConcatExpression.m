@@ -30,6 +30,22 @@
     return result;
 }
 
+#pragma mark - Overrides
+
+- (NSString *)description {
+    NSMutableString *result = [NSMutableString string];
+
+    for (id<FOSExpression> nextExpr in self.expressions) {
+        [result appendString:result.length == 0 ? @"( " : @" + "];
+
+        [result appendString:nextExpr.description];
+    }
+
+    [result appendString:@" )"];
+
+    return result;
+}
+
 #pragma mark - Private Methods
 
 - (NSString *)_bindMultipleWithContext:(NSDictionary *)context error:(NSError **)error {
@@ -44,7 +60,9 @@
         NSString *exprResult = nil;
 
         if (![nextExpr conformsToProtocol:@protocol(FOSExpression)]) {
-            NSString *msg = [NSString stringWithFormat:@"The class %@ does not conform to FOSExpression and thus cannot be concatenated.", NSStringFromClass([nextExpr class])];
+            NSString *msg = [NSString stringWithFormat:@"The class %@ does not conform to FOSExpression and thus cannot be concatenated in expression: %@.",
+                             NSStringFromClass([nextExpr class]),
+                             self.description];
             localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
         }
         else {
@@ -55,7 +73,9 @@
 
             // Only strings can be realized if there are multiple expressions
             if (![exprResult isKindOfClass:[NSString class]]) {
-                NSString *msg = [NSString stringWithFormat:@"Received type %@ during evaluation of concatenating expressions.  Only NSString types are allowed.", NSStringFromClass([exprResult class])];
+                NSString *msg = [NSString stringWithFormat:@"Received type %@ during evaluation of concatenating expressions.  Only NSString types are allowed in expression %@.",
+                                 NSStringFromClass([exprResult class]),
+                                 self.description];
 
                 localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
 

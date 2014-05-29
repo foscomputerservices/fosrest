@@ -71,7 +71,9 @@
 
         }
         else {
+            [self willChangeValueForKey:@"error"];
             _error = localError;
+            [self didChangeValueForKey:@"error"];
         }
     }
 
@@ -82,7 +84,9 @@
 
 - (void)setOriginalJsonResult:(NSDictionary *)jsonResult {
     [self willChangeValueForKey:@"jsonId"];
+
     [super setOriginalJsonResult:jsonResult];
+
     [self didChangeValueForKey:@"jsonId"];
 }
 

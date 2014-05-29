@@ -62,43 +62,82 @@
         _bindings = bindings;
         _parentFetchOp = parentFetchOp;
 
-        NSEntityDescription *destEntity = _relationship.entity;
-        NSError *localError = nil;
+        NSEntityDescription *destEntity = _relationship.destinationEntity;
 
-#ifndef NS_BLOCK_ASSERTIONS
-        NSEntityDescription *ownerEntity = _relationship.entity;
-#endif
-        NSAssert(!destEntity.isAbstract,
-                 @"Encountered an abstract destination entity on relationship %@ of entity %@.",
-                 relDesc.name, ownerEntity.name);
+        if (!destEntity.isAbstract) {
+            NSError *localError = nil;
 
-        id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
-        _urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
-                                           forRelationship:relDesc
-                                             forEntity:destEntity];
-        id<FOSTwoWayRecordBinding> recordBinder = _urlBinding.cmoBinding;
+            id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+            _urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                               forRelationship:relDesc
+                                                     forEntity:destEntity];
 
-        // Only force-load 'owned' relationships.  Non-owned relationships will assumed
-        // to be already loaded by the time we're done.
-        if (relDesc.isOwnershipRelationship) {
-            // Retrieve the relationship id
-            FOSJsonId jsonId = [recordBinder jsonIdFromJSON:jsonFragment
-                                                  forEntity:destEntity
-                                                      error:&localError];
+            if (_urlBinding == nil) {
+                NSString *msgFmt = @"Missing URL_BINDING for lifecycle %@ for Relationship '%@' between Entity '%@' and Entity '%@'";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecordRelationship],
+                                 relDesc.name,
+                                 _relationship.entity.name,
+                                 destEntity.name];
 
-            if (localError == nil) {
-                _fetchRelatedEntityOp = [FOSRetrieveCMOOperation fetchRelatedManagedObjectForEntity:destEntity
-                                                                                             withId:jsonId
-                                                                                       withBindings:bindings
-                                                                            andParentFetchOperation:parentFetchOp];
+                localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            }
 
-                [self addDependency:_fetchRelatedEntityOp];
+            if (relDesc.isOwnershipRelationship ||
+                relDesc.jsonRelationshipForcePull == FOSForcePullType_Always) {
+                id<FOSTwoWayRecordBinding> recordBinder = _urlBinding.cmoBinding;
+
+                if (localError == nil && recordBinder == nil) {
+                    NSString *msgFmt = @"Missing CMO_BINDING for lifecycle %@ for Relationship '%@' between Entity '%@' and Entity '%@'";
+                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                     [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecordRelationship],
+                                     relDesc.name,
+                                     _relationship.entity.name,
+                                     destEntity.name];
+
+                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                }
+
+                // Retrieve the relationship id from the parent's json
+                FOSJsonId jsonId = [recordBinder jsonIdFromJSON:jsonFragment
+                                                      forEntity:destEntity
+                                                          error:&localError];
+
+                if (localError == nil) {
+                    if (jsonId != nil) {
+                        _fetchRelatedEntityOp =
+                            [FOSRetrieveCMOOperation fetchRelatedManagedObjectForEntity:destEntity
+                                                                         ofRelationship:relDesc
+                                                                                 withId:jsonId
+                                                                           withBindings:bindings
+                                                                andParentFetchOperation:parentFetchOp];
+
+                        [self addDependency:_fetchRelatedEntityOp];
+                    }
+                    else {
+                        NSString *msgFmt = @"Unable to find identity for Entity '%@' for lifecycle %@ for Relationship '%@' between Entity '%@' and Entity '%@'";
+                        NSString *msg = [NSString stringWithFormat:msgFmt,
+                                         [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecordRelationship],
+                                         relDesc.name,
+                                         _relationship.entity.name,
+                                         destEntity.name];
+
+                        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    }
+                }
+
+                if (localError != nil) {
+                    _error = localError;
+                }
             }
         }
+        else {
+            NSString *msgFmt = @"Encountered an abstract destination entity on relationship %@ of entity %@.";
+            NSString *msg = [NSString stringWithFormat:msgFmt,
+                             relDesc.name,
+                             _relationship.entity];
 
-        if (localError != nil) {
-            _error = localError;
-            self = nil;
+            _error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
         }
     }
 
@@ -109,7 +148,6 @@
     NSParameterAssert(ownerId != nil);
 
     if (!self.isCancelled && self.error == nil) {
-
         FOSCachedManagedObject *childObj = nil;
 
         NSDictionary *childFragment = ((NSDictionary *)_jsonFragment);
@@ -125,6 +163,8 @@
 
             if (childFragment != nil) {
                 NSError *localError = nil;
+
+                NSAssert(_urlBinding != nil, @"_urlBinding should have been assigned by now!");
 
                 FOSJsonId childId = [_urlBinding.cmoBinding jsonIdFromJSON:childFragment
                                                            forRelationship:_relationship

@@ -12,26 +12,11 @@
 
 - (void)setError:(NSError *)error {
     @synchronized(self) {
-        if (_mainCalled) {
-            [self willChangeValueForKey:@"error"];
-        }
+        [self willChangeValueForKey:@"error"];
         _error = error;
-        if (_mainCalled) {
-            [self didChangeValueForKey:@"error"];
-        }
+        [self didChangeValueForKey:@"error"];
 
-        // The order of ops here is as detailed in Apple's docs:
-        // http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html
-
-        if (_mainCalled) {
-            [self willChangeValueForKey:@"isFinished"];
-            [self willChangeValueForKey:@"isExecuting"];
-        }
-        _requestState = FOSWSRequestStateFinished;
-        if (_mainCalled) {
-            [self didChangeValueForKey:@"isExecuting"];
-            [self didChangeValueForKey:@"isFinished"];
-        }
+        [self _setToFinished];
     }
 }
 
@@ -49,33 +34,36 @@
         }
 
         if (localError == nil) {
-            if (_mainCalled) {
-                [self willChangeValueForKey:@"jsonResult"];
-                [self willChangeValueForKey:@"originalJsonResult"];
-            }
+            [self willChangeValueForKey:@"jsonResult"];
+            [self willChangeValueForKey:@"originalJsonResult"];
+
             _jsonResult = jsonResult;
             _originalJsonResult = originalJsonResult;
-            if (_mainCalled) {
-                [self didChangeValueForKey:@"jsonResult"];
-                [self didChangeValueForKey:@"originalJsonResult"];
-            }
 
-            // The order of ops here is as detailed in Apple's docs:
-            // http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html
-            if (_mainCalled) {
-                [self willChangeValueForKey:@"isFinished"];
-                [self willChangeValueForKey:@"isExecuting"];
-            }
-            _requestState = FOSWSRequestStateFinished;
-            if (_mainCalled) {
-                [self didChangeValueForKey:@"isExecuting"];
-                [self didChangeValueForKey:@"isFinished"];
-            }
+            [self didChangeValueForKey:@"jsonResult"];
+            [self didChangeValueForKey:@"originalJsonResult"];
+
+            [self _setToFinished];
         }
         else {
             self.error = localError;
         }
     }
+}
+
+#pragma mark - Private Methods
+
+- (void)_setToFinished {
+    // The order of ops here is as detailed in Apple's docs:
+    // http://developer.apple.com/library/ios/#documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html
+
+    [self willChangeValueForKey:@"isFinished"];
+    [self willChangeValueForKey:@"isExecuting"];
+
+    _requestState = FOSWSRequestStateFinished;
+
+    [self didChangeValueForKey:@"isExecuting"];
+    [self didChangeValueForKey:@"isFinished"];
 }
 
 @end

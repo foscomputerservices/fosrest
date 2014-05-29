@@ -24,13 +24,6 @@
     BOOL _cancelled;
 }
 
-- (id)init {
-    if ((self = [super init]) != nil) {
-    }
-
-    return self;
-}
-
 - (FOSBeginOperation *)beginOperation {
     FOSBeginOperation *result = nil;
 
@@ -72,21 +65,28 @@
 }
 
 - (NSError *)error {
-    NSError *result = nil;
+    NSError *result =
+#ifdef CONFIGURATION_Debug
+    _testError;
+#else
+    nil;
+#endif
 
-    @autoreleasepool {
-        for (NSOperation *depOp in self.dependencies) {
-            if ([depOp isKindOfClass:[FOSOperation class]]) {
-                result = ((FOSOperation *)depOp).error;
-            }
+    if (result == nil) {
+        @autoreleasepool {
+            for (NSOperation *depOp in self.dependencies) {
+                if ([depOp isKindOfClass:[FOSOperation class]]) {
+                    result = ((FOSOperation *)depOp).error;
+                }
 
-            // Stop when we reach the top of our tree
-            if ([depOp isKindOfClass:[FOSBeginOperation class]]) {
-                break;
-            }
+                // Stop when we reach the top of our tree
+                if ([depOp isKindOfClass:[FOSBeginOperation class]]) {
+                    break;
+                }
 
-            if (result != nil) {
-                break;
+                if (result != nil) {
+                    break;
+                }
             }
         }
     }

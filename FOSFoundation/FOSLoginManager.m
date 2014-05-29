@@ -29,6 +29,8 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     FOSJsonId _loggedInUserId;
     NSManagedObjectID *__loggedInUserMOID;
     BOOL _userIsLoggingIn;
+    FOSUser *_loginUser;
+    FOSLoginOperation *_loginOp;
 }
 
 #pragma mark - Class Methods
@@ -70,10 +72,6 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     [self _setLoggedInUserId:nil];
 }
 
-- (void)setUserIsLoggingIn {
-    _userIsLoggingIn = YES;
-}
-
 - (void)setLoggedInUserId:(NSManagedObjectID *)loggedInUserId {
     NSParameterAssert(loggedInUserId == nil || ![loggedInUserId isTemporaryID]);
 
@@ -98,44 +96,50 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
 - (FOSUser *)loggedInUser {
     @synchronized(self) {
-        // NOTE: We do *not* hold on to the logged in FOSUser as this causes sync
-        //       problems between threads.
         FOSUser *result = nil;
 
-        NSManagedObjectID *loggedInUserId = [self _loggedInUserId];
+        if (_userIsLoggingIn) {
+            result = _loginUser;
+        }
+        else {
+            // NOTE: We do *not* hold on to the logged in FOSUser as this causes sync
+            //       problems between threads.
+            NSManagedObjectID *loggedInUserId = [self _loggedInUserId];
 
-        if (loggedInUserId != nil) {
-            NSManagedObjectContext *moc = _restConfig.databaseManager.currentMOC;
+            if (loggedInUserId != nil) {
+                NSManagedObjectContext *moc = _restConfig.databaseManager.currentMOC;
 
-            NSError *error = nil;
-            if ([moc existingObjectWithID:loggedInUserId error:&error]) {
-                FOSUser *user = (FOSUser *)[moc objectWithID:loggedInUserId];
+                NSError *error = nil;
+                if ([moc existingObjectWithID:loggedInUserId error:&error]) {
+                    FOSUser *user = (FOSUser *)[moc objectWithID:loggedInUserId];
 
-                if (user == nil) {
-                    self.loggedInUserId = nil;
+                    if (user == nil) {
+                        self.loggedInUserId = nil;
+                    }
+
+                    // This can happen when the DB is upgraded.  The MOID is stored
+                    // as a URI string, but no longer matches the logged in (upgraded)
+                    // user MOID and we seem to get a phantom user record.
+                    // So we'll just log out the user.
+                    else if (user.uid == nil) {
+                        self.loggedInUserId = nil;
+                        user = nil;
+                    }
+
+                    if (user == nil) {
+                        NSLog(@" ******  Cannot find a the logged in user???   *****");
+                    }
+
+                    result = user;
                 }
-
-                // This can happen when the DB is upgraded.  The MOID is stored
-                // as a URI string, but no longer matches the logged in (upgraded)
-                // user MOID and we seem to get a phantom user record.
-                // So we'll just log out the user.
-                else if (user.uid == nil) {
-                    self.loggedInUserId = nil;
-                    user = nil;
-                }
-
-                if (user == nil) {
+                else {
                     NSLog(@" ******  Cannot find a the logged in user???   *****");
                 }
+            }
 
-                result = user;
-            }
-            else {
-                NSLog(@" ******  Cannot find a the logged in user???   *****");
-            }
+            NSAssert(!result.isLoginUser, @"We should *not* have a 'login-style' user here!");
+            NSAssert(!(result == nil && self.isLoggedIn), @"Logged in, but no user???");
         }
-
-        NSAssert(!result.isLoginUser, @"We should *not* have a 'login-style' user here!");
 
         return result;
     }
@@ -180,13 +184,15 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                     format:NSLocalizedString(@"The provided user is a non-uploadable user (user.isUploadable == NO).", @"FOSNonUploadableUser")];
     }
 
+    __block FOSLoginManager *blockSelf = self;
+
     if (_restConfig.networkStatus != FOSNetworkStatusNotReachable) {
         FOSOperation *pushOp = [user sendServerRecord];
 
         FOSBackgroundOperation *clearContextOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
 
             // Delete this temp user before saving changes
-            [FOSLoginManager _clearLoginUserContext];
+            [blockSelf _clearLoginUserContext];
 
             [[FOSRESTConfig sharedInstance].databaseManager.currentMOC rollback];
         } callRequestIfCancelled:YES];
@@ -216,7 +222,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     else {
         dispatch_async(dispatch_get_main_queue(), ^{
             // Remove the user in the login context
-            [[self class] _clearLoginUserContext];
+            [blockSelf _clearLoginUserContext];
 
             if (handler != nil) {
                 NSString *msg = NSLocalizedString(@"Unable to create user accounts unless connected to the Internet.  Please check your network connection.", @"");
@@ -244,6 +250,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     
     // We'll support 'local' users too, but don't go to the web service for them!
     if (!user.isLocalOnly && _restConfig.networkStatus != FOSNetworkStatusNotReachable) {
+        [self _storeTempLoginUser:user];
 
         // Ensure that the static tables have all been pulled before attempting to create
         // any futher objects
@@ -257,13 +264,16 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                 FOSLoginOperation *loginOp = [FOSLoginOperation loginOperationForUser:user];
                 [loginOp addDependency:pullStaticTablesOp];
 
+                blockSelf->_loginOp = loginOp;
+
                 FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
 
                     // Remove the user in the login context
-                    [[blockSelf class] _clearLoginUserContext];
+                    [blockSelf _clearLoginUserContext];
 
                     // Save the object id now that the FOSUser object has been saved
                     blockSelf.loggedInUserId = loginOp.loggedInMOID;
+                    blockSelf->_loginOp = nil;
 
                     NSAssert((error == nil && blockSelf.loggedInUser != nil) ||
                              ((error != nil || isCancelled) &&
@@ -288,7 +298,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
             }
             else {
                 // Remove the user in the login context
-                [[blockSelf class] _clearLoginUserContext];
+                [blockSelf _clearLoginUserContext];
 
                 if (handler != nil) {
                     NSError *localError = error;
@@ -316,7 +326,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
         self.loggedInUserId = user.objectID;
 
         // Remove the user in the login context
-        [[self class] _clearLoginUserContext];
+        [self _clearLoginUserContext];
 
         if (handler != nil) {
             handler(YES, nil);
@@ -324,7 +334,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     }
     else {
         // Remove the user in the login context
-        [[self class] _clearLoginUserContext];
+        [self _clearLoginUserContext];
 
         if (handler != nil) {
 
@@ -477,11 +487,20 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
 #pragma mark - Private Methods
 
-+ (void)_clearLoginUserContext {
-    NSManagedObjectContext *moc = [self loginUserContext];
+- (void)_clearLoginUserContext {
+    _loginUser = nil;
+
+    NSManagedObjectContext *moc = [[self class] loginUserContext];
 
     [moc rollback];
     [moc reset];
+}
+
+- (void)_storeTempLoginUser:(FOSUser *)tempUser {
+    NSParameterAssert(tempUser.isLoginUser);
+
+    _userIsLoggingIn = YES;
+    _loginUser = tempUser;
 }
 
 - (NSManagedObjectID *)_loggedInUserId {

@@ -89,3 +89,13 @@
 }
 
 @end
+
+#ifdef CONFIGURATION_Debug
+@implementation FOSOperation (Testing)
+
+- (void)setError:(NSError *)error {
+    _testError = error;
+}
+
+@end
+#endif

@@ -41,6 +41,7 @@
                   andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     NSMutableDictionary *bindings = [NSMutableDictionary dictionaryWithCapacity:100];
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
+                                                   ofRelationship:nil
                                                            withId:jsonId
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
@@ -57,6 +58,7 @@
     NSParameterAssert(bindings != nil);
 
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
+                                                   ofRelationship:nil
                                                            withId:jsonId
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
@@ -72,6 +74,7 @@
 
     NSMutableDictionary *bindings = [NSMutableDictionary dictionaryWithCapacity:100];
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
+                                                   ofRelationship:nil
                                                          withJson:json
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
@@ -88,6 +91,7 @@
     NSParameterAssert(bindings != nil);
 
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
+                                                   ofRelationship:nil
                                                          withJson:json
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
@@ -266,6 +270,7 @@
 - (id)initAsTopLevelFetch:(BOOL)isTopLevelFetch
         forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                    entity:(NSEntityDescription *)entity
+           ofRelationship:(NSRelationshipDescription *)relDesc
              withBindings:(NSMutableDictionary *)bindings
   andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     NSParameterAssert(entity != nil);
@@ -280,8 +285,21 @@
 
         id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
         _urlBinding = [adapter urlBindingForLifecyclePhase:lifecyclePhase
-                                           forRelationship:nil
+                                           forRelationship:relDesc
                                              forEntity:entity];
+
+        if (_urlBinding == nil) {
+            NSString *msgFmt = @"URL_BINDING missing for lifecycle %@ of Entity '%@'%@";
+            NSString *msg = [NSString stringWithFormat:msgFmt,
+                             [FOSURLBinding stringForLifecycle:lifecyclePhase],
+                             entity.name,
+                             relDesc == nil
+                                ? @""
+                                : [NSString stringWithFormat:@" for relationship '%@'", relDesc.name]
+                             ];
+
+            _error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        }
     }
 
     return self;
@@ -296,6 +314,7 @@
     NSParameterAssert(bindings != nil);
 
     if ((self = [self initForEntity:fetchDataOp.entity
+                     ofRelationship:nil
                              withId:nil
                     isTopLevelFetch:isTopLevelFetch
                  forLifecyclePhase:lifecyclePhase
@@ -346,6 +365,7 @@
 }
 
 - (id)initForEntity:(NSEntityDescription *)entity
+     ofRelationship:(NSRelationshipDescription *)relDesc
              withId:(FOSJsonId)jsonId
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
@@ -357,6 +377,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     if ((self = [self initAsTopLevelFetch:isTopLevelFetch
                         forLifecyclePhase:lifecyclePhase
                                    entity:entity
+                           ofRelationship:relDesc
                              withBindings:bindings
                   andParentFetchOperation:parentFetchOp]) != nil) {
         if (jsonId != nil) {
@@ -368,6 +389,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
 }
 
 - (id)initForEntity:(NSEntityDescription *)entity
+     ofRelationship:(NSRelationshipDescription *)relDesc
            withJson:(NSDictionary *)json
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
@@ -380,40 +402,51 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     if ((self = [self initAsTopLevelFetch:isTopLevelFetch
                         forLifecyclePhase:lifecyclePhase
                                    entity:entity
+                           ofRelationship:relDesc
                              withBindings:bindings
                   andParentFetchOperation:parentFetchOp]) != nil) {
 
-        NSError *localError = nil;
+        if (self.error == nil) {
+            NSError *localError = nil;
 
-        _jsonId = [_urlBinding.cmoBinding jsonIdFromJSON:json
-                                               forEntity:entity
-                                                   error:&localError];
+            _jsonId = [_urlBinding.cmoBinding jsonIdFromJSON:json
+                                                   forEntity:entity
+                                                       error:&localError];
 
-        if (localError == nil) {
-            NSAssert(_jsonId != nil, @"No jsonId in provided json?");
+            if (localError == nil) {
+                if (_jsonId != nil) {
 
-            // Can we fast-track?
-            // NOTE: Cannot check property _allowFastTrack here as it's a user-settable
-            //       property that can be set after init.  Thus, we just set up the possibility
-            //       here and check later.
-            //
-            //       We allow _allowFastTrack to be delay-set as FOSFetchEntityOperation instances
-            //       are created by a variety of mechanisms and passed back to the user.  It would
-            //       be impractical to flow the value through all API calls into init.
-            FOSCachedManagedObject *cmo = [self cmoForEntity:_entity
-                                                    withJson:json
-                                                fromBindings:_bindings
-                                   respectingPreviousLookups:YES];
-            _managedObjectID = cmo.objectID;
-            if (cmo.objectID) {
-                _bindings[_jsonId] = cmo.objectID;
+                    // Can we fast-track?
+                    // NOTE: Cannot check property _allowFastTrack here as it's a user-settable
+                    //       property that can be set after init.  Thus, we just set up the possibility
+                    //       here and check later.
+                    //
+                    //       We allow _allowFastTrack to be delay-set as FOSFetchEntityOperation instances
+                    //       are created by a variety of mechanisms and passed back to the user.  It would
+                    //       be impractical to flow the value through all API calls into init.
+                    FOSCachedManagedObject *cmo = [self cmoForEntity:_entity
+                                                            withJson:json
+                                                        fromBindings:_bindings
+                                           respectingPreviousLookups:YES];
+                    _managedObjectID = cmo.objectID;
+                    if (_managedObjectID != nil) {
+                        _bindings[_jsonId] = cmo.objectID;
+                    }
+
+                    self.json = json;
+                }
+                else {
+                    NSString *msgFmt = @"Unable to bind identity using URL_BINDING for lifecycle %@ for entity '%@' from JSON: %@";
+                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                     [FOSURLBinding stringForLifecycle:lifecyclePhase],
+                                     entity.name,
+                                     json.description];
+
+                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                }
             }
 
-            self.json = json;
-        }
-
-        else {
-            self = nil;
+            _error = localError;
         }
     }
     
@@ -827,25 +860,24 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
             id<FOSTwoWayRecordBinding> recordBinder = _urlBinding.cmoBinding;
 
             // Create the new entity
-            FOSCachedManagedObject *newOwner = [self _objectFromJSON:_json
-                                                          withJsonId:_jsonId
-                                            withParentFetchOperation:_parentFetchOp
-                                                           forEntity:_entity
-                                                        withBindings:_bindings
-                                                      serviceAdapter:recordBinder
-                                                               error:&localError];
+            FOSCachedManagedObject *newCMO = [self _objectFromJSON:_json
+                                                        withJsonId:_jsonId
+                                          withParentFetchOperation:_parentFetchOp
+                                                         forEntity:_entity
+                                                      withBindings:_bindings
+                                                      twoWayBinder:recordBinder
+                                                             error:&localError];
             if (localError == nil) {
-                newOwner.hasRelationshipFaults = _createdFaults;
+                newCMO.hasRelationshipFaults = _createdFaults;
 
-                if ([moc obtainPermanentIDsForObjects:@[ newOwner ] error:&localError]) {
-                    _managedObjectID = newOwner.objectID;
+                if ([moc obtainPermanentIDsForObjects:@[ newCMO ] error:&localError]) {
+                    _managedObjectID = newCMO.objectID;
 
                     // The jsonId and managed object's jsonId should now align
-                    NSAssert([(NSString *)_jsonId isEqualToString:(NSString *)newOwner.jsonIdValue],
-                             @"Ids aren't the same???");
+                    NSAssert([_jsonId isEqual:newCMO.jsonIdValue], @"Ids aren't the same???");
 
                     // Add to bindings dictionary
-                    _bindings[newOwner.jsonIdValue] = _managedObjectID;
+                    _bindings[newCMO.jsonIdValue] = _managedObjectID;
                 }
                 else {
                     _error = localError;
@@ -948,18 +980,13 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     //       set in the initializer, but we're not *really* ready until we've been queued.  This is
     //       because the user can set _allowFastTrack between init and being queued
     BOOL ready = _json != nil ||
-        (self.isQueued &&_allowFastTrack && _managedObjectID != nil) ||
+        (self.isQueued && _allowFastTrack && _managedObjectID != nil) ||
         self.error != nil;
 
     if (_ready != ready) {
+        [self willChangeValueForKey:@"isReady"];
         _ready = ready;
         [self didChangeValueForKey:@"isReady"];
-
-//        NSLog(@"FOSFETCHENTITY - READY : %@ (%@) - %@ (%@)",
-//              self.entity.name,
-//              self.jsonId,
-//              _ready ? @"YES" : @"NO",
-//              self.isReady ? @"YES" : @"NO");
     }
 }
 
@@ -968,7 +995,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                    withParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp
                                   forEntity:(NSEntityDescription *)entity
                                withBindings:(NSMutableDictionary *)bindings
-                             serviceAdapter:(id<FOSTwoWayRecordBinding>)twoWayBinder
+                               twoWayBinder:(id<FOSTwoWayRecordBinding>)twoWayBinder
                                       error:(NSError **)error {
     NSParameterAssert(json != nil);
     NSParameterAssert(jsonId != nil);
@@ -1005,8 +1032,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                            respectingPreviousLookups:NO];
                 }
                 else {
-                    NSAssert([(NSString *)localJsonId isEqualToString:(NSString *)jsonId],
-                             @"Why are these different???");
+                    NSAssert([localJsonId isEqual:jsonId], @"Why are these different???");
 
                     // We'll use the JSON form, if possible, to handle the case that we cannot
                     // find a local instance with the id set; then we can search using
@@ -1032,8 +1058,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                       forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                   error:&localError]) {
 
-                NSAssert([(NSString *)cmo.jsonIdValue isEqualToString:(NSString *)jsonId],
-                         @"Ids not equal???");
+                NSAssert([cmo.jsonIdValue isEqual:jsonId], @"Ids not equal???");
 
                 result = cmo;
             }
@@ -1062,13 +1087,14 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
 
     for (NSPropertyDescription *nextProp in entity.properties) {
         if ([nextProp isKindOfClass:[NSRelationshipDescription class]]) {
-            NSOperation *nextOp = nil;
+            FOSOperation *nextOp = nil;
 
             NSRelationshipDescription *relDesc = (NSRelationshipDescription *)nextProp;
 
             // Process toOne relationships, optional relationships will be hooked up
             // at the last minute by FOSCachedManagedObject::willAccessValueForKey
-            if (!relDesc.isToMany && !relDesc.isOptional) {
+            if (!relDesc.isToMany &&
+                (!relDesc.isOptional || relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
                 nextOp = [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
                                                                        jsonFragment:json
                                                                        withBindings:_bindings
@@ -1133,7 +1159,6 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
 
                     // Nope, must process many-to-one relationship now!
                     else if (!relDesc.inverseRelationship.isToMany) {
-
                         nextOp = [FOSRetrieveToManyRelationshipOperation fetchToManyRelationship:relDesc
                                                                                     ownerJson:json
                                                                                   ownerJsonId:jsonOwnerId

@@ -31,7 +31,9 @@
 - (void)setServiceRequestProcessor:(id<FOSProcessServiceRequest>)serviceRequestProcessor {
     _serviceRequestProcessor = serviceRequestProcessor;
 
-    [_serviceRequestProcessor queueRequest:self];
+    [self willChangeValueForKey:@"isReady"];
+    _requestState = FOSWSRequestStateReady;
+    [self didChangeValueForKey:@"isReady"];
 }
 
 - (NSURL *)url {
@@ -142,6 +144,14 @@
     return YES;
 }
 
+- (BOOL)isReady {
+    @synchronized(self) {
+        BOOL result = [super isReady] && _requestState == FOSWSRequestStateReady;
+
+        return result;
+    }
+}
+
 - (BOOL)isCancelled {
     BOOL result = [super isCancelled];
 
@@ -150,7 +160,7 @@
 
 - (BOOL)isExecuting {
     @synchronized(self) {
-        BOOL result = _requestState == FOSWSRequestStateExecuting;
+        BOOL result = _requestState == FOSWSRequestStateExecuting && !self.isCancelled;
 
         return result;
     }
@@ -166,39 +176,27 @@
     }
 }
 
+- (void)cancel {
+    [self willChangeValueForKey:@"isExecuting"];
+    [self willChangeValueForKey:@"isFinished"];
+
+    [super cancel];
+
+    [self didChangeValueForKey:@"isFinished"];
+    [self didChangeValueForKey:@"isExecuting"];
+}
+
 - (void)start {
     @synchronized(self) {
-        if (!self.isCancelled) {
-            NSAssert(self.serviceRequestProcessor != nil,
-                     @"FOSCacheManager should have assigned serviceRequestProcessor by now!");
+        NSAssert(self.serviceRequestProcessor != nil,
+                 @"FOSCacheManager should have assigned serviceRequestProcessor by now!");
 
-            [self willChangeValueForKey:@"isExecuting"];
-            _requestState = FOSWSRequestStateExecuting;
-            [self didChangeValueForKey:@"isExecuting"];
-
-        }
-        else {
-            [self willChangeValueForKey:@"isFinished"];
-            [self willChangeValueForKey:@"isExecuting"];
-            _requestState = FOSWSRequestStateFinished;
-            [self didChangeValueForKey:@"isExecuting"];
-            [self didChangeValueForKey:@"isFinished"];
-        }
+        [self willChangeValueForKey:@"isExecuting"];
+        _requestState = FOSWSRequestStateExecuting;
+        [self didChangeValueForKey:@"isExecuting"];
 
         // Do it!
         [self main];
-    }
-}
-
-- (void)cancel {
-    [super cancel];
-
-    @synchronized(self) {
-        [self willChangeValueForKey:@"isFinished"];
-        [self willChangeValueForKey:@"isExecuting"];
-        _requestState = FOSWSRequestStateCancelled;
-        [self didChangeValueForKey:@"isExecuting"];
-        [self didChangeValueForKey:@"isFinished"];
     }
 }
 
@@ -209,19 +207,8 @@
     // FOSWebService will then call back on either setOriginalJsonResult: or setError:
     // in FOSWebServiceRequest+FOS_Internal, which will cuse things to progresss
     // from there.
-//    [self.webService queueRequest:self];
 
-    if (!self.isCancelled) {
-
-        // These will cause the KVO triggers to be sent, which were
-        // previously skipped.
-        if (_error != nil) {
-            self.error = _error;
-        }
-        else if (_jsonResult != nil) {
-            self.originalJsonResult = _jsonResult;
-        }
-    }
+    [_serviceRequestProcessor queueRequest:self];
 }
 
 #pragma mark - Class methods

@@ -10,6 +10,7 @@
 #import "FOSRetrieveCMOOperation.h"
 #import "FOSCacheManager_Internal.h"
 #import "FOSLoginManager_Internal.h"
+#import "FOSRetrieveLoginDataOperation.h"
 
 @implementation FOSLoginOperation {
     FOSRetrieveCMOOperation *__fetchUserRequest;
@@ -31,9 +32,21 @@
     NSParameterAssert(user.isLoginUser);
 
     if ((self = [super init]) != nil) {
-        _user = user;
+        FOSRESTConfig *restConfig = self.restConfig;
+        NSEntityDescription *restUserEntity = [restConfig.userSubType entityDescription];
 
-        [self addDependency:self._resolveUserRequest];
+        if ([user.entity.name isEqual:restUserEntity.name]) {
+            _user = user;
+
+            [self addDependency:self._resolveUserRequest];
+        }
+        else {
+            NSString *msgFmt = @"FOSLoginOperation was initialized with a user of type %@, but the FOSRESTConfig specified %@ as the user type.";
+            NSString *msg = [NSString stringWithFormat:msgFmt,
+                             user.entity.name, restUserEntity.name];
+
+            _error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        }
     }
 
     return self;
@@ -94,28 +107,19 @@
     NSURLRequest *urlRequest = [urlBinding urlRequestForServerCommandWithContext:context
                                                                            error:&localError];
     if (localError == nil) {
+        __block FOSLoginOperation *blockSelf = self;
 
-        FOSRetrieveCMODataOperation *fetchDataOp =
-            [FOSRetrieveCMODataOperation retrieveDataOperationForEntity:_user.entity
+        FOSRetrieveLoginDataOperation *fetchDataOp =
+            [FOSRetrieveLoginDataOperation retrieveDataOperationForEntity:_user.entity
                                                             withRequest:urlRequest
                                                           andURLBinding:urlBinding];
-
-        FOSBackgroundOperation *cmLoginOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-
-            if (error == nil) {
-                // We need to run ops to load in the user's dependent data.
-                [self.restConfig.loginManager setUserIsLoggingIn];
-            }
-        }];
+        fetchDataOp.loginUser = _user;
 
         FOSRetrieveCMOOperation *loginRequest =
             [FOSRetrieveCMOOperation retrieveCMOUsingDataOperation:fetchDataOp
                                                  forLifecyclePhase:FOSLifecyclePhaseLogin];
-        [loginRequest addDependency:cmLoginOp];
 
-        __block FOSLoginOperation *blockSelf = self;
-
-       result = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
+        result = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
             if (!isCancelled && loginRequest.error == nil) {
 
                 // Make it real

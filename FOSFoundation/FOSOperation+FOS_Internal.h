@@ -16,6 +16,14 @@
 
 @end
 
+#ifdef CONFIGURATION_Debug
+@interface FOSOperation (Testing)
+
+- (void)setError:(NSError *)error;
+
+@end
+#endif
+
 @interface FOSOperation ()
 
 @property (nonatomic, weak) FOSOperationQueue *operationQueue;

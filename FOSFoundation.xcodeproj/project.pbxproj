@@ -128,6 +128,10 @@
 		635020BE19259C3900A78EED /* NSBundle+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 635020BB19259C3900A78EED /* NSBundle+FOS.m */; };
 		635020BF19259C3900A78EED /* NSBundle+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 635020BB19259C3900A78EED /* NSBundle+FOS.m */; };
 		635020C219259DA900A78EED /* libFOSFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63BFA3771481A85700FE1C0C /* libFOSFoundation.a */; };
+		6356A0EF1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6356A0ED1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h */; };
+		6356A0F01936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6356A0ED1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h */; };
+		6356A0F11936FA8100C9B142 /* FOSRetrieveLoginDataOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6356A0EE1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.m */; };
+		6356A0F21936FA8100C9B142 /* FOSRetrieveLoginDataOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6356A0EE1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.m */; };
 		6356F2AE168B593D00F0BFED /* FOSTimeFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 6356F2AC168B593D00F0BFED /* FOSTimeFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6356F2AF168B593D00F0BFED /* FOSTimeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6356F2AD168B593D00F0BFED /* FOSTimeFilter.m */; };
 		635BA67F16F8DB3500777092 /* FOSOperationQueue+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 635BA67D16F8DB3400777092 /* FOSOperationQueue+FOS_Internal.h */; };
@@ -622,6 +626,8 @@
 		635020A919259A0000A78EED /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		635020BA19259C3900A78EED /* NSBundle+FOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+FOS.h"; sourceTree = "<group>"; };
 		635020BB19259C3900A78EED /* NSBundle+FOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+FOS.m"; sourceTree = "<group>"; };
+		6356A0ED1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSRetrieveLoginDataOperation.h; sourceTree = "<group>"; };
+		6356A0EE1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSRetrieveLoginDataOperation.m; sourceTree = "<group>"; };
 		6356F2AC168B593D00F0BFED /* FOSTimeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSTimeFilter.h; sourceTree = "<group>"; };
 		6356F2AD168B593D00F0BFED /* FOSTimeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSTimeFilter.m; sourceTree = "<group>"; };
 		635BA67D16F8DB3400777092 /* FOSOperationQueue+FOS_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FOSOperationQueue+FOS_Internal.h"; sourceTree = "<group>"; };
@@ -1099,6 +1105,8 @@
 				6390777316949018006DC589 /* FOSLogoutOperation.m */,
 				639077441693EC44006DC589 /* FOSRefreshUserOperation.h */,
 				639077451693EC44006DC589 /* FOSRefreshUserOperation.m */,
+				6356A0ED1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h */,
+				6356A0EE1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.m */,
 				633467F51687784100ACD4EA /* FOSUser.h */,
 				633467F61687784100ACD4EA /* FOSUser.m */,
 			);
@@ -1551,6 +1559,7 @@
 				63A313D516E5B56C00DDE117 /* NSData+Base64.h in Headers */,
 				63A313D616E5B56C00DDE117 /* NSDate+FOS.h in Headers */,
 				63A313D716E5B56C00DDE117 /* NSError+FOS.h in Headers */,
+				6356A0F01936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h in Headers */,
 				63B81279185537E400C54585 /* FOSThreadSleep.h in Headers */,
 				63A313D816E5B56C00DDE117 /* NSMutableDictionary+FOS.h in Headers */,
 				63A313D916E5B56C00DDE117 /* NSMutableString+FOS.h in Headers */,
@@ -1657,6 +1666,7 @@
 				633467D71686C06700ACD4EA /* FOSModifiedProperty.h in Headers */,
 				633467E01686C12000ACD4EA /* FOSDatabaseManager.h in Headers */,
 				63FD73D918D39DDA00DCD982 /* FOSRESTServiceAdapter.h in Headers */,
+				6356A0EF1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h in Headers */,
 				63742E7B1691D5D300541200 /* FOSRetrieveCMOOperation.h in Headers */,
 				633467E41686C18800ACD4EA /* FOSMergePolicy.h in Headers */,
 				63986F3018DD31C100D89CFD /* FOSBoundServiceAdapter.h in Headers */,
@@ -2006,6 +2016,7 @@
 				63A313B316E5B43D00DDE117 /* FOSOperation+FOS_Internal.m in Sources */,
 				6376C64B18D7B2F80075FAE1 /* FOSAdapterBinding.lm in Sources */,
 				63A313B516E5B43D00DDE117 /* FOSOperation.m in Sources */,
+				6356A0F21936FA8100C9B142 /* FOSRetrieveLoginDataOperation.m in Sources */,
 				6349540118DA831400DDCB45 /* FOSAdapterBinding.m in Sources */,
 				63E80D1018F6E5B8001D8959 /* FOSSendServerRecordOperation.m in Sources */,
 				63A313B716E5B43D00DDE117 /* FOSOperationQueue.m in Sources */,
@@ -2108,6 +2119,7 @@
 				63F11E4818D890750070D19A /* FOSKeyPathExpression.m in Sources */,
 				63C343DC1686BBDB003D10B5 /* FOSSaveOperation.m in Sources */,
 				6376C65418D7BADA0075FAE1 /* FOSConcatExpression.m in Sources */,
+				6356A0F11936FA8100C9B142 /* FOSRetrieveLoginDataOperation.m in Sources */,
 				6377914E192A69C800E42C89 /* FOSFoundation.xcdatamodeld in Sources */,
 				63C343DE1686BBDB003D10B5 /* FOSSearchOperation.m in Sources */,
 				63C343E01686BBDB003D10B5 /* FOSSleepOperation.m in Sources */,

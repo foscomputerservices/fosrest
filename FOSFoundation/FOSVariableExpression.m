@@ -51,7 +51,7 @@
     else if ([ident isEqualToString:@"CMOID"]) {
         result = [self _evaluateWithContext:context
                                  identifier:ident
-                              expectingType:[NSString class]
+                              expectingType:[NSObject class]
                                       error:&localError];
 
         if (result == nil && localError == nil) {

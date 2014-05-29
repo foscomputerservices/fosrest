@@ -14,6 +14,10 @@
 @interface FOSOperation : NSOperation {
 @protected
     BOOL _mainCalled;
+
+#ifdef CONFIGURATION_Debug
+    NSError *_testError;
+#endif
 }
 
 /*!

@@ -55,7 +55,7 @@ typedef NS_OPTIONS(NSUInteger, FOSLifecycleDirection) {
  *           (Adapter binding: RETRIEVE_RELATIONSHIP).
  */
 typedef NS_ENUM(NSUInteger, FOSLifecyclePhase) {
-    FOSLifecyclePhaseLogin                            = 0x01,
+    FOSLifecyclePhaseLogin                            = 0x01 | FOSLifecycleDirectionRetrieve,
     FOSLifecyclePhaseLogout                           = 0x02,
     FOSLifecyclePhasePasswordReset                    = 0x03,
     FOSLifecyclePhaseCreateServerRecord               = 0x04 | FOSLifecycleDirectionUpdate,
@@ -426,5 +426,14 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * If the recevier's jsonWrapperKey is nil, then json is returned unaltered.
  */
 - (id<NSObject>)unwrapJSON:(id<NSObject>)json context:(NSDictionary *)context error:(NSError **)error;
+
+/*!
+ * @methodgroup Debug Information
+ */
+
+/*!
+ * @method stringforLifecycle:
+ */
++ (NSString *)stringForLifecycle:(FOSLifecyclePhase)lifecyclePhase;
 
 @end

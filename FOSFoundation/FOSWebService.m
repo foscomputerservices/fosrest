@@ -19,7 +19,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
     FOSOperationQueue *_timerQueue;
 }
 
-#pragma mark - FSOProcessServiceRequest Protocol Methods
+#pragma mark - FOSProcessServiceRequest Protocol Methods
 
 - (id)initWithCacheConfig:(FOSRESTConfig *)restConfig {
     NSParameterAssert(restConfig != nil);

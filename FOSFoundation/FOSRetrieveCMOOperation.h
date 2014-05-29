@@ -64,6 +64,7 @@
 - (id)initAsTopLevelFetch:(BOOL)isTopLevelFetch
         forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                    entity:(NSEntityDescription *)entity
+           ofRelationship:(NSRelationshipDescription *)relDesc
              withBindings:(NSMutableDictionary *)bindings
   andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
 
@@ -74,6 +75,7 @@
     andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
 
 - (id)initForEntity:(NSEntityDescription *)entity
+     ofRelationship:(NSRelationshipDescription *)relDesc
              withId:(FOSJsonId)jsonId
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
@@ -81,6 +83,7 @@
 andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
 
 - (id)initForEntity:(NSEntityDescription *)entity
+     ofRelationship:(NSRelationshipDescription *)relDesc
            withJson:(NSDictionary *)json
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
