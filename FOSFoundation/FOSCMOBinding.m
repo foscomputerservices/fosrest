@@ -95,12 +95,14 @@
 
     FOSJsonId result = nil;
     NSError *localError = nil;
+    BOOL foundRelBinding = NO;
 
     id<FOSTwoWayPropertyBinding> identityBinding = nil;
     NSDictionary *context = @{ @"ENTITY" : relDesc.destinationEntity, @"RELDESC" : relDesc };
 
     for (FOSRelationshipBinding *relBinding in self.relationshipBindings) {
         if ([relBinding.relationshipMatcher itemIsIncluded:relDesc.name context:context]) {
+            foundRelBinding = YES;
             identityBinding = relBinding;
             break;
         }
@@ -115,14 +117,31 @@
         }
     }
     else {
-        NSString *msg = @"Missing identity binding!";
+        NSString *msg = nil;
+
+        if (foundRelBinding) {
+            NSString *msgFmt = @"Missing JSON_ID_BINDING in RELATINSHIP_BINDING for Entity '%@', a destination entity of relationship '%@' with parent Entity '%@' using CMO_BINDING: %@";
+            msg = [NSString stringWithFormat:msgFmt,
+                   relDesc.destinationEntity.name,
+                   relDesc.name,
+                   relDesc.entity.name,
+                   self.entityMatcher.description];
+        }
+        else {
+            NSString *msgFmt = @"Missing RELATINSHIP_BINDING from Entity '%@' to Entity '%@' across relationship '%@' for CMO_BINDING: %@";
+            msg = [NSString stringWithFormat:msgFmt,
+                   relDesc.entity.name,
+                   relDesc.destinationEntity.name,
+                   relDesc.name,
+                   self.entityMatcher.description];
+        }
 
         localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
     }
 
 
     if (localError != nil) {
-        if (error != nil) { *error = nil; }
+        if (error != nil) { *error = localError; }
 
         result = nil;
     }

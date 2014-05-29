@@ -1106,7 +1106,11 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
             // Process toOne relationships, optional relationships will be hooked up
             // at the last minute by FOSCachedManagedObject::willAccessValueForKey
             if (!relDesc.isToMany &&
-                (!relDesc.isOptional || relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
+                // Skip the inverse ownership relationship, as it will be resolved via finishBinding if
+                // this isn't a topLevelFetch, otherwise, we'll have to go get it.
+                ((!relDesc.isOptional &&
+                  (!relDesc.inverseRelationship.isOwnershipRelationship || self.isTopLevelFetch)) ||
+                 relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
                 nextOp = [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
                                                                        jsonFragment:json
                                                                        withBindings:_bindings

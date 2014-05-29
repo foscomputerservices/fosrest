@@ -63,9 +63,9 @@
         _parentFetchOp = parentFetchOp;
 
         NSEntityDescription *destEntity = _relationship.destinationEntity;
+        NSError *localError = nil;
 
         if (!destEntity.isAbstract) {
-            NSError *localError = nil;
 
             id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
             _urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
@@ -83,8 +83,9 @@
                 localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
             }
 
-            if (relDesc.isOwnershipRelationship ||
-                relDesc.jsonRelationshipForcePull == FOSForcePullType_Always) {
+            if (localError == nil &&
+                (relDesc.isOwnershipRelationship ||
+                 relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
                 id<FOSTwoWayRecordBinding> recordBinder = _urlBinding.cmoBinding;
 
                 if (localError == nil && recordBinder == nil) {
@@ -125,10 +126,6 @@
                         localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
                     }
                 }
-
-                if (localError != nil) {
-                    _error = localError;
-                }
             }
         }
         else {
@@ -137,8 +134,10 @@
                              relDesc.name,
                              _relationship.entity];
 
-            _error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
         }
+
+        _error = localError;
     }
 
     return self;
@@ -153,7 +152,8 @@
         NSDictionary *childFragment = ((NSDictionary *)_jsonFragment);
 
         if (_fetchRelatedEntityOp != nil) {
-            NSAssert(_relationship.isOwnershipRelationship,
+            NSAssert(_relationship.isOwnershipRelationship ||
+                     _relationship.jsonRelationshipForcePull != FOSForcePullType_Never,
                      @"Expected an ownership relationship, not a graph relationship.");
             [_fetchRelatedEntityOp finishBinding];
             childObj = _fetchRelatedEntityOp.managedObject;
