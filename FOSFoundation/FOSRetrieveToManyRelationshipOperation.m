@@ -168,7 +168,23 @@
                                                                             withJsonIDs:fetchIds];
 
                             // Add to existing bindings
-                            [bindings addEntriesFromDictionary:newBindings];
+                            [newBindings addEntriesFromDictionary:bindings];
+
+                            // Also store the 'originalJson' in the bindings if we're the top-level
+                            // data pull as it can have related-CMO data as well.
+                            id ojr = webServiceRequest.originalJsonResult;
+
+                            // NOTE: Right now we're not merging with parent results as it could
+                            //       prove to be difficult as there might be a mismatch of
+                            //       NSArray & NSDictionary types between the parent and here.
+                            //
+                            //       If it proves that we need to maintain state from all levels,
+                            //       we'll probably have to invent a more formal scoping
+                            //       mechanism for bindings (which is a horrid name anyway).
+                            if ([ojr respondsToSelector:@selector(count)] && [ojr count] > 0) {
+                                newBindings[@"originalJsonResult"] =
+                                    webServiceRequest.originalJsonResult;
+                            }
 
                             for (id<NSObject> nextFragment in jsonFragments) {
                                 // NOTE: Here we use the 'related' form of the constructor to inihibit save
@@ -179,7 +195,7 @@
                                     [FOSRetrieveCMOOperation fetchRelatedManagedObjectForEntity:destEntity
                                                                                  ofRelationship:relDesc
                                                                                        withJson:nextFragment
-                                                                                   withBindings:bindings
+                                                                                   withBindings:newBindings
                                                                         andParentFetchOperation:blockSelf->_parentFetchOp];
 
                                 [blockSelf->_boundEntityQueries addObject:nextFetchOp];

@@ -159,7 +159,7 @@
 }
 
 - (BOOL)updateCMO:(FOSCachedManagedObject *)cmo
-         fromJSON:(NSDictionary *)json
+         fromJSON:(id<NSObject>)json
       forProperty:(NSPropertyDescription *)propDesc
             error:(NSError **)error {
     NSParameterAssert(cmo != nil);
@@ -183,7 +183,7 @@
                 // Bind the JSON value
                 // TODO : valueForKeyPath will throw if a dotted key path is provided that
                 //        doesn't exist in the json.  Probably need to build our own... :(
-                id value = [json valueForKeyPath:jsonKeyPath];
+                id value = [(id)json valueForKeyPath:jsonKeyPath];
 
                 // NOTE: We should get NSNull when the object has been set to nil. Thus,
                 //       nil indicates that the property wasn't in the JSON at at all.
@@ -211,9 +211,9 @@
                             }
                             @catch (NSException *e) {
                                 if (e != nil) {
-                                    NSString *msgFmt = @"The CMO doesn't implement the specified CMO KeyPath: '%@' in the mapping from JSON Key: %@.";
+                                    NSString *msgFmt = @"The CMO doesn't implement the specified CMO KeyPath: '%@' in the mapping from JSON Key: %@. (Error: %@)";
                                     NSString *msg = [NSString stringWithFormat:msgFmt,
-                                                     cmoKeyPath, jsonKeyPath];
+                                                     cmoKeyPath, jsonKeyPath, e.description];
 
                                     localError = [NSError errorWithDomain:@"FOSFoundation"
                                                                andMessage:msg];

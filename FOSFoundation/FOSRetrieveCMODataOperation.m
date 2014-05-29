@@ -80,7 +80,7 @@
     return _jsonId;
 }
 
-#pragma mark - FOSRetrieveCMODataOperationProtocol Methods
+#pragma mark - Method Overrides
 
 - (void)setOriginalJsonResult:(NSDictionary *)jsonResult {
     [self willChangeValueForKey:@"jsonId"];
@@ -89,8 +89,6 @@
 
     [self didChangeValueForKey:@"jsonId"];
 }
-
-#pragma mark - Method Overrides
 
 - (NSError *)error {
     NSError *result = _error;

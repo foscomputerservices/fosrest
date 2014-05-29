@@ -67,7 +67,7 @@
  * decoded json value.
  */
 - (BOOL)updateCMO:(FOSCachedManagedObject *)cmo
-         fromJSON:(NSDictionary *)json
+         fromJSON:(id<NSObject>)json
       forProperty:(NSPropertyDescription *)propDesc
             error:(NSError **)error;
 

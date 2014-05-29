@@ -50,7 +50,7 @@
  * property values from the JSON dictionary values.
  */
 - (BOOL)updateCMO:(FOSCachedManagedObject *)cmo
-         fromJSON:(NSDictionary *)json
+         fromJSON:(id<NSObject>)json
 forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
             error:(NSError **)error;
 

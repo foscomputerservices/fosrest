@@ -17,7 +17,7 @@
 
 @property (nonatomic, readonly) NSEntityDescription *entity;
 @property (nonatomic, readonly) FOSJsonId jsonId;
-@property (nonatomic, readonly) NSDictionary *json;
+@property (nonatomic, readonly) id<NSObject> json;
 @property (nonatomic, readonly) NSManagedObjectID *managedObjectID;
 @property (nonatomic, readonly) FOSCachedManagedObject *managedObject;
 @property (nonatomic, readonly) BOOL isTopLevelFetch;
@@ -55,7 +55,7 @@
                             fromBindings:(NSDictionary *)bindings
                respectingPreviousLookups:(BOOL)respectPrevious;
 - (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
-                                withJson:(NSDictionary *)json
+                                withJson:(id<NSObject>)json
                             fromBindings:(NSDictionary *)bindings
                respectingPreviousLookups:(BOOL)respectPrevious;
 

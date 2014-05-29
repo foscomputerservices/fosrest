@@ -19,6 +19,7 @@
 @synthesize entity = _entity;
 @synthesize jsonId = _jsonId;
 @synthesize jsonResult = _jsonResult;
+@synthesize originalJsonResult = _originalJsonResult;
 
 #pragma mark - Class Methods
 
@@ -43,6 +44,7 @@
 
         _entity = entity;
         _jsonResult = (NSDictionary *)json;
+        _originalJsonResult = _jsonResult;
 //        _webRequest = [entity jsonCreateRequestForJSON:json];
         NSAssert(NO, @"Broken!!! Hopefully atomic create will be obsolted!");
 
