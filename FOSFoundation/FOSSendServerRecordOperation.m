@@ -91,7 +91,7 @@
                     [sendCMOOp addDependency:sendToOneRelsOp];
 
                     [blockSelf addDependency:sendCMOOp];
-                    [blockSelf.restConfig.cacheManager requeueOperation:self];
+                    [blockSelf.restConfig.cacheManager requeueOperation:blockSelf];
                 }
             }];
 

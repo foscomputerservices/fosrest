@@ -289,6 +289,11 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * The key that server expects objects to be wrapped under.  If the object is
  * not under any key, this value should be nil.
  *
+ * @discussion
+ *
+ * This key is also used to look into parent-supplied results to see if parent
+ * server queries might have provided the child's information.
+ *
  * Setting this property is optional.
  */
 @property (nonatomic, strong) id<FOSExpression> jsonWrapperKey;
@@ -307,7 +312,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
 @property (nonatomic, strong) FOSCMOBinding *cmoBinding;
 
 /*!
- * @property jsonBindingExpression
+ * @property jsonBindingExpressions
  *
  * A binding that provides for one-way binding between a context and a web service's
  * JSON packet.

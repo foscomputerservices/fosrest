@@ -43,187 +43,61 @@
         _relationship = relDesc;
         _parentFetchOp = parentFetchOp;
 
-        __block FOSRetrieveToManyRelationshipOperation *blockSelf = self;
+        NSError *localError = nil;
 
         // Retrieve query(ies) to pull array of json fragments defining the members of the
         // relationship relDesc.  The relationship might be to an abstract type, so then we
         // need to pull across the relationship for all leaf types of the abstract type,
         // which is why there might be multiple queries.
         NSSet *leafEntities = relDesc.destinationEntity.leafEntities;
-        NSMutableSet *requests = [NSMutableSet setWithCapacity:leafEntities.count];
 
-        id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
-        BOOL found = NO;
-        for (NSEntityDescription *nextLeafEntity in leafEntities) {
-            FOSURLBinding *urlBinding =
-                [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
-                                     forRelationship:relDesc
-                                       forEntity:nextLeafEntity];
+        // Look to see if we can bind to json in the bindings from upper-level queries
+        NSSet *existingJSON = [self _jsonBindingsForRelationship:relDesc
+                                                    leafEntities:leafEntities
+                                                        bindings:bindings
+                                                     ownerJsonId:ownerJsonId];
 
-            if (urlBinding != nil) {
-                NSError *localError = nil;
-                NSURLRequest *urlRequest =
-                    [urlBinding urlRequestServerRecordsOfRelationship:relDesc
-                                                 forDestinationEntity:nextLeafEntity
-                                                          withOwnerId:ownerJsonId
-                                                                error:&localError];
+        NSSet *requests = nil;
+        if (existingJSON == nil) {
 
-                if (localError != nil) {
-                    NSString *msg = localError.description;
+            // If couldn't find JSON, then we need to ask the server
+            requests = [self _webServiceRequestsForRelationship:relDesc
+                                                   leafEntities:leafEntities
+                                                       bindings:bindings
+                                                    ownerJsonId:ownerJsonId
+                                                          error:&localError];
+        }
 
-                    NSException *e = [NSException exceptionWithName:@"FOSFoundation"
-                                                             reason:msg
-                                                           userInfo:nil];
-                    @throw e;
-                }
+        // Process existing JSON
+        if (existingJSON != nil) {
+            for (NSDictionary *jsonEntry in existingJSON) {
+                NSEntityDescription *destEntity = jsonEntry[@"DestEntity"];
+                NSArray *existingJSON = jsonEntry[@"JSON"];
 
-                FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
-                                                                              forURLBinding:urlBinding];
-                NSDictionary *requestEntry = @{
-                                               @"DestEntity" : nextLeafEntity,
-                                               @"Request" : request
-                                              };
-                [requests addObject:requestEntry];
-
-                found = YES;
+                [self _processJSONFragmentsForRelationships:relDesc
+                                                   bindings:bindings
+                                                 destEntity:destEntity
+                                              jsonFragments:existingJSON];
             }
         }
 
-        if (!found) {
+        // Queue the server requests
+        else if (requests != nil) {
+            [self _queueRequestsForRelationship:relDesc
+                                    ownerJsonId:ownerJsonId
+                                       bindings:bindings
+                                       requests:requests];
+        }
+        else {
             NSString *msgFmt = @"Unable to locate a URL_BINDING for lifecycle RETRIEVE_SERVER_RECORD of entity %@ (across to-many relationship %@ of entity %@)";
             NSString *msg = [NSString stringWithFormat:msgFmt,
                              relDesc.destinationEntity.name, relDesc.name,
                              relDesc.entity.name];
 
-            NSException *e = [NSException exceptionWithName:@"FOSFoundation"
-                                                     reason:msg
-                                                   userInfo:nil];
-            @throw e;
+            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
         }
 
-        for (NSDictionary *nextRequestEntry in requests) {
-
-            NSEntityDescription *destEntity = nextRequestEntry[@"DestEntity"];
-            FOSWebServiceRequest *webServiceRequest = nextRequestEntry[@"Request"];
-
-            NSAssert(destEntity != nil, @"Expected a destination entity description!");
-            NSAssert(webServiceRequest != nil, @"Expected web service request!");
-
-            FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-
-                if (!isCancelled && error == nil) {
-
-                    // Now that we've retrieved the fragments representing the members of the
-                    // relationship, bind each entity.
-                    //
-                    // NOTE: We'd like to just create the entity and be done here, but the
-                    //       entity might, itself, have relationships that need to be bound,
-                    //       so we must use the FOSFetchEntityOperation to ensure that all
-                    //       require relationships are bound correctly.
-                    NSArray *jsonFragments = (NSArray *)webServiceRequest.jsonResult;
-                    NSUInteger fragCount = jsonFragments.count;
-
-                    // Let's see if we can short-circuit a test for cardinality here
-                    BOOL isValid = YES;
-                    if (isValid && self.relationship.minCount > 0) {
-                        isValid = fragCount >= blockSelf.relationship.minCount;
-                    }
-
-                    if (isValid && self.relationship.maxCount > 0) {
-                        NSUInteger fragCount = jsonFragments.count;
-
-                        isValid = fragCount <= blockSelf.relationship.maxCount;
-                    }
-                    
-                    if (isValid) {
-                        blockSelf->_boundEntityQueries = [NSMutableSet setWithCapacity:jsonFragments.count];
-
-                        id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
-                        FOSURLBinding *urlBinding =
-                            [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
-                                                 forRelationship:relDesc
-                                                   forEntity:relDesc.entity];
-                        id<FOSTwoWayRecordBinding> recordBinder = urlBinding.cmoBinding;
-
-                        NSError *localError = nil;
-                        NSMutableArray *fetchIds = [NSMutableArray arrayWithCapacity:jsonFragments.count];
-                        for (NSDictionary *jsonFragment in jsonFragments) {
-                            FOSJsonId jsonId = [recordBinder jsonIdFromJSON:jsonFragment
-                                                                  forEntity:destEntity
-                                                                      error:&localError];
-                            if (jsonId && localError == nil) {
-                                [fetchIds addObject:jsonId];
-                            }
-                            else {
-                                blockSelf->_error = localError;
-                                break;
-                            }
-                        }
-
-                        if (localError == nil) {
-                            // Do a top-level pull for these entities from the database to reduce the number
-                            // of incremental DB hits as the entities are processed by FOSFetchEntityOperation
-                            NSMutableDictionary *newBindings =
-                                [[FOSRetrieveCMOOperation class] primeBindingsForEntity:destEntity
-                                                                            withJsonIDs:fetchIds];
-
-                            // Add to existing bindings
-                            [newBindings addEntriesFromDictionary:bindings];
-
-                            // Also store the 'originalJson' in the bindings if we're the top-level
-                            // data pull as it can have related-CMO data as well.
-                            id ojr = webServiceRequest.originalJsonResult;
-
-                            // NOTE: Right now we're not merging with parent results as it could
-                            //       prove to be difficult as there might be a mismatch of
-                            //       NSArray & NSDictionary types between the parent and here.
-                            //
-                            //       If it proves that we need to maintain state from all levels,
-                            //       we'll probably have to invent a more formal scoping
-                            //       mechanism for bindings (which is a horrid name anyway).
-                            if ([ojr respondsToSelector:@selector(count)] && [ojr count] > 0) {
-                                newBindings[@"originalJsonResult"] =
-                                    webServiceRequest.originalJsonResult;
-                            }
-
-                            for (id<NSObject> nextFragment in jsonFragments) {
-                                // NOTE: Here we use the 'related' form of the constructor to inihibit save
-                                //       of the context until the entire graph is loaded.  This ensures that
-                                //       the required relationships are realized.
-
-                                FOSRetrieveCMOOperation *nextFetchOp =
-                                    [FOSRetrieveCMOOperation fetchRelatedManagedObjectForEntity:destEntity
-                                                                                 ofRelationship:relDesc
-                                                                                       withJson:nextFragment
-                                                                                   withBindings:newBindings
-                                                                        andParentFetchOperation:blockSelf->_parentFetchOp];
-
-                                [blockSelf->_boundEntityQueries addObject:nextFetchOp];
-
-                                [blockSelf addDependency:nextFetchOp];
-                            }
-
-                            // Requeue self adding further dependencies
-                            [self.restConfig.cacheManager requeueOperation:self];
-                        }
-                    }
-                    else {
-                        NSString *msg = [NSString stringWithFormat:@"Relationship %@ of entity %@(%@) does not contain the schema required number of destination entities.  Found %lu entities, but the required MIN was %lu and the required MAX was %lu.",
-                                         blockSelf.relationship.name,
-                                         blockSelf.relationship.entity.name,
-                                         ownerJsonId,
-                                         (unsigned long)jsonFragments.count,
-                                         (unsigned long)blockSelf.relationship.minCount,
-                                         (unsigned long)blockSelf.relationship.maxCount];
-
-                        blockSelf->_error = [NSError errorWithDomain:@"FOSFoundation" errorCode:0 andMessage:msg];
-                    }
-                }
-            }];
-
-            [bgOp addDependency:webServiceRequest];
-            [self addDependency:bgOp];
-        }
+        _error = localError;
     }
 
     return self;
@@ -448,6 +322,312 @@
             [relationshipMutableSet removeObject:nextDeadCMO];
             [nextDeadCMO.managedObjectContext deleteObject:nextDeadCMO];
         }
+    }
+}
+
+- (NSSet *)_jsonBindingsForRelationship:(NSRelationshipDescription *)relDesc
+                             leafEntities:(NSSet *)leafEntities
+                                 bindings:(NSDictionary *)bindings
+                              ownerJsonId:(FOSJsonId)ownerJsonId {
+    NSParameterAssert(relDesc != nil);
+    NSParameterAssert(leafEntities != nil);
+    NSParameterAssert(ownerJsonId != nil);
+
+    NSMutableSet *result = nil;
+    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+
+    for (NSEntityDescription *nextLeafEntity in leafEntities) {
+        FOSURLBinding *urlBinding =
+            [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                 forRelationship:relDesc
+                                       forEntity:nextLeafEntity];
+
+        if (urlBinding != nil) {
+            // Let's see if we can find a parent-supplied set of values
+            NSArray *json = [self _bindToJSONInBindings:bindings
+                                         forRelaionship:relDesc
+                                             destEntity:nextLeafEntity
+                                         withUrlBinding:urlBinding
+                                         andOwnerJsonId:ownerJsonId];
+
+            if (json != nil && json.count > 0) {
+                NSDictionary *nextEntry = @{
+                                            @"DestEntity" : nextLeafEntity,
+                                            @"JSON" : json
+                                          };
+
+                if (result == nil) {
+                    result = [NSMutableSet setWithObject:nextEntry];
+                }
+                else {
+                    [result addObject:nextEntry];
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+- (NSSet *)_webServiceRequestsForRelationship:(NSRelationshipDescription *)relDesc
+                                 leafEntities:(NSSet *)leafEntities
+                                     bindings:(NSDictionary *)bindings
+                                  ownerJsonId:(FOSJsonId)ownerJsonId
+                                        error:(NSError **)error {
+    NSParameterAssert(relDesc != nil);
+    NSParameterAssert(leafEntities != nil);
+    NSParameterAssert(ownerJsonId != nil);
+
+    NSMutableSet *result = nil;
+    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+    NSError *localError = nil;
+
+    for (NSEntityDescription *nextLeafEntity in leafEntities) {
+        FOSURLBinding *urlBinding =
+            [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                 forRelationship:relDesc
+                                       forEntity:nextLeafEntity];
+
+        if (urlBinding != nil) {
+            NSURLRequest *urlRequest =
+                [urlBinding urlRequestServerRecordsOfRelationship:relDesc
+                                             forDestinationEntity:nextLeafEntity
+                                                      withOwnerId:ownerJsonId
+                                                            error:&localError];
+
+            FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                          forURLBinding:urlBinding];
+            NSDictionary *requestEntry = @{
+                                           @"DestEntity" : nextLeafEntity,
+                                           @"Request" : request
+                                           };
+
+            if (result == nil) {
+                result = [NSMutableSet setWithObject:requestEntry];
+            }
+            else {
+                [result addObject:requestEntry];
+            }
+        }
+
+        if (localError != nil) {
+            break;
+        }
+    }
+
+    if (localError != nil) {
+        if (error != nil) { *error = localError; }
+
+        result = nil;
+    }
+
+    return result;
+}
+
+- (NSArray *)_bindToJSONInBindings:(NSDictionary *)bindings
+                    forRelaionship:(NSRelationshipDescription *)relDesc
+                        destEntity:(NSEntityDescription *)destEntity
+                    withUrlBinding:(FOSURLBinding *)urlBinding
+                    andOwnerJsonId:(FOSJsonId)ownerJsonId {
+    NSError *localError = nil;
+    NSArray *results = nil;
+
+    // Can we find the json in bindings?
+    id<NSObject> originalJson = bindings[@"originalJsonResult"];
+    if (originalJson != nil) {
+        NSDictionary *context = @{ @"ENTITY" : destEntity, @"RELDESC" : relDesc };
+
+        id<NSObject> unwrappedJson = [urlBinding unwrapJSON:originalJson
+                                                     context:context
+                                                       error:&localError];
+
+        // We expect an array of possibilities here. We'll look into
+        // the array and attempt to match jsonId.
+        if (unwrappedJson != nil && [unwrappedJson isKindOfClass:[NSArray class]]) {
+            FOSCMOBinding *cmoBinding = urlBinding.cmoBinding;
+
+            FOSRelationshipBinding *relBinding = nil;
+
+            for (FOSRelationshipBinding *nextRelBinding in cmoBinding.relationshipBindings) {
+                if ([nextRelBinding.entityMatcher itemIsIncluded:destEntity.name
+                                                         context:context]) {
+                    relBinding = nextRelBinding;
+                    break;
+                }
+            }
+
+            // TODO : Could issue a warning...
+            if (relBinding != nil) {
+                id<FOSExpression> jsonKeyExpression = relBinding.jsonIdBindingExpression;
+                NSString *jsonIdKeyPath = [jsonKeyExpression evaluateWithContext:context
+                                                                           error:&localError];
+                if (localError == nil && jsonIdKeyPath.length > 0) {
+
+                    NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K = %@",
+                                         jsonIdKeyPath, ownerJsonId];
+
+                    results = [(NSArray *)unwrappedJson filteredArrayUsingPredicate:pred];
+
+                    // Just incase something changes in foundation later...
+                    if (results == nil) {
+                        results = @[];
+                    }
+                }
+            }
+
+            // For now we'll ignore any errors as this is just fast tracking...
+            localError = nil;
+        }
+    }
+    
+    return results;
+}
+
+- (void)_queueRequestsForRelationship:(NSRelationshipDescription *)relDesc
+                          ownerJsonId:(FOSJsonId)ownerJsonId
+                             bindings:(NSMutableDictionary *)bindings
+                             requests:(NSSet *)requests {
+
+    __block FOSRetrieveToManyRelationshipOperation *blockSelf = self;
+
+    for (NSDictionary *nextRequestEntry in requests) {
+
+        NSEntityDescription *destEntity = nextRequestEntry[@"DestEntity"];
+        FOSWebServiceRequest *webServiceRequest = nextRequestEntry[@"Request"];
+
+        NSAssert(destEntity != nil, @"Expected a destination entity description!");
+        NSAssert(webServiceRequest != nil, @"Expected web service request!");
+
+        FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
+
+            if (!isCancelled && error == nil) {
+
+                // Now that we've retrieved the fragments representing the members of the
+                // relationship, bind each entity.
+                //
+                // NOTE: We'd like to just create the entity and be done here, but the
+                //       entity might, itself, have relationships that need to be bound,
+                //       so we must use the FOSFetchEntityOperation to ensure that all
+                //       require relationships are bound correctly.
+                NSArray *jsonFragments = (NSArray *)webServiceRequest.jsonResult;
+                NSUInteger fragCount = jsonFragments.count;
+
+                // Let's see if we can short-circuit a test for cardinality here
+                BOOL isValid = YES;
+                if (isValid && self.relationship.minCount > 0) {
+                    isValid = fragCount >= blockSelf.relationship.minCount;
+                }
+
+                if (isValid && self.relationship.maxCount > 0) {
+                    NSUInteger fragCount = jsonFragments.count;
+
+                    isValid = fragCount <= blockSelf.relationship.maxCount;
+                }
+
+                if (isValid && fragCount > 0) {
+                    blockSelf->_boundEntityQueries = [NSMutableSet setWithCapacity:jsonFragments.count];
+
+                    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+                    FOSURLBinding *urlBinding =
+                    [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                         forRelationship:relDesc
+                                               forEntity:relDesc.entity];
+                    id<FOSTwoWayRecordBinding> recordBinder = urlBinding.cmoBinding;
+
+                    NSError *localError = nil;
+                    NSMutableArray *fetchIds = [NSMutableArray arrayWithCapacity:jsonFragments.count];
+                    for (NSDictionary *jsonFragment in jsonFragments) {
+                        FOSJsonId jsonId = [recordBinder jsonIdFromJSON:jsonFragment
+                                                              forEntity:destEntity
+                                                                  error:&localError];
+                        if (jsonId && localError == nil) {
+                            [fetchIds addObject:jsonId];
+                        }
+                        else {
+                            blockSelf->_error = localError;
+                            break;
+                        }
+                    }
+
+                    if (localError == nil) {
+                        // Do a top-level pull for these entities from the database to reduce the number
+                        // of incremental DB hits as the entities are processed by FOSFetchEntityOperation
+                        NSMutableDictionary *newBindings =
+                            [[FOSRetrieveCMOOperation class] primeBindingsForEntity:destEntity
+                                                                        withJsonIDs:fetchIds];
+
+                        // Add to existing bindings
+                        [newBindings addEntriesFromDictionary:bindings];
+
+                        // Also store the 'originalJson' in the bindings if we're the top-level
+                        // data pull as it can have related-CMO data as well.
+                        id ojr = webServiceRequest.originalJsonResult;
+
+                        // NOTE: Right now we're not merging with parent results as it could
+                        //       prove to be difficult as there might be a mismatch of
+                        //       NSArray & NSDictionary types between the parent and here.
+                        //
+                        //       If it proves that we need to maintain state from all levels,
+                        //       we'll probably have to invent a more formal scoping
+                        //       mechanism for bindings (which is a horrid name anyway).
+                        if ([ojr respondsToSelector:@selector(count)] && [ojr count] > 0) {
+                            newBindings[@"originalJsonResult"] = webServiceRequest.originalJsonResult;
+                        }
+
+                        [self _processJSONFragmentsForRelationships:relDesc
+                                                           bindings:newBindings
+                                                         destEntity:destEntity
+                                                      jsonFragments:jsonFragments];
+                    }
+                }
+                else if (!isValid) {
+                    NSString *msg = [NSString stringWithFormat:@"Relationship %@ of entity %@(%@) does not contain the schema required number of destination entities.  Found %lu entities, but the required MIN was %lu and the required MAX was %lu.",
+                                     blockSelf.relationship.name,
+                                     blockSelf.relationship.entity.name,
+                                     ownerJsonId,
+                                     (unsigned long)jsonFragments.count,
+                                     (unsigned long)blockSelf.relationship.minCount,
+                                     (unsigned long)blockSelf.relationship.maxCount];
+
+                    blockSelf->_error = [NSError errorWithDomain:@"FOSFoundation" errorCode:0 andMessage:msg];
+                }
+            }
+        }];
+
+        [bgOp addDependency:webServiceRequest];
+        [self addDependency:bgOp];
+    }
+}
+
+- (void)_processJSONFragmentsForRelationships:(NSRelationshipDescription *)relDesc
+                                     bindings:(NSMutableDictionary *)bindings
+                                   destEntity:(NSEntityDescription *)destEntity
+                                jsonFragments:(NSArray *)jsonFragments {
+    NSParameterAssert(relDesc != nil);
+    NSParameterAssert(destEntity != nil);
+    NSParameterAssert(jsonFragments != nil);
+    NSParameterAssert(jsonFragments.count > 0);
+
+    for (id<NSObject> nextFragment in jsonFragments) {
+        // NOTE: Here we use the 'related' form of the constructor to inihibit save
+        //       of the context until the entire graph is loaded.  This ensures that
+        //       the required relationships are realized.
+
+        FOSRetrieveCMOOperation *nextFetchOp =
+            [FOSRetrieveCMOOperation fetchRelatedManagedObjectForEntity:destEntity
+                                                         ofRelationship:relDesc
+                                                               withJson:nextFragment
+                                                           withBindings:bindings
+                                                andParentFetchOperation:_parentFetchOp];
+
+        [_boundEntityQueries addObject:nextFetchOp];
+
+        [self addDependency:nextFetchOp];
+    }
+
+    // Requeue self adding further dependencies
+    if (self.isQueued) {
+        [self.restConfig.cacheManager requeueOperation:self];
     }
 }
 

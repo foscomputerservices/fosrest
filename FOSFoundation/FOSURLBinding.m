@@ -469,7 +469,10 @@
 
     id exprValue = [self.endPointURLExpression evaluateWithContext:context error:error];
     if (![exprValue isKindOfClass:[NSString class]]) {
-        NSString *msg = [NSString stringWithFormat:@"endPointURLExpression yieled an instance of type %@, expected and NSString", NSStringFromClass([exprValue class])];
+        NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING %@";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         NSStringFromClass([exprValue class]),
+                         self.entityMatcher.description];
 
         *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
     }
@@ -507,7 +510,10 @@
 
     id exprValue = [self.endPointURLExpression evaluateWithContext:context error:error];
     if (![exprValue isKindOfClass:[NSString class]]) {
-        NSString *msg = [NSString stringWithFormat:@"endPointURLExpression yieled an instance of type %@, expected an NSString", NSStringFromClass([exprValue class])];
+        NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING %@";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         NSStringFromClass([exprValue class]),
+                         self.entityMatcher.description];
 
         *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
     }
