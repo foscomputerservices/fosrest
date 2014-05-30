@@ -114,7 +114,7 @@
 		634F072018AADF0A0093FCDF /* FOSParseFileService.h in Headers */ = {isa = PBXBuildFile; fileRef = 634F071D18AADF0A0093FCDF /* FOSParseFileService.h */; };
 		634F072118AADF0A0093FCDF /* FOSParseFileService.m in Sources */ = {isa = PBXBuildFile; fileRef = 634F071E18AADF0A0093FCDF /* FOSParseFileService.m */; };
 		634F072218AADF0A0093FCDF /* FOSParseFileService.m in Sources */ = {isa = PBXBuildFile; fileRef = 634F071E18AADF0A0093FCDF /* FOSParseFileService.m */; };
-		634F072418AADF530093FCDF /* FOSProcessServiceRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 634F072318AADF530093FCDF /* FOSProcessServiceRequest.h */; };
+		634F072418AADF530093FCDF /* FOSProcessServiceRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 634F072318AADF530093FCDF /* FOSProcessServiceRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		634F072518AADF530093FCDF /* FOSProcessServiceRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 634F072318AADF530093FCDF /* FOSProcessServiceRequest.h */; };
 		634FA6661803828F00389821 /* FOSSearchOperation+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 634FA6641803828F00389821 /* FOSSearchOperation+Internal.h */; };
 		634FA6671803828F00389821 /* FOSSearchOperation+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 634FA6641803828F00389821 /* FOSSearchOperation+Internal.h */; };
