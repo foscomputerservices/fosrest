@@ -193,7 +193,7 @@
                             break;
                         }
                         else {
-                            NSLog(@"IGNORING ERROR: during to-many fetch operation %@ to entity %@: %@",
+                            FOSLogWarning(@"IGNORING ERROR: during to-many fetch operation %@ to entity %@: %@",
                                   _relationship.name, _relationship.entity.name, nextOp.error.description);
                             _ignoreDependentErrors = YES;
                         }

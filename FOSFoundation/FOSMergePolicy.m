@@ -24,7 +24,8 @@
     BOOL result = [super resolveConflicts:conflicts error:error];
     
     if (!result) {
-        NSLog(@"FOSMergePloicy attempting to resolve %li conflicts...", (unsigned long)conflicts.count);
+        FOSLogDebug(@"FOSMergePloicy attempting to resolve %li conflicts...",
+                    (unsigned long)conflicts.count);
 
         result = YES;
         

@@ -45,7 +45,7 @@
 
     [super main];
 
-    NSLog(@"Logged out");
+    FOSLogInfo(@"Logged out");
 }
 
 #pragma mark - Private methods
@@ -84,13 +84,13 @@
         if (!isCancelled && error == nil) {
             self.restConfig.loginManager.loggedInUserId = nil;
             
-            NSLog(@"Logged out user: %@", loggedInUserId);
+            FOSLogInfo(@"Logged out user: %@", loggedInUserId);
         }
         else if (error != nil) {
-            NSLog(@"Unable to complete logout due to error: %@", error.description);
+            FOSLogError(@"Unable to complete logout due to error: %@", error.description);
         }
         else {
-            NSLog(@"Logout cancelled.");
+            FOSLogInfo(@"Logout cancelled.");
         }
     } callRequestIfCancelled:YES];
 

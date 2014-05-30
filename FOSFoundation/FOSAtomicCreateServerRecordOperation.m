@@ -126,11 +126,11 @@
 #endif
     }
     else if (self.error != nil) {
-        NSLog(@"Create failed for entity '%@': %@", _entity.name,
+        FOSLogError(@"Create failed for entity '%@': %@", _entity.name,
               _webRequest.error.description);
     }
     else {
-        NSLog(@"Create for entity '%@' **CANCELLED**.", _entity.name);
+        FOSLogInfo(@"Create for entity '%@' **CANCELLED**.", _entity.name);
     }
 }
 

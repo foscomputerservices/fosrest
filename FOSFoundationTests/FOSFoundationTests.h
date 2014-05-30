@@ -11,11 +11,11 @@
 
 #define START_TEST \
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0); \
-    NSLog(@"###### Test START ######");
+    FOSLogDebug(@"###### Test START ######");
 
 
 #define END_TEST { \
-    NSLog(@"###### Test END ######"); \
+    FOSLogDebug(@"###### Test END ######"); \
     dispatch_semaphore_signal(semaphore); }
 
 #define WAIT_FOR_TEST_END { \
@@ -34,7 +34,7 @@
 
 #define SETUP_NOLOGIN \
 - (void)setUp { \
-    NSLog(@"###### Test SETUP NO Login ######"); \
+    FOSLogDebug(@"###### Test SETUP NO Login ######"); \
     [super setUp]; \
     \
     [[FOSLoginManagerTests class] setupStandardWebServiceConfig]; \
@@ -43,7 +43,7 @@
 
 #define TEARDOWN_NOLOGIN \
 - (void)tearDown { \
-    NSLog(@"###### Test TEARDOWN ######"); \
+    FOSLogDebug(@"###### Test TEARDOWN ######"); \
     [[FOSLoginManagerTests class] tearDownWebService]; \
     \
     [super tearDown]; \
@@ -56,7 +56,7 @@
 
 #define SETUP_LOGIN(options) \
 - (void)setUp { \
-    NSLog(@"###### Test SETUP WITH Login ######"); \
+    FOSLogDebug(@"###### Test SETUP WITH Login ######"); \
     [super setUp]; \
 \
     [[FOSLoginManagerTests class] setupStandardWebServiceConfigAndLogInWithOptions:options]; \

@@ -550,7 +550,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
 
                             blockSelf->_json = cmo.originalJson;
 
-                            NSLog(@"FOSFETCHENTITY - BEGIN (FASTRACK): %@ (%@)", blockSelf->_entity.name, blockSelf->_jsonId);
+                            FOSLogDebug(@"FOSFETCHENTITY - BEGIN (FASTRACK): %@ (%@)", blockSelf->_entity.name, blockSelf->_jsonId);
 
                             [self _updateReady];
                         }
@@ -623,7 +623,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                 [self.restConfig.cacheManager requeueOperation:self];
             }
 
-        //    NSLog(@"FOSFETCHENTITY - BEGIN (setJson): %@ (%@)", _entity.name, _jsonId);
+        //    FOSLogDebug(@"FOSFETCHENTITY - BEGIN (setJson): %@ (%@)", _entity.name, _jsonId);
         }
     }
 
@@ -839,7 +839,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                 : nil;
 
             if (cmo != nil) {
-                NSLog(@"DISCARDING INSTANCE: The entity %@ (%@-%@) failed binding/ordering/validation and has been discarded: %@", self.entity.name, cmo.jsonIdValue, cmo.objectID.description,
+                FOSLogDebug(@"DISCARDING INSTANCE: The entity %@ (%@-%@) failed binding/ordering/validation and has been discarded: %@", self.entity.name, cmo.jsonIdValue, cmo.objectID.description,
                       _isTopLevelFetch ? self.error.description : @"");
 
                 [self.managedObjectContext deleteObject:cmo];

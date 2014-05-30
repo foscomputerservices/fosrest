@@ -136,7 +136,7 @@ extern NSString *FOSWebServiceServerErrorMessage;
                                             endPoint:@"1/batch"
                                         uriFragments:@[ requestFrag ]];
 
-    NSLog(@"FOSWebService: BATCH REQUEST - %@", requestFrag);
+    FOSLogDebug(@"FOSWebService: BATCH REQUEST - %@", requestFrag);
 
     return result;
 }

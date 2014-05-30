@@ -42,7 +42,7 @@
     [super main];
 
     if (!self.isCancelled) {
-        NSLog(@"Refreshed user: %@", self.restConfig.loginManager.loggedInUserId);
+        FOSLogDebug(@"Refreshed user: %@", self.restConfig.loginManager.loggedInUserId);
     }
 }
 

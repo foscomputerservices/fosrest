@@ -180,7 +180,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
                                              returningResponse:&response
                                                          error:&error];
 
-        NSLog(@"FOSWebService (%li) Sync: %@ - %@%@",
+        FOSLogDebug(@"FOSWebService (%li) Sync: %@ - %@%@",
               (long)currentRequestId, requestMethod,
               [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
               requestDebugData == nil
@@ -200,7 +200,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
                  @"Expected FOSOperationQueue, got %@.",
                  NSStringFromClass([queue class]));
 
-        NSLog(@"FOSWebService (%li) Async: %@ - %@", (long)currentRequestId, requestMethod, requestURLString);
+        FOSLogDebug(@"FOSWebService (%li) Async: %@ - %@", (long)currentRequestId, requestMethod, requestURLString);
 
         __block FOSWebService *blockSelf = self;
 
@@ -208,7 +208,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
         NSInteger requestId = _nextRequestId;
         [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
 
-            NSLog(@"   FOSWebService (%li) response...", (long)requestId);
+            FOSLogDebug(@"   FOSWebService (%li) response...", (long)requestId);
 
             [blockSelf _completionHandlerForRequest:webServiceRequest
                                      withURLRequest:urlRequest
@@ -264,12 +264,12 @@ const NSTimeInterval kQueueingDelay = 0.26f;
 
     // Handle the result of the processing
     if (localError == nil) {
-        NSLog(@"    FOSWebService Success!!!");
+        FOSLogDebug(@"    FOSWebService Success!!!");
 
         [webServiceRequest setOriginalJsonResult:jsonResult];
     }
     else {
-        NSLog(@"    FOSWebService Response ERROR: %@", localError.description);
+        FOSLogError(@"    FOSWebService Response ERROR: %@", localError.description);
 
         [webServiceRequest setError:localError];
     }

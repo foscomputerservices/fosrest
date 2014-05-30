@@ -71,14 +71,14 @@
         self.user.jsonIdValue = _loggedInUser.jsonIdValue;
         [self.user markClean];
 
-        NSLog(@"Logged in: %@", _loggedInUid);
+        FOSLogInfo(@"Logged in: %@", _loggedInUid);
     }
     else {
         if (self.isCancelled) {
-            NSLog(@"Login cancelled.");
+            FOSLogInfo(@"Login cancelled.");
         }
         else {
-            NSLog(@"Error during login: %@", self.error.description);
+            FOSLogError(@"Error during login: %@", self.error.description);
         }
     }
 }

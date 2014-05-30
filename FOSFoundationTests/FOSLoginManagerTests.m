@@ -30,6 +30,9 @@
 
     if (!configDone) {
 
+        // We want all output during testing
+        FOSSetLogLevel(FOSLogLevelDebug);
+
         // Force to forget that we were logged in via a previous session
         [FOSLoginManager clearLoggedInUserId];
 
@@ -400,13 +403,13 @@
                                                             options:nil
                                                               error:&error]) {
 
-            NSLog(@"Unable to add persistent store after deleting the old file...abort: %@",
+            FOSLogCritical(@"Unable to add persistent store after deleting the old file...abort: %@",
                   error.description);
             abort();
         }
     }
     @catch (NSException *exception) {
-        NSLog(@"Exception thrown creating store: %@", exception.description);
+        FOSLogCritical(@"Exception thrown creating store: %@", exception.description);
         abort();
     }
 
@@ -432,7 +435,7 @@
         [NSManagedObjectModel modelByMergingModels:models ignoringPlaceholder:@"isPlaceholder"];
 
     if (mergedModel == nil) {
-        NSLog(@"Unable to merge models...abort...");
+        FOSLogCritical(@"Unable to merge models...abort...");
         abort();
     }
 

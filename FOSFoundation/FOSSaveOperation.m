@@ -44,12 +44,12 @@
     FOSDatabaseManager *dbMgr = self.restConfig.databaseManager;
 
     if (self.isCancelled) {
-        NSLog(@"-------------------- ROLLBACK: Save operation was cancelled for queue group: %@ --------------------", self.groupName);
+        FOSLogInfo(@"-------------------- ROLLBACK: Save operation was cancelled for queue group: %@ --------------------", self.groupName);
 
         [dbMgr.currentMOC reset];
     }
     else if (self.error != nil) {
-        NSLog(@"-------------------- ROLLBACK: Error %@ encountered for queue group: %@ --------------------",
+        FOSLogError(@"-------------------- ROLLBACK: Error %@ encountered for queue group: %@ --------------------",
               self.error, self.groupName);
 
         // We're calling reset here instead of rollback.
@@ -66,7 +66,7 @@
         [dbMgr.currentMOC reset];
     }
     else {
-        NSLog(@"SAVE: Save operation was initiated for queue group: %@", self.groupName);
+        FOSLogDebug(@"SAVE: Save operation was initiated for queue group: %@", self.groupName);
 
         // We don't really do anything, all the work is done by
         // our dependencies.  So, all we need to do is to save
@@ -76,12 +76,12 @@
         _saveError = error;
 
         if (_saveError == nil) {
-            NSLog(@"-------------------- SAVED: Save operation was completed for queue group: %@ --------------------", self.groupName);
+            FOSLogDebug(@"-------------------- SAVED: Save operation was completed for queue group: %@ --------------------", self.groupName);
         }
         else {
             [dbMgr.currentMOC reset];
 
-            NSLog(@"-------------------- SAVE ERROR: Save operation FAILED for queue group: %@ -- %@ --------------------", self.groupName, _saveError.description);
+            FOSLogError(@"-------------------- SAVE ERROR: Save operation FAILED for queue group: %@ -- %@ --------------------", self.groupName, _saveError.description);
         }
     }
 }

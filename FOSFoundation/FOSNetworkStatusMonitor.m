@@ -224,7 +224,7 @@
 static void _PrintReachabilityFlags(SCNetworkReachabilityFlags flags, const char* comment) {
 #if kShouldPrintReachabilityFlags
 
-    NSLog(
+    FOSLogDebug(
 #if	TARGET_OS_IPHONE
         @"Reachability Flag Status: %c%c %c%c%c%c%c%c%c %s\n",
           (flags & kSCNetworkReachabilityFlagsIsWWAN)               ? 'W' : '-',

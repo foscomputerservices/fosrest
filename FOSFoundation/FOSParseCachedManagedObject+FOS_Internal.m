@@ -146,7 +146,7 @@
 
     if (!result && error) {
         NSString *msg = NSLocalizedString(@"Encountered duplicate objectId %@ for entity '%@': %@", @"");
-        NSLog(msg, (NSString *)*objId, self.entity.name, self.description);
+        FOSLogDebug(msg, (NSString *)*objId, self.entity.name, self.description);
 
         msg = [NSString stringWithFormat:msg, (NSString *)*objId, self.entity.name, self.description];
 

@@ -62,7 +62,7 @@
 - (void)main {
     [super main];
 
-    NSLog(@"-------------------- EXECUTING: Queue group - %@ --------------------", self.groupName);
+    FOSLogDebug(@"-------------------- EXECUTING: Queue group - %@ --------------------", self.groupName);
 
     // Bring in changes from the store to eliminate conflicts
     FOSOperationQueue *myQueue = [FOSOperationQueue currentQueue];

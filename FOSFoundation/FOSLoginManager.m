@@ -127,13 +127,13 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                     }
 
                     if (user == nil) {
-                        NSLog(@" ******  Cannot find a the logged in user???   *****");
+                        FOSLogError(@" ******  Cannot find a the logged in user???   *****");
                     }
 
                     result = user;
                 }
                 else {
-                    NSLog(@" ******  Cannot find a the logged in user???   *****");
+                    FOSLogError(@" ******  Cannot find a the logged in user???   *****");
                 }
             }
 

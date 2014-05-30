@@ -176,7 +176,7 @@
                                        reason:msg
                                      userInfo:userInfo];
 #else
-        NSLog(@"%@", msg);
+        FOSLogDebug(@"%@", msg);
         [self.currentMOC rollback];
 #endif
     }
@@ -194,7 +194,7 @@
     // more changes remain
     do {
         if (moc.hasChanges && ![moc save:error]) {
-            NSLog(@"Unresolved error saving changes to store: %@, %@",
+            FOSLogError(@"Unresolved error saving changes to store: %@, %@",
                   [*error description], [*error userInfo]);
             result = NO;
         } 

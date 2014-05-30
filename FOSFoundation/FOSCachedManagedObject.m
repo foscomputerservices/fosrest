@@ -581,7 +581,7 @@ static NSMutableDictionary *_processingFaults = nil;
                                             [localSelf setValue:resolver.managedObject forKey:key];
                                         }
                                         else {
-                                            NSLog(@"*** Unable to fulfill to-one request 'self' (%@) no longer exists??? (%@)", selfID.description, error.description);
+                                            FOSLogError(@"*** Unable to fulfill to-one request 'self' (%@) no longer exists??? (%@)", selfID.description, error.description);
                                         }
                                     }
                                 }];
@@ -817,7 +817,7 @@ static NSMutableDictionary *_processingFaults = nil;
                 if (relObj != nil && !relObj.hasBeenUploadedToServer) {
                     result = NO;
 
-                    NSLog(@"%@ NOT UPLOADED because %@ NOT UPLOADED via RELATIONSHIP %@",
+                    FOSLogError(@"%@ NOT UPLOADED because %@ NOT UPLOADED via RELATIONSHIP %@",
                           [[self class] description],
                           [[relObj class] description],
                           relDesc.name);

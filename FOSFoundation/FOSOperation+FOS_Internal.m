@@ -43,13 +43,13 @@
     NSMutableSet *result = [NSMutableSet setWithCapacity:self.dependencies.count];
 
 #ifdef DEBUG_PRINT
-    NSLog(@"\r\nFLATTENED BEGIN ***");
+    FOSLogDebug(@"\r\nFLATTENED BEGIN ***");
 #endif
 
     [self _addDepsFromOperation:self toSet:result level:0 stopAtBegin:YES];
 
 #ifdef DEBUG_PRINT
-    NSLog(@"\r\n*** FLATTENED END");
+    FOSLogDebug(@"\r\n*** FLATTENED END");
 #endif
 }
 #endif
@@ -74,7 +74,7 @@
 
             [tabFormat appendString:@"%i : %@ - %@ - %@ - %@"];
 
-            NSLog(tabFormat, level, [nextOp description],
+            FOSLogDebug(tabFormat, level, [nextOp description],
                   nextOp.isQueued ? (nextOp.isFinished ? @"FINISHED" : @"QUEUED") : @"*** NOT QUEUED ***",
                   nextOp.groupName,
                   nextOp.debugDescription);

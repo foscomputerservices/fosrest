@@ -769,9 +769,9 @@ void yyerror(char *s, ...) {
 
     parser_error = [NSError errorWithMessage:msg];
 
-    NSLog(@"***************************************");
-    NSLog(@"*** PARSER ERROR: %@", msg);
-    NSLog(@"***************************************");
+    FOSLogDebug(@"***************************************");
+    FOSLogDebug(@"*** PARSER ERROR: %@", msg);
+    FOSLogDebug(@"***************************************");
 }
 
 

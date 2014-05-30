@@ -25,10 +25,10 @@
         @synchronized(self.restConfig) {
             if (self.restConfig.pendingPushOperation == nil) {
                 self.restConfig.pendingPushOperation = [self _pushChangesOp];
-                NSLog(@"CREATED: Push op created...");
+                FOSLogDebug(@"CREATED: Push op created...");
             }
             else {
-                NSLog(@"SKIP: Skipping push as there's a pending push op...");
+                FOSLogDebug(@"SKIP: Skipping push as there's a pending push op...");
             }
 
             [self addDependency:self.restConfig.pendingPushOperation];
@@ -48,7 +48,7 @@
         @synchronized(self.restConfig) {
             self.restConfig.pendingPushOperation = nil;
         }
-        NSLog(@"END: Pushing changes to server.");
+        FOSLogDebug(@"END: Pushing changes to server.");
     }
     else {
         @synchronized(self.restConfig) {
@@ -56,10 +56,10 @@
         }
 
         if (self.isCancelled) {
-            NSLog(@"CANCELED: Pushing changes to server.");
+            FOSLogInfo(@"CANCELED: Pushing changes to server.");
         }
         else {
-            NSLog(@"ERROR: Pushing changes to server: %@", self.error.description);
+            FOSLogError(@"ERROR: Pushing changes to server: %@", self.error.description);
         }
     }
 }
@@ -67,7 +67,7 @@
 #pragma mark - Private Methods
 
 - (FOSOperation *)_pushChangesOp {
-    NSLog(@"BEGIN: Pushing changes to server...");
+    FOSLogDebug(@"BEGIN: Pushing changes to server...");
 
     // Queue this after all of the updates are finished
     FOSBackgroundOperation *completePushOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {

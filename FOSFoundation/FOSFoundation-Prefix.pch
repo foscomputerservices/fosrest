@@ -13,6 +13,8 @@
     #import <AppKit/AppKit.h>
 #endif
 
+#import "FOSLog.h"
+
 // Extensions
 #import "NSAttributeDescription+FOS.h"
 #import "NSAttributeDescription+FOS_Internal.h"

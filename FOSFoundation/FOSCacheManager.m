@@ -346,7 +346,7 @@ withCompletionOperation:(FOSOperation *)finalOp
     // The queue to update is the opposite of the thread on which
     // we were called.  So, main thread, means push changes to server.
     if ([NSThread isMainThread]) {
-        NSLog(@"*** Database *** updated from MAIN thread...");
+        FOSLogDebug(@"*** Database *** updated from MAIN thread...");
 
         // Only auto-push changes if we're configured to do so
         if (_restConfig.isAutomaticallySynchronizing &&
@@ -354,7 +354,7 @@ withCompletionOperation:(FOSOperation *)finalOp
 
             FOSOperation *op = [FOSPushAllCacheChangesOperation pushAllChangesOperation];
             FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
-                NSLog(@"*** Database *** finished pushing changes to server.");
+                FOSLogDebug(@"*** Database *** finished pushing changes to server.");
             }];
 
             [self queueOperation:op
@@ -400,7 +400,7 @@ withCompletionOperation:(FOSOperation *)finalOp
                 newEntry.deletedJsonId = (NSString *)cmo.jsonIdValue;
                 newEntry.deletedEntityName = cmo.entity.name;
 
-                NSLog(@"MARKED FOR DELETION: %@ (%@)",
+                FOSLogDebug(@"MARKED FOR DELETION: %@ (%@)",
                       newEntry.deletedEntityName,
                       newEntry.deletedJsonId);
             }
@@ -438,7 +438,7 @@ withCompletionOperation:(FOSOperation *)finalOp
 
     // Non-main thread means update mainThreadMOC (and deliver any change notifications).
     else {
-        NSLog(@"*** Database *** updated from BACKGROUND thread...");
+        FOSLogDebug(@"*** Database *** updated from BACKGROUND thread...");
 
         void (^syncNotifyRequest)() = ^ {
 
@@ -449,7 +449,7 @@ withCompletionOperation:(FOSOperation *)finalOp
 
             blockSelf->_updatingMainThreadMOC = NO;
 
-            NSLog(@"*** MAIN Thread *** merged changes from BACKGROUND ***");
+            FOSLogDebug(@"*** MAIN Thread *** merged changes from BACKGROUND ***");
         };
 
 
@@ -516,7 +516,7 @@ withCompletionOperation:(FOSOperation *)finalOp
                 BOOL completeDeletion = YES;
 
                 if (cancelled) {
-                    NSLog(@"CANCELED: While deleting server record: %@", error.description);
+                    FOSLogInfo(@"CANCELED: While deleting server record: %@", error.description);
                     completeDeletion = NO;
                 }
                 else if (error != nil) {
@@ -528,12 +528,12 @@ withCompletionOperation:(FOSOperation *)finalOp
                         result = FOSRecorveryOption_Recovered;
                     }
                     else {
-                        NSLog(@"ERROR: While deleting server record: %@", error.description);
+                        FOSLogError(@"ERROR: While deleting server record: %@", error.description);
                     }
                 }
 
                 if (completeDeletion) {
-                    NSLog(@"DELETING DELETE RECORD: %@ (%@)", deleteEntityName, deleteJsonId);
+                    FOSLogDebug(@"DELETING DELETE RECORD: %@ (%@)", deleteEntityName, deleteJsonId);
 
                     NSManagedObjectContext *moc = blockSelf->_restConfig.databaseManager.currentMOC;
 

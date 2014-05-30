@@ -64,7 +64,7 @@
         [logStr appendFormat:@"New Entity: %@ (%@) - ", newEntity.name,
          newEntity.superentity.name];
 
-        NSLog(@"%@", logStr);
+        FOSLogDebug(@"%@", logStr);
     }
 
     // Clear the placeholder

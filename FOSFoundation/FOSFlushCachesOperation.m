@@ -32,13 +32,13 @@
 - (FOSOperation *)_depOp {
     FOSBackgroundOperation *flushCompleteOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
         if (isCancelled) {
-            NSLog(@"FLUSH CANCELLED!");
+            FOSLogInfo(@"FLUSH CANCELLED!");
         }
         else if (error != nil) {
-            NSLog(@"FLUSH ERROR: %@", error.description);
+            FOSLogError(@"FLUSH ERROR: %@", error.description);
         }
         else {
-            NSLog(@"FLUSH COMPLETE: *** All queues ***");
+            FOSLogDebug(@"FLUSH COMPLETE: *** All queues ***");
         }
     } callRequestIfCancelled:YES];
     flushCompleteOp.queuePriority = NSOperationQueuePriorityVeryLow;
