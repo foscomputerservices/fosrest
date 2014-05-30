@@ -350,16 +350,15 @@
                                          withUrlBinding:urlBinding
                                          andOwnerJsonId:ownerJsonId];
 
-            if (json != nil && json.count > 0) {
-                NSDictionary *nextEntry = @{
-                                            @"DestEntity" : nextLeafEntity,
-                                            @"JSON" : json
-                                          };
+            if (json != nil) {
+                result = [NSMutableSet setWithCapacity:json.count];
 
-                if (result == nil) {
-                    result = [NSMutableSet setWithObject:nextEntry];
-                }
-                else {
+                if (json.count > 0) {
+                    NSDictionary *nextEntry = @{
+                                                @"DestEntity" : nextLeafEntity,
+                                                @"JSON" : json
+                                              };
+
                     [result addObject:nextEntry];
                 }
             }
