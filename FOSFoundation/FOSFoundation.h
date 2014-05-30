@@ -12,6 +12,9 @@
 #import <FOSFoundation/FOSProcessServiceRequest.h>
 #import <FOSFoundation/FOSRESTServiceAdapter.h>
 
+#pragma mark - Log Service
+#import <FOSFoundation/FOSLog.h>
+
 #pragma mark - Extensions
 #import <FOSFoundation/NSAttributeDescription+FOS.h>
 #import <FOSFoundation/NSDate+FOS.h>

@@ -11,7 +11,7 @@
 #import "FOSRelationshipFault.h"
 
 @implementation FOSRetrieveToManyRelationshipOperation {
-    NSMutableSet *_boundEntityQueries;
+    NSMutableSet *_childRetrieveCMOOps;
     BOOL _ignoreDependentErrors;
     NSError *_error;
 }
@@ -125,7 +125,7 @@
         BOOL encounteredErrors = NO;
 
         // There no longer exist any relations, so make sure to clear the local relationships.
-        if (_boundEntityQueries.count == 0) {
+        if (_childRetrieveCMOOps.count == 0) {
             id<NSFastEnumeration> deadCMOs = [relationshipMutableSet mutableCopy];
 
             for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
@@ -143,8 +143,8 @@
         }
         else {
             // Gather the, now realized, entities
-            NSMutableSet *newEntries = [NSMutableSet setWithCapacity:_boundEntityQueries.count];
-            for (FOSRetrieveCMOOperation *nextOp in _boundEntityQueries) {
+            NSMutableSet *newEntries = [NSMutableSet setWithCapacity:_childRetrieveCMOOps.count];
+            for (FOSRetrieveCMOOperation *nextOp in _childRetrieveCMOOps) {
 
                 // If the op was cancelled, we won't include it in our result set.
                 // One way that an op can be cancelled is if it was marked as deleted
@@ -245,19 +245,19 @@
 }
 
 - (void)finishOrdering {
-    for (FOSRetrieveCMOOperation *nextOp in _boundEntityQueries) {
+    for (FOSRetrieveCMOOperation *nextOp in _childRetrieveCMOOps) {
         [nextOp finishOrdering];
     }
 }
 
 - (void)finishValidation {
-    for (FOSRetrieveCMOOperation *nextOp in _boundEntityQueries) {
+    for (FOSRetrieveCMOOperation *nextOp in _childRetrieveCMOOps) {
         [nextOp finishValidation];
     }
 }
 
 - (void)finishCleanup:(BOOL)forceDestroy {
-    for (FOSRetrieveCMOOperation *nextOp in _boundEntityQueries) {
+    for (FOSRetrieveCMOOperation *nextOp in _childRetrieveCMOOps) {
         [nextOp finishCleanup:forceDestroy || (self.error != nil)];
     }
 }
@@ -524,7 +524,7 @@
                 }
 
                 if (isValid && fragCount > 0) {
-                    blockSelf->_boundEntityQueries = [NSMutableSet setWithCapacity:jsonFragments.count];
+                    blockSelf->_childRetrieveCMOOps = [NSMutableSet setWithCapacity:jsonFragments.count];
 
                     id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
                     FOSURLBinding *urlBinding =
@@ -607,6 +607,8 @@
     NSParameterAssert(jsonFragments != nil);
     NSParameterAssert(jsonFragments.count > 0);
 
+    _childRetrieveCMOOps = [NSMutableSet setWithCapacity:jsonFragments.count];
+
     for (id<NSObject> nextFragment in jsonFragments) {
         // NOTE: Here we use the 'related' form of the constructor to inihibit save
         //       of the context until the entire graph is loaded.  This ensures that
@@ -619,7 +621,7 @@
                                                            withBindings:bindings
                                                 andParentFetchOperation:_parentFetchOp];
 
-        [_boundEntityQueries addObject:nextFetchOp];
+        [_childRetrieveCMOOps addObject:nextFetchOp];
 
         [self addDependency:nextFetchOp];
     }
