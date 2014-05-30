@@ -295,7 +295,7 @@ extern NSString *FOSWebServiceServerErrorMessage;
                              NSStringFromClass([[transformer class] transformedValueClass]),
                              attrDesc.name, attrDesc.entity.name];
 
-            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            localError = [NSError errorWithMessage:msg];
         }
 
         if ([xFormClass isSubclassOfClass:[NSData class]]) {
@@ -353,7 +353,7 @@ extern NSString *FOSWebServiceServerErrorMessage;
                              NSStringFromClass([[transformer class] transformedValueClass]),
                              attrDesc.name, attrDesc.entity.name];
 
-            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            localError = [NSError errorWithMessage:msg];
         }
 
         if ([xFormClass isSubclassOfClass:[NSData class]]) {

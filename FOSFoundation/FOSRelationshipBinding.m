@@ -70,7 +70,7 @@
     else {
         NSString *msg = @"Missing jsonIdBindingExpression";
 
-        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        localError = [NSError errorWithMessage:msg forAtom:self];
     }
 
     if (localError != nil) {
@@ -235,7 +235,7 @@
     if (![self.relationshipMatcher itemIsIncluded:propDesc.name context:context]) {
         NSString *msg = [NSString stringWithFormat:@"The relationship %@ does not match any relationship descriptions for the relationship binding.", propDesc.name];
 
-        *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        *error = [NSError errorWithMessage:msg forAtom:self];
         result = NO;
     }
 
@@ -243,7 +243,7 @@
         NSString *msg = [NSString stringWithFormat:@"The CMO '%@' does not match any entity descriptions for the relationship binding on relationship '%@' for binding matching entities %@.",
                          cmo.entity.name, propDesc.name, self.entityMatcher.description];
 
-        *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        *error = [NSError errorWithMessage:msg forAtom:self];
         result = NO;
     }
 
@@ -252,7 +252,7 @@
             if (error) {
                 NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
 
-                *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                *error = [NSError errorWithMessage:msg forAtom:self];
             }
 
             result = NO;

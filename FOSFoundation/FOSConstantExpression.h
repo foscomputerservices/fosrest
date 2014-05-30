@@ -13,7 +13,7 @@
  *
  * An expression that evaluates a single input.
  */
-@interface FOSConstantExpression : NSObject<FOSExpression>
+@interface FOSConstantExpression : FOSCompiledAtom<FOSExpression>
 
 /*!
  * @methodgroup Class Methods

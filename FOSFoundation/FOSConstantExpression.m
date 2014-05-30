@@ -31,7 +31,7 @@
         if (error != nil) {
             NSString *msg = [NSString stringWithFormat:@"Constant values should not be expressions."];
 
-            *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            *error = [NSError errorWithMessage:msg forAtom:self];
         }
 
         result = nil;

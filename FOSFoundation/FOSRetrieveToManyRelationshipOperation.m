@@ -94,7 +94,7 @@
                              relDesc.destinationEntity.name, relDesc.name,
                              relDesc.entity.name];
 
-            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            localError = [NSError errorWithMessage:msg];
         }
 
         _error = localError;
@@ -588,7 +588,7 @@
                                      (unsigned long)blockSelf.relationship.minCount,
                                      (unsigned long)blockSelf.relationship.maxCount];
 
-                    blockSelf->_error = [NSError errorWithDomain:@"FOSFoundation" errorCode:0 andMessage:msg];
+                    blockSelf->_error = [NSError errorWithMessage:msg];
                 }
             }
         }];

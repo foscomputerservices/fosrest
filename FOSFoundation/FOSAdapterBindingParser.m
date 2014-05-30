@@ -99,7 +99,7 @@ NSError *parser_error = nil;
         @catch (NSException* exception) {
             NSString *msg = exception.description;
 
-            *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            *error = [NSError errorWithMessage:msg];
         }
     }
 

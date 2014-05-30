@@ -31,12 +31,12 @@
     if (self.lhs == nil) {
         NSString *msg = @"No lhs was provided.";
 
-        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        localError = [NSError errorWithMessage:msg forAtom:self];
     }
     if (self.rhs == nil) {
         NSString *msg = @"No rhs was provided.";
 
-        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        localError = [NSError errorWithMessage:msg forAtom:self];
     }
 
     if (localError == nil) {
@@ -76,21 +76,20 @@
                     result = [contextObj valueForKeyPath:keyPath];
                 }
                 @catch (NSException *exception) {
-                    *error = [NSError errorWithDomain:@"FOSFoundation"
-                                           andMessage:exception.description];
+                    *error = [NSError errorWithMessage:exception.description forAtom:self];
                 }
             }
             else {
                 NSString *msg = [NSString stringWithFormat:@"Received an empty keyPath expression."];
 
-                *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                *error = [NSError errorWithMessage:msg forAtom:self];
             }
         }
         else {
             NSString *msg = [NSString stringWithFormat:@"Expected NSString, got %@.",
                              NSStringFromClass([keyPath class])];
 
-            *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            *error = [NSError errorWithMessage:msg forAtom:self];
         }
     }
 

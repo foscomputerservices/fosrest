@@ -248,9 +248,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
         NSString *errorMsg = [NSString stringWithFormat:@"Received a reponse of type %@, expected NSHTTPURLResponse.",
                               [[response class] description]];
 
-        localError = [NSError errorWithDomain:@"FOSFoundation"
-                                      message:errorMsg
-                                  andUserInfo:nil];
+        localError = [NSError errorWithMessage:errorMsg];
     }
     else {
         if (localError == nil) {
@@ -260,9 +258,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
                 errorMsg = @"Received a nil NSURLResponse and no NSError.";
             }
 
-            localError = [NSError errorWithDomain:@"FOSFoundation"
-                                          message:errorMsg
-                                      andUserInfo:nil];
+            localError = [NSError errorWithMessage:errorMsg];
         }
     }
 

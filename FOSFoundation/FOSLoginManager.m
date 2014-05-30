@@ -208,7 +208,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                 if (cancelled && error == nil) {
                     NSString *msg = NSLocalizedString(@"Unable to create user account as the operation was cancelled.  Please check your network connection.", @"");
 
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    localError = [NSError errorWithMessage:msg];
                 }
 
                 handler(success, localError);
@@ -227,7 +227,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
             if (handler != nil) {
                 NSString *msg = NSLocalizedString(@"Unable to create user accounts unless connected to the Internet.  Please check your network connection.", @"");
 
-                NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                NSError *error = [NSError errorWithMessage:msg];
                 
                 handler(NO, error);
             }
@@ -285,7 +285,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                         if (isCancelled && localError == nil) {
                             NSString *msg = NSLocalizedString(@"Unable to login as the operation was cancelled.  Please check your network connection.", @"");
 
-                            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                            localError = [NSError errorWithMessage:msg];
                         }
 
                         handler(localError == nil && !isCancelled, localError);
@@ -305,7 +305,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                     if (isCancelled && localError == nil) {
                         NSString *msg = NSLocalizedString(@"Unable to login as the operation was cancelled.  Please check your network connection.", @"");
 
-                        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                        localError = [NSError errorWithMessage:msg];
                     }
                     
                     handler(NO, localError);
@@ -340,7 +340,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
             NSString *msg = NSLocalizedString(@"Unable to login unless connected to the Internet.  Please check your network connection.", @"");
 
-            NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            NSError *error = [NSError errorWithMessage:msg];
 
             handler(NO, error);
         }
@@ -388,7 +388,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *msg = NSLocalizedString(@"Unable to refresh user unless connected to the Internet.  Please check your network connection.", @"");
 
-            NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            NSError *error = [NSError errorWithMessage:msg];
 
             handler(NO, error);
         });
@@ -432,7 +432,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     else if (handler != nil) {
         NSString *msg = NSLocalizedString(@"Unable to logout user unless connected to the Internet.  Please check your network connection.", @"");
 
-        NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        NSError *error = [NSError errorWithMessage:msg];
 
         handler(NO, error);
     }
@@ -478,7 +478,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *msg = NSLocalizedString(@"Unable to logout user unless connected to the Internet.  Please check your network connection.", @"");
 
-            NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            NSError *error = [NSError errorWithMessage:msg];
 
             handler(NO, error);
         });

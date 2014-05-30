@@ -13,7 +13,7 @@
  *
  * An expression with two pieces: an lhs which provides context to the rhs.
  */
-@interface FOSKeyPathExpression : NSObject<FOSExpression>
+@interface FOSKeyPathExpression : FOSCompiledAtom<FOSExpression>
 
 /*!
  * @methodgroup Class Methods

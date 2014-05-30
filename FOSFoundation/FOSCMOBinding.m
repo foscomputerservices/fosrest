@@ -73,7 +73,7 @@
     else {
         NSString *msg = @"Missing identity binding!";
 
-        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        localError = [NSError errorWithMessage:msg forAtom:self];
     }
     
 
@@ -120,23 +120,21 @@
         NSString *msg = nil;
 
         if (foundRelBinding) {
-            NSString *msgFmt = @"Missing JSON_ID_BINDING in RELATINSHIP_BINDING for Entity '%@', a destination entity of relationship '%@' with parent Entity '%@' using CMO_BINDING: %@";
+            NSString *msgFmt = @"Missing JSON_ID_BINDING in RELATINSHIP_BINDING for Entity '%@', a destination entity of relationship '%@' with parent Entity '%@'.";
             msg = [NSString stringWithFormat:msgFmt,
                    relDesc.destinationEntity.name,
                    relDesc.name,
-                   relDesc.entity.name,
-                   self.entityMatcher.description];
+                   relDesc.entity.name];
         }
         else {
-            NSString *msgFmt = @"Missing RELATINSHIP_BINDING from Entity '%@' to Entity '%@' across relationship '%@' for CMO_BINDING: %@";
+            NSString *msgFmt = @"Missing RELATINSHIP_BINDING from Entity '%@' to Entity '%@' across relationship '%@'.";
             msg = [NSString stringWithFormat:msgFmt,
                    relDesc.entity.name,
                    relDesc.destinationEntity.name,
-                   relDesc.name,
-                   self.entityMatcher.description];
+                   relDesc.name];
         }
 
-        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        localError = [NSError errorWithMessage:msg forAtom:self];
     }
 
 
@@ -382,7 +380,7 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          [attrEntityDescriptions valueForKeyPath:@"self"], cmo.entity.name];
 
-        *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        *error = [NSError errorWithMessage:msg forAtom:self];
         result = NO;
     }
 
@@ -391,7 +389,7 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
         if (![self.entityMatcher itemIsIncluded:cmo.entity.name context:context]) {
             NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
 
-            *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            *error = [NSError errorWithMessage:msg forAtom:self];
 
             result = NO;
         }

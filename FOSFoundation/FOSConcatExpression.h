@@ -14,7 +14,7 @@
  * A specialized expression evaluator that concatenates the string results of id<FOSExpression>
  * instances.
  */
-@interface FOSConcatExpression : NSObject<FOSExpression>
+@interface FOSConcatExpression : FOSCompiledAtom<FOSExpression>
 
 /*!
  * @methodgroup Class Methods

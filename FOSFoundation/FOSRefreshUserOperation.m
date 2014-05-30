@@ -25,7 +25,7 @@
         else {
             NSString *msg = NSLocalizedString(@"No user is currenlty logged in to refresh.", @"");
 
-            _error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            _error = [NSError errorWithMessage:msg];
         }
     }
 

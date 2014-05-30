@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, FOSItemMatch) {
  *
  * Provides for the specification and matching against a list of instances (items).
  */
-@interface FOSItemMatcher : NSObject
+@interface FOSItemMatcher : FOSCompiledAtom
 
 /*!
  * @methodgroup Class Methods

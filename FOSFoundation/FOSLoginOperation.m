@@ -45,7 +45,7 @@
             NSString *msg = [NSString stringWithFormat:msgFmt,
                              user.entity.name, restUserEntity.name];
 
-            _error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            _error = [NSError errorWithMessage:msg];
         }
     }
 

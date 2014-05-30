@@ -65,7 +65,7 @@
     else {
         NSString *msg = @"Requested jsonIdFromJSON on non-identity attribute binding";
 
-        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        localError = [NSError errorWithMessage:msg forAtom:self];
     }
 
     if (localError != nil) {
@@ -215,8 +215,7 @@
                                     NSString *msg = [NSString stringWithFormat:msgFmt,
                                                      cmoKeyPath, jsonKeyPath, e.description];
 
-                                    localError = [NSError errorWithDomain:@"FOSFoundation"
-                                                               andMessage:msg];
+                                    localError = [NSError errorWithMessage:msg forAtom:self];
                                 }
                             }
                         }
@@ -251,7 +250,7 @@
         if (![self.attributeMatcher itemIsIncluded:propDesc.name context:context]) {
             NSString *msg = [NSString stringWithFormat:@"The property %@ does not match any property descriptions for the property binding.", propDesc.name];
 
-            *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            *error = [NSError errorWithMessage:msg forAtom:self];
             result = NO;
         }
 
@@ -266,7 +265,7 @@
                 if (error) {
                     NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
 
-                    *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    *error = [NSError errorWithMessage:msg forAtom:self];
                 }
 
                 result = NO;

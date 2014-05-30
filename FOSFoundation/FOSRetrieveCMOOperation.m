@@ -298,7 +298,7 @@
                                 : [NSString stringWithFormat:@" for relationship '%@'", relDesc.name]
                              ];
 
-            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            localError = [NSError errorWithMessage:msg];
         }
 
         _error = localError;
@@ -332,13 +332,13 @@
                     NSString *msgFmt = @"The CMO data operation returned a nil jsonId while retrieving entity %@";
                     NSString *msg = [NSString stringWithFormat:msgFmt, blockSelf.entity.name];
 
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    localError = [NSError errorWithMessage:msg];
                 }
                 if (localError == nil && fetchDataOp.jsonResult == nil) {
                     NSString *msgFmt = @"The CMO data operation returned a nil jsonResult while retrieving entity %@";
                     NSString *msg = [NSString stringWithFormat:msgFmt, blockSelf.entity.name];
 
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    localError = [NSError errorWithMessage:msg];
                 }
 
                 if (localError == nil &&
@@ -448,7 +448,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                                      entity.name,
                                      json.description];
 
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    localError = [NSError errorWithMessage:msg forAtom:_urlBinding];
                 }
             }
 

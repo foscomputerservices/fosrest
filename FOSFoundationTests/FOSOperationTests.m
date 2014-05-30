@@ -98,7 +98,7 @@ SETUP_TEARDOWN_NOLOGIN
     START_TEST
 
     FOSOperation *op = [[FOSOperation alloc] init];
-    NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:@"Epic Fail!"];
+    NSError *error = [NSError errorWithMessage:@"Epic Fail!"];
     [op setError:error];
 
     XCTAssertNotNil(op.error, @"Setting error didn't take!");
@@ -134,7 +134,7 @@ SETUP_TEARDOWN_NOLOGIN
     START_TEST
 
     FOSOperation *op = [[FOSOperation alloc] init];
-    NSError *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:@"Epic Fail!"];
+    NSError *error = [NSError errorWithMessage:@"Epic Fail!"];
     [op setError:error];
 
     XCTAssertNotNil(op.error, @"Setting error didn't take!");

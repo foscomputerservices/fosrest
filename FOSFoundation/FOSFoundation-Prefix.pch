@@ -21,6 +21,7 @@
 #import "NSEntityDescription+FOS.h"
 #import "NSEntityDescription+FOS_Internal.h"
 #import "NSError+FOS.h"
+#import "NSError+FOS_Internal.h"
 #import "NSMutableDictionary+FOS.h"
 #import "NSMutableString+FOS.h"
 #import "NSRelationshipDescription+FOS.h"

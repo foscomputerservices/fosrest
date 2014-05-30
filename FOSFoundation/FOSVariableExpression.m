@@ -105,7 +105,7 @@
             }
             else if (!matched) {
                 NSString *msg = [NSString stringWithFormat:@"Unknown identifier: %@.", ident];
-                *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                *error = [NSError errorWithMessage:msg forAtom:self];
             }
         }
 
@@ -139,7 +139,7 @@
     else if (contextResult != nil && error != nil) {
         NSString *msg = [NSString stringWithFormat:@"Expected instance of type %@, got %@ for identifier %@.", NSStringFromClass(type), NSStringFromClass([contextResult class]), ident];
 
-        *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        *error = [NSError errorWithMessage:msg forAtom:self];
     }
 
     return result;

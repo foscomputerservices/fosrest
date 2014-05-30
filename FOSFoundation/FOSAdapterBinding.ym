@@ -27,7 +27,8 @@
     } \
 \
     NSMutableArray *array = (__bridge NSMutableArray *)(result); \
-    [array addObject:(__bridge id)(val)]; }
+    [array addObject:(__bridge id)(val)]; \
+}
 #define COMBINE_ORDERED_VALS2(result, val1, val2) {\
     BOOL isNew = NO; \
     if (![(__bridge id)(result) isKindOfClass:[NSMutableArray class]]) { \
@@ -37,7 +38,8 @@
 \
     NSMutableArray *array = (__bridge NSMutableArray *)(result); \
     if (!isNew) { [array addObject:(__bridge id)(val2)]; } \
-    [array addObject:(__bridge id)(val1)]; }
+    [array addObject:(__bridge id)(val1)]; \
+}
 
 #define CAPTURE_UNORDERED_VAL(result, val)  result = ((__bridge void *)[NSMutableSet setWithObject:(__bridge id)(val)])
 #define COMBINE_UNORDERED_VALS(result, val) {\
@@ -46,7 +48,14 @@
     } \
 \
     NSMutableSet *set = (__bridge NSMutableSet *)(result); \
-    [set addObject:(__bridge id)(val)]; }
+    [set addObject:(__bridge id)(val)]; \
+}
+
+#define CAPTURE_ATOM_INFO(atomNameStr, loc, atom) {\
+    ((__bridge id<FOSCompiledAtomInfo>)(atom)).atomStartLineNum = (loc).first_line; \
+    ((__bridge id<FOSCompiledAtomInfo>)(atom)).atomStartColNum = (loc).first_column; \
+    ((__bridge id<FOSCompiledAtomInfo>)(atom)).atomName = (atomNameStr); \
+}
 
 %}
 
@@ -163,6 +172,7 @@ adapter
         $$ = (__bridge void *)[FOSAdapterBinding adapterBindingWithFields:adapterFields
                                                               urlBindings:urlBindings
                                                      andSharedBindings:sharedBindings];
+        CAPTURE_ATOM_INFO(AT_"ADAPTER", @1, $$);
     }
     ;
 
@@ -296,6 +306,8 @@ url_binding
         CFBridgingRetain(binding);
 
         $$ = (__bridge void *)binding;
+
+        CAPTURE_ATOM_INFO(AT_"URL_BINDING", @1, $$);
     }
 
 shared_bindings
@@ -358,6 +370,7 @@ base_url
     | BASE_URL SEP shared_binding_identifer SEMI {
         $$ = (__bridge void *)[FOSSharedBindingReference referenceWithBindingType:AT_"BASE_URL"
                                                                     andIdentifier:(__bridge NSString *)$3];
+        CAPTURE_ATOM_INFO(AT_"BASE_URL", @1, $$);
     }
     ;
 
@@ -397,9 +410,13 @@ cmo_binding
 
         ((__bridge FOSCMOBinding *)$$).jsonWrapperKey = jsonWrapperKey;
         ((__bridge FOSCMOBinding *)$$).jsonBindingExpressions = jsonBindingExpressions;
+
+        CAPTURE_ATOM_INFO(AT_"CMO_BINDING", @1, $$);
     }
     | CMO_BINDING SEP shared_binding_identifer SEMI {
         $$ = (__bridge void *)[FOSSharedBindingReference referenceWithBindingType:AT_"CMO_BINDING" andIdentifier:(__bridge NSString *)$3];
+
+        CAPTURE_ATOM_INFO(AT_"CMO_BINDING", @1, $$);
     }
     ;
 
@@ -422,15 +439,21 @@ attribute_binding
         [(__bridge FOSAttributeBinding *)$2 setIsIdentityAttribute:YES];
 
         $$ = $2;
+
+        CAPTURE_ATOM_INFO(AT_"ID_ATTRIBUTE", @1, $$);
     }
     | RECEIVE_ONLY_ATTRIBUTE attribute_binding_spec {
         [(__bridge FOSAttributeBinding *)$2 setIsSendOnlyAttribute:YES];
 
         $$ = $2;
+
+        CAPTURE_ATOM_INFO(AT_"RECEIVE_ONLY_ATTRIBUTE", @1, $$);
     }
     | SEND_ONLY_ATTRIBUTE LBRACE expression COLON expression RBRACE {
         $$ = (__bridge void *)[FOSAttributeBinding sendOnlyBindingWithJsonKeyExpression:(__bridge id)($3)
                                                                    cmoKeyPathExpression:(__bridge id)($5)];
+
+        CAPTURE_ATOM_INFO(AT_"SEND_ONLY_ATTRIBUTE", @1, $$);
     }
     | attribute_binding_spec { $$ = $1; }
     ;
@@ -440,20 +463,28 @@ attribute_binding_spec
         $$ = (__bridge void *)[FOSAttributeBinding bindingWithJsonKeyExpression:(__bridge id)($2)
                                                           cmoKeyPathExpression:(__bridge id)($4)
                                                            andAttributeMatcher:(__bridge id)($6)];
+
+        CAPTURE_ATOM_INFO(AT_"ATTRIBUTE_BINDING", @1, $$);
     }
     ;
 
 matching_attributes
     : ATTRIBUTES SEP ALL {
         $$ = (__bridge void *)[FOSItemMatcher matcherMatchingAllItems];
+
+        CAPTURE_ATOM_INFO(AT_"ATTRIBUTES", @1, $$);
     }
     | ATTRIBUTES SEP ALL_EXCEPT LPAREN expression_set RPAREN {
         $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchAllExcept
                                              forItemExpressions:(__bridge NSSet *)($5)];
+
+        CAPTURE_ATOM_INFO(AT_"ATTRIBUTES", @1, $$);
     }
     | ATTRIBUTES SEP LPAREN expression_set RPAREN {
         $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchItems
                                              forItemExpressions:(__bridge NSSet *)($4)];
+
+        CAPTURE_ATOM_INFO(AT_"ATTRIBUTES", @1, $$);
     }
     ;
 
@@ -479,6 +510,8 @@ relationship_binding
                                     jsonIdBindingExpression:destCMOBindingExpr
                                         relationshipMatcher:relationshipMatcher
                                               entityMatcher:entityMatcher];
+
+        CAPTURE_ATOM_INFO(AT_"RELATIONSHIP_BINDING", @1, $$);
     }
     ;
 
@@ -503,14 +536,20 @@ optional_relationships
 relationships
     : RELATIONSHIPS SEP ALL SEMI {
         $$ = (__bridge void *)[FOSItemMatcher matcherMatchingAllItems];
+
+        CAPTURE_ATOM_INFO(AT_"RELATIONSHIPS", @1, $$);
     }
     | RELATIONSHIPS SEP ALL_EXCEPT LPAREN expression_set RPAREN SEMI {
         $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchAllExcept
                                              forItemExpressions:(__bridge NSSet *)($5)];
+
+        CAPTURE_ATOM_INFO(AT_"RELATIONSHIPS", @1, $$);
     }
     | RELATIONSHIPS SEP LPAREN expression_set RPAREN SEMI {
         $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchItems
                                              forItemExpressions:(__bridge NSSet *)($4)];
+
+        CAPTURE_ATOM_INFO(AT_"RELATIONSHIPS", @1, $$);
     }
     ;
 
@@ -537,14 +576,20 @@ optional_matching_entities
 matching_entities
     : ENTITIES SEP ALL SEMI {
         $$ = (__bridge void *)[FOSItemMatcher matcherMatchingAllItems];
+
+        CAPTURE_ATOM_INFO(AT_"ENTITIES", @1, $$);
     }
     | ENTITIES SEP ALL_EXCEPT LPAREN expression_set RPAREN SEMI {
         $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchAllExcept
                                              forItemExpressions:(__bridge NSSet *)($5)];
+
+        CAPTURE_ATOM_INFO(AT_"ENTITIES", @1, $$);
     }
     | ENTITIES SEP LPAREN expression_set RPAREN SEMI {
         $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchItems
                                              forItemExpressions:(__bridge NSSet *)($4)];
+
+        CAPTURE_ATOM_INFO(AT_"ENTITIES", @1, $$);
     }
     ;
 
@@ -568,10 +613,14 @@ keypath_expression
         }
         else {
             rhsExpr = [FOSConcatExpression concatExpressionWithExpressions:exprList];
+
+            CAPTURE_ATOM_INFO(AT_"CONCAT_EXPR", @1, $$);
         }
 
         $$ = (__bridge void *)[FOSKeyPathExpression keyPathExpressionWithLHS:(__bridge id<FOSExpression>)$1
                                                                     andRHS:rhsExpr];
+
+        CAPTURE_ATOM_INFO(AT_"KEY_PATH_EXPR", @1, $$);
     }
     ;
 
@@ -585,12 +634,16 @@ keypath_expression_list
 keypath_dot_element
     : DOT {
         $$ = (__bridge void *)[FOSConstantExpression constantExpressionWithValue:AT_"."];
+
+        CAPTURE_ATOM_INFO(AT_"CONSTANT_EXPR", @1, $$);
     }
     ;
 
 keypath_element
     : string_constant {
         $$ = (__bridge void *) [FOSConstantExpression constantExpressionWithValue:(__bridge id)$1];
+
+        CAPTURE_ATOM_INFO(AT_"CONSTANT_EXPR", @1, $$);
     }
     | TIC keypath_expression TIC { $$ = $2; }
     ;
@@ -598,6 +651,8 @@ keypath_element
 concat_expression
     : LPAREN concat_expression_list RPAREN {
         $$ = (__bridge void *)[FOSConcatExpression concatExpressionWithExpressions:(__bridge NSArray*)$2];
+
+        CAPTURE_ATOM_INFO(AT_"CONCAT_EXPR", @1, $$);
     }
     ;
     
@@ -644,6 +699,8 @@ string_literal
 
         NSString *str = [NSString stringWithCString:cStr encoding:NSASCIIStringEncoding];
         $$ = (__bridge void *)[FOSConstantExpression constantExpressionWithValue:str];
+
+        CAPTURE_ATOM_INFO(AT_"STRING_EXPR", @1, $$);
     }
     ;
 
@@ -653,6 +710,8 @@ integer_literal
         int intVal = intStr.integerValue;
 
         $$ = (__bridge void *)[FOSConstantExpression constantExpressionWithValue:AT_(intVal)];
+
+        CAPTURE_ATOM_INFO(AT_"INTEGER_EXPR", @1, $$);
     }
     ;
 
@@ -666,6 +725,8 @@ identifier
     : IDENTIFIER {
         NSString *identifier = [NSString stringWithCString:&($1[1]) encoding:NSASCIIStringEncoding];
         $$ = (__bridge void *)[FOSVariableExpression variableExpressionWithIdentifier:identifier];
+
+        CAPTURE_ATOM_INFO(AT_"VARIABLE_EXPR", @1, $$);
     }
     ;
 
@@ -692,7 +753,7 @@ void yyerror(char *s, ...) {
     buf2[0] = '\0';
 
     if (yylloc.first_line) {
-        sprintf(buf1, "Error: %d:%d - ", yylloc.first_line, yylloc.first_column);
+        sprintf(buf1, "Error: (%d:%d) - ", yylloc.first_line, yylloc.first_column);
     }
     vsprintf(buf2, s, ap);
 
@@ -706,7 +767,7 @@ void yyerror(char *s, ...) {
 
     NSString *msg = [NSString stringWithFormat:@"%@ IN: '%@'", errorMessage, currentLine];
 
-    parser_error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+    parser_error = [NSError errorWithMessage:msg];
 
     NSLog(@"***************************************");
     NSLog(@"*** PARSER ERROR: %@", msg);

@@ -80,7 +80,7 @@
                                  _relationship.entity.name,
                                  destEntity.name];
 
-                localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                localError = [NSError errorWithMessage:msg];
             }
 
             if (localError == nil &&
@@ -96,7 +96,7 @@
                                      _relationship.entity.name,
                                      destEntity.name];
 
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    localError = [NSError errorWithMessage:msg forAtom:_urlBinding];
                 }
 
                 // Retrieve the relationship id from the parent's json
@@ -124,7 +124,7 @@
                                          destEntity.name,
                                          jsonFragment];
 
-                        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                        localError = [NSError errorWithMessage:msg forAtom:_urlBinding.cmoBinding];
                     }
                 }
             }
@@ -135,7 +135,7 @@
                              relDesc.name,
                              _relationship.entity];
 
-            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            localError = [NSError errorWithMessage:msg];
         }
 
         _error = localError;
@@ -194,9 +194,7 @@
                                      childEntity.name, _relationship.name, owner.jsonIdValue,
                                      _relationship.entity.name];
 
-                    NSError *error = [NSError errorWithDomain:@"FOSFoundation"
-                                                      message:msg
-                                                  andUserInfo:nil];
+                    NSError *error = [NSError errorWithMessage:msg];
 
                     _error = error;
                 }

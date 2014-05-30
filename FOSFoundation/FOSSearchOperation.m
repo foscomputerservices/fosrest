@@ -56,7 +56,7 @@
                 NSString *msg = [NSString stringWithFormat:msgFormat,
                                  NSStringFromClass([webRequest.jsonResult class])];
 
-                localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                localError = [NSError errorWithMessage:msg];
                 blockSelf->_error = localError;
             }
 

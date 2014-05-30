@@ -16,7 +16,7 @@
  *
  * Describes how data is bound from an instance into a FOSWebServiceRequest.
  */
-@interface FOSCMOBinding : NSObject<FOSTwoWayRecordBinding>
+@interface FOSCMOBinding : FOSCompiledAtom<FOSTwoWayRecordBinding>
 
 /*!
  * @methodgroup Class Methods

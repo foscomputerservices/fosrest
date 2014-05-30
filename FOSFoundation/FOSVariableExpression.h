@@ -32,7 +32,7 @@
  *
  *  ADAPTER:<name>  - A variable that is bound by @link FOSRESTServiceAdapter/valueForExpressionVariable:matched:error: @/link.
  */
-@interface FOSVariableExpression : NSObject<FOSExpression>
+@interface FOSVariableExpression : FOSCompiledAtom<FOSExpression>
 
 /*!
  * @methodgroup Class Methods

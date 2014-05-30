@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FOSCompiledAtom.h"
 #import "FOSCachedManagedObject.h"
 #import "FOSWebServiceRequest.h"
 
@@ -121,7 +122,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * Describes how to generate a NSURLRequest for a given lifecycle phase of
  * a given NSEntityDescription.
  */
-@interface FOSURLBinding : NSObject
+@interface FOSURLBinding : FOSCompiledAtom
 
 /*!
  * @methodgroup Class Methods

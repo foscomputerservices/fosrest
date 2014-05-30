@@ -13,7 +13,7 @@
  *
  * A reference to an @link FOSSharedBinding @/link.
  */
-@interface FOSSharedBindingReference : NSObject
+@interface FOSSharedBindingReference : FOSCompiledAtom
 
 /*!
  * @methodgroup Class Methods

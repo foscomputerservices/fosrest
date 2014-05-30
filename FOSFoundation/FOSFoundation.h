@@ -31,6 +31,7 @@
 #import <FOSFoundation/FOSParseCachedManagedObject.h>
 
 #pragma mark - Binding Support
+#import <FOSFoundation/FOSCompiledAtom.h>
 #import <FOSFoundation/FOSTwoWayRecordBinding.h>
 #import <FOSFoundation/FOSTwoWayPropertyBinding.h>
 #import <FOSFoundation/FOSExpression.h>

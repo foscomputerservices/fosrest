@@ -150,7 +150,7 @@
 
         msg = [NSString stringWithFormat:msg, (NSString *)*objId, self.entity.name, self.description];
 
-        *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        *error = [NSError errorWithMessage:msg];
 
     }
 

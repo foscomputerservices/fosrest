@@ -13,7 +13,7 @@
  *
  * An abstract class that provides a few shared methods for its subtypes.
  */
-@interface FOSPropertyBinding : NSObject
+@interface FOSPropertyBinding : FOSCompiledAtom
 
 /*!
  * @methodgroup Class Methods

@@ -11,7 +11,7 @@
 
 @class FOSAttributeBinding;
 
-@interface FOSAdapterBinding : NSObject
+@interface FOSAdapterBinding : FOSCompiledAtom
 
 /*!
  * @methodgroup Class Methods

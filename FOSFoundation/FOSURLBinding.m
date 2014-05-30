@@ -290,7 +290,7 @@
                                  NSStringFromClass([json class]),
                                  self.entityMatcher.description];
 
-                localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                localError = [NSError errorWithMessage:msg forAtom:self];
             }
             else {
                 NSDictionary *jsonDict = (NSDictionary *)json;
@@ -431,11 +431,10 @@
 
     if (![self.entityMatcher itemIsIncluded:entity.name context:context]) {
         if (error) {
-            NSString *msgFmt = @"The provided CMO is of type %@, which doesn't match any entity descriptions bound to this URLBinding (%@).";
-            NSString *msg = [NSString stringWithFormat:msgFmt,
-                             entity.name, self.entityMatcher.description];
+            NSString *msgFmt = @"The provided CMO is of type %@, which doesn't match any entity descriptions bound to this URLBinding.";
+            NSString *msg = [NSString stringWithFormat:msgFmt, entity.name];
 
-            *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            *error = [NSError errorWithMessage:msg forAtom:self];
         }
 
         result = NO;
@@ -474,7 +473,7 @@
                          NSStringFromClass([exprValue class]),
                          self.entityMatcher.description];
 
-        *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        *error = [NSError errorWithMessage:msg forAtom:self];
     }
     else {
         result = [(NSString *)exprValue mutableCopy];
@@ -510,12 +509,11 @@
 
     id exprValue = [self.endPointURLExpression evaluateWithContext:context error:error];
     if (![exprValue isKindOfClass:[NSString class]]) {
-        NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING %@";
+        NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING";
         NSString *msg = [NSString stringWithFormat:msgFmt,
-                         NSStringFromClass([exprValue class]),
-                         self.entityMatcher.description];
+                         NSStringFromClass([exprValue class])];
 
-        *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        *error = [NSError errorWithMessage:msg forAtom:self];
     }
     else {
         NSString *escapedExprValue =
@@ -532,7 +530,7 @@
             if (![paramExprVal isKindOfClass:[NSString class]]) {
                 NSString *msg = [NSString stringWithFormat:@"endPointParameters yieled an instance of type %@, expected an NSString", NSStringFromClass([paramExprVal class])];
                 
-                *error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                *error = [NSError errorWithMessage:msg forAtom:self];
                 break;
             }
             

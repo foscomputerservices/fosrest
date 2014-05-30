@@ -109,7 +109,7 @@
         if (_jsonId == nil) {
             NSString *msg = NSLocalizedString(@"Did not receive a unique id from the web service afer creating entity '%@'.", @"FOSMissing_WebServiceId");
 
-            _error = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            _error = [NSError errorWithMessage:msg];
         }
         else if (localError != nil) {
             _error = localError;

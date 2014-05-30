@@ -237,6 +237,14 @@
 		63986F4818DEA64300D89CFD /* FOSSharedBindingReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 63986F4518DEA64300D89CFD /* FOSSharedBindingReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63986F4918DEA64300D89CFD /* FOSSharedBindingReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 63986F4618DEA64300D89CFD /* FOSSharedBindingReference.m */; };
 		63986F4A18DEA64300D89CFD /* FOSSharedBindingReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 63986F4618DEA64300D89CFD /* FOSSharedBindingReference.m */; };
+		6399F3C21938D42A001D48DD /* FOSCompiledAtom.h in Headers */ = {isa = PBXBuildFile; fileRef = 6399F3C01938D42A001D48DD /* FOSCompiledAtom.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6399F3C31938D42A001D48DD /* FOSCompiledAtom.h in Headers */ = {isa = PBXBuildFile; fileRef = 6399F3C01938D42A001D48DD /* FOSCompiledAtom.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6399F3C41938D42A001D48DD /* FOSCompiledAtom.m in Sources */ = {isa = PBXBuildFile; fileRef = 6399F3C11938D42A001D48DD /* FOSCompiledAtom.m */; };
+		6399F3C51938D42A001D48DD /* FOSCompiledAtom.m in Sources */ = {isa = PBXBuildFile; fileRef = 6399F3C11938D42A001D48DD /* FOSCompiledAtom.m */; };
+		6399F3C81938E04C001D48DD /* NSError+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6399F3C61938E04C001D48DD /* NSError+FOS_Internal.h */; };
+		6399F3C91938E04C001D48DD /* NSError+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6399F3C61938E04C001D48DD /* NSError+FOS_Internal.h */; };
+		6399F3CA1938E04C001D48DD /* NSError+FOS_Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6399F3C71938E04C001D48DD /* NSError+FOS_Internal.m */; };
+		6399F3CB1938E04C001D48DD /* NSError+FOS_Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6399F3C71938E04C001D48DD /* NSError+FOS_Internal.m */; };
 		639B0FB61925A47D0028009C /* FOSFoundation.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 635020A819259A0000A78EED /* FOSFoundation.bundle */; };
 		639DFD451708ABA70005DAFF /* FOSNetworkStatusMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E74E411708A9D300BD61FC /* FOSNetworkStatusMonitor.m */; };
 		63A08FCF18D403A2003F14E0 /* FOSAdapterBinding.lm in Sources */ = {isa = PBXBuildFile; fileRef = 63A08FCD18D403A2003F14E0 /* FOSAdapterBinding.lm */; };
@@ -690,6 +698,10 @@
 		63986F3418DD330800D89CFD /* Bison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bison.h; sourceTree = "<group>"; };
 		63986F4518DEA64300D89CFD /* FOSSharedBindingReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSSharedBindingReference.h; sourceTree = "<group>"; };
 		63986F4618DEA64300D89CFD /* FOSSharedBindingReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSSharedBindingReference.m; sourceTree = "<group>"; };
+		6399F3C01938D42A001D48DD /* FOSCompiledAtom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSCompiledAtom.h; sourceTree = "<group>"; };
+		6399F3C11938D42A001D48DD /* FOSCompiledAtom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSCompiledAtom.m; sourceTree = "<group>"; };
+		6399F3C61938E04C001D48DD /* NSError+FOS_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+FOS_Internal.h"; sourceTree = "<group>"; };
+		6399F3C71938E04C001D48DD /* NSError+FOS_Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+FOS_Internal.m"; sourceTree = "<group>"; };
 		63A08FCD18D403A2003F14E0 /* FOSAdapterBinding.lm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = FOSAdapterBinding.lm; sourceTree = "<group>"; };
 		63A08FCE18D403A2003F14E0 /* FOSAdapterBinding.ym */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; path = FOSAdapterBinding.ym; sourceTree = "<group>"; };
 		63A08FD118D40A1C003F14E0 /* FOSAdapterBindingParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSAdapterBindingParser.h; sourceTree = "<group>"; };
@@ -1232,6 +1244,8 @@
 				63A08FDE18D5254C003F14E0 /* FOSAttributeBinding.m */,
 				63A08FD718D51DD0003F14E0 /* FOSCMOBinding.h */,
 				63A08FD818D51DD0003F14E0 /* FOSCMOBinding.m */,
+				6399F3C01938D42A001D48DD /* FOSCompiledAtom.h */,
+				6399F3C11938D42A001D48DD /* FOSCompiledAtom.m */,
 				6376C65018D7BADA0075FAE1 /* FOSConcatExpression.h */,
 				6376C65118D7BADA0075FAE1 /* FOSConcatExpression.m */,
 				63F11E4A18D8990F0070D19A /* FOSConstantExpression.h */,
@@ -1327,12 +1341,16 @@
 		63AA54361686774300F8F835 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				635020BA19259C3900A78EED /* NSBundle+FOS.h */,
+				635020BB19259C3900A78EED /* NSBundle+FOS.m */,
 				63247F27169B36EF00A729A2 /* NSData+Base64.h */,
 				63247F28169B36EF00A729A2 /* NSData+Base64.m */,
 				63BFA3E31482815400FE1C0C /* NSDate+FOS.h */,
 				63BFA3E41482815400FE1C0C /* NSDate+FOS.m */,
 				63CCC1E6156D681900C45259 /* NSError+FOS.h */,
 				63CCC1E7156D681900C45259 /* NSError+FOS.m */,
+				6399F3C61938E04C001D48DD /* NSError+FOS_Internal.h */,
+				6399F3C71938E04C001D48DD /* NSError+FOS_Internal.m */,
 				63AA54571686B8F500F8F835 /* NSMutableDictionary+FOS.h */,
 				63AA54581686B8F500F8F835 /* NSMutableDictionary+FOS.m */,
 				637B861914AA546600776F5E /* NSMutableString+FOS.h */,
@@ -1341,8 +1359,6 @@
 				63127DB61688D70600F70BF9 /* NSObject+FOS.m */,
 				63BFA3E71482815400FE1C0C /* NSString+FOS.h */,
 				63BFA3E81482815400FE1C0C /* NSString+FOS.m */,
-				635020BA19259C3900A78EED /* NSBundle+FOS.h */,
-				635020BB19259C3900A78EED /* NSBundle+FOS.m */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1560,6 +1576,7 @@
 				63A313D616E5B56C00DDE117 /* NSDate+FOS.h in Headers */,
 				63A313D716E5B56C00DDE117 /* NSError+FOS.h in Headers */,
 				6356A0F01936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h in Headers */,
+				6399F3C91938E04C001D48DD /* NSError+FOS_Internal.h in Headers */,
 				63B81279185537E400C54585 /* FOSThreadSleep.h in Headers */,
 				63A313D816E5B56C00DDE117 /* NSMutableDictionary+FOS.h in Headers */,
 				63A313D916E5B56C00DDE117 /* NSMutableString+FOS.h in Headers */,
@@ -1592,6 +1609,7 @@
 				63A08FE018D5254C003F14E0 /* FOSAttributeBinding.h in Headers */,
 				63F11E4718D890750070D19A /* FOSKeyPathExpression.h in Headers */,
 				63E9CF4317208A5000EC28A8 /* FOSCachedManagedObject.h in Headers */,
+				6399F3C31938D42A001D48DD /* FOSCompiledAtom.h in Headers */,
 				63E9CF4917208A5000EC28A8 /* FOSRelationshipFault.h in Headers */,
 				637EE2751721EC72009F8C98 /* FOSRelationshipFault+FOS_Internal.h in Headers */,
 				634953FF18DA831400DDCB45 /* FOSAdapterBinding.h in Headers */,
@@ -1667,6 +1685,7 @@
 				633467E01686C12000ACD4EA /* FOSDatabaseManager.h in Headers */,
 				63FD73D918D39DDA00DCD982 /* FOSRESTServiceAdapter.h in Headers */,
 				6356A0EF1936FA8100C9B142 /* FOSRetrieveLoginDataOperation.h in Headers */,
+				6399F3C81938E04C001D48DD /* NSError+FOS_Internal.h in Headers */,
 				63742E7B1691D5D300541200 /* FOSRetrieveCMOOperation.h in Headers */,
 				633467E41686C18800ACD4EA /* FOSMergePolicy.h in Headers */,
 				63986F3018DD31C100D89CFD /* FOSBoundServiceAdapter.h in Headers */,
@@ -1699,6 +1718,7 @@
 				6300F38516961A88003D9E26 /* FOSFlushCachesOperation.h in Headers */,
 				6300F38916961B51003D9E26 /* FOSPushCacheChangesOperation.h in Headers */,
 				6310F94D16991F3900981E85 /* FOSManagedObject+FOS_Internal.h in Headers */,
+				6399F3C21938D42A001D48DD /* FOSCompiledAtom.h in Headers */,
 				63247F29169B36EF00A729A2 /* NSData+Base64.h in Headers */,
 				63A08FDF18D5254C003F14E0 /* FOSAttributeBinding.h in Headers */,
 				634F071F18AADF0A0093FCDF /* FOSParseFileService.h in Headers */,
@@ -1989,9 +2009,11 @@
 				63A3138C16E5B43D00DDE117 /* FOSUser.m in Sources */,
 				63A3139016E5B43D00DDE117 /* FOSCacheManager.m in Sources */,
 				63F11E4F18D8990F0070D19A /* FOSConstantExpression.m in Sources */,
+				6399F3C51938D42A001D48DD /* FOSCompiledAtom.m in Sources */,
 				63A3139316E5B43D00DDE117 /* FOSDatabaseManager.m in Sources */,
 				63A3139516E5B43D00DDE117 /* FOSFlushCachesOperation.m in Sources */,
 				634F072218AADF0A0093FCDF /* FOSParseFileService.m in Sources */,
+				6399F3CB1938E04C001D48DD /* NSError+FOS_Internal.m in Sources */,
 				63A3139716E5B43D00DDE117 /* FOSMergePolicy.m in Sources */,
 				6384F7CB18F79E1C0038AEB7 /* FOSSendToManyRelationshipOperation.m in Sources */,
 				63432DC417FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m in Sources */,
@@ -2112,6 +2134,7 @@
 				63986F3218DD31C100D89CFD /* FOSBoundServiceAdapter.m in Sources */,
 				634FA6681803828F00389821 /* FOSSearchOperation+Internal.m in Sources */,
 				63C343D41686BBDB003D10B5 /* FOSLoginManager.m in Sources */,
+				6399F3CA1938E04C001D48DD /* NSError+FOS_Internal.m in Sources */,
 				63432DC317FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m in Sources */,
 				6384F7CA18F79E1C0038AEB7 /* FOSSendToManyRelationshipOperation.m in Sources */,
 				63C343D61686BBDB003D10B5 /* FOSOperation.m in Sources */,
@@ -2139,6 +2162,7 @@
 				63A08FCF18D403A2003F14E0 /* FOSAdapterBinding.lm in Sources */,
 				6315724D190432420044CC90 /* NSManagedObjectModel+FOS.m in Sources */,
 				632B5428168E454B003AD474 /* NSRelationshipDescription+FOS_Internal.m in Sources */,
+				6399F3C41938D42A001D48DD /* FOSCompiledAtom.m in Sources */,
 				63E4651D168FAA9800E96C07 /* FOSParseCachedManagedObject.m in Sources */,
 				63742E7C1691D5D300541200 /* FOSRetrieveCMOOperation.m in Sources */,
 				63F11E4E18D8990F0070D19A /* FOSConstantExpression.m in Sources */,
