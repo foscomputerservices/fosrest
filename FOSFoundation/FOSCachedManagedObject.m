@@ -121,6 +121,11 @@ static NSMutableDictionary *_processingFaults = nil;
     return result;
 }
 
+- (FOSRESTConfig *)restConfig {
+    // TODO : Hook this up on create so that we're not using the 'sharedInstance'
+    return [FOSRESTConfig sharedInstance];
+}
+
 - (BOOL)isUploadable {
     BOOL result = !self.isLocalOnly && !self.isReadOnly;
 

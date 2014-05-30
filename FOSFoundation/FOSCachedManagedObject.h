@@ -13,6 +13,7 @@
 
 @class FOSRetrieveCMOOperation;
 @class FOSSendServerRecordOperation;
+@class FOSRESTConfig;
 
 typedef id<NSObject,NSCopying> FOSJsonId;
 
@@ -39,6 +40,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 @property (nonatomic, readonly) BOOL hasLocalOnlyParent;
 @property (nonatomic, readonly) NSSet *faultedRelationships;
 @property (nonatomic, readonly) BOOL isSubTreeDirty;
+@property (nonatomic, readonly) FOSRESTConfig *restConfig;
 
 /*!
  * @property isUploadable
