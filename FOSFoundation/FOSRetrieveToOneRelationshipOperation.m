@@ -116,12 +116,13 @@
                         [self addDependency:_fetchRelatedEntityOp];
                     }
                     else {
-                        NSString *msgFmt = @"Unable to find identity for Entity '%@' for lifecycle %@ for Relationship '%@' between Entity '%@' and Entity '%@'";
+                        NSString *msgFmt = @"Unable to find identity for lifecycle %@ for Relationship '%@' between Entity '%@' and Entity '%@' in json: %@";
                         NSString *msg = [NSString stringWithFormat:msgFmt,
                                          [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecordRelationship],
                                          relDesc.name,
                                          _relationship.entity.name,
-                                         destEntity.name];
+                                         destEntity.name,
+                                         jsonFragment];
 
                         localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
                     }
