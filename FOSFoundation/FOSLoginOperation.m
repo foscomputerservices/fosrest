@@ -134,7 +134,8 @@
 
         FOSRetrieveCMOOperation *loginRequest =
             [FOSRetrieveCMOOperation retrieveCMOUsingDataOperation:fetchDataOp
-                                                 forLifecyclePhase:FOSLifecyclePhaseLogin];
+                                                 forLifecyclePhase:FOSLifecyclePhaseLogin
+                                                 forLifecycleStyle:self.loginStyle];
 
         result = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
             if (!isCancelled && loginRequest.error == nil) {

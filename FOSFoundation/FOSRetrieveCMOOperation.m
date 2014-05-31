@@ -27,11 +27,13 @@
 }
 
 + (instancetype)retrieveCMOUsingDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
-                            forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase {
+                            forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+                            forLifecycleStyle:(NSString *)lifecycleStyle {
     NSMutableDictionary *bindings = [NSMutableDictionary dictionaryWithCapacity:100];
     return [[self alloc] initWithDataOperation:fetchOp
                                isTopLevelFetch:YES
                              forLifecyclePhase:lifecyclePhase
+                             forLifecycleStyle:lifecycleStyle
                                   withBindings:bindings
                        andParentFetchOperation:nil];
 }
@@ -45,6 +47,7 @@
                                                            withId:jsonId
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                                forLifecycleStyle:nil
                                                      withBindings:bindings
                                           andParentFetchOperation:parentFetchOp];
 
@@ -62,6 +65,7 @@
                                                            withId:jsonId
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                                forLifecycleStyle:nil
                                                      withBindings:bindings
                                           andParentFetchOperation:parentFetchOp];
 
@@ -78,6 +82,7 @@
                                                          withJson:json
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                                forLifecycleStyle:nil
                                                      withBindings:bindings
                                           andParentFetchOperation:parentFetchOp];
 
@@ -95,6 +100,7 @@
                                                          withJson:json
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                                forLifecycleStyle:nil
                                                      withBindings:bindings
                                           andParentFetchOperation:parentFetchOp];
 
@@ -267,6 +273,7 @@
 // Designated Initializer
 - (id)initAsTopLevelFetch:(BOOL)isTopLevelFetch
         forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+        forLifecycleStyle:(NSString *)lifecycleStyle
                    entity:(NSEntityDescription *)entity
            ofRelationship:(NSRelationshipDescription *)relDesc
              withBindings:(NSMutableDictionary *)bindings
@@ -285,14 +292,15 @@
 
         id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
         _urlBinding = [adapter urlBindingForLifecyclePhase:lifecyclePhase
-                                            forLifecycleStyle:nil
+                                         forLifecycleStyle:lifecycleStyle
                                            forRelationship:relDesc
-                                             forEntity:entity];
+                                                 forEntity:entity];
 
         if (_urlBinding == nil) {
-            NSString *msgFmt = @"URL_BINDING missing for lifecycle %@ of Entity '%@'%@";
+            NSString *msgFmt = @"URL_BINDING missing for lifecycle %@ with lifecycle style '%@' of Entity '%@'%@";
             NSString *msg = [NSString stringWithFormat:msgFmt,
                              [FOSURLBinding stringForLifecycle:lifecyclePhase],
+                             lifecycleStyle,
                              entity.name,
                              relDesc == nil
                                 ? @""
@@ -311,6 +319,7 @@
 - (id)initWithDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchDataOp
             isTopLevelFetch:(BOOL)isTopLevelFetch
           forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+          forLifecycleStyle:(NSString *)lifecycleStyle
                withBindings:(NSMutableDictionary *)bindings
     andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     NSParameterAssert(fetchDataOp != nil);
@@ -321,6 +330,7 @@
                              withId:nil
                     isTopLevelFetch:isTopLevelFetch
                  forLifecyclePhase:lifecyclePhase
+                  forLifecycleStyle:lifecycleStyle
                        withBindings:bindings
             andParentFetchOperation:parentFetchOp]) != nil) {
         __block FOSRetrieveCMOOperation *blockSelf = self;
@@ -376,6 +386,7 @@
              withId:(FOSJsonId)jsonId
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+  forLifecycleStyle:(NSString *)lifecycleStyle
        withBindings:(NSMutableDictionary *)bindings
 andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     NSParameterAssert(entity != nil);
@@ -383,6 +394,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
 
     if ((self = [self initAsTopLevelFetch:isTopLevelFetch
                         forLifecyclePhase:lifecyclePhase
+                        forLifecycleStyle:lifecycleStyle
                                    entity:entity
                            ofRelationship:relDesc
                              withBindings:bindings
@@ -400,6 +412,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
            withJson:(NSDictionary *)json
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+  forLifecycleStyle:(NSString *)lifecycleStyle
        withBindings:(NSMutableDictionary *)bindings
 andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     NSParameterAssert(json != nil);
@@ -408,6 +421,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
 
     if ((self = [self initAsTopLevelFetch:isTopLevelFetch
                         forLifecyclePhase:lifecyclePhase
+                        forLifecycleStyle:lifecycleStyle
                                    entity:entity
                            ofRelationship:relDesc
                              withBindings:bindings

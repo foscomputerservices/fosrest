@@ -27,7 +27,8 @@
 #pragma mark - Class Methods
 
 + (instancetype)retrieveCMOUsingDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
-                            forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase;
+                            forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+                            forLifecycleStyle:(NSString *)lifecycleStyle;
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                               withId:(FOSJsonId)jsonId
@@ -62,6 +63,7 @@
 
 - (id)initAsTopLevelFetch:(BOOL)isTopLevelFetch
         forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+        forLifecycleStyle:(NSString *)lifecycleStyle
                    entity:(NSEntityDescription *)entity
            ofRelationship:(NSRelationshipDescription *)relDesc
              withBindings:(NSMutableDictionary *)bindings
@@ -70,6 +72,7 @@
 - (id)initWithDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
             isTopLevelFetch:(BOOL)isTopLevelFetch
           forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+          forLifecycleStyle:(NSString *)lifecycleStyle
                withBindings:(NSMutableDictionary *)bindings
     andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
 
@@ -78,6 +81,7 @@
              withId:(FOSJsonId)jsonId
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+  forLifecycleStyle:(NSString *)lifecycleStyle
        withBindings:(NSMutableDictionary *)bindings
 andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
 
@@ -86,6 +90,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
            withJson:(NSDictionary *)json
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+  forLifecycleStyle:(NSString *)lifecycleStyle
        withBindings:(NSMutableDictionary *)bindings
 andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
 

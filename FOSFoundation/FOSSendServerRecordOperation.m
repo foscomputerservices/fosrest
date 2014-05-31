@@ -116,24 +116,36 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
 
     FOSOperation *result = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
         if (!cancelled && (error == nil)) {
+            NSError *localError = nil;
             FOSCachedManagedObject *cmo = blockSelf.cmo;
             FOSRESTConfig *restConfig = blockSelf.restConfig;
             FOSURLBinding *urlBinding =
                 [restConfig.restServiceAdapter urlBindingForLifecyclePhase:blockSelf.lifecyclePhase
-                                                            forLifecycleStyle:nil
+                                                         forLifecycleStyle:blockSelf.lifecycleStyle
                                                            forRelationship:nil
                                                                  forEntity:cmo.entity];
             FOSWebServiceRequest *webServiceRequest = nil;
-            NSError *localError = nil;
 
-            // Create a request to send our changes
-            if ((blockSelf.lifecyclePhase == FOSLifecyclePhaseCreateServerRecord) ||
-                cmo.hasModifiedProperties) {
-                NSURLRequest *urlRequest = [urlBinding urlRequestForCMO:cmo error:&localError];
+            if (urlBinding == nil) {
+                NSString *msgFmt = @"Missing URL_BINDING for lifecycle %@ lifecycle style '%@' for Entity '%@'";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 [FOSURLBinding stringForLifecycle:blockSelf.lifecyclePhase],
+                                 blockSelf.lifecycleStyle,
+                                 cmo.entity.name];
 
-                if (localError == nil) {
-                    webServiceRequest = [FOSWebServiceRequest requestWithURLRequest:urlRequest
-                                                                      forURLBinding:urlBinding];
+                localError = [NSError errorWithMessage:msg];
+            }
+
+            if (localError == nil) {
+                // Create a request to send our changes
+                if ((blockSelf.lifecyclePhase == FOSLifecyclePhaseCreateServerRecord) ||
+                    cmo.hasModifiedProperties) {
+                    NSURLRequest *urlRequest = [urlBinding urlRequestForCMO:cmo error:&localError];
+
+                    if (localError == nil) {
+                        webServiceRequest = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                          forURLBinding:urlBinding];
+                    }
                 }
             }
 

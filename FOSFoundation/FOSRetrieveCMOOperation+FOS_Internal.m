@@ -23,6 +23,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
     return [[self alloc] initWithDataOperation:fetchOp
                                isTopLevelFetch:NO
                              forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                             forLifecycleStyle:nil
                                   withBindings:bindings
                        andParentFetchOperation:parentFetchOp];
 }
@@ -42,6 +43,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
                                                            withId:jsonId
                                                   isTopLevelFetch:NO
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                                forLifecycleStyle:nil
                                                      withBindings:bindings
                                           andParentFetchOperation:parentFetchOp];
 
@@ -63,6 +65,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
                                                          withJson:(NSDictionary *)json
                                                   isTopLevelFetch:NO
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                                forLifecycleStyle:nil
                                                      withBindings:bindings
                                           andParentFetchOperation:parentFetchOp];
 

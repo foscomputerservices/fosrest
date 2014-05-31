@@ -26,7 +26,8 @@
 
     FOSRetrieveCMOOperation *result =
         [FOSRetrieveCMOOperation retrieveCMOUsingDataOperation:createOp
-                                             forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord];
+                                             forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                             forLifecycleStyle:nil];
 
     return result;
 }
