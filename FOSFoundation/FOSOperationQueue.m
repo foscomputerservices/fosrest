@@ -71,8 +71,6 @@
 - (void)addOperation:(NSOperation *)op {
     NSParameterAssert(op != nil);
 
-    [super addOperation:op];
-
     // The web service queues NSOperations, so we have to handle that case
     if ([op isKindOfClass:[FOSOperation class]]) {
         NSParameterAssert(!((FOSOperation *)op).isQueued);
@@ -80,11 +78,11 @@
         ((FOSOperation *)op).isQueued = YES;
         ((FOSOperation *)op).operationQueue = self;
     }
+
+    [super addOperation:op];
 }
 
 - (void)addOperations:(NSArray *)ops waitUntilFinished:(BOOL)wait {
-    [super addOperations:ops waitUntilFinished:wait];
-
     for (FOSOperation *nextOp in ops) {
         NSParameterAssert([nextOp isKindOfClass:[FOSOperation class]]);
         NSParameterAssert(!nextOp.isQueued);
@@ -92,6 +90,8 @@
         nextOp.isQueued = YES;
         nextOp.operationQueue = self;
     }
+
+    [super addOperations:ops waitUntilFinished:wait];
 }
 
 - (void)cancelAllOperations {

@@ -167,7 +167,7 @@ TEARDOWN_LOGIN
     //        opQueue MOCs will not be able to locate the instance unless it's saved.
     [[FOSRESTConfig sharedInstance].databaseManager saveChanges];
 
-    FOSSendServerRecordOperation *createOp = [testCreate sendServerRecord];
+    FOSSendServerRecordOperation *createOp = [testCreate sendServerRecordWithLifecycleStyle:nil];
 
     XCTAssertTrue([createOp isKindOfClass:[FOSCreateServerRecordOperation class]], @"Wrong type!");
 
@@ -213,7 +213,7 @@ TEARDOWN_LOGIN
     // http://fosmain.foscomputerservices.com:8080/browse/FF-4
     [[FOSRESTConfig sharedInstance].databaseManager saveChanges];
 
-    FOSSendServerRecordOperation *createOp = [testCreate sendServerRecord];
+    FOSSendServerRecordOperation *createOp = [testCreate sendServerRecordWithLifecycleStyle:nil];
 
     XCTAssertTrue([createOp isKindOfClass:[FOSCreateServerRecordOperation class]], @"Wrong type!");
 
@@ -257,7 +257,7 @@ TEARDOWN_LOGIN
     //        opQueue MOCs will not be able to locate the instance unless it's saved.
     [[FOSRESTConfig sharedInstance].databaseManager saveChanges];
 
-    FOSSendServerRecordOperation *createOp = [newWidget sendServerRecord];
+    FOSSendServerRecordOperation *createOp = [newWidget sendServerRecordWithLifecycleStyle:nil];
 
     XCTAssertTrue([createOp isKindOfClass:[FOSCreateServerRecordOperation class]], @"Wrong type!");
 
@@ -540,7 +540,7 @@ TEARDOWN_LOGIN
 
         XCTAssertTrue(testCreate.hasModifiedProperties, @"No modified props???");
 
-        FOSSendServerRecordOperation *createOp = [testCreate sendServerRecord];
+        FOSSendServerRecordOperation *createOp = [testCreate sendServerRecordWithLifecycleStyle:nil];
 
         XCTAssertTrue([createOp isKindOfClass:[FOSUpdateServerRecordOperation class]], @"Wrong type!");
 

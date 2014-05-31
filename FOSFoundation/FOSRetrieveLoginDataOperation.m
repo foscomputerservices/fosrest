@@ -51,6 +51,7 @@
     id<FOSRESTServiceAdapter> adapter = self.restAdapter;
     FOSURLBinding *urlBindig =
         [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogin
+                              forLifecycleStyle:nil
                              forRelationship:nil
                                    forEntity:self.loginUser.entity];
     FOSCMOBinding *cmoBinding = urlBindig.cmoBinding;

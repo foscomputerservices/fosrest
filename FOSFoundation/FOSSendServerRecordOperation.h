@@ -31,11 +31,19 @@
 /*!
  * @property lifecyclePhase
  *
- * The @link FOSLifecyclePhase @/link to which the receiver
- * corresponds.  The only valid values are @link FOSLifecyclePhaseCreateServerRecord @/link
+ * The @link FOSLifecyclePhase @/link to which the receiver corresponds.  The only valid
+ * values are @link FOSLifecyclePhaseCreateServerRecord @/link
  * and @link FOSLifecyclePhaseUpdateServerRecord @/link.
  */
 @property (nonatomic, readonly) FOSLifecyclePhase lifecyclePhase;
+
+/*!
+ * @property lifecycleStyle
+ *
+ * A value to match to the @link FOSURLBinding.lifecycleStyle @/link when searching
+ * for the correct binding to send the receiver's cmo (may be nil).
+ */
+@property (nonatomic, readonly) NSString *lifecycleStyle;
 
 /*!
  * @methodgroup Initialization Methods
@@ -43,13 +51,13 @@
 #pragma mark - Initialization Methods
 
 /*!
- * @method initWithCMO:forLifecyclePhase:
+ * @method initWithCMO:forLifecyclePhase:withLifecycleStyle:
  *
- * @discussion
- *
- * @link lifecyclePhase @/link can only be FOSLifecyclePhaseCreateServerRecord or
- * FOSLifecyclePhaseUpdateServerRecord.
+ * @param lifecyclePhase Can only be FOSLifecyclePhaseCreateServerRecord or
+ *                       FOSLifecyclePhaseUpdateServerRecord.
  */
-- (id)initWithCMO:(FOSCachedManagedObject *)cmo forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase;
+- (id)initWithCMO:(FOSCachedManagedObject *)cmo
+forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+withLifecycleStyle:(NSString *)lifecycleStyle;
 
 @end

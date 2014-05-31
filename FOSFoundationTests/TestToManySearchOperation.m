@@ -32,9 +32,11 @@
                     [NSString stringWithFormat:@", \"testType\" : \"%@\"", self.testType]];
     }
 
-    FOSURLBinding *urlBinding = [self.restAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecords
-                                                              forRelationship:nil
-                                                                forEntity:entity];
+    FOSURLBinding *urlBinding =
+        [self.restAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecords
+                                    forLifecycleStyle:nil
+                                      forRelationship:nil
+                                            forEntity:entity];
     NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
                                                            withDSLQuery:dslQuery
                                                                   error:&localError];

@@ -18,7 +18,7 @@
     if ((self = [super initWithCMO:cmo forRelationship:relDesc]) != nil) {
         FOSCachedManagedObject *relObj = (FOSCachedManagedObject *)[cmo valueForKey:relDesc.name];
         if (relObj != nil) {
-            [self addDependency:relObj.sendServerRecord];
+            [self addDependency:[relObj sendServerRecordWithLifecycleStyle:nil]];
         }
     }
 

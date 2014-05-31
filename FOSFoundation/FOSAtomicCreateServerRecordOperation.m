@@ -96,6 +96,7 @@
 
         id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
         FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseCreateServerRecord
+                                                          forLifecycleStyle:nil
                                                          forRelationship:nil
                                                                forEntity:self.entity];
         id<FOSTwoWayRecordBinding> recordBinding = urlBinding.cmoBinding;

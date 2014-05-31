@@ -114,6 +114,7 @@
 }
 
 - (FOSURLBinding *)urlBindingForLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+                             forLifecycleStyle:(NSString *)lifecycleStyle
                                forRelationship:(NSRelationshipDescription *)relDesc
                                  forEntity:(NSEntityDescription *)entity {
     NSParameterAssert(entity != nil);
@@ -121,6 +122,7 @@
                       relDesc != nil);
 
     FOSURLBinding *urlBinding = [_bindings urlBindingForLifecyclePhase:lifecyclePhase
+                                                        forLifecycleStyle:lifecycleStyle
                                                        forRelationship:relDesc
                                                              forEntity:entity];
 

@@ -82,6 +82,16 @@
     return result;
 }
 
+#pragma mark - Initialization
+
+- (id)init {
+    if ((self = [super init])) {
+        self.lifecycleStyle = [FOSItemMatcher matcherMatchingAllItems];
+    }
+
+    return self;
+}
+
 #pragma mark - Property Overrides
 
 - (NSURL *)baseURL {

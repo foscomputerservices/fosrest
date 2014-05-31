@@ -100,7 +100,7 @@
     if (!lm.isLoggedIn) {
         User *user = [self _testLoginUser];
 
-        [lm loginUser:user handler:^(BOOL succeeded, NSError *error) {
+        [lm loginUser:user loginStyle:nil handler:^(BOOL succeeded, NSError *error) {
             NSAssert(succeeded, @"Failed login: %@", error.description);
 
             if (succeeded) {
@@ -163,7 +163,7 @@
     START_TEST
 
     FOSLoginManager *lm = [FOSRESTConfig sharedInstance].loginManager;
-    [lm loginUser:user handler:^(BOOL succeeded, NSError *error) {
+    [lm loginUser:user loginStyle:nil handler:^(BOOL succeeded, NSError *error) {
         XCTAssertTrue([NSThread isMainThread], @"Wrong thread!");
         XCTAssertTrue(succeeded, @"Failed login: %@", error.description);
 
@@ -197,7 +197,7 @@
     START_TEST
 
     FOSLoginManager *lm = [FOSRESTConfig sharedInstance].loginManager;
-    [lm loginUser:user handler:^(BOOL succeeded, NSError *error) {
+    [lm loginUser:user loginStyle:nil handler:^(BOOL succeeded, NSError *error) {
         XCTAssertTrue([NSThread isMainThread], @"Wrong thread!");
         XCTAssertFalse(succeeded, @"Failed succeeded???");
 
@@ -221,7 +221,7 @@
     START_TEST
 
     FOSLoginManager *lm = [FOSRESTConfig sharedInstance].loginManager;
-    [lm loginUser:user handler:^(BOOL succeeded, NSError *error) {
+    [lm loginUser:user loginStyle:nil handler:^(BOOL succeeded, NSError *error) {
         XCTAssertTrue([NSThread isMainThread], @"Wrong thread!");
         XCTAssertTrue(succeeded, @"Failed succeeded???");
 
@@ -238,7 +238,7 @@
     START_TEST
 
     FOSLoginManager *lm = [FOSRESTConfig sharedInstance].loginManager;
-    [lm loginUser:user handler:^(BOOL succeeded, NSError *error) {
+    [lm loginUser:user loginStyle:nil handler:^(BOOL succeeded, NSError *error) {
         [lm refreshLoggedInUser:^(BOOL succeeded, NSError *error) {
             XCTAssertTrue([NSThread isMainThread], @"Wrong thread!");
             XCTAssertTrue(succeeded, @"Failed: %@", error.description);
@@ -306,7 +306,7 @@
 
     [[FOSRESTConfig sharedInstance].databaseManager saveChanges];
 
-    [[FOSRESTConfig sharedInstance].loginManager createUser:newUser handler:^(BOOL succeeded, NSError *error) {
+    [[FOSRESTConfig sharedInstance].loginManager createUser:newUser createStyle:nil handler:^(BOOL succeeded, NSError *error) {
         XCTAssertTrue([NSThread isMainThread], @"Wrong thread!");
         XCTAssertTrue(succeeded, @"Failed???");
         XCTAssertNil(error, @"Error creating user: %@", error.description);
@@ -320,7 +320,7 @@
             newUser.username = username;
             newUser.password = password;
 
-            [[FOSRESTConfig sharedInstance].loginManager loginUser:newUser handler:^(BOOL succeeded, NSError *error) {
+            [[FOSRESTConfig sharedInstance].loginManager loginUser:newUser loginStyle:nil handler:^(BOOL succeeded, NSError *error) {
                 FOSLoginManager *loginMgr = [FOSRESTConfig sharedInstance].loginManager;
 
                 XCTAssertTrue([NSThread isMainThread], @"Wrong thread!");
@@ -358,7 +358,7 @@
     [[FOSRESTConfig sharedInstance].databaseManager saveChanges];
 
     [[FOSRESTConfig sharedInstance].cacheManager flushCaches:^(BOOL isCancelled, NSError *error) {
-        [[FOSRESTConfig sharedInstance].loginManager loginUser:localOnlyUser handler:^(BOOL succeeded, NSError *error) {
+        [[FOSRESTConfig sharedInstance].loginManager loginUser:localOnlyUser loginStyle:nil handler:^(BOOL succeeded, NSError *error) {
             FOSLoginManager *loginMgr = [FOSRESTConfig sharedInstance].loginManager;
 
             XCTAssertTrue(succeeded, @"Login failed: %@", error);

@@ -20,7 +20,8 @@
         if (relatedCMOs != nil) {
 
             for (FOSCachedManagedObject *relatedCMO in relatedCMOs) {
-                FOSSendServerRecordOperation *sendOp = relatedCMO.sendServerRecord;
+                FOSSendServerRecordOperation *sendOp =
+                    [relatedCMO sendServerRecordWithLifecycleStyle:nil];
 
                 [self addDependency:sendOp];
             }

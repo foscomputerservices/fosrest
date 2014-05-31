@@ -171,7 +171,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 + (FOSRetrieveCMOOperation *)retrieveCMOForJsonId:(FOSJsonId)jsonId;
 
 /*!
- * @method sendServerRecord
+ * @method sendServerRecordWithLifecycleStyle:
  *
  * Updates the corresponding server record's fields with the
  * the values of the properties returned by
@@ -185,7 +185,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  * depending on the receiver's @link hasBeenUploadedToSErver @/link
  * status.
  */
-- (FOSSendServerRecordOperation *)sendServerRecord;
+- (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle;
 
 /*!
  * @method createAndRetrieveServerRecordWithJSON:

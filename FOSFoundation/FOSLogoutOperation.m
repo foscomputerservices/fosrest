@@ -57,6 +57,7 @@
 
     id<FOSRESTServiceAdapter> adapter = self.restAdapter;
     FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogout
+                                                      forLifecycleStyle:nil
                                                      forRelationship:nil
                                                            forEntity:entity];
 

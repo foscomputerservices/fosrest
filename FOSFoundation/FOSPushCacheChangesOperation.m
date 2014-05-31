@@ -77,7 +77,7 @@
     if (restConfig.loginManager.isLoggedIn) {
         FOSUser *user = restConfig.loginManager.loggedInUser;
 
-        FOSOperation *pushOp = [user sendServerRecord];
+        FOSOperation *pushOp = [user sendServerRecordWithLifecycleStyle:nil];
         NSAssert(![pushOp.flattenedDependencies containsObject:self.parentOperation],
                  @"Cycle in push dependencies???");
 

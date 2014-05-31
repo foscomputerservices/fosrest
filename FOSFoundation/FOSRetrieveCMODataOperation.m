@@ -48,9 +48,11 @@
 - (FOSJsonId)jsonId {
     if (_jsonId == nil && self.jsonResult != nil) {
         id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
-        FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                                         forRelationship:nil
-                                                               forEntity:self.entity];
+        FOSURLBinding *urlBinding =
+            [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                  forLifecycleStyle:nil
+                                 forRelationship:nil
+                                       forEntity:self.entity];
 
         FOSJsonId jsonId = nil;
         NSError *localError = nil;

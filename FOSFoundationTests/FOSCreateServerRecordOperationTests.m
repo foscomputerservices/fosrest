@@ -25,7 +25,8 @@ SETUP_TEARDOWN_NOLOGIN
 - (void)testSettingCMO {
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    FOSCreateServerRecordOperation *op = [FOSCreateServerRecordOperation createOperationForCMO:cmo];
+    FOSCreateServerRecordOperation *op = [FOSCreateServerRecordOperation createOperationForCMO:cmo
+                                                                            withLifecycleStyle:nil];
 
     XCTAssertNotNil(op.cmo, @"Nil?");
     XCTAssertTrue([op.cmo.objectID isEqual:cmo.objectID], @"Wrong CMO?");

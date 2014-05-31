@@ -26,8 +26,9 @@
 #pragma mark - Class Methods
 
 /*!
- * @method createOperationForCMO
+ * @method updateOperationForCMO:withLifecycleStyle:
  */
-+ (instancetype)updateOperationForCMO:(FOSCachedManagedObject *)cmo;
++ (instancetype)updateOperationForCMO:(FOSCachedManagedObject *)cmo
+                   withLifecycleStyle:(NSString *)lifecycleStyle;
 
 @end

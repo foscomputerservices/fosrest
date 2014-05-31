@@ -44,6 +44,7 @@
  *          otherwise its value is ignored.
  */
 - (FOSURLBinding *)urlBindingForLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+                             forLifecycleStyle:(NSString *)lifecycleStyle
                                forRelationship:(NSRelationshipDescription *)relDesc
                                      forEntity:(NSEntityDescription *)entity;
 

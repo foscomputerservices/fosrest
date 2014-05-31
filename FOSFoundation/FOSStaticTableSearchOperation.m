@@ -96,6 +96,7 @@
     // 1st retrieve a count of records from the server to see if that count matches ours
     FOSURLBinding *urlCountBinding =
         [self.restAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordCount
+                                       forLifecycleStyle:nil
                                       forRelationship:nil
                                         forEntity:entity];
     NSURLRequest *urlCountRequest = [urlCountBinding urlRequestServerRecordOfType:entity
@@ -123,6 +124,7 @@
 
     FOSURLBinding *urlDataBinding =
         [self.restAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecords
+                                       forLifecycleStyle:nil
                                       forRelationship:nil
                                         forEntity:entity];
 

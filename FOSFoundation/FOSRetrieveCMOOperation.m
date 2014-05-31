@@ -285,6 +285,7 @@
 
         id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
         _urlBinding = [adapter urlBindingForLifecyclePhase:lifecyclePhase
+                                            forLifecycleStyle:nil
                                            forRelationship:relDesc
                                              forEntity:entity];
 

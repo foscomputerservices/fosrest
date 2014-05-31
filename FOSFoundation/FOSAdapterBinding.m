@@ -76,6 +76,7 @@
 }
 
 - (FOSURLBinding *)urlBindingForLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+                             forLifecycleStyle:(NSString *)lifecycleStyle
                                forRelationship:(NSRelationshipDescription *)relDesc
                                      forEntity:(NSEntityDescription *)entity {
     NSParameterAssert(entity != nil);
@@ -97,6 +98,7 @@
         if ((binding.entityMatcher == nil ||
             [binding.entityMatcher itemIsIncluded:entityName context:context]) &&
             binding.lifecyclePhase == lifecyclePhase &&
+            [binding.lifecycleStyle itemIsIncluded:lifecycleStyle context:context] &&
             (relDesc == nil ||
              [binding.relationshipMatcher itemIsIncluded:relDesc.name context:context])) {
 

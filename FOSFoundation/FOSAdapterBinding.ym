@@ -73,7 +73,7 @@
 %token SEP SEMI COLON COMMA LPAREN RPAREN LBRACE RBRACE DOT PLUS TIC
 %token ADAPTER URL_BINDINGS SHARED_BINDINGS
 %token URL_BINDING BASE_URL HEADER_FIELDS TIMEOUT_INTERVAL
-%token LIFECYCLE REQUEST_METHOD REQUEST_FORMAT END_POINT END_POINT_PARAMETERS CMO_BINDING
+%token LIFECYCLE LIFECYCLE_STYLE REQUEST_METHOD REQUEST_FORMAT END_POINT END_POINT_PARAMETERS CMO_BINDING
 %token BINDING_OPTIONS ONE_TO_ONE ONE_TO_MANY UNORDERED ORDERED
 %token ENTITIES ATTRIBUTES ALL ALL_EXCEPT
 %token LOGIN LOGOUT PASSWORD_RESET
@@ -90,6 +90,7 @@
 %type<object> url_bindings url_binding_list url_binding
 %type<object> shared_bindings shared_bindings_list shared_binding
 %type<lifecyclePhase> lifecycle lifecycle_phase
+%type<object> lifecycle_style
 %type<bindingOptions> binding_options binding_options_list binding_option
 %type<object> header_fields
 %type<object> base_url
@@ -206,40 +207,42 @@ url_binding_list
 url_binding
     :  URL_BINDING SEP
         /*  3 */ lifecycle                  /* required */
-        /*  4 */ binding_options            /* optional */
-        /*  5 */ header_fields              /* optional */
-        /*  6 */ request_method             /* optional */
-        /*  7 */ request_format             /* optional */
-        /*  8 */ timeout_interval           /* optional */
-        /*  9 */ base_url                   /* optional */
-        /* 10 */ end_point_url              /* required */
-        /* 11 */ end_point_parameters       /* optional */
-        /* 12 */ json_wrapper_key           /* optional */
-        /* 13 */ optional_json_binding      /* optional */
-        /* 14 */ cmo_binding                /* optional */
-        /* 15 */ optional_relationships     /* optional */
-        /* 16 */ optional_matching_entities /* optional */ {
+        /*  4 */ lifecycle_style            /* optional */
+        /*  5 */ binding_options            /* optional */
+        /*  6 */ header_fields              /* optional */
+        /*  7 */ request_method             /* optional */
+        /*  8 */ request_format             /* optional */
+        /*  9 */ timeout_interval           /* optional */
+        /* 10 */ base_url                   /* optional */
+        /* 11 */ end_point_url              /* required */
+        /* 12 */ end_point_parameters       /* optional */
+        /* 13 */ json_wrapper_key           /* optional */
+        /* 14 */ optional_json_binding      /* optional */
+        /* 15 */ cmo_binding                /* optional */
+        /* 16 */ optional_relationships     /* optional */
+        /* 17 */ optional_matching_entities /* optional */ {
 
         FOSLifecyclePhase lifecyclePhase = ($3);
-        FOSBindingOptions bindingOptions = ($4);
-        NSDictionary *headerFields = (__bridge NSDictionary *)($5);
-        FOSRequestMethod requestMethod = ($6);
-        FOSRequestFormat requestFormat = ($7);
-        NSNumber *timeoutInterval = (__bridge NSNumber *)($8);
-        id<FOSExpression> baseURLExpr = (__bridge id<FOSExpression>)($9);
-        id<FOSExpression> endPoint = (__bridge id<FOSExpression>)($10);
-        NSArray *endPointParameters = (__bridge NSArray *)($11);
-        id<FOSExpression> jsonWrapperKey = (__bridge id<FOSExpression>)($12);
-        NSArray *jsonBindingExpressions = (__bridge NSArray *)($13);
-        id binder = (__bridge id)($14);
+        FOSItemMatcher *lifecycleStyle = (__bridge FOSItemMatcher *)($4);
+        FOSBindingOptions bindingOptions = ($5);
+        NSDictionary *headerFields = (__bridge NSDictionary *)($6);
+        FOSRequestMethod requestMethod = ($7);
+        FOSRequestFormat requestFormat = ($8);
+        NSNumber *timeoutInterval = (__bridge NSNumber *)($9);
+        id<FOSExpression> baseURLExpr = (__bridge id<FOSExpression>)($10);
+        id<FOSExpression> endPoint = (__bridge id<FOSExpression>)($11);
+        NSArray *endPointParameters = (__bridge NSArray *)($12);
+        id<FOSExpression> jsonWrapperKey = (__bridge id<FOSExpression>)($13);
+        NSArray *jsonBindingExpressions = (__bridge NSArray *)($14);
+        id binder = (__bridge id)($15);
         FOSCMOBinding *cmoBinder = [binder isKindOfClass:[FOSCMOBinding class]]
             ? (FOSCMOBinding *)binder
             : nil;
         FOSSharedBindingReference *bindingReference = [binder isKindOfClass:[FOSSharedBindingReference class]]
             ? (FOSSharedBindingReference *)binder
             : nil;
-        FOSItemMatcher *relationshipMatcher = (__bridge FOSItemMatcher *)($15);
-        FOSItemMatcher *entityMatcher = (__bridge FOSItemMatcher *)($16);
+        FOSItemMatcher *relationshipMatcher = (__bridge FOSItemMatcher *)($16);
+        FOSItemMatcher *entityMatcher = (__bridge FOSItemMatcher *)($17);
 
         FOSURLBinding *binding = nil;
         if (cmoBinder != nil) {
@@ -293,6 +296,7 @@ url_binding
         }
 
         binding.lifecyclePhase = lifecyclePhase;
+        binding.lifecycleStyle = lifecycleStyle;
         binding.requestMethod = requestMethod;
         binding.requestFormat = requestFormat;
         binding.headerFields = headerFields;
@@ -328,6 +332,33 @@ shared_binding
 lifecycle
     : LIFECYCLE SEP lifecycle_phase SEMI { $$ = $3; }
     ;
+
+lifecycle_style
+    : /* empty */ {
+        /* By creating the 'default' atom here, we can still attach line/col info */
+        $$ = (__bridge void *)[FOSItemMatcher matcherMatchingAllItems];
+
+        CAPTURE_ATOM_INFO(AT_"LIFECYCLE_STYLE", yylloc, $$);
+    }
+    | LIFECYCLE_STYLE SEP ALL SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcherMatchingAllItems];
+
+        CAPTURE_ATOM_INFO(AT_"LIFECYCLE_STYLE", @1, $$);
+    }
+    | LIFECYCLE_STYLE SEP ALL_EXCEPT LPAREN expression_set RPAREN SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchAllExcept
+        forItemExpressions:(__bridge NSSet *)($5)];
+
+        CAPTURE_ATOM_INFO(AT_"LIFECYCLE_STYLE", @1, $$);
+    }
+    | LIFECYCLE_STYLE SEP LPAREN expression_set RPAREN SEMI {
+        $$ = (__bridge void *)[FOSItemMatcher matcher:FOSItemMatchItems
+        forItemExpressions:(__bridge NSSet *)($4)];
+
+        CAPTURE_ATOM_INFO(AT_"LIFECYCLE_STYLE", @1, $$);
+    }
+;
+
 
 lifecycle_phase
     : LOGIN { $$ = FOSLifecyclePhaseLogin; }

@@ -172,7 +172,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     return self;
 }
 
-- (void)createUser:(FOSUser *)user handler:(FOSLoginHandler)handler {
+- (void)createUser:(FOSUser *)user createStyle:(NSString *)createStyle handler:(FOSLoginHandler)handler {
     NSAssert([NSThread isMainThread], @"Creating users should only be done from the main thread.");
 
     NSParameterAssert(user != nil);
@@ -187,7 +187,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     __block FOSLoginManager *blockSelf = self;
 
     if (_restConfig.networkStatus != FOSNetworkStatusNotReachable) {
-        FOSOperation *pushOp = [user sendServerRecord];
+        FOSOperation *pushOp = [user sendServerRecordWithLifecycleStyle:createStyle];
 
         FOSBackgroundOperation *clearContextOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
 
@@ -235,7 +235,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     }
 }
 
-- (void)loginUser:(FOSUser *)user handler:(FOSLoginHandler)handler {
+- (void)loginUser:(FOSUser *)user loginStyle:(NSString *)loginStyle handler:(FOSLoginHandler)handler {
     NSAssert([NSThread isMainThread], @"Login should only be done from the main thread.");
 
     NSParameterAssert(user != nil);
@@ -261,7 +261,8 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
             if (!isCancelled && error == nil) {
 
-                FOSLoginOperation *loginOp = [FOSLoginOperation loginOperationForUser:user];
+                FOSLoginOperation *loginOp = [FOSLoginOperation loginOperationForUser:user
+                                                                       withLoginStyle:loginStyle];
                 [loginOp addDependency:pullStaticTablesOp];
 
                 blockSelf->_loginOp = loginOp;
@@ -449,6 +450,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
         id<FOSRESTServiceAdapter> adapter = _restConfig.restServiceAdapter;
         FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhasePasswordReset
+                                                          forLifecycleStyle:nil
                                                          forRelationship:nil
                                                                forEntity:userEntity];
 

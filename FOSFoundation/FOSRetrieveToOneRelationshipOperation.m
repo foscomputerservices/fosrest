@@ -34,10 +34,6 @@
                        andParentFetchOperation:parentFetchOp];
 }
 
-- (void)setIsQueued:(BOOL)isQueued {
-    [super setIsQueued:isQueued];
-}
-
 - (NSError *)error {
     NSError *result = _error;
 
@@ -69,6 +65,7 @@
 
             id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
             _urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                                forLifecycleStyle:nil
                                                forRelationship:relDesc
                                                      forEntity:destEntity];
 

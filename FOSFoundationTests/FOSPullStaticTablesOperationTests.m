@@ -78,7 +78,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     [dbMgr saveChanges];
 
-    FOSOperation *pushOp = [testRole sendServerRecord];
+    FOSOperation *pushOp = [testRole sendServerRecordWithLifecycleStyle:nil];
     FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
         FOSJsonId roleJsonId = testRole.jsonIdValue;
 

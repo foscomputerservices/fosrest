@@ -283,14 +283,16 @@ static NSMutableDictionary *_processingFaults = nil;
 
 #pragma mark - FOSLifecyclePhase Methods
 
-- (FOSSendServerRecordOperation *)sendServerRecord {
+- (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle {
     FOSSendServerRecordOperation *result = nil;
 
     if (!self.hasBeenUploadedToServer) {
-        result = [FOSCreateServerRecordOperation createOperationForCMO:self];
+        result = [FOSCreateServerRecordOperation createOperationForCMO:self
+                                                    withLifecycleStyle:lifecycleStyle];
     }
     else {
-        result = [FOSUpdateServerRecordOperation updateOperationForCMO:self];
+        result = [FOSUpdateServerRecordOperation updateOperationForCMO:self
+                                                    withLifecycleStyle:lifecycleStyle];
     }
 
     return result;
@@ -954,9 +956,11 @@ static NSMutableDictionary *_processingFaults = nil;
     NSDictionary *context = @{ @"ENTITY" : entity };
 
     id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
-    FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                                     forRelationship:nil
-                                                       forEntity:entity];
+    FOSURLBinding *urlBinding =
+        [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                              forLifecycleStyle:nil
+                             forRelationship:nil
+                                   forEntity:entity];
 
     // Any errors encountered by this method are yielded as exceptions as they're something
     // very wrong with the adapter's configuration.
@@ -1018,6 +1022,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
     FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                                      forLifecycleStyle:nil
                                                      forRelationship:nil
                                                            forEntity:entity];
 
@@ -1067,9 +1072,11 @@ static NSMutableDictionary *_processingFaults = nil;
     NSEntityDescription *entity = [self entityDescription];
 
     id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
-    FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                                     forRelationship:nil
-                                                           forEntity:entity];
+    FOSURLBinding *urlBinding =
+        [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                              forLifecycleStyle:nil
+                             forRelationship:nil
+                                   forEntity:entity];
     NSSet *attrBindings = urlBinding.cmoBinding.attributeBindings;
 
     NSMutableDictionary *context = [@{ @"ENTITY" : entity} mutableCopy];

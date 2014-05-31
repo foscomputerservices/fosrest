@@ -339,6 +339,7 @@
     for (NSEntityDescription *nextLeafEntity in leafEntities) {
         FOSURLBinding *urlBinding =
             [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                  forLifecycleStyle:nil
                                  forRelationship:relDesc
                                        forEntity:nextLeafEntity];
 
@@ -384,6 +385,7 @@
     for (NSEntityDescription *nextLeafEntity in leafEntities) {
         FOSURLBinding *urlBinding =
             [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                  forLifecycleStyle:nil
                                  forRelationship:relDesc
                                        forEntity:nextLeafEntity];
 
@@ -529,6 +531,7 @@
                     id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
                     FOSURLBinding *urlBinding =
                     [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                          forLifecycleStyle:nil
                                          forRelationship:relDesc
                                                forEntity:relDesc.entity];
                     id<FOSTwoWayRecordBinding> recordBinder = urlBinding.cmoBinding;

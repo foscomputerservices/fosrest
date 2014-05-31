@@ -79,9 +79,10 @@
 /*!
  * @method urlBindingForEntity:forLifecyclePhase:
  *
- * Returns the appropriate URL binding for the given entity and lifecyclePhase.
+ * Returns the appropriate URL binding for the given entity, lifecyclePhase and lifecycleStyle.
  */
 - (FOSURLBinding *)urlBindingForLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+                             forLifecycleStyle:(NSString *)lifecycleStyle
                                forRelationship:(NSRelationshipDescription *)relDesc
                                      forEntity:(NSEntityDescription *)entity;
 

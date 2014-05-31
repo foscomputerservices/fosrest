@@ -12,8 +12,11 @@
 
 #pragma mark - Class Methods
 
-+ (instancetype)updateOperationForCMO:(FOSCachedManagedObject *)cmo {
-    return [[self alloc] initWithCMO:cmo forLifecyclePhase:FOSLifecyclePhaseUpdateServerRecord];
++ (instancetype)updateOperationForCMO:(FOSCachedManagedObject *)cmo
+                   withLifecycleStyle:(NSString *)lifecycleStyle {
+    return [[self alloc] initWithCMO:cmo
+                   forLifecyclePhase:FOSLifecyclePhaseUpdateServerRecord
+                  withLifecycleStyle:lifecycleStyle];
 }
 
 @end

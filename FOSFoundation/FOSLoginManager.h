@@ -80,9 +80,12 @@ typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
 - (id)initWithCacheConfig:(FOSRESTConfig *)restConfig;
 
 /*!
- * @method createUser:handler:
+ * @method createUser:createStyle:handler:
  *
  * @param user  An FOSUser (or subtype) instance to use for account creation
+ *
+ * @param createStyle A style to match the 'LIFECYCLE_STYLE' of the login URL_BINDING
+ *                   specification.  If none is requred, this parameter may be nil.
  *
  * @param handler  A callback that will be invoked after the success/failure of the call
  *
@@ -98,15 +101,18 @@ typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
  * 'user' should be considered invalid and re-obtained from the receiver via
  * the 'loggedInUser' property.
  */
-- (void)createUser:(FOSUser *)user handler:(FOSLoginHandler)handler;
+- (void)createUser:(FOSUser *)user createStyle:(NSString *)createStyle handler:(FOSLoginHandler)handler;
 
 /*!
- * @method loginUser:handler:
+ * @method loginUser:loginStyle:handler:
  *
  * Provides a mechanism for authenticating to the server with
  * the given credentails.
  *
  * @param user  An FOSUser (or subtype) instance to use for authentication
+ *
+ * @param loginStyle A style to match the 'LIFECYCLE_STYLE' of the login URL_BINDING
+ *                   specification.  If none is requred, this parameter may be nil.
  *
  * @param handler  A callback that will be invoked after the success/failure of the call
  *
@@ -123,7 +129,7 @@ typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
  * 'user' should be considered invalid and re-obtained from the receiver via
  * the 'loggedInUser' property.
  */
-- (void)loginUser:(FOSUser *)user handler:(FOSLoginHandler)handler;
+- (void)loginUser:(FOSUser *)user loginStyle:(NSString *)loginStyle handler:(FOSLoginHandler)handler;
 
 /*!
  * @method refreshLoggedInUser:

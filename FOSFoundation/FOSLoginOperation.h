@@ -14,10 +14,11 @@
 
 #pragma mark - Properties
 @property (nonatomic, readonly) FOSUser *user;
+@property (nonatomic, readonly) NSString *loginStyle;
 @property (nonatomic, readonly) FOSJsonId loggedInUid;
 @property (nonatomic, readonly) NSManagedObjectID *loggedInMOID;
 
 #pragma mark - Class methods
-+ (instancetype)loginOperationForUser:(FOSUser *)user;
++ (instancetype)loginOperationForUser:(FOSUser *)user withLoginStyle:(NSString *)loginStyle;
 
 @end

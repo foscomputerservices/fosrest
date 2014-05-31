@@ -88,6 +88,7 @@ HEADER_FIELDS                  { return HEADER_FIELDS; }
 TIMEOUT_INTERVAL               { return TIMEOUT_INTERVAL; }
 
 LIFECYCLE                      { return LIFECYCLE; }
+LIFECYCLE_STYLE                { return LIFECYCLE_STYLE; }
 REQUEST_METHOD                 { return REQUEST_METHOD; }
 REQUEST_FORMAT                 { return REQUEST_FORMAT; }
 END_POINT                      { return END_POINT; }

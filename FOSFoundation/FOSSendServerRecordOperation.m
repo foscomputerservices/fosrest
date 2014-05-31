@@ -55,7 +55,10 @@
 
 #pragma mark - Initialization Methods
 
-- (id)initWithCMO:(FOSCachedManagedObject *)cmo forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase {
+- (id)initWithCMO:(FOSCachedManagedObject *)cmo
+forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
+withLifecycleStyle:(NSString *)lifecycleStyle{
+
     NSParameterAssert(cmo != nil);
     NSParameterAssert(lifecyclePhase == FOSLifecyclePhaseCreateServerRecord ||
                       lifecyclePhase == FOSLifecyclePhaseUpdateServerRecord);
@@ -66,6 +69,7 @@
         if ([self.managedObjectContext obtainPermanentIDsForObjects:@[ cmo ] error:&error]) {
             _cmoID = cmo.objectID;
             _lifecyclePhase = lifecyclePhase;
+            _lifecycleStyle = lifecycleStyle;
 
             if ((lifecyclePhase == FOSLifecyclePhaseCreateServerRecord ||
                 lifecyclePhase == FOSLifecyclePhaseLogin) &&
@@ -116,6 +120,7 @@
             FOSRESTConfig *restConfig = blockSelf.restConfig;
             FOSURLBinding *urlBinding =
                 [restConfig.restServiceAdapter urlBindingForLifecyclePhase:blockSelf.lifecyclePhase
+                                                            forLifecycleStyle:nil
                                                            forRelationship:nil
                                                                  forEntity:cmo.entity];
             FOSWebServiceRequest *webServiceRequest = nil;

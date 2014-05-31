@@ -48,7 +48,9 @@
 
     [dslQuery appendString:@"}"];
 
-    FOSURLBinding *urlBinding = [self.restAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecords
+    FOSURLBinding *urlBinding = [self.restAdapter
+                                 urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecords
+                                                            forLifecycleStyle:nil
                                                               forRelationship:nil
                                                                 forEntity:entity];
     NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity

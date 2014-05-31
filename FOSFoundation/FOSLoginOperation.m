@@ -20,18 +20,19 @@
 }
 
 #pragma mark - Class methods
-+ (instancetype)loginOperationForUser:(FOSUser *)user {
++ (instancetype)loginOperationForUser:(FOSUser *)user withLoginStyle:(NSString *)loginStyle {
     NSParameterAssert(user != nil);
     NSParameterAssert(user.isLoginUser);
 
-    return [[self alloc] initForUser:user];
+    return [[self alloc] initForUser:user withLoginStyle:loginStyle];
 }
 
-- (id)initForUser:(FOSUser *)user {
+- (id)initForUser:(FOSUser *)user withLoginStyle:(NSString *)loginStyle {
     NSParameterAssert(user != nil);
     NSParameterAssert(user.isLoginUser);
 
     if ((self = [super init]) != nil) {
+        _loginStyle = loginStyle;
         FOSRESTConfig *restConfig = self.restConfig;
         NSEntityDescription *restUserEntity = [restConfig.userSubType entityDescription];
 
@@ -95,17 +96,33 @@
 
 - (FOSBackgroundOperation *)_resolveUserRequest {
     FOSBackgroundOperation *result = nil;
+    NSError *localError = nil;
 
     id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
     FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogin
+                                                      forLifecycleStyle:self.loginStyle
                                                      forRelationship:nil
                                                            forEntity:_user.entity];
 
-    NSDictionary *context = @{ @"USER_NAME" : _user.jsonUsername, @"PASSWORD" : _user.password };
+    if (urlBinding == nil) {
+        NSString *msgFmt = @"Missing URL_BINDING for lifecycle %@, lifecycle style %@ for Entity '%@'.";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseLogin],
+                         self.loginStyle ? self.loginStyle : @"<none>",
+                         _user.entity.name];
 
-    NSError *localError = nil;
-    NSURLRequest *urlRequest = [urlBinding urlRequestForServerCommandWithContext:context
-                                                                           error:&localError];
+        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+    }
+
+    NSURLRequest *urlRequest = nil;
+
+    if (localError == nil) {
+        NSDictionary *context = @{ @"USER_NAME" : _user.jsonUsername, @"PASSWORD" : _user.password };
+
+        urlRequest = [urlBinding urlRequestForServerCommandWithContext:context
+                                                                 error:&localError];
+    }
+
     if (localError == nil) {
         __block FOSLoginOperation *blockSelf = self;
 

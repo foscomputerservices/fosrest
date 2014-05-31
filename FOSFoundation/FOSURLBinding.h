@@ -170,6 +170,23 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
 @property (nonatomic, assign) FOSLifecyclePhase lifecyclePhase;
 
 /*!
+ * @property lifecycleStyle
+ *
+ * Allows for multiple @link FOSURLBinding @/link
+ * specificiations for a single @link FOSLifeCyclePhase @/link.
+ *
+ * For example, there might be multiple mechanisms for authenticating
+ * (FOSLifecyclePhaseLogin) wil the REST service.  Each authentication
+ * mechanism would need a different @link FOSURLBinding @/link specification.
+ *
+ * @discussion
+ *
+ * Setting this property is optional.  The default matcher is
+ * [FOSItemMatcher matcherMatchingAllItems];
+ */
+@property (nonatomic, strong) FOSItemMatcher *lifecycleStyle;
+
+/*!
  * @property bindingOptions
  *
  * Describes any binding options that match for the lifecycle.
