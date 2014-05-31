@@ -346,6 +346,7 @@
 
         }
 
+        NSAssert(pred != nil, @"Nil pred???");
         [preds addObject:pred];
     }
 

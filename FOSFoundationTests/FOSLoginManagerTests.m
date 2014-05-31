@@ -379,11 +379,11 @@
 
 #pragma mark - Private Methods
 + (NSPersistentStoreCoordinator *)_setupDB {
-    NSURL *appDocsDirURL =
+    NSURL *appLibDirURL =
         [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
                                                 inDomains:NSUserDomainMask] lastObject];
 
-    NSURL *storeURL = [appDocsDirURL URLByAppendingPathComponent:@"testDB.sqlite"];
+    NSURL *storeURL = [appLibDirURL URLByAppendingPathComponent:@"testDB.sqlite"];
 
     // Delete the DB between tests
     [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
@@ -417,17 +417,15 @@
 }
 
 + (NSManagedObjectModel *)_mergeModels {
-    NSMutableArray *models = [NSMutableArray array];
+    NSMutableArray *models = [NSMutableArray arrayWithCapacity:2];
 
     // FOSFoundation
-    NSBundle *fosBundle = [NSBundle fosFrameworkBundle];
-    NSURL *modelURL = [fosBundle URLForResource:@"FOSFoundation" withExtension:@"momd"];
-    NSManagedObjectModel *model = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    NSManagedObjectModel *model = [NSBundle fosManagedObjectModel];
     [models addObject:model];
 
     // RESTTests
     NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
-    modelURL = [testBundle URLForResource:@"RESTTests" withExtension:@"momd"];
+    NSURL *modelURL = [testBundle URLForResource:@"RESTTests" withExtension:@"momd"];
     model = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     [models addObject:model];
 

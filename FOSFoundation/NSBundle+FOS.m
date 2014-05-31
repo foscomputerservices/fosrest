@@ -12,14 +12,23 @@
 
 // Load the framework bundle.
 + (NSBundle *)fosFrameworkBundle {
-    static NSBundle* frameworkBundle = nil;
-    static dispatch_once_t predicate;
-    dispatch_once(&predicate, ^{
+    static NSBundle* __fosFrameworkBundle = nil;
+    static dispatch_once_t __fosDispatchOnceBundle;
+    dispatch_once(&__fosDispatchOnceBundle, ^{
         NSString* mainBundlePath = [[NSBundle bundleForClass:[FOSRESTConfig class]] resourcePath];
         NSString* frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:@"FOSFoundation.bundle"];
-        frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
+        __fosFrameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
     });
-    return frameworkBundle;
+    return __fosFrameworkBundle;
+}
+
++ (NSManagedObjectModel *)fosManagedObjectModel {
+    // FOSFoundation
+    NSBundle *fosBundle = [NSBundle fosFrameworkBundle];
+    NSURL *modelURL = [fosBundle URLForResource:@"FOSFoundation" withExtension:@"momd"];
+    NSManagedObjectModel *model = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+
+    return model;
 }
 
 @end

@@ -11,5 +11,6 @@
 @interface NSBundle (FOS)
 
 + (NSBundle *)fosFrameworkBundle;
++ (NSManagedObjectModel *)fosManagedObjectModel;
 
 @end

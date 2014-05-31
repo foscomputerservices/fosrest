@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
-#import <FOSFoundation/FOSFoundation.h>
 #import <FOSFoundation/FOSRetrieveCMODataOperation.h>
 
 @interface FOSAtomicCreateServerRecordOperation : FOSOperation<FOSRetrieveCMODataOperationProtocol>
