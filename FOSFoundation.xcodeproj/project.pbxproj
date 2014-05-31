@@ -1339,10 +1339,10 @@
 				63EDFAA4168A06540086F588 /* FOSRESTConfig.m */,
 				63ADA3471698BA58007E184A /* FOSRESTConfig_FOS_Internal.h */,
 				63E4B1BB1688FC0300253B1F /* Entity Model Extensions */,
+				CB7458F217E657E700485B2A /* Analytics */,
 				633467F4168775B900ACD4EA /* Authentication */,
 				633467F1168774FD00ACD4EA /* Cache Management */,
 				633467F0168774C300ACD4EA /* Data Model */,
-				CB7458F217E657E700485B2A /* Logging */,
 				633467F31687758D00ACD4EA /* Queue Management */,
 				6356F2AA168B591400F0BFED /* Search Support */,
 				633467F21687754E00ACD4EA /* Web Service Interaction */,
@@ -1511,12 +1511,12 @@
 			name = "REST Service Providers";
 			sourceTree = "<group>";
 		};
-		CB7458F217E657E700485B2A /* Logging */ = {
+		CB7458F217E657E700485B2A /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
 				CB7458F317E6585300485B2A /* FOSAnalytics.h */,
 			);
-			name = Logging;
+			name = Analytics;
 			sourceTree = "<group>";
 		};
 		CB7458FF17E6649400485B2A /* Logging */ = {
