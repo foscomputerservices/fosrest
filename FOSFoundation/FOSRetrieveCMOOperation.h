@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-#import <FOSFoundation/FOSFoundation.h>
 #import "FOSBackgroundOperation.h"
 
 @class FOSRetrieveCMODataOperation;

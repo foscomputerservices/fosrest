@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
-#import <FOSFoundation/FOSFoundation.h>
-
 @interface FOSLogoutOperation : FOSOperation
 
 #pragma mark - Class methods
