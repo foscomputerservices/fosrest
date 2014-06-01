@@ -126,25 +126,27 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
                                                                  forEntity:cmo.entity];
             FOSWebServiceRequest *webServiceRequest = nil;
 
-            if (urlBinding == nil) {
-                NSString *msgFmt = @"Missing URL_BINDING for lifecycle %@ lifecycle style '%@' for Entity '%@'";
-                NSString *msg = [NSString stringWithFormat:msgFmt,
-                                 [FOSURLBinding stringForLifecycle:blockSelf.lifecyclePhase],
-                                 blockSelf.lifecycleStyle,
-                                 cmo.entity.name];
-
-                localError = [NSError errorWithMessage:msg];
-            }
-
             if (localError == nil) {
                 // Create a request to send our changes
                 if ((blockSelf.lifecyclePhase == FOSLifecyclePhaseCreateServerRecord) ||
                     cmo.hasModifiedProperties) {
-                    NSURLRequest *urlRequest = [urlBinding urlRequestForCMO:cmo error:&localError];
 
-                    if (localError == nil) {
-                        webServiceRequest = [FOSWebServiceRequest requestWithURLRequest:urlRequest
-                                                                          forURLBinding:urlBinding];
+                    if (urlBinding != nil) {
+                        NSURLRequest *urlRequest = [urlBinding urlRequestForCMO:cmo error:&localError];
+
+                        if (localError == nil) {
+                            webServiceRequest = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                              forURLBinding:urlBinding];
+                        }
+                    }
+                    else {
+                        NSString *msgFmt = @"Missing URL_BINDING for lifecycle %@ lifecycle style '%@' for Entity '%@'";
+                        NSString *msg = [NSString stringWithFormat:msgFmt,
+                                         [FOSURLBinding stringForLifecycle:blockSelf.lifecyclePhase],
+                                         blockSelf.lifecycleStyle,
+                                         cmo.entity.name];
+
+                        localError = [NSError errorWithMessage:msg];
                     }
                 }
             }

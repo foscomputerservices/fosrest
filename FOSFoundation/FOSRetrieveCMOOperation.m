@@ -1144,7 +1144,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                 if ([json isKindOfClass:[NSDictionary class]]) {
 
                     // Don't check counts between static table classes and non-static table entities.
-                    if (!entity.jsonIsStaticTableEntity || relDesc.destinationEntity.jsonIsStaticTableEntity) {
+                    if (!entity.isStaticTableEntity || relDesc.destinationEntity.isStaticTableEntity) {
                         NSString *childCountKey = [NSString stringWithFormat:@"%@ChildCount_",
                                                    relDesc.name];
                         id childCountJson = ((NSDictionary *)json)[childCountKey];

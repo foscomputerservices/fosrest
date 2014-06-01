@@ -124,7 +124,7 @@ static NSMutableArray *_checkingStaticTables = nil;
         NSPersistentStoreCoordinator *psc = moc.persistentStoreCoordinator;
         NSManagedObjectModel *model = psc.managedObjectModel;
 
-        NSPredicate *staticEntityPred = [NSPredicate predicateWithFormat:@"jsonIsStaticTableEntity == YES"];
+        NSPredicate *staticEntityPred = [NSPredicate predicateWithFormat:@"isStaticTableEntity == YES"];
         NSArray *staticTableEntities = [model.entities filteredArrayUsingPredicate:staticEntityPred];
 
         [_uncheckedStaticTables addObjectsFromArray:staticTableEntities];

@@ -27,7 +27,7 @@
 
 - (BOOL)isReadOnly {
     BOOL result =
-        (self.entity.jsonIsStaticTableEntity &&
+        (self.entity.isStaticTableEntity &&
          ![FOSRESTConfig sharedInstance].allowStaticTableModifications);
 
     return result;

@@ -70,12 +70,45 @@
     FOSLogDebug(@"BEGIN: Pushing changes to server...");
 
     // Queue this after all of the updates are finished
-    FOSBackgroundOperation *completePushOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-    } callRequestIfCancelled:YES];
+    FOSOperation *completePushOp = [[FOSOperation alloc] init];
 
-    FOSRESTConfig *restConfig = [FOSRESTConfig sharedInstance];
-    if (restConfig.loginManager.isLoggedIn) {
-        FOSUser *user = restConfig.loginManager.loggedInUser;
+    [self _pushNonOwnedEntityChanges:completePushOp];
+    [self _pushLoggedInUserChanges:completePushOp];
+
+    return completePushOp;
+}
+
+- (void)_pushNonOwnedEntityChanges:(FOSOperation *)completePushOp {
+    NSParameterAssert(completePushOp != nil);
+
+    NSArray *allEntities = self.restConfig.storeCoordinator.managedObjectModel.entities;
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"(jsonIgnoreAsStaticTableEntity == YES) || (%@ == YES && isStaticTableEntity == YES)",
+                         self.restConfig.allowStaticTableModifications ? @YES : @NO];
+    NSArray *nonOwnedEntities = [allEntities filteredArrayUsingPredicate:pred];
+
+    for (NSEntityDescription *nonOwnedEntity in nonOwnedEntities) {
+        Class nonOwnedClass = NSClassFromString(nonOwnedEntity.managedObjectClassName);
+        NSPredicate *isDirtyPred = [FOSCacheManager isDirtyServerPredicate];
+        NSArray *dirtyNonOwnedCMOs = [nonOwnedClass fetchWithPredicate:isDirtyPred];
+
+        for (FOSCachedManagedObject *nextDirtyCMO in dirtyNonOwnedCMOs) {
+
+            // Still need to check a few things in the instance as the predicate doesn't
+            // cover any overridden functionality.
+            if (!nextDirtyCMO.isLocalOnly && nextDirtyCMO.isDirty) {
+                FOSOperation *pushOp = [nextDirtyCMO sendServerRecordWithLifecycleStyle:nil];
+
+                [completePushOp addDependency:pushOp];
+            }
+        }
+    }
+}
+
+- (void)_pushLoggedInUserChanges:(FOSOperation *)completePushOp {
+    NSParameterAssert(completePushOp != nil);
+
+    if (self.restConfig.loginManager.isLoggedIn) {
+        FOSUser *user = self.restConfig.loginManager.loggedInUser;
 
         FOSOperation *pushOp = [user sendServerRecordWithLifecycleStyle:nil];
         NSAssert(![pushOp.flattenedDependencies containsObject:self.parentOperation],
@@ -83,8 +116,6 @@
 
         [completePushOp addDependency:pushOp];
     }
-
-    return completePushOp;
 }
 
 @end

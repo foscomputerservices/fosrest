@@ -388,7 +388,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
 - (void)willSave {
     @autoreleasepool {
-        if (!self.entity.jsonIsStaticTableEntity) {
+        if (!self.entity.isStaticTableEntity) {
             NSDate *startLastModifiedAt = [self primitiveValueForKey:@"lastModifiedAt"];
             BOOL saveRecursed = self.willSaveHasRecursed;
             [super willSave];
@@ -436,10 +436,18 @@ static NSMutableDictionary *_processingFaults = nil;
 - (void)didSave {
     [super didSave];
 
+    // NOTE: One reason that we get here is that by default if an identity is of type NSNumber,
+    //       the CoreData UI automatically defaults the value of the id to '0' instead of nil.
+    //       If the user doesn't manually turn that off, then we'll assert here.
+    //
+    //       Thus, we'll also accept '0' as 'nil' for the id, if it's of type NSNumber, which
+    //       makes this assert a bit heavy, but oh well...
     NSAssert((self.jsonIdValue != nil && self.updatedWithServerAt != nil) ||
-             (self.jsonIdValue == nil && self.updatedWithServerAt == nil) ||
+             ((self.jsonIdValue == nil ||
+               ([self.jsonIdValue isKindOfClass:[NSNumber class]] && ((NSNumber *)self.jsonIdValue).integerValue == 0)) &&
+              self.updatedWithServerAt == nil) ||
              !self.isUploadable ||
-             self.entity.jsonIsStaticTableEntity,
+             self.entity.isStaticTableEntity,
              @"jsonIdValue & updatedWithServerAt are out of sync!");
 }
 #endif

@@ -109,11 +109,11 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
 @property (nonatomic, readonly) BOOL jsonCanValueMatch;
 
 /*!
- * @property jsonIsStaticTableEntity
+ * @property jsonIgnoreAsStaticTableEntity
  *
- * Indicates whether to treat the entity as a static table of data from
- * which the adapter will pull the entire table upon startup of the
- * framework.
+ * Specifying 'YES' overrides any automatic matching of the receiver
+ * as a static table entity and thus treats entities of the recvier's
+ * type as normal FOSCachedManagedObject entities.
  *
  * @discussion
  *
@@ -122,7 +122,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * the entity has any owning relationships to or from it.  If no relationships
  * are found, then it is assumed to be a static entity.
  */
-@property (nonatomic, readonly) BOOL jsonIsStaticTableEntity;
+@property (nonatomic, readonly) BOOL jsonIgnoreAsStaticTableEntity;
 
 /*!
  * @property jsonAbstractRelationshipMaps
