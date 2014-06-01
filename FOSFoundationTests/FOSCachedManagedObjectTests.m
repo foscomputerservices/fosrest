@@ -249,7 +249,7 @@ TEARDOWN_LOGIN
 
     Widget *newWidget = [[Widget alloc] init];
     newWidget.name = @"New Name";
-    newWidget.widgetInfo = [WidgetInfo fetchAllEntities].lastObject;
+    newWidget.widgetInfo = [WidgetInfo fetchAll].lastObject;
     newWidget.user = self.loggedInUser;
 
     // TODO : For now we must save the record for things to work in the createOp.  That is,
@@ -891,7 +891,7 @@ TEARDOWN_LOGIN
 
     NSString *widgetName1 = @"Test Conflict";
     newWidget.name = widgetName1;
-    newWidget.widgetInfo = [WidgetInfo fetchAllEntities].lastObject;
+    newWidget.widgetInfo = [WidgetInfo fetchAll].lastObject;
     newWidget.user = self.loggedInUser;
 
     [[FOSRESTConfig sharedInstance].databaseManager saveChanges];

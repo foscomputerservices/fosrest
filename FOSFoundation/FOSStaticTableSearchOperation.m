@@ -55,7 +55,7 @@
                              @"Expected NSNumber, got %@.",
                              NSStringFromClass(blockSelf->_staticTableClass));
 
-                    NSUInteger existingCount = [blockSelf->_staticTableClass countOfEntities];
+                    NSUInteger existingCount = [blockSelf->_staticTableClass count];
 
                     // If the server count and the local count are equal, then no need to proceed.
                     if (serverCount.unsignedIntegerValue == existingCount) {

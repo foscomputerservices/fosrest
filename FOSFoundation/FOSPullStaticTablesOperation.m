@@ -54,7 +54,7 @@ static NSMutableArray *_checkingStaticTables = nil;
                     if (!searchOp.isCancelled && error == nil) {
 
                         Class tableClass = searchOp.staticTableClass;
-                        NSArray *existingInstances = [tableClass fetchAllEntities];
+                        NSArray *existingInstances = [tableClass fetchAll];
 
                         NSMutableSet *idsToRemove =
                             [NSMutableSet setWithArray:[existingInstances valueForKeyPath:@"objectID"]];

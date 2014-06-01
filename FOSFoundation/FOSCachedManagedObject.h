@@ -117,9 +117,9 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 + (NSSet *)fetchWithRelId:(FOSJsonId)jsonRelId forJsonRelation:(NSString *)jsonRelation;
 
 /*!
- * @method fetchAllEntities
+ * @method fetchAll
  */
-+ (NSArray *)fetchAllEntities;
++ (NSArray *)fetchAll;
 
 /*!
  * @method fetchWithPredicate:
@@ -133,27 +133,19 @@ typedef id<NSObject,NSCopying> FOSJsonId;
             withSortDescriptors:(NSArray *)sortDescriptors;
 
 /*!
- * @method countOfEntities
+ * @method count
  *
- * Returns the number of instances of the receiver in the database.
+ * Returns the number of instances of the receiver's type in the database.
  */
-+ (NSUInteger)countOfEntities;
++ (NSUInteger)count;
 
 /*!
- * @method countOfEntitiesWithPredicate
+ * @method countWithPredicate
  *
- * Returns the number of instances of the receiver in the database that
+ * Returns the number of instances of the receiver's type in the database that
  * match the given predicate.
  */
-+ (NSUInteger)countOfEntitiesWithPredicate:(NSPredicate *)pred;
-
-/*!
- * @method updateNotificationName
- *
- * Returns the name that identifies that changes have been
- * made to the database entities of this type.
- */
-+ (NSString *)updateNotificationName;
++ (NSUInteger)countWithPredicate:(NSPredicate *)pred;
 
 /*!
  * @methodgroup FOSLifecyclePhase Methods
@@ -227,20 +219,6 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  */
 @property (nonatomic, strong) FOSJsonId jsonIdValue;
 
-/*!
- * @property updateNotificationName
- *
- * Returns a string that can be used to register for update notifications
- * related to the receiver.
- *
- * @discussion
- *
- * This name is based on the jsonIdValue, and thus will be invalidated
- * if jsonIdValue changes.  It is an error to call this method if
- * jsonIdValue == nil.
- */
-@property (nonatomic, readonly) NSString *updateNotificationName;
-
 #pragma mark - Public methods
 
 - (void)markClean;
@@ -275,22 +253,9 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  */
 - (NSSet *)propertiesModifiedSinceLastUpload;
 
-/*!
- */
-- (NSString *)updateNotificationNameForToManyRelationship:(SEL)toManySelector;
-
 #pragma mark - Override Points
 
 + (id)objectForAttribute:(NSAttributeDescription *)attrDesc forJsonValue:(id)jsonValue;
 + (id)jsonValueForObject:(id)objValue forAttribute:(NSAttributeDescription *)attrDesc;
-
-@end
-
-@interface FOSCachedManagedObject (CoreDataGeneratedAccessors)
-
-- (void)addFaultedRelationshipsObject:(FOSRelationshipFault *)value;
-- (void)removeFaultedRelationshipsObject:(FOSRelationshipFault *)value;
-- (void)addFaultedRelationships:(NSSet *)values;
-- (void)removeFaultedRelationships:(NSSet *)values;
 
 @end

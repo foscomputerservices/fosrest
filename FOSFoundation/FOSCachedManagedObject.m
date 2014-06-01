@@ -243,7 +243,7 @@ static NSMutableDictionary *_processingFaults = nil;
     return result;
 }
 
-+ (NSArray *)fetchAllEntities {
++ (NSArray *)fetchAll {
     return [self fetchWithPredicate:nil withSortDescriptors:nil];
 }
 
@@ -260,26 +260,18 @@ static NSMutableDictionary *_processingFaults = nil;
     return result;
 }
 
-+ (NSUInteger)countOfEntities {
-    NSUInteger result = [self countOfEntitiesWithPredicate:nil];
++ (NSUInteger)count {
+    NSUInteger result = [self countWithPredicate:nil];
 
     return result;
 }
 
-+ (NSUInteger)countOfEntitiesWithPredicate:(NSPredicate *)pred {
++ (NSUInteger)countWithPredicate:(NSPredicate *)pred {
     NSUInteger result = [[FOSRESTConfig sharedInstance].databaseManager countOfEntities:[self entityDescription]
                                                                       matchingPredicate:pred];
 
     return result;
 }
-
-+ (NSString *)updateNotificationName {
-    NSString *result =
-        [@"FOSFoundationUpdateNotification_" stringByAppendingString:[self entityName]];
-
-    return result;
-}
-
 
 #pragma mark - FOSLifecyclePhase Methods
 
@@ -792,23 +784,6 @@ static NSMutableDictionary *_processingFaults = nil;
     [self setPrimitiveIsFaultObject:@NO];
 }
 
-- (NSString *)updateNotificationName {
-
-    // We use the DB id because object that are client-side
-    // created (e.g. created by the user (i.e. new plan, venue, etc.))
-    // might not yet have a server assigned id.
-    NSManagedObjectID *objId = self.objectID;
-
-    NSAssert(!objId.isTemporaryID,
-             @"Cannot get a notification name for an object that has not yet been saved to the database.");
-
-    NSString *result = [NSString stringWithFormat:@"%@_%@",
-                        NSStringFromClass([self class]),
-                        objId.URIRepresentation.absoluteString];
-
-    return result;
-}
-
 #ifdef DEBUG
 - (BOOL)_debugReferencesGraph {
     BOOL result = YES;
@@ -871,16 +846,6 @@ static NSMutableDictionary *_processingFaults = nil;
 - (NSSet *)propertiesModifiedSinceLastUpload {
     NSArray *modProps = [self _modifiedProperties];
     NSMutableSet *result = modProps ? [NSMutableSet setWithArray:modProps] : nil;
-
-    return result;
-}
-
-- (NSString *)updateNotificationNameForToManyRelationship:(SEL)toManySelector {
-    NSParameterAssert([self respondsToSelector:toManySelector]);
-
-    NSString *result = [NSString stringWithFormat:@"%@_%@",
-                        self.updateNotificationName,
-                        NSStringFromSelector(toManySelector)];
 
     return result;
 }

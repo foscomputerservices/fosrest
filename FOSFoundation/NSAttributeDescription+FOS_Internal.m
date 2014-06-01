@@ -36,7 +36,6 @@
         [propertyName isEqualToString:@"hasLocalOnlyParent"] ||
         [propertyName isEqualToString:@"isSubTreeDirty"] ||
         [propertyName isEqualToString:@"jsonIdValue"] ||
-        [propertyName isEqualToString:@"updateNotificationName"] ||
         [propertyName isEqualToString:@"skipServerDelete"] ||
         [propertyName isEqualToString:@"skipServerDeleteTree"]
     ) {

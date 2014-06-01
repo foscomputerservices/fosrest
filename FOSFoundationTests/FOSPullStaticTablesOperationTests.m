@@ -38,7 +38,7 @@ SETUP_TEARDOWN_NOLOGIN
     [[FOSRESTConfig sharedInstance].databaseManager saveChanges];
 
     [[FOSRESTConfig sharedInstance].cacheManager flushCaches:^(BOOL cancelled, NSError *error) {
-        XCTAssertTrue([Role fetchAllEntities].count == 0, @"Roles still remain???");
+        XCTAssertTrue([Role fetchAll].count == 0, @"Roles still remain???");
 
         FOSPullStaticTablesOperation *pullStaticTables =
         [[FOSPullStaticTablesOperation alloc] initResettingProcessedTables:YES];
@@ -47,7 +47,7 @@ SETUP_TEARDOWN_NOLOGIN
             XCTAssertFalse(cancelled, @"Cancelled???");
             XCTAssertNil(error, @"Error ???");
 
-            XCTAssertTrue([Role fetchAllEntities].count >= 2, @"Expected at least two Roles");
+            XCTAssertTrue([Role fetchAll].count >= 2, @"Expected at least two Roles");
 
             NSArray *expectedRoles = @[@"Technician", @"CEO"];
             NSPredicate *pred = [NSPredicate predicateWithFormat:@"role in %@", expectedRoles];
@@ -139,7 +139,7 @@ SETUP_TEARDOWN_NOLOGIN
     [self _clearRoleTable];
 
     [[FOSRESTConfig sharedInstance].cacheManager flushCaches:^(BOOL cancelled, NSError *error) {
-        XCTAssertTrue([Role fetchAllEntities].count == 0, @"Roles still remain???");
+        XCTAssertTrue([Role fetchAll].count == 0, @"Roles still remain???");
 
         FOSPullStaticTablesOperation *pullStaticTables =
             [[FOSPullStaticTablesOperation alloc] initResettingProcessedTables:YES];
@@ -148,13 +148,13 @@ SETUP_TEARDOWN_NOLOGIN
             XCTAssertFalse(cancelled, @"Cancelled???");
             XCTAssertNil(error, @"Error ???");
 
-            NSUInteger pulledRoleCount = [Role countOfEntities];
+            NSUInteger pulledRoleCount = [Role count];
             XCTAssertTrue(pulledRoleCount >= 2, @"Expected at least two Roles");
 
             NSArray *expectedRoles = @[@"Technician", @"CEO"];
             NSPredicate *pred = [NSPredicate predicateWithFormat:@"role in %@", expectedRoles];
 
-            XCTAssertTrue([Role countOfEntitiesWithPredicate:pred] == 2,
+            XCTAssertTrue([Role countWithPredicate:pred] == 2,
                           @"Expected the following roles: %@",
                           expectedRoles);
 
@@ -169,9 +169,9 @@ SETUP_TEARDOWN_NOLOGIN
                 XCTAssertFalse(cancelled, @"Cancelled???");
                 XCTAssertNil(error, @"Error ???");
 
-                XCTAssertEqual(pulledRoleCount, [Role countOfEntities], @"Count changed???");
+                XCTAssertEqual(pulledRoleCount, [Role count], @"Count changed???");
 
-                XCTAssertTrue([Role countOfEntitiesWithPredicate:pred] == 2,
+                XCTAssertTrue([Role countWithPredicate:pred] == 2,
                               @"Expected the following roles: %@",
                               expectedRoles);
 
@@ -196,7 +196,7 @@ SETUP_TEARDOWN_NOLOGIN
 
 - (void)_clearRoleTable {
     // Force clear out the Role Table
-    id<NSFastEnumeration> roles = [Role fetchAllEntities];
+    id<NSFastEnumeration> roles = [Role fetchAll];
     for (Role *nextRole in roles) {
 
         // Don't delete these from the server, just locally

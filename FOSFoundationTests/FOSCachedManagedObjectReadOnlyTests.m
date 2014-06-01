@@ -30,7 +30,7 @@ SETUP_TEARDOWN_LOGIN(FOSRESTConfigOptionsNone)
 
     NSString *widgetName1 = @"Test Non-Upload Deps";
     newWidget.name = widgetName1;
-    newWidget.widgetInfo = [WidgetInfo fetchAllEntities].lastObject;
+    newWidget.widgetInfo = [WidgetInfo fetchAll].lastObject;
     newWidget.user = self.loggedInUser;
 
     [[[FOSRESTConfig sharedInstance] databaseManager] saveChanges];
