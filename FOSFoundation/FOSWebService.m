@@ -46,24 +46,33 @@ const NSTimeInterval kQueueingDelay = 0.26f;
 
 - (void)queueRequest:(FOSWebServiceRequest *)request {
     @synchronized(_queuedRequests) {
+        BOOL batchedRequestsSupported =
+            [_restConfig.restServiceAdapter respondsToSelector:@selector(maxBatchCount)];
+
         [_queuedRequests addObject:request];
 
-        [_timerQueue cancelAllOperations];
+        if (batchedRequestsSupported) {
+            __block FOSWebService *blockSelf = self;
 
-        __block FOSWebService *blockSelf = self;
+            [_timerQueue cancelAllOperations];
 
-        FOSSleepOperation *nextSleepOp = [FOSSleepOperation sleepOperationWithSleepInterval:kQueueingDelay];
+            FOSSleepOperation *nextSleepOp =
+                [FOSSleepOperation sleepOperationWithSleepInterval:kQueueingDelay];
 
-        FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
-            if (!cancelled && error == nil) {
-                [blockSelf _processRequestQueue];
-            }
-        }];
+            FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+                if (!cancelled && error == nil) {
+                    [blockSelf _processRequestQueue];
+                }
+            }];
 
-        [bgOp addDependency:nextSleepOp];
+            [bgOp addDependency:nextSleepOp];
 
-        [_timerQueue addOperation:nextSleepOp];
-        [_timerQueue addOperation:bgOp];
+            [_timerQueue addOperation:nextSleepOp];
+            [_timerQueue addOperation:bgOp];
+        }
+        else {
+            [self _processRequestQueue];
+        }
     }
 }
 
