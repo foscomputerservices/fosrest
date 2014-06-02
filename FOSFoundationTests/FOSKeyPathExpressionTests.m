@@ -68,8 +68,8 @@ SETUP_TEARDOWN_NOLOGIN
 }
 
 - (void)testNilErrorValue_OnFailure {
-    NSString *identifer = @"--Unknown Var--";
-    id<FOSExpression> lhs = [FOSVariableExpression variableExpressionWithIdentifier:identifer];
+    NSString *identifier = @"--Unknown Var--";
+    id<FOSExpression> lhs = [FOSVariableExpression variableExpressionWithIdentifier:identifier];
     id<FOSExpression> rhs = [FOSConstantExpression constantExpressionWithValue:@"jsonIdValue"];
 
     FOSKeyPathExpression *expr = [FOSKeyPathExpression keyPathExpressionWithLHS:lhs andRHS:rhs];

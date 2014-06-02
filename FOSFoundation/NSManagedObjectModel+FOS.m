@@ -33,7 +33,7 @@
         NSEntityDescription *newParentEntity = [oldParentEntity copy];
 
         // Merge the sub-entity lists of both 'old entity' and all placeholder entities
-        NSMutableArray *allSubentities =
+        NSMutableArray *allSubEntities =
             [NSMutableArray arrayWithArray:oldParentEntity.subentities];
         NSMutableArray *newSubEntities =
             [NSMutableArray arrayWithCapacity:oldParentEntity.subentities.count];
@@ -42,12 +42,12 @@
         if (phEntities != nil) {
             for (NSEntityDescription *phEntity in phEntities) {
                 NSArray *phSubEntities = phEntity.subentities;
-                [allSubentities addObjectsFromArray:phSubEntities];
+                [allSubEntities addObjectsFromArray:phSubEntities];
             }
         }
 
-        // Repair superentity<->subentitiy relationships, if necessary
-        for (NSEntityDescription *oldSubEntity in allSubentities) {
+        // Repair superEntity<->subEntitiy relationships, if necessary
+        for (NSEntityDescription *oldSubEntity in allSubEntities) {
             [newSubEntities addObject:newEntities[oldSubEntity.name]];
         }
 
@@ -133,7 +133,7 @@ static NSString *_placeholder;
 }
 
 - (BOOL)isPlaceholder {
-    BOOL isPlaceHolder = [[self.userInfo objectForKey:_placeholder] boolValue];
+    BOOL isPlaceHolder = [self.userInfo[_placeholder] boolValue];
 
     return isPlaceHolder;
 }

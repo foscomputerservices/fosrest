@@ -111,7 +111,7 @@
 }
 
 - (id<FOSTwoWayPropertyBinding>)twoWayBindingForProperty:(NSPropertyDescription *)propDesc
-                                       forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase {
+                                     forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase {
     NSParameterAssert(propDesc != nil);
 
     FOSAttributeBinding *result = nil;

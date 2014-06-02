@@ -12,7 +12,7 @@
 
 #pragma mark - Class Methods
 
-+ (instancetype)adapterWithApplicationId:(NSString *)applicationid
++ (instancetype)adapterWithApplicationId:(NSString *)applicationId
                            andRESTAPIKey:(NSString *)restAPIKey;
 
 #pragma mark - Initialization

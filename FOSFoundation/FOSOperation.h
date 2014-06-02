@@ -44,7 +44,7 @@
 /*!
  * @property managedObjectContext
  *
- * Each closed set of FOSOperations that are interdepenent has a single
+ * Each closed set of FOSOperations that are interdependent has a single
  * NSManagedObjectContext that is managed by the associated FOSBeginOperation.
  *
  * @remarks

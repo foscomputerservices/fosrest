@@ -7,7 +7,6 @@
 //
 
 #import "FOSCacheManager.h"
-#import "FOSCacheManager_Internal.h"
 #import "FOSRESTConfig.h"
 #import "FOSDatabaseManager.h"
 #import "FOSWebService_Internal.h"
@@ -128,7 +127,7 @@
     [self _queueOperation:baseOperation withCompletionOperation:finalOp withGroupName:groupName];
 }
 
-- (void)requeueOperation:(FOSOperation *)operation {
+- (void)reQueueOperation:(FOSOperation *)operation {
     [self _queueOperation:operation withCompletionOperation:nil withGroupName:nil];
 }
 
@@ -378,7 +377,8 @@ withCompletionOperation:(FOSOperation *)finalOp
         }
 
         // Process deletions
-        NSSet *deletedSet = [notification.userInfo objectForKey:NSDeletedObjectsKey];
+        NSSet *deletedSet;
+        deletedSet = [notification.userInfo objectForKey:NSDeletedObjectsKey];
         NSArray *deletedObjects = [deletedSet allObjects];
 
         // For Deleted objects, we need to remove them from the server as well.
@@ -396,7 +396,7 @@ withCompletionOperation:(FOSOperation *)finalOp
                     // We do *not* want to create objects in the main thread moc as the user
                     // has full control to save/rollback/modify/etc the main thread moc.  So,
                     // we store up the requests in an array and create a background operation
-                    // that will create them in a seperate moc.
+                    // that will create them in a separate moc.
                     [queuedDeletedObjects addObject:nextDelete];
                 }
             }
@@ -526,9 +526,9 @@ withCompletionOperation:(FOSOperation *)finalOp
             FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
                                                                           forURLBinding:urlBinding];
 
-            FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecorveryOption(BOOL cancelled, NSError *error) {
+            FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
 
-                FOSRecorveryOption result = FOSRecorveryOption_NoRecovery;
+                FOSRecoveryOption result = FOSRecoveryOption_NoRecovery;
                 BOOL completeDeletion = YES;
 
                 if (cancelled) {
@@ -541,7 +541,7 @@ withCompletionOperation:(FOSOperation *)finalOp
 
                     if (error.code == 101) {
                         completeDeletion = YES;
-                        result = FOSRecorveryOption_Recovered;
+                        result = FOSRecoveryOption_Recovered;
                     }
                     else {
                         FOSLogError(@"ERROR: While deleting server record: %@", error.description);

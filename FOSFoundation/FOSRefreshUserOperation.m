@@ -7,7 +7,7 @@
 //
 
 #import "FOSRefreshUserOperation.h"
-#import "FOSCacheManager_Internal.h"
+#import "FOSCacheManager.h"
 
 @implementation FOSRefreshUserOperation {
     NSError *_error;

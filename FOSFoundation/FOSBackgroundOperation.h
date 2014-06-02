@@ -34,7 +34,7 @@
 @property (nonatomic, readonly) BOOL callRequestIfCancelled;
 @property (nonatomic, readonly) BOOL callRequestOnMainThread;
 @property (nonatomic, strong) id result;
-@property (nonatomic, assign) FOSRecorveryOption recoveryOption;
+@property (nonatomic, assign) FOSRecoveryOption recoveryOption;
 
 #pragma mark - Initialization Methods
 

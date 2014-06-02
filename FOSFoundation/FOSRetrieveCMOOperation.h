@@ -32,22 +32,17 @@
                               withId:(FOSJsonId)jsonId;
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
-                              withId:(FOSJsonId)jsonId
-                        withBindings:(NSMutableDictionary *)bindings;
-
-+ (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
-                            withJson:(NSDictionary *)json;
-
-+ (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                             withJson:(NSDictionary *)json
                         withBindings:(NSMutableDictionary *)bindings;
 
 + (NSMutableDictionary *)primeBindingsForEntity:(NSEntityDescription *)entity
                                     withJsonIDs:(NSArray *)jsonIds;
+
 + (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
                               withJsonId:(FOSJsonId)jsonId
                             fromBindings:(NSDictionary *)bindings
                respectingPreviousLookups:(BOOL)respectPrevious;
+
 - (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
                                 withJson:(id<NSObject>)json
                             fromBindings:(NSDictionary *)bindings

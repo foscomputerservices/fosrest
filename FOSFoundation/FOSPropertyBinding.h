@@ -39,7 +39,7 @@
                      error:(NSError **)error;
 
 /*!
- @method shouldUpdatevalueForCMO:toNewValue:forKeyPath:andProperty:
+ @method shouldUpdateValueForCMO:toNewValue:forKeyPath:andProperty:
  */
 + (BOOL)shouldUpdateValueForCMO:(FOSCachedManagedObject *)cmo
                      toNewValue:(id)newValue

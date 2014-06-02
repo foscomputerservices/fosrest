@@ -30,10 +30,10 @@
     __block NSError *searchError = nil;
 
     // The top-level operation that will handle the pulled results
-    __block FOSBackgroundOperation *finalOp =  [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecorveryOption(BOOL cancelled, NSError *error) {
-        FOSRecorveryOption result = blockSelf->_saveIndividualResults
-            ? FOSRecorveryOption_Recovered
-            : FOSRecorveryOption_NoRecovery;
+    __block FOSBackgroundOperation *finalOp =  [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
+        FOSRecoveryOption result = blockSelf->_saveIndividualResults
+            ? FOSRecoveryOption_Recovered
+            : FOSRecoveryOption_NoRecovery;
 
         blockSelf.results = newEntities;
         blockSelf->_error = searchError;
@@ -134,7 +134,7 @@
                     [self addDependency:nextTopLevelOp];
                 }
 
-                [blockSelf.restConfig.cacheManager requeueOperation:self];
+                [blockSelf.restConfig.cacheManager reQueueOperation:self];
             }
         }
     }];
@@ -168,10 +168,10 @@
 
         // This operation will 'cover' any errors found if they were to be ignored, which
         // allows the final operation to save the changes to the database.
-        FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecorveryOption(BOOL cancelled, NSError *error) {
-            FOSRecorveryOption result = blockSelf->_saveIndividualResults
-                ? FOSRecorveryOption_Recovered
-                : FOSRecorveryOption_NoRecovery;
+        FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
+            FOSRecoveryOption result = blockSelf->_saveIndividualResults
+                ? FOSRecoveryOption_Recovered
+                : FOSRecoveryOption_NoRecovery;
 
             return result;
         }];

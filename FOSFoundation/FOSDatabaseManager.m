@@ -81,8 +81,7 @@
                                          error:&error];
     
     if (result == nil && error != nil) {
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:error
-                                                             forKey:@"error"];
+        NSDictionary *userInfo = @{ @"error" : error };
         NSString *msg = [NSString stringWithFormat:@"Error fetching %@: %@",
                          entityName, error.description];
         

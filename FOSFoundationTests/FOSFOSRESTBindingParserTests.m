@@ -165,7 +165,7 @@
     XCTAssertNil(error, @"Bad error");
 }
 
-- (void)testiDPropertyBinding {
+- (void)testIdPropertyBinding {
 
     FOSAdapterBindingParser *parser = [[FOSAdapterBindingParser alloc] init];
 

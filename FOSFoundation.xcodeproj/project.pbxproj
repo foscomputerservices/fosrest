@@ -342,7 +342,6 @@
 		63A313EF16E5B59000DDE117 /* FOSParseUser+FOS_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 6390777A1694FA63006DC589 /* FOSParseUser+FOS_Internal.h */; };
 		63A313F016E5B59000DDE117 /* FOSRefreshUserOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 639077441693EC44006DC589 /* FOSRefreshUserOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63A313F416E5B59000DDE117 /* FOSCacheManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C343AD1686BBDB003D10B5 /* FOSCacheManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		63A313F516E5B5B200DDE117 /* FOSCacheManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C343AC1686BBDB003D10B5 /* FOSCacheManager_Internal.h */; };
 		63A313F616E5B5B200DDE117 /* FOSDatabaseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 633467DE1686C12000ACD4EA /* FOSDatabaseManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63A313F716E5B5B200DDE117 /* FOSFlushCachesOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6300F38316961A88003D9E26 /* FOSFlushCachesOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63A313F816E5B5B200DDE117 /* FOSMergePolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 633467E21686C18700ACD4EA /* FOSMergePolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -397,7 +396,6 @@
 		63C343C81686BBDB003D10B5 /* FOSBackgroundOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C343A51686BBDB003D10B5 /* FOSBackgroundOperation.m */; };
 		63C343C91686BBDB003D10B5 /* FOSBeginOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C343A61686BBDB003D10B5 /* FOSBeginOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63C343CA1686BBDB003D10B5 /* FOSBeginOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C343A71686BBDB003D10B5 /* FOSBeginOperation.m */; };
-		63C343CF1686BBDB003D10B5 /* FOSCacheManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C343AC1686BBDB003D10B5 /* FOSCacheManager_Internal.h */; };
 		63C343D01686BBDB003D10B5 /* FOSCacheManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C343AD1686BBDB003D10B5 /* FOSCacheManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63C343D11686BBDB003D10B5 /* FOSCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C343AE1686BBDB003D10B5 /* FOSCacheManager.m */; };
 		63C343D21686BBDB003D10B5 /* FOSLoginManager_Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C343AF1686BBDB003D10B5 /* FOSLoginManager_Internal.h */; };
@@ -762,7 +760,6 @@
 		63C343A51686BBDB003D10B5 /* FOSBackgroundOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSBackgroundOperation.m; sourceTree = "<group>"; };
 		63C343A61686BBDB003D10B5 /* FOSBeginOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSBeginOperation.h; sourceTree = "<group>"; };
 		63C343A71686BBDB003D10B5 /* FOSBeginOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSBeginOperation.m; sourceTree = "<group>"; };
-		63C343AC1686BBDB003D10B5 /* FOSCacheManager_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSCacheManager_Internal.h; sourceTree = "<group>"; };
 		63C343AD1686BBDB003D10B5 /* FOSCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSCacheManager.h; sourceTree = "<group>"; };
 		63C343AE1686BBDB003D10B5 /* FOSCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FOSCacheManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		63C343AF1686BBDB003D10B5 /* FOSLoginManager_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSLoginManager_Internal.h; sourceTree = "<group>"; };
@@ -1048,7 +1045,6 @@
 			children = (
 				63C343AD1686BBDB003D10B5 /* FOSCacheManager.h */,
 				63C343AE1686BBDB003D10B5 /* FOSCacheManager.m */,
-				63C343AC1686BBDB003D10B5 /* FOSCacheManager_Internal.h */,
 				633467DE1686C12000ACD4EA /* FOSDatabaseManager.h */,
 				633467DF1686C12000ACD4EA /* FOSDatabaseManager.m */,
 				6300F38316961A88003D9E26 /* FOSFlushCachesOperation.h */,
@@ -1604,7 +1600,6 @@
 				63A3141116E5B5CE00DDE117 /* FOSWebService_Internal.h in Headers */,
 				63A3141316E5B5CE00DDE117 /* FOSWebServiceRequest+FOS_Internal.h in Headers */,
 				63A3141516E5B5CE00DDE117 /* FOSFoundation-Prefix.pch in Headers */,
-				63A313F516E5B5B200DDE117 /* FOSCacheManager_Internal.h in Headers */,
 				6335897518DA315D008EEFE2 /* FOSItemMatcher.h in Headers */,
 				63A313FC16E5B5B200DDE117 /* FOSCachedManagedObject+FOS_Internal.h in Headers */,
 				63F11E4318D88B7B0070D19A /* FOSExpression.h in Headers */,
@@ -1670,7 +1665,6 @@
 				63C343C91686BBDB003D10B5 /* FOSBeginOperation.h in Headers */,
 				6370755D18F4B21700D28B3F /* FOSPushAllCacheChangesOperation.h in Headers */,
 				63986F3518DD330800D89CFD /* Bison.h in Headers */,
-				63C343CF1686BBDB003D10B5 /* FOSCacheManager_Internal.h in Headers */,
 				63432DC117FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.h in Headers */,
 				6399F4E319393E5E001D48DD /* FOSFoundation-Prefix.pch in Headers */,
 				630BB99C18F6E710009EF09D /* FOSCreateServerRecordOperation.h in Headers */,

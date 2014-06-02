@@ -11,13 +11,13 @@
 @implementation NSAttributeDescription (FOS)
 
 - (NSString *)jsonLogInProp {
-    NSString *result = [self.userInfo objectForKey:@"jsonLogInProp"];
+    NSString *result = self.userInfo[@"jsonLogInProp"];
 
     return result;
 }
 
 - (NSString *)jsonLogOutProp {
-    NSString *result = [self.userInfo objectForKey:@"jsonLogOutProp"];
+    NSString *result = self.userInfo[@"jsonLogOutProp"];
 
     return result;
 }

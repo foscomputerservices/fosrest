@@ -64,7 +64,7 @@
  * @discussion
  *
  * This is a SEND-ONLY binding to add information to the JSON as additional
- * parameterization of the request.
+ * parametrization of the request.
  */
 @property (nonatomic, strong) NSArray *jsonBindingExpressions;
 

@@ -79,7 +79,7 @@
     result = entityCache[selName];
 
     if (result == nil) {
-        result = [self.userInfo objectForKey:selName];
+        result = self.userInfo[selName];
 
         if (result != nil && result.length == 0) {
             result = nil;

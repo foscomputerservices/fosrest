@@ -8,6 +8,7 @@
 
 #import "FOSPullStaticTablesOperation.h"
 #import "FOSStaticTableSearchOperation.h"
+#import "FOSPullStaticTablesOperation+FOS_Internal.h"
 
 static BOOL _staticTableListInitialized = NO;
 static NSMutableArray *_uncheckedStaticTables = nil;
@@ -48,7 +49,7 @@ static NSMutableArray *_checkingStaticTables = nil;
                 searchOp.staticTableClass = NSClassFromString(nextEntity.managedObjectClassName);
                 [searchOp finalizeDependencies];
 
-                FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecorveryOption(BOOL cancelled, NSError *error) {
+                FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
 
                     // Remove outdated entries that are no longer available on the server
                     if (!searchOp.isCancelled && error == nil) {
@@ -77,7 +78,7 @@ static NSMutableArray *_checkingStaticTables = nil;
                     }
 
                     // Any canceled operation is just one that we can skip
-                    return error == nil ? FOSRecorveryOption_Recovered : FOSRecorveryOption_NoRecovery;
+                    return error == nil ? FOSRecoveryOption_Recovered : FOSRecoveryOption_NoRecovery;
                 }];
                 
                 [finalOp addDependency:searchOp];

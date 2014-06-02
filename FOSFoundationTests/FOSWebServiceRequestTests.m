@@ -120,7 +120,7 @@ SETUP_TEARDOWN_NOLOGIN
 
 #pragma mark - Will Process Handler Tests
 
-- (void)testSuccessfulWillProceessHandler {
+- (void)testSuccessfulWillProcessHandler {
     START_TEST
     NSString *uid = @"_my_madeup_id";
 

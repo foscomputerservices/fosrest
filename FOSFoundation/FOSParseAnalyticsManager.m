@@ -110,7 +110,7 @@ static NSString *FOSParseEventEndPoint = @"1/events";
         NSMutableDictionary *data = [@{ @"at" : parseJsonDate } mutableCopy];
         
         if (eventData.count > 0) {
-            [data setObject:eventData forKey:@"dimensions"];
+            data[@"dimensions"] = eventData;
         }
         NSArray *fragments = @[ data ];
         
@@ -118,7 +118,7 @@ static NSString *FOSParseEventEndPoint = @"1/events";
                                                                             endPoint:endPoint
                                                                         uriFragments:fragments];
         
-        // This is *not* guaranteed trasport.  Items could be lost if the request times out.
+        // This is *not* guaranteed transport.  Items could be lost if the request times out.
         [[FOSRESTConfig sharedInstance].cacheManager queueOperation:request
                                             withCompletionOperation:nil
                                                       withGroupName:@"AnalyticsEvent"];

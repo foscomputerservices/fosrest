@@ -20,15 +20,15 @@ typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
  *
  * @return
  *
- * YES if the application has server credentails stored,
+ * YES if the application has server credentials stored,
  * NO otherwise.
  *
  * @discussion
  *
  * The concept of 'logged in' is that the application has
- * credentails stored that *could* be used to authenticate calls
+ * credentials stored that *could* be used to authenticate calls
  * to the server.  Thus, this check is a trivial check that there
- * are credentails saved.
+ * are credentials saved.
  *
  * Being 'logged in' has nothing to do with 'online status' and
  * whether the server is actually available.
@@ -85,7 +85,7 @@ typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
  * @param user  An FOSUser (or subtype) instance to use for account creation
  *
  * @param createStyle A style to match the 'LIFECYCLE_STYLE' of the login URL_BINDING
- *                   specification.  If none is requred, this parameter may be nil.
+ *                   specification.  If none is required, this parameter may be nil.
  *
  * @param handler  A callback that will be invoked after the success/failure of the call
  *
@@ -107,12 +107,12 @@ typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
  * @method loginUser:loginStyle:handler:
  *
  * Provides a mechanism for authenticating to the server with
- * the given credentails.
+ * the given credentials.
  *
  * @param user  An FOSUser (or subtype) instance to use for authentication
  *
  * @param loginStyle A style to match the 'LIFECYCLE_STYLE' of the login URL_BINDING
- *                   specification.  If none is requred, this parameter may be nil.
+ *                   specification.  If none is required, this parameter may be nil.
  *
  * @param handler  A callback that will be invoked after the success/failure of the call
  *
@@ -134,13 +134,13 @@ typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
 /*!
  * @method refreshLoggedInUser:
  *
- * This method should be called when the application is iniailized
+ * This method should be called when the application is initialized
  * this method should be invoked to refresh account information
  * related to the logged in user.
  *
  * It is not necessary, but okay, to check if the user is logged in
  * before calling this method.  If the user isn't logged in, then
- * suceeded will equal NO and error will equal nil;
+ * succeeded will equal NO and error will equal nil;
  */
 - (void)refreshLoggedInUser:(FOSLoginHandler)handler;
 

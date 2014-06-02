@@ -14,6 +14,7 @@
 #import "NSEntityDescription+FOS.h"
 #import "FOSRetrieveCMOOperation.h"
 #import "FOSRetrieveToManyRelationshipOperation.h"
+#import "FOSRetrieveToOneRelationshipOperation.h"
 
 typedef void (^FOSReferenceResolutionHandler)(NSDictionary *resolutions, NSError *error);
 
@@ -27,7 +28,7 @@ typedef void (^FOSReferenceResolutionHandler)(NSDictionary *resolutions, NSError
 static NSMutableDictionary *_processingFaults = nil;
 
 @implementation FOSCachedManagedObject {
-    // NOTE: _modifiedPropertiesCache *must* be cleared whenver hasModifiedProperties is modified!!!
+    // NOTE: _modifiedPropertiesCache *must* be cleared whenever hasModifiedProperties is modified!!!
     NSArray *_modifiedPropertiesCache;
 }
 
@@ -155,7 +156,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
             result = [self valueForKey:relDesc.name];
 
-            // We're done if we found an id, otherwsie we might have
+            // We're done if we found an id, otherwise we might have
             // multiple potential owners.
             continueEnumeration = (result != nil);
         }
@@ -849,6 +850,84 @@ static NSMutableDictionary *_processingFaults = nil;
     return result;
 }
 
+#pragma mark - Relationship Refresh methods
+
+- (void)refreshRelationshipNamed:(NSString *)relName handler:(FOSBackgroundRequest)handler {
+    [self refreshAllRelationshipsNamed:@[relName] handler:handler];
+}
+
+- (void)refreshAllRelationshipsNamed:(id<NSFastEnumeration>)relNames
+                             handler:(FOSBackgroundRequest)handler {
+    NSParameterAssert(relNames != nil);
+
+    NSManagedObjectID *ownerId = self.objectID;
+    NSDictionary *rels = self.entity.relationshipsByName;
+    NSMutableArray *toOneOps = [NSMutableArray array];
+    NSMutableArray *toManyOps = [NSMutableArray array];
+
+    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+
+        NSError *localError = error;
+
+        // Finish Binding to-One ops
+        for (FOSRetrieveToOneRelationshipOperation *toOneOp in toOneOps) {
+            [toOneOp bindToOwner:ownerId];
+            if (localError == nil) {
+                localError = toOneOp.error;
+            }
+        }
+
+        // Finish Binding to-Many ops
+        for (FOSRetrieveToManyRelationshipOperation *toManyOp in toManyOps) {
+            [toManyOp bindToOwner:ownerId];
+            [toManyOp finishOrdering];
+            [toManyOp finishValidation];
+
+            if (localError == nil) {
+                localError = toManyOp.error;
+            }
+
+            [toManyOp finishCleanup:localError != nil];
+        }
+
+        handler(cancelled, localError);
+    } callRequestIfCancelled:YES];
+
+    for (NSString *relName in relNames) {
+        NSRelationshipDescription *relDesc = rels[relName];
+
+        FOSOperation *refreshRelOp = nil;
+
+        NSMutableDictionary *bindings =
+            [FOSRetrieveCMOOperation primeBindingsForEntity:self.entity
+                                                withJsonIDs:@[self.jsonIdValue]];
+
+        if (!relDesc.isToMany) {
+            refreshRelOp =
+                [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
+                                                                 jsonFragment:self.originalJson
+                                                                 withBindings:bindings];
+
+            [toOneOps addObject:refreshRelOp];
+        }
+        else {
+            refreshRelOp =
+                [FOSRetrieveToManyRelationshipOperation fetchToManyRelationship:relDesc
+                                                                      ownerJson:self.originalJson
+                                                                    ownerJsonId:self.jsonIdValue
+                                                                   withBindings:bindings];
+
+            [toManyOps addObject:refreshRelOp];
+        }
+
+        [finalOp addDependency:refreshRelOp];
+    }
+}
+
+- (void)refreshAllRelationships:(FOSBackgroundRequest)handler {
+    [self refreshAllRelationshipsNamed:self.entity.ownerRelationships handler:handler];
+}
+
 #pragma mark - Override Points
 
 + (id)objectForAttribute:(NSAttributeDescription *)attrDesc forJsonValue:(id)jsonValue {
@@ -889,7 +968,7 @@ static NSMutableDictionary *_processingFaults = nil;
     else if (objValue != nil && [result isKindOfClass:[NSDate class]]) {
         NSDate *date = (NSDate *)objValue;
 
-        result = [NSNumber numberWithDouble:date.timeIntervalSince1970];
+        result = @(date.timeIntervalSince1970);
     }
     else if (objValue != nil && [result isKindOfClass:[NSData class]]) {
         NSData *data = (NSData *)objValue;
@@ -1239,7 +1318,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
             // We also need to maintain the local attribute associated
             // with this FK relationships on toMany relationships
-            NSRelationshipDescription *relDesc = [self.entity.propertiesByName objectForKey:nextProp];
+            NSRelationshipDescription *relDesc = self.entity.propertiesByName[nextProp];
             NSAssert(relDesc != nil, @"No relDesc, how'd we get here???");
 
             if (relDesc.isToMany) {
@@ -1250,7 +1329,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
                         if ([idRelationshipKeyPath isEqualToString:attrDesc.name]) {
                             NSString *objProp = attrDesc.name;
-                            id newValue = [changedVals objectForKey:nextProp];
+                            id newValue = changedVals[nextProp];
 
                             [self setValue:newValue forKey:objProp];
                         }

@@ -80,7 +80,7 @@
                 break;
             }
             else {
-                NSString *exprStr = (NSString *)exprResult;
+                NSString *exprStr = exprResult;
 
                 if (mutableBuffer == nil) {
 

@@ -90,8 +90,7 @@
                                                                          context:context]) {
 
         // Must not be a CMO Property
-        if ([attrDesc isKindOfClass:[NSAttributeDescription class]] &&
-            !((NSAttributeDescription *)attrDesc).isCMOProperty) {
+        if ([attrDesc isKindOfClass:[NSAttributeDescription class]] && !attrDesc.isCMOProperty) {
             [result addObject:attrDesc];
         }
     }
@@ -135,7 +134,7 @@
                                                     ofType:(NSAttributeDescription *)propDesc
                                                      error:&localError];
 
-                // Udpate the JSON dictionary (handling nested dictionaries)
+                // Update the JSON dictionary (handling nested dictionaries)
                 if (localError == nil) {
                     // Don't set nil values on create
                     if (!(lifecyclePhase == FOSLifecyclePhaseCreateServerRecord &&
@@ -262,11 +261,9 @@
             NSArray *entityDescriptions = [attributeDescriptions valueForKey:@"entity"];
 
             if (![entityDescriptions containsObject:cmo.entity]) {
-                if (error) {
-                    NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
+                NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
 
-                    *error = [NSError errorWithMessage:msg forAtom:self];
-                }
+                *error = [NSError errorWithMessage:msg forAtom:self];
 
                 result = NO;
             }

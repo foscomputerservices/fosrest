@@ -12,7 +12,7 @@
  * @typedef FOSItemMatch
  *
  * @constant FOSItemMatchAll  Ignores any items specified by the @link FOSItemMatcher/items %/link
- *                              property matching all entites in the data model.
+ *                              property matching all entities in the data model.
  *
  * @constant FOSItemMatchAllExcept Matches all entities in the data model except for those that
  *                                   are listed in @link FOSItemMatcher/items %/link.

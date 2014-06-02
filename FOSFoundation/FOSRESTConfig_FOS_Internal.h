@@ -10,6 +10,8 @@
 
 + (void)resetSharedInstance;
 
++ (void)configWithApplicationVersion:(NSString *)appVersion options:(FOSRESTConfigOptions)options userSubType:(Class)userSubType storeCoordinator:(NSPersistentStoreCoordinator *)storeCoordinator restServiceAdapter:(id <FOSRESTServiceAdapter>)restServiceAdapter;
+
 @property (atomic, weak) FOSOperation *pendingPushOperation;
 @property (nonatomic, readonly) Class serviceRequestProcessorType;
 

@@ -367,7 +367,7 @@ TEARDOWN_LOGIN
 - (void)testAtomicCreateFailure {
     START_TEST
 
-    // There's a required releationship to 'user', which will cause a validation save failure
+    // There's a required relationship to 'user', which will cause a validation save failure
     NSDictionary *json = @{
                            @"name" : @"New Name",
                            };

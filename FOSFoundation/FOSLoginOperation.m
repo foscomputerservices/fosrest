@@ -8,7 +8,7 @@
 
 #import "FOSLoginOperation.h"
 #import "FOSRetrieveCMOOperation.h"
-#import "FOSCacheManager_Internal.h"
+#import "FOSCacheManager.h"
 #import "FOSLoginManager_Internal.h"
 #import "FOSRetrieveLoginDataOperation.h"
 

@@ -203,9 +203,9 @@
 - (void)main {
     [super main];
 
-    // Asyncronously queue ourself for processing.
+    // Asynchronously queue ourself for processing.
     // FOSWebService will then call back on either setOriginalJsonResult: or setError:
-    // in FOSWebServiceRequest+FOS_Internal, which will cuse things to progresss
+    // in FOSWebServiceRequest+FOS_Internal, which will cause things to progres
     // from there.
 
     [_serviceRequestProcessor queueRequest:self];
@@ -411,10 +411,10 @@
     // succeed, but for tracking down problems it's worth the slight overhead on
     // each call.
     NSMutableDictionary *errorUserInfo = [NSMutableDictionary dictionaryWithCapacity:15];
-    [errorUserInfo setObject:[NSNumber numberWithInt:requestType] forKey:@"requestType"];
-    [errorUserInfo setObject:baseURL forKey:@"baseURL"];
+    errorUserInfo[@"requestType"] = @(requestType);
+    errorUserInfo[@"baseURL"] = baseURL;
     if (uriFragments != nil) {
-        [errorUserInfo setObject:uriFragments forKey:@"uriFragments"];
+        errorUserInfo[@"uriFragments"] = uriFragments;
     }
 
     // Build up the full URL
@@ -490,12 +490,12 @@
                             baseEndsWithSlash ? @"" : @"/",
                             localEndPointAndQuery];
     }
-    [errorUserInfo setObject:requestURLString forKey:@"requestURLString"];
+    errorUserInfo[@"requestURLString"] = requestURLString;
 
     // Encode the URL
     NSString *encodedRequestURLString = [requestURLString
                                          stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [errorUserInfo setObject:encodedRequestURLString forKey:@"encodedRequestURLString"];
+    errorUserInfo[@"encodedRequestURLString"] = encodedRequestURLString;
 
     NSURL *requestURL = [NSURL URLWithString:encodedRequestURLString];
 
@@ -564,7 +564,7 @@
                         NSAssert([nextKey isKindOfClass:[NSString class]],
                                  @"Bad header key, expected an NSString");
 
-                        NSString *nextValue = [fields objectForKey:nextKey];
+                        NSString *nextValue = fields[nextKey];
                         NSAssert([nextValue isKindOfClass:[NSString class]],
                                  @"Bad header value, expected an NSString");
 

@@ -186,7 +186,7 @@
     if (result == nil) {
         NSDictionary *userInfo = self.userInfo;
         if (userInfo.count > 0) {
-            result = [userInfo objectForKey:selName];
+            result = userInfo[selName];
 
             if (result != nil && result.length == 0) {
                 result = nil;

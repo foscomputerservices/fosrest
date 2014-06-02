@@ -88,12 +88,12 @@ extern NSString *FOSWebServiceServerErrorMessage;
         *matched = YES;
     }
     else if ([varName isEqualToString:@"PARSE_RESTRICT_FIELDS"]) {
-        // Default to all fieds
+        // Default to all fields
         result = @"";
         *matched = YES;
     }
     else if ([varName isEqualToString:@"PARSE_WHERE_CLAUSE"]) {
-        // We default it to blank if they didn't specifiy it in the context
+        // We default it to blank if they didn't specific it in the context
         result = @"";
         *matched = YES;
     }
@@ -261,7 +261,7 @@ extern NSString *FOSWebServiceServerErrorMessage;
                 break;
 
             case FOSLifecyclePhaseDestroyServerRecord:
-                result = [self _processDestoryResponse:httpResponse
+                result = [self _processDestroyResponse:httpResponse
                                               jsonData:jsonData
                                             jsonResult:jsonResult
                                                  error:error];
@@ -371,7 +371,7 @@ extern NSString *FOSWebServiceServerErrorMessage;
             result = [transformer reverseTransformedValue:jsonVal];
         }
     }
-    else if (jsonVal != nil && attrDesc.attributeType == NSDateAttributeType && jsonVal != nil) {
+    else if (jsonVal != nil && attrDesc.attributeType == NSDateAttributeType) {
         NSAssert([jsonVal isKindOfClass:[NSDictionary class]], @"Expected a dictionary!");
 
         NSDictionary *dateDict = (NSDictionary *)jsonVal;
@@ -416,9 +416,9 @@ extern NSString *FOSWebServiceServerErrorMessage;
     return result;
 }
 
-- (BOOL)_processDestoryResponse:(NSHTTPURLResponse *)httpResponse
-                       jsonData:(id<NSObject>)jsonData
-                     jsonResult:(id<NSObject> *)jsonResult
+- (BOOL)_processDestroyResponse:(NSHTTPURLResponse *)httpResponse
+                       jsonData:(id <NSObject>)jsonData
+                     jsonResult:(id <NSObject> *)jsonResult
                           error:(NSError **)error {
     NSParameterAssert(jsonResult != nil);
     NSParameterAssert(error != nil);

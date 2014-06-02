@@ -511,7 +511,7 @@
 
                 // Let's see if we can short-circuit a test for cardinality here
                 BOOL isValid = YES;
-                if (isValid && self.relationship.minCount > 0) {
+                if (self.relationship.minCount > 0) {
                     isValid = fragCount >= blockSelf.relationship.minCount;
                 }
 
@@ -626,7 +626,7 @@
 
     // Requeue self adding further dependencies
     if (self.isQueued) {
-        [self.restConfig.cacheManager requeueOperation:self];
+        [self.restConfig.cacheManager reQueueOperation:self];
     }
 }
 

@@ -24,6 +24,10 @@
 
 #define kShouldPrintReachabilityFlags 1
 
+static void _ReachabilityCallback(SCNetworkReachabilityRef target,
+        SCNetworkReachabilityFlags flags,
+        void *info);
+
 @implementation FOSNetworkStatusMonitor {
     BOOL _localWiFiRef;
     SCNetworkReachabilityRef _reachabilityRef;

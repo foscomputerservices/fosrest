@@ -18,6 +18,7 @@
 #import "FOSRetrieveCMOOperation.h"
 #import "FOSBackgroundOperation.h"
 #import "FOSPullStaticTablesOperation.h"
+#import "FOSLoginManager_Internal.h"
 
 // Note: This key changed, which will for re-login for the sake of
 //       upgrading to NSManagedObjectID vs. NSString, which caused
@@ -253,7 +254,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
         [self _storeTempLoginUser:user];
 
         // Ensure that the static tables have all been pulled before attempting to create
-        // any futher objects
+        // any further objects
         FOSPullStaticTablesOperation *pullStaticTablesOp =
             [[FOSPullStaticTablesOperation alloc] initResettingProcessedTables:YES];
 
@@ -362,7 +363,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
         if (!loggedInUser.isLocalOnly) {
             // Ensure that the static tables have all been pulled before attempting to create
-            // any futher objects
+            // any further objects
             FOSPullStaticTablesOperation *pullStaticTablesOp =
                 [[FOSPullStaticTablesOperation alloc] initResettingProcessedTables:NO];
 

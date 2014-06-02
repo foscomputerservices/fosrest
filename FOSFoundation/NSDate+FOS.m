@@ -45,7 +45,7 @@
 
     // Pull out only the pieces that we need from the given date
     NSDateComponents *dateComps =
-    [calendar components:kCFCalendarUnitDay | kCFCalendarUnitMonth | kCFCalendarUnitYear
+    [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                 fromDate:self];
 
     // We've pull off the hour/minute components, so now we

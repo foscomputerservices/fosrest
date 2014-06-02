@@ -26,7 +26,7 @@
                     andSharedBindings:(NSDictionary *)sharedBindings;
 
 /*!
- * @method parseAdapterBindingDescirption:error:
+ * @method parseAdapterBindingDescription:error:
  *
  * Parses the given binding description string.
  */
@@ -91,7 +91,7 @@
  *
  * Returns the appropriate two-way binding for the given property and lifecyclePhase.
  */
-- (id<FOSTwoWayRecordBinding>)twoWayBindingForProperty:(NSPropertyDescription *)propDesc
-                                     forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase;
+- (id<FOSTwoWayPropertyBinding>)twoWayBindingForProperty:(NSPropertyDescription *)propDesc
+                                       forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase;
 
 @end

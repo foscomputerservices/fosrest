@@ -10,13 +10,14 @@
 
 @implementation FOSManagedObject (FOS_Internal)
 
-+ (NSEntityDescription *)entityDescriptionInManagedObjectContect:(NSManagedObjectContext *)moc {
++ (NSEntityDescription *)entityDescriptionInManagedObjectContext:(NSManagedObjectContext *)moc {
 
     NSEntityDescription *result = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass(self)
                                                                 inManagedObjectContext:moc];
     if (result != nil) {
         result.managedObjectClassName = NSStringFromClass(self);
         result.properties = [self _properties];
+
         result.abstract = YES;
     }
 

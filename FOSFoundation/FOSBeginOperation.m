@@ -76,7 +76,7 @@
 // Overriding these methods inhibits the calculation from passing
 // the FOSBeginOperation.  FOSBeginOperations define a contextual
 // boundary in the FOSOperation dependency graph.  FOSBeginOperations
-// have depenecnies against previous (in time) FOSSaveOperation
+// have dependencies against previous (in time) FOSSaveOperation
 // instances to force linear processing of the FOSOperation graph,
 // but for these calculation purposes, we stop at FOSBeginOperations.
 

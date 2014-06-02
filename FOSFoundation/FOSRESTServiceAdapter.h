@@ -66,7 +66,7 @@
  *
  * @{
  *     @"X-Parse-Application-Id" : @"<your parse app id>",
- *     @"X-Parse-REST-API-Key" : @"<your prase API key>",
+ *     @"X-Parse-REST-API-Key" : @"<your parse API key>",
  *  };
  */
 - (NSDictionary *)headerFields;
@@ -78,7 +78,7 @@
  *
  * @discussion
  *
- * If the recevier implements this property AND returns a value > 0, then
+ * If the receiver implements this property AND returns a value > 0, then
  * the receiver *must* implement requestCanBeBatched:, generateBatchRequestForRequests:
  * and processResultsOfBatchRequest:forRequests:.
  */
@@ -167,7 +167,7 @@
  *
  * This provides the client application to modify the URI
  * before it is used.  Thus, if the standard patterns that
- * the toolkit uses are not suficient, an easily matched
+ * the toolkit uses are not sufficient, an easily matched
  * token can be placed in the pattern and it can be matched
  * and replaced via this method.
  *
@@ -181,7 +181,7 @@
  * account for parse.com, we might want to specify that
  * both the user id and the email are the same upon
  * account creation.  However, the template for
- * account creation only takes two substituion points:
+ * account creation only takes two substitution points:
  *
  *   * Allowed: 1/users?newUser={"username" : "%@", "password" : "%@"}
  *   * Desired: 1/users?newUser={"username" : "%@", "password" : "%@", "email" : "%@"}

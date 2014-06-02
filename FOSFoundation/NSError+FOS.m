@@ -35,7 +35,7 @@
     NSMutableDictionary *finalUserInfo = userInfo == nil
         ? [NSMutableDictionary dictionaryWithCapacity:1]
         : [NSMutableDictionary dictionaryWithDictionary:userInfo];
-    [finalUserInfo setObject:userError forKey:NSLocalizedDescriptionKey];
+    finalUserInfo[NSLocalizedDescriptionKey] = userError;
     
     NSError *error = [NSError errorWithDomain:domain
                                          code:errorCode

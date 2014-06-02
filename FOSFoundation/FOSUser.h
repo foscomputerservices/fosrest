@@ -42,7 +42,7 @@
  *
  * Its value is surfaced to the adapter map via the $USER_NAME variable.
  *
- * @discusson
+ * @discussion
  *
  * This is an abstract property that must be overridden by subclasses to map
  * to the actual property that is used by the server.

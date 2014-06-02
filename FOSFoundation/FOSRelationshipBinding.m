@@ -114,7 +114,7 @@
 
             if (lifecyclePhase == FOSLifecyclePhaseCreateServerRecord) {
                 // Do we have a value for the relation at all? No reason to send nil
-                // values for non-existent relatinoships during create phase.
+                // values for non-existent relationships during create phase.
                 addRelationValue = ([cmo valueForKeyPath:propDesc.name] != nil);
             }
 
@@ -172,7 +172,7 @@
 #ifdef later
         NSDictionary *context = @{ @"CMO" : cmo, @"RELDESC" : propDesc };
 
-        // TODO : Certianly these aren't always going to be the same, we'll
+        // TODO : Certainly these aren't always going to be the same, we'll
         //        need to add a json back binding as the forward won't always work either.
         id<FOSExpression> jsonKeyExpression = self.jsonIdBindingExpression;
         id<FOSExpression> cmoKeyPathExpression = self.jsonIdBindingExpression;
@@ -230,6 +230,8 @@
     NSParameterAssert(error != nil);
     BOOL result = YES;
 
+    *error = nil;
+
     NSDictionary *context = @{ @"CMO" : cmo, @"RELDESC" : propDesc };
 
     if (![self.relationshipMatcher itemIsIncluded:propDesc.name context:context]) {
@@ -249,11 +251,9 @@
 
     if (result) {
         if (![self.entityMatcher itemIsIncluded:cmo.entity.name context:context]) {
-            if (error) {
-                NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
+            NSString *msg = [NSString stringWithFormat:@"The entity %@ does not match any property descriptions for the property binding.", cmo.entity.name];
 
-                *error = [NSError errorWithMessage:msg forAtom:self];
-            }
+            *error = [NSError errorWithMessage:msg forAtom:self];
 
             result = NO;
         }

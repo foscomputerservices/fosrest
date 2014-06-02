@@ -30,7 +30,6 @@ extern void yy_load_buffer_state (void );
 extern void yy_init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
 extern void yyparse();
-extern void yyrestart();
 extern void yyreset_state();
 
 #endif

@@ -15,7 +15,7 @@
  *
  * @field FOSForcePullType_Always Always force the relationship to be resolved (ignores count). The relationship will be resolved immediately and automatically when the owner instance is pulled from the server.
  *
- * @field FOSForcePullType_UseCount Works like FOSForcePullType_Always, but consults the XXXCount_ count property on the owner instance to deteremine if there are any children to resolve.
+ * @field FOSForcePullType_UseCount Works like FOSForcePullType_Always, but consults the XXXCount_ count property on the owner instance to determine if there are any children to resolve.
  *
  * @discussion
  *
@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, FOSForcePullType) {
  * @property jsonOrderProp
  *
  * A string containing one or more comma separated names that identify
- * the keys by which the destination of the relationship should be ordred.
+ * the keys by which the destination of the relationship should be ordered.
  *
  * If more than one property is specified, the consideration of the sort
  * will be from left to right with left-most property being the primary

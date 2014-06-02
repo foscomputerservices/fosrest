@@ -14,16 +14,16 @@
 @class FOSRESTConfig;
 @class FOSBackgroundOperation;
 
-typedef NS_ENUM(NSUInteger, FOSRecorveryOption) {
-    FOSRecorveryOption_NoRecovery = 0,
-    FOSRecorveryOption_Recovered = 1
+typedef NS_ENUM(NSUInteger, FOSRecoveryOption) {
+    FOSRecoveryOption_NoRecovery = 0,
+    FOSRecoveryOption_Recovered = 1
 };
 
 typedef void (^FOSCacheErrorHandler)(NSError *error);
 typedef void (^FOSCacheFetchHandler)(NSManagedObjectID *result, NSError *error);
 typedef void (^FOSCacheSearchHandler)(NSSet *results, NSError *error);
 typedef void (^FOSBackgroundRequest)(BOOL cancelled, NSError *error);
-typedef FOSRecorveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSError *error);
+typedef FOSRecoveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSError *error);
 
 @class FOSUser;
 
@@ -66,7 +66,7 @@ typedef FOSRecorveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NS
  * @param finalOp  An optional operation that will be executed after operation and after
  *                 all changes have been saved to the database.  May be nil.
  *
- * @param groupName  An optional string that will be assocaited with operation (and its
+ * @param groupName  An optional string that will be associated with operation (and its
  *                   dependencies that will be used for logging purposes).
  *
  * @discussion
@@ -79,12 +79,12 @@ typedef FOSRecorveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NS
 - (void)queueOperation:(FOSOperation *)operation withCompletionOperation:(FOSOperation *)finalOp
          withGroupName:(NSString *)groupName;
 
-- (void)requeueOperation:(FOSOperation *)operation;
+- (void)reQueueOperation:(FOSOperation *)operation;
 
 /*!
  * @method cancelOutstandingPullOperations
  *
- * Searches throught the operation queue and cancels any operations that are queued that
+ * Searches throughout the operation queue and cancels any operations that are queued that
  * are marked as isPullOperation.
  */
 - (void)cancelOutstandingPullOperations;

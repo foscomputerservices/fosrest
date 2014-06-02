@@ -37,7 +37,7 @@
     if ((self = [super init]) != nil) {
         _backgroundRequest = request;
         _callRequestIfCancelled = callRequestIfCancelled;
-        _recoveryOption = FOSRecorveryOption_NoRecovery;
+        _recoveryOption = FOSRecoveryOption_NoRecovery;
     }
 
     return self;
@@ -47,7 +47,7 @@
     if ((self = [super init]) != nil) {
         _recoverableBackgroundRequest = request;
         _callRequestIfCancelled = YES;
-        _recoveryOption = FOSRecorveryOption_NoRecovery;
+        _recoveryOption = FOSRecoveryOption_NoRecovery;
     }
 
     return self;
@@ -84,7 +84,7 @@
 - (BOOL)isCancelled {
     BOOL result = NO;
 
-    if (_recoveryOption == FOSRecorveryOption_NoRecovery) {
+    if (_recoveryOption == FOSRecoveryOption_NoRecovery) {
         result = super.isCancelled;
     }
 
@@ -94,7 +94,7 @@
 - (NSError *)error {
     NSError *result = nil;
 
-    if (_recoveryOption == FOSRecorveryOption_NoRecovery) {
+    if (_recoveryOption == FOSRecoveryOption_NoRecovery) {
         result = super.error;
     }
 

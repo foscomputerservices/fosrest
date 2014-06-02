@@ -216,7 +216,7 @@ __strong FOSRESTConfig *__sharedInstance = nil;
         _loginManager = [[FOSLoginManager alloc] initWithCacheConfig:self];
 
         // Set initial network status.  This does seem to block in the simulator
-        // somtimes, but we must have a stable status to begin with.  Otherwise
+        // sometimes, but we must have a stable status to begin with.  Otherwise
         // the login process may fail before the KVO callback is invoked as the KVO
         // callback is scheduled on the run loop and if control doesn't reach the
         // runloop before login, then all will fail.  (This happens during unit testing,

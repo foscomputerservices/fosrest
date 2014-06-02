@@ -12,8 +12,8 @@
 
 - (NSString *)description {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateStyle = kCFDateFormatterMediumStyle;
-    dateFormatter.timeStyle = kCFDateFormatterMediumStyle;
+    dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+    dateFormatter.timeStyle = NSDateFormatterMediumStyle;
 
     NSMutableString *result = [NSMutableString stringWithFormat:@"{ { super = %@ }, startTimeMin = %@, startTimeMax = %@, endTimeMin = %@, endTimeMax = %@ }",
                                [super description],

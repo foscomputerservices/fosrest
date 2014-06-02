@@ -252,13 +252,9 @@ const NSTimeInterval kQueueingDelay = 0.26f;
     }
     else {
         if (localError == nil) {
-            NSString *errorMsg = @"Received a null NSURLResponse.  See userInfo for more information.";
+            NSString *msg = @"Received a nil NSURLResponse and no NSError.";
 
-            if (localError == nil) {
-                errorMsg = @"Received a nil NSURLResponse and no NSError.";
-            }
-
-            localError = [NSError errorWithMessage:errorMsg];
+            localError = [NSError errorWithMessage:msg];
         }
     }
 

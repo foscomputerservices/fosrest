@@ -1,9 +1,9 @@
 //
 //  UIColorRGBValueTransformer.h
-//  VB-MAPP
+//  FOSFoundation
 //
-//  Created by Gabelmann Fredrick on 2/5/12.
-//  Copyright (c) 2012 Reticent Media, Inc. All rights reserved.
+//  Created by David Hunt on 3/17/14.
+//  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
 

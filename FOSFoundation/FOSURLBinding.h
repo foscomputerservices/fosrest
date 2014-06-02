@@ -102,7 +102,7 @@ typedef NS_OPTIONS(NSUInteger, FOSBindingOptions) {
  *           in the body of the message with a body type of 'application/json'.  This is the
  *           default for FOSRequestMethodPOST, FOSRequestMethodGET and FOSRequestMethodDELETE.
  *
- * @constant FOSRequestFormatWebform (Adapter binding: 'WEBFORM') The data will be transmited
+ * @constant FOSRequestFormatWebform (Adapter binding: 'WEBFORM') The data will be transmitted
  *           as parameters. For FOSRequestMethodGET they are embedded in the URL; for all
  *           other request types, they are embedded in the body with a content type
  *           of 'application/x-www-form-urlencoded'.
@@ -163,7 +163,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
 /*!
  * @property lifecyclePhase
  *
- * Describes to which lifecycle the reciever applies.
+ * Describes to which lifecycle the reliever applies.
  *
  * Setting this property is required.
  */
@@ -173,7 +173,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * @property lifecycleStyle
  *
  * Allows for multiple @link FOSURLBinding @/link
- * specificiations for a single @link FOSLifeCyclePhase @/link.
+ * specifications for a single @link FOSLifeCyclePhase @/link.
  *
  * For example, there might be multiple mechanisms for authenticating
  * (FOSLifecyclePhaseLogin) wil the REST service.  Each authentication
@@ -213,7 +213,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  *
  * The format into which the data should be delivered to the REST server.
  *
- * Setting this property is optional.  The default falue is @link FOSRequestFormatJSON @/link.
+ * Setting this property is optional.  The default failure is @link FOSRequestFormatJSON @/link.
  */
 @property (nonatomic, assign) FOSRequestFormat requestFormat;
 
@@ -234,7 +234,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * @property headerFields
  *
  * A set of header key/value pairs that can extend/override what is provided by
- * @link FOSRESTServiceAdaper/requestHeaders @/link.
+ * @link FOSRESTServiceAdapter/requestHeaders @/link.
  *
  * Setting this property is optional.
  *
@@ -268,7 +268,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  *
  * Setting this property is optional.
  *
- * @discuassion
+ * @discussion
  *
  * If this property is set, it overrides any value set by baseURL.  However, if the evaluation
  * of baseURLExpr yields an error, baseURL will be returned.
@@ -281,7 +281,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * An expression that yields a URL fragment that is applied to baseURL.  This URL is the URL
  * that is used to communicate with the REST Service.
  *
- * For eaxample, '1/classes/MyClass' or '1/classes/$ENTITY.name'.
+ * For example, '1/classes/MyClass' or '1/classes/$ENTITY.name'.
  *
  * Setting this property is required.
  */
@@ -402,7 +402,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * @discussion
  *
  * @link dslQuery @/link Is a 'Domain Specific Query', which is simply a string
- * that is added as a parameter to the requet url.  The query is specific to the
+ * that is added as a parameter to the request url.  The query is specific to the
  * REST Service.
  */
 - (NSURLRequest *)urlRequestServerRecordOfType:(NSEntityDescription *)entity
@@ -435,7 +435,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * provided context and the resulting string will be used to wrap json in an
  * NSDictionary under the specified key.
  *
- * If the recevier's jsonWrapperKey is nil, then json is returned unaltered.
+ * If the receiver's jsonWrapperKey is nil, then json is returned unaltered.
  */
 - (id<NSObject>)wrapJSON:(id<NSObject>)json context:(NSDictionary *)context error:(NSError **)error;
 
@@ -446,7 +446,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * provided context and the resulting string will be used against (NSDictionary *)json
  * to return the inner wrapped json.
  *
- * If the recevier's jsonWrapperKey is nil, then json is returned unaltered.
+ * If the receiver's jsonWrapperKey is nil, then json is returned unaltered.
  */
 - (id<NSObject>)unwrapJSON:(id<NSObject>)json context:(NSDictionary *)context error:(NSError **)error;
 
@@ -455,7 +455,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  */
 
 /*!
- * @method stringforLifecycle:
+ * @method stringForLifecycle:
  */
 + (NSString *)stringForLifecycle:(FOSLifecyclePhase)lifecyclePhase;
 

@@ -136,7 +136,7 @@
         // Cast really isn't necessary, but it demonstrates what we're expecting
         result = (NSRelationshipDescription *)contextResult;
     }
-    else if (contextResult != nil && error != nil) {
+    else if (contextResult != nil) {
         NSString *msg = [NSString stringWithFormat:@"Expected instance of type %@, got %@ for identifier %@.", NSStringFromClass(type), NSStringFromClass([contextResult class]), ident];
 
         *error = [NSError errorWithMessage:msg forAtom:self];

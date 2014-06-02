@@ -13,7 +13,7 @@
 #pragma mark - Private Methods
 
 - (NSNumber *)_jsonDateForNSDate:(NSDate *)date {
-    return [NSNumber numberWithLong:(long)date.timeIntervalSince1970];
+    return @((long) date.timeIntervalSince1970);
 }
 
 #pragma mark - Public Methods
@@ -32,7 +32,7 @@
         obj = [self _jsonDateForNSDate:(NSDate *)obj];
     }
     
-    [self setObject:obj forKey:key];
+    self[key] = obj;
 }
 
 @end

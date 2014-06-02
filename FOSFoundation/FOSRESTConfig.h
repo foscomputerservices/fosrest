@@ -164,26 +164,6 @@ typedef enum : NSUInteger {
 #pragma mark - Class Methods
 
 /*!
- * @method configWithApplicationVersion:options:userSubType:defaultTimeout:
- *
- * This must be the first method called.  The arguments to the method are
- * all of the required paramters to ensure proper startup of the REST services.
- *
- * @throws FOSCannotReconfigure
- *
- * @throws FOSBadUserSubType
- *
- * @discussion
- *
- * This method can only be called one time at initialization of the application.
- */
-+ (void)configWithApplicationVersion:(NSString *)appVersion
-                             options:(FOSRESTConfigOptions)options
-                         userSubType:(Class)userSubType
-                    storeCoordinator:(NSPersistentStoreCoordinator *)storeCoordinator
-                  restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter;
-
-/*!
  * @method sharedInstance
  *
  * Returns a singleton shared instance of the receiver's type.

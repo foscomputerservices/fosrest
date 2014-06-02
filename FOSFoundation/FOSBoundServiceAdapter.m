@@ -266,7 +266,7 @@
         else if ([result isKindOfClass:[NSDate class]]) {
             NSDate *date = (NSDate *)jsonValue;
 
-            result = [NSNumber numberWithDouble:date.timeIntervalSince1970];
+            result = @(date.timeIntervalSince1970);
         }
         else if ([result isKindOfClass:[NSData class]]) {
             NSData *data = (NSData *)jsonValue;

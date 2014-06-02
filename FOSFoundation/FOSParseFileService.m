@@ -137,7 +137,7 @@
             matchedObjects = @[];
         }
 
-        // Let's see if they wanted a count intead of the full set
+        // Let's see if they wanted a count instead of the full set
         if ([fields[@"count"] isEqualToString:@"1"]) {
             result = @{
                 @"results" : @[ ],
@@ -407,7 +407,7 @@
         for (NSString *nextComp in comps) {
             NSArray *fieldComps = [nextComp componentsSeparatedByString:@"="];
 
-            [fields setObject:fieldComps[1] forKey:fieldComps[0]];
+            fields[fieldComps[0]] = fieldComps[1];
         }
 
         result = fields;

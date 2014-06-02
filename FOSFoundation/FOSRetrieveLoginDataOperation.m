@@ -32,17 +32,17 @@
     //
     // We need to capture user authentication information after we've authenticated
     // with the server, but before the FOSRetrieveCMOOperation is run as the latter
-    // will potentiall recurse required deps, which may cause futher server requests
+    // will potential recurse required deps, which may cause further server requests
     // that need to be authenticated.  So we drop in an op to slide the fetched,
     // but not saved, user instance into the login manager.
     //
     // It's a bit tricky, but we've kinda got a chicken & egg scenario here.
     //
-    // A specific example is that the adapterbinding might have HEADER_FIELDS
+    // A specific example is that the adapter binding might have HEADER_FIELDS
     // specifications that retrieve properties off of the logged in user.  We
     // cannot save the user yet, as not all required deps have been realized.
     // However, in order to realize those deps, we need the user surfaced to the
-    // adapterbindings so that subsequent server requests can be made.
+    // adapter bindings so that subsequent server requests can be made.
 
     NSError *localError = nil;
 

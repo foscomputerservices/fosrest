@@ -175,7 +175,7 @@
                     NSString *jsonKeyPath = [jsonKeyExpression evaluateWithContext:context
                                                                              error:&localError];
                     if (jsonKeyPath && localError == nil) {
-                        // Udpate the JSON dictionary (handling nested dictionaries)
+                        // Update the JSON dictionary (handling nested dictionaries)
                         [[FOSPropertyBinding class] setValue:value ofJson:json forKeyPath:jsonKeyPath];
                     }
                 }

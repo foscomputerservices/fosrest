@@ -10,6 +10,6 @@
 
 @interface FOSManagedObject (FOS_Internal)
 
-+ (NSEntityDescription *)entityDescriptionInManagedObjectContect:(NSManagedObjectContext *)moc;
++ (NSEntityDescription *)entityDescriptionInManagedObjectContext:(NSManagedObjectContext *)moc;
 
 @end

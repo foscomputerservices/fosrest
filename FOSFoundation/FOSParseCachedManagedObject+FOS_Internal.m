@@ -55,7 +55,7 @@
             result = [transformer reverseTransformedValue:jsonVal];
         }
     }
-    else if (jsonVal != nil && attrDesc.attributeType == NSDateAttributeType && jsonVal != nil) {
+    else if (jsonVal != nil && attrDesc.attributeType == NSDateAttributeType) {
         NSAssert([jsonVal isKindOfClass:[NSDictionary class]], @"Expected a dictionary!");
 
         NSDictionary *dateDict = (NSDictionary *)jsonVal;

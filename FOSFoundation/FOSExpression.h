@@ -18,7 +18,7 @@
 /*!
  * @method evaluateWithContext:
  *
- * Eavalutes the receiver's value with the given context.
+ * Evaluates the receiver's value with the given context.
  */
 - (id)evaluateWithContext:(NSDictionary *)context error:(NSError **)error;
 

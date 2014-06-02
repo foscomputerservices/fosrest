@@ -45,7 +45,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 /*!
  * @property isUploadable
  *
- * Determins if it is allowable to upload the receiver
+ * Determines if it is allowable to upload the receiver
  * to the web service.
  *
  * It combines the receiver's isLocalOnly and isReadOnly
@@ -174,7 +174,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  * This method corresponds to both the
  * FOSLifecyclePhaseCreateServerRecord and the
  * FOSLifecyclePhaseUpdateServerRecord @link FOSLifecyclePhase @/link,
- * depending on the receiver's @link hasBeenUploadedToSErver @/link
+ * depending on the receiver's @link hasBeenUploadedToServer @/link
  * status.
  */
 - (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle;
@@ -255,10 +255,35 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 /*!
  * @method propertiesModifiedSinceLastUpload
  *
- * Returns the set of properties that have chagned since the last time
+ * Returns the set of properties that have changed since the last time
  * that @link markClean @/link was called.
  */
 - (NSSet *)propertiesModifiedSinceLastUpload;
+
+/*! @methodgroup Relationship Refresh */
+#pragma mark - Relationship Refresh methods
+
+/*!
+ * @method refreshRelationshipNamed:handler:
+ *
+ * Refreshes the receiver's named relationship with the REST server.
+ */
+- (void)refreshRelationshipNamed:(NSString *)relName handler:(FOSBackgroundRequest)handler;
+
+/*!
+ * @method refreshRelationshipNamed:handler:
+ *
+ * Refreshes the receiver's named relationships with the REST server.
+ */
+- (void)refreshAllRelationshipsNamed:(id<NSFastEnumeration>)relNames
+                             handler:(FOSBackgroundRequest)handler;
+
+/*!
+ * @method refreshAllRelationships:
+ *
+ * Refreshes the receiver's managed relationships with the REST server.
+ */
+- (void)refreshAllRelationships:(FOSBackgroundRequest)handler;
 
 #pragma mark - Override Points
 

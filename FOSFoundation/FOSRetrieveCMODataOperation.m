@@ -28,7 +28,7 @@
     return [[self alloc] initWithEntity:entity withRequest:request andURLBinding:urlBinding];
 }
 
-#pragma mark - Intialization Methods
+#pragma mark - Initialization Methods
 
 - (id)initWithEntity:(NSEntityDescription *)entity
          withRequest:(NSURLRequest *)request
@@ -84,7 +84,7 @@
 
 #pragma mark - Method Overrides
 
-- (void)setOriginalJsonResult:(NSDictionary *)jsonResult {
+- (void)setOriginalJsonResult:(id<NSObject>)jsonResult {
     [self willChangeValueForKey:@"jsonId"];
 
     [super setOriginalJsonResult:jsonResult];

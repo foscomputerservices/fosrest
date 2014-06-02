@@ -52,37 +52,6 @@
 }
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
-                              withId:(FOSJsonId)jsonId
-                        withBindings:(NSMutableDictionary *)bindings {
-    NSParameterAssert(bindings != nil);
-
-    FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
-                                                   ofRelationship:nil
-                                                           withId:jsonId
-                                                  isTopLevelFetch:YES
-                                                forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                                forLifecycleStyle:nil
-                                                     withBindings:bindings];
-
-    return result;
-}
-
-+ (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
-                            withJson:(NSDictionary *)json {
-
-    NSMutableDictionary *bindings = [NSMutableDictionary dictionaryWithCapacity:100];
-    FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
-                                                   ofRelationship:nil
-                                                         withJson:json
-                                                  isTopLevelFetch:YES
-                                                forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                                forLifecycleStyle:nil
-                                                     withBindings:bindings];
-
-    return result;
-}
-
-+ (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                             withJson:(NSDictionary *)json
                         withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(bindings != nil);
@@ -344,7 +313,7 @@
                                                 forEntity:blockSelf->_entity
                                                     error:&localError]) {
                     blockSelf->_jsonId = fetchDataOp.jsonId;
-                    blockSelf.json = (NSDictionary *)fetchDataOp.jsonResult;
+                    blockSelf.json = fetchDataOp.jsonResult;
 
                     // Also store the 'originalJson' in the bindings if we're the top-level
                     // data pull as it can have related-CMO data as well.
@@ -487,104 +456,102 @@
 - (void)setJsonId:(FOSJsonId)jsonId {
     NSParameterAssert(jsonId != nil);
 
+    NSError *localError = nil;
+
     _jsonId = jsonId;
 
     if (!self.isCancelled && self.error == nil) {
 
         __block FOSRetrieveCMOOperation *blockSelf = self;
 
-        NSError *localError = nil;
-        if (localError == nil) {
+        // Can we find the JSON in _bindings???
+        BOOL foundJson = [self _bindToJSONInBindings];
 
-            // Can we find the JSON in _bindings???
-            BOOL foundJson = [self _bindToJSONInBindings];
+        // No need to pull the jsonData if we already have it
+        if (!foundJson) {
+            NSURLRequest *urlRequest = [_urlBinding urlRequestServerRecordOfType:self.entity
+                                                                      withJsonId:jsonId
+                                                                           error:&localError];
 
-            // No need to pull the jsonData if we already have it
-            if (!foundJson) {
-                NSURLRequest *urlRequest = [_urlBinding urlRequestServerRecordOfType:self.entity
-                                                                          withJsonId:jsonId
-                                                                               error:&localError];
+            // Fetch the data for entity with the given jsonId from the server
+            FOSWebServiceRequest *jsonDataRequest =
+                [FOSWebServiceRequest requestWithURLRequest:urlRequest forURLBinding:_urlBinding];
 
-                // Fetch the data for entity with the given jsonId from the server
-                FOSWebServiceRequest *jsonDataRequest =
-                    [FOSWebServiceRequest requestWithURLRequest:urlRequest forURLBinding:_urlBinding];
+            jsonDataRequest.willProcessHandler = /* (NSManagedObjectID *)(^)() */ ^{
 
-                jsonDataRequest.willProcessHandler = /* (NSManagedObjectID *)(^)() */ ^{
+                NSManagedObjectID *result = nil;
 
-                    NSManagedObjectID *result = nil;
+                // Can we FAST-TRACK to an existing object and skip pulling down this instance?
+                if (blockSelf->_allowFastTrack) {
+                    result = blockSelf->_managedObjectID;
 
-                    // Can we FAST-TRACK to an existing object and skip pulling down this instance?
-                    if (blockSelf->_allowFastTrack) {
-                        result = blockSelf->_managedObjectID;
+                    if (result == nil) {
+                        FOSCachedManagedObject *cmo = [[self class] cmoForEntity:blockSelf->_entity
+                                                                      withJsonId:jsonId
+                                                                    fromBindings:blockSelf->_bindings
+                                                       respectingPreviousLookups:NO];
 
-                        if (result == nil) {
-                            FOSCachedManagedObject *cmo = [[self class] cmoForEntity:blockSelf->_entity
-                                                                          withJsonId:jsonId
-                                                                        fromBindings:blockSelf->_bindings
-                                                           respectingPreviousLookups:NO];
-
-                            result = cmo.objectID;
-                        }
+                        result = cmo.objectID;
                     }
+                }
 
-                    return result;
-                };
+                return result;
+            };
 
-                // Chain in an op that will add new dependencies to ourself after
-                // they're determined from resolving the new FOSCachedManagedObject.  This
-                // effectively creates a recursive structure for resolution.  Of course,
-                // there hadn't better be any loops.
-                FOSBackgroundOperation *queueSubOps = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-                    if (!jsonDataRequest.isCancelled && jsonDataRequest.error == nil) {
+            // Chain in an op that will add new dependencies to ourself after
+            // they're determined from resolving the new FOSCachedManagedObject.  This
+            // effectively creates a recursive structure for resolution.  Of course,
+            // there hadn't better be any loops.
+            FOSBackgroundOperation *queueSubOps = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
+                if (!jsonDataRequest.isCancelled && jsonDataRequest.error == nil) {
 
-                        // We got the object early! Woohoo!
-                        if ([jsonDataRequest.jsonResult isKindOfClass:[NSManagedObjectID class]]) {
-                            blockSelf->_managedObjectID = (NSManagedObjectID *)jsonDataRequest.jsonResult;
+                    // We got the object early! Woohoo!
+                    if ([jsonDataRequest.jsonResult isKindOfClass:[NSManagedObjectID class]]) {
+                        blockSelf->_managedObjectID = (NSManagedObjectID *)jsonDataRequest.jsonResult;
 
-                            FOSCachedManagedObject *cmo = (FOSCachedManagedObject *)[self.managedObjectContext objectWithID:blockSelf->_managedObjectID];
+                        FOSCachedManagedObject *cmo = (FOSCachedManagedObject *)[self.managedObjectContext objectWithID:blockSelf->_managedObjectID];
 
-                            NSAssert([(NSString *)blockSelf->_jsonId isEqualToString:(NSString *)cmo.jsonIdValue],
-                                     @"Ids aren't the same?");
+                        NSAssert([(NSString *)blockSelf->_jsonId isEqualToString:(NSString *)cmo.jsonIdValue],
+                                 @"Ids aren't the same?");
 
-                            blockSelf->_json = cmo.originalJson;
+                        blockSelf->_json = cmo.originalJson;
 
-                            FOSLogDebug(@"FOSFETCHENTITY - BEGIN (FASTRACK): %@ (%@)", blockSelf->_entity.name, blockSelf->_jsonId);
+                        FOSLogDebug(@"FOSFETCHENTITY - BEGIN (FASTRACK): %@ (%@)", blockSelf->_entity.name, blockSelf->_jsonId);
 
-                            [self _updateReady];
-                        }
-                        else if (jsonDataRequest.jsonResult == nil) {
-                            NSString *msg = NSLocalizedString(@"Received no data in response to the query '%@' for entity '%@'.", @"");
-
-                            [NSException raise:@"FOSBadQuery" format:msg,
-                             jsonDataRequest.endPoint, blockSelf->_entity.name];
-                        }
-                        else {
-                            // This will call _updateReady
-                            blockSelf.json = (NSDictionary *)jsonDataRequest.jsonResult;
-                        }
-                    }
-                    else {
                         [self _updateReady];
                     }
-                }];
+                    else if (jsonDataRequest.jsonResult == nil) {
+                        NSString *msg = NSLocalizedString(@"Received no data in response to the query '%@' for entity '%@'.", @"");
 
-                [queueSubOps addDependency:jsonDataRequest];
-                [self addDependency:queueSubOps];
-            }
+                        [NSException raise:@"FOSBadQuery" format:msg,
+                         jsonDataRequest.endPoint, blockSelf->_entity.name];
+                    }
+                    else {
+                        // This will call _updateReady
+                        blockSelf.json = (NSDictionary *)jsonDataRequest.jsonResult;
+                    }
+                }
+                else {
+                    [self _updateReady];
+                }
+            }];
 
-            // If we've already been queued, then we need to queue these new ops
-            if (self.isQueued) {
-                NSAssert(!self.isFinished, @"We're already done executing and have new deps???");
-                NSAssert(!self.isExecuting, @"We're already executing and have new deps???");
-
-                // Requeue ourself so that we can find the begin op
-                [self.restConfig.cacheManager requeueOperation:self];
-            }
+            [queueSubOps addDependency:jsonDataRequest];
+            [self addDependency:queueSubOps];
         }
 
-        if (localError != nil) {
-            _error = localError;
+        // If we've already been queued, then we need to queue these new ops
+        if (self.isQueued) {
+            NSAssert(!self.isFinished, @"We're already done executing and have new deps???");
+            NSAssert(!self.isExecuting, @"We're already executing and have new deps???");
+
+            // Requeue ourself so that we can find the begin op
+            [self.restConfig.cacheManager reQueueOperation:self];
         }
+    }
+
+    if (localError != nil) {
+        _error = localError;
     }
 }
 
@@ -617,8 +584,8 @@
                 NSAssert(!self.isFinished, @"We're already done executing and have new deps???");
                 NSAssert(!self.isExecuting, @"We're already executing and have new deps???");
 
-                // We requeue ourself so that we can find the begin op
-                [self.restConfig.cacheManager requeueOperation:self];
+                // We re-queue ourself so that we can find the begin op
+                [self.restConfig.cacheManager reQueueOperation:self];
             }
 
         //    FOSLogDebug(@"FOSFETCHENTITY - BEGIN (setJson): %@ (%@)", _entity.name, _jsonId);

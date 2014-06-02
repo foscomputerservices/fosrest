@@ -61,8 +61,8 @@
         FOSCachedManagedObject *source = (FOSCachedManagedObject *)conflict.sourceObject;
 
         // Is the conflict in any of FOSManagedObject's properties
-        NSDate *objUWSADate = [conflict.objectSnapshot objectForKey:@"updatedWithServerAt"];
-        NSDate *cacheUWSADate = [conflict.cachedSnapshot objectForKey:@"updatedWithServerAt"];
+        NSDate *objUWSADate = conflict.objectSnapshot[@"updatedWithServerAt"];
+        NSDate *cacheUWSADate = conflict.cachedSnapshot[@"updatedWithServerAt"];
 
         if (objUWSADate != cacheUWSADate) {
             NSComparisonResult comp = [objUWSADate compare:cacheUWSADate];

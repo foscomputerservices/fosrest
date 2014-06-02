@@ -113,7 +113,7 @@
 %type<object> concat_expression concat_expression_list
 %type<object> expression_list expression_set expression
 %type<object> key_value_pair_list key_value_pair_desc_list key_value_pair_desc key_value_pair
-%type<object> string_literal integer_literal identifier string_constant shared_binding_identifer
+%type<object> string_literal integer_literal identifier string_constant shared_binding_identifier
 
 %start begin
 
@@ -324,7 +324,7 @@ shared_bindings_list
     ;
 
 shared_binding
-    : shared_binding_identifer SEP binding {
+    : shared_binding_identifier SEP binding {
         $$ = (__bridge void *)AT_{ (__bridge NSString *)$1 : (__bridge id)($3) };
     }
     ;
@@ -398,7 +398,7 @@ header_fields
 base_url
     : /* empty */ { $$ = nil; }
     | BASE_URL SEP expression SEMI { $$ = $3; }
-    | BASE_URL SEP shared_binding_identifer SEMI {
+    | BASE_URL SEP shared_binding_identifier SEMI {
         $$ = (__bridge void *)[FOSSharedBindingReference referenceWithBindingType:AT_"BASE_URL"
                                                                     andIdentifier:(__bridge NSString *)$3];
         CAPTURE_ATOM_INFO(AT_"BASE_URL", @1, $$);
@@ -444,7 +444,7 @@ cmo_binding
 
         CAPTURE_ATOM_INFO(AT_"CMO_BINDING", @1, $$);
     }
-    | CMO_BINDING SEP shared_binding_identifer SEMI {
+    | CMO_BINDING SEP shared_binding_identifier SEMI {
         $$ = (__bridge void *)[FOSSharedBindingReference referenceWithBindingType:AT_"CMO_BINDING" andIdentifier:(__bridge NSString *)$3];
 
         CAPTURE_ATOM_INFO(AT_"CMO_BINDING", @1, $$);
@@ -761,7 +761,7 @@ identifier
     }
     ;
 
-shared_binding_identifer
+shared_binding_identifier
     : SHARED_BINDING_IDENTIFIER {
         $$ = (__bridge void *)[NSString stringWithCString:$1 encoding:NSASCIIStringEncoding];
     }

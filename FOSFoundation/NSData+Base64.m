@@ -138,7 +138,7 @@ void *NewBase64Decode(
 //
 // NewBase64Encode
 //
-// Encodes the arbitrary data in the inputBuffer as base64 into a newly malloced
+// Encodes the arbitrary data in the inputBuffer as base64 into a newly malloc'd
 // output buffer.
 //
 //  inputBuffer - the source data for the encode

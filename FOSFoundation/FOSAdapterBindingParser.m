@@ -58,7 +58,7 @@ NSError *parser_error = nil;
     NSParameterAssert(error != nil);
     FOSAdapterBinding *result = nil;
 
-    if (error != nil) { *error = nil; }
+    *error = nil;
 
     // Reset global var to bison parser
     parsedAdapterBinding = nil;
@@ -89,11 +89,9 @@ NSError *parser_error = nil;
             yy_delete_buffer(buf);
 
             if (parser_error != nil) {
-                if (error != nil) {
-                    *error = parser_error;
-                }
+                *error = parser_error;
 
-                result = NO;
+                result = nil;
             }
         }
         @catch (NSException* exception) {

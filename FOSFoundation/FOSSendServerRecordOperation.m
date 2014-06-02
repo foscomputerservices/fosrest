@@ -78,7 +78,7 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
             }
 
             // Delay creation of webServiceRequest to BG thread.  We want to do this as there
-            // might be a fair amount of overhead in creating the entire hieararchy and we don't want
+            // might be a fair amount of overhead in creating the entire hierarchy and we don't want
             // to block the main thread.  This will also allow saved values to stabilize into the
             // bg contexts.
             __block FOSSendServerRecordOperation *blockSelf = self;
@@ -95,7 +95,7 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
                     [sendCMOOp addDependency:sendToOneRelsOp];
 
                     [blockSelf addDependency:sendCMOOp];
-                    [blockSelf.restConfig.cacheManager requeueOperation:blockSelf];
+                    [blockSelf.restConfig.cacheManager reQueueOperation:blockSelf];
                 }
             }];
 
@@ -126,28 +126,26 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
                                                                  forEntity:cmo.entity];
             FOSWebServiceRequest *webServiceRequest = nil;
 
-            if (localError == nil) {
-                // Create a request to send our changes
-                if ((blockSelf.lifecyclePhase == FOSLifecyclePhaseCreateServerRecord) ||
-                    cmo.hasModifiedProperties) {
+            // Create a request to send our changes
+            if ((blockSelf.lifecyclePhase == FOSLifecyclePhaseCreateServerRecord) ||
+                cmo.hasModifiedProperties) {
 
-                    if (urlBinding != nil) {
-                        NSURLRequest *urlRequest = [urlBinding urlRequestForCMO:cmo error:&localError];
+                if (urlBinding != nil) {
+                    NSURLRequest *urlRequest = [urlBinding urlRequestForCMO:cmo error:&localError];
 
-                        if (localError == nil) {
-                            webServiceRequest = [FOSWebServiceRequest requestWithURLRequest:urlRequest
-                                                                              forURLBinding:urlBinding];
-                        }
+                    if (localError == nil) {
+                        webServiceRequest = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                          forURLBinding:urlBinding];
                     }
-                    else {
-                        NSString *msgFmt = @"Missing URL_BINDING for lifecycle %@ lifecycle style '%@' for Entity '%@'";
-                        NSString *msg = [NSString stringWithFormat:msgFmt,
-                                         [FOSURLBinding stringForLifecycle:blockSelf.lifecyclePhase],
-                                         blockSelf.lifecycleStyle,
-                                         cmo.entity.name];
+                }
+                else {
+                    NSString *msgFmt = @"Missing URL_BINDING for lifecycle %@ lifecycle style '%@' for Entity '%@'";
+                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                     [FOSURLBinding stringForLifecycle:blockSelf.lifecyclePhase],
+                                     blockSelf.lifecycleStyle,
+                                     cmo.entity.name];
 
-                        localError = [NSError errorWithMessage:msg];
-                    }
+                    localError = [NSError errorWithMessage:msg];
                 }
             }
 
@@ -164,7 +162,7 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
 
                 [blockSelf addDependency:updateCMO];
 
-                [blockSelf.restConfig.cacheManager requeueOperation:blockSelf];
+                [blockSelf.restConfig.cacheManager reQueueOperation:blockSelf];
             }
             else {
                 blockSelf->_error = localError;
@@ -212,7 +210,7 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
 
                 [blockSelf addDependency:sendToManyRelsOp];
 
-                [blockSelf.restConfig.cacheManager requeueOperation:blockSelf];
+                [blockSelf.restConfig.cacheManager reQueueOperation:blockSelf];
             }
             else {
                 blockSelf->_error = localError;

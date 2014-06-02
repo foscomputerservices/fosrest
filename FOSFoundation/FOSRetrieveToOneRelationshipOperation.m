@@ -81,7 +81,7 @@
                  relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
                 id<FOSTwoWayRecordBinding> recordBinder = _urlBinding.cmoBinding;
 
-                if (localError == nil && recordBinder == nil) {
+                if (recordBinder == nil) {
                     NSString *msgFmt = @"Missing CMO_BINDING for lifecycle %@ for Relationship '%@' between Entity '%@' and Entity '%@'";
                     NSString *msg = [NSString stringWithFormat:msgFmt,
                                      [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecordRelationship],

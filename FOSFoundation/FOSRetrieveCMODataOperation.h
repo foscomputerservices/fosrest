@@ -31,7 +31,7 @@
 /*!
  * @methodgroup Initialization Methods
  */
-#pragma mark - Intialization Methods
+#pragma mark - Initialization Methods
 
 - (id)initWithEntity:(NSEntityDescription *)entity
          withRequest:(NSURLRequest *)request

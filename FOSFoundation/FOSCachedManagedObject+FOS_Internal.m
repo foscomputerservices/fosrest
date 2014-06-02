@@ -31,7 +31,7 @@
     else {
         NSManagedObjectModel *model = [FOSRESTConfig sharedInstance].storeCoordinator.managedObjectModel;
 
-        result  = [[model entitiesByName] objectForKey:entityName];
+        result  = [model entitiesByName][entityName];
 
     }
     NSAssert(result != nil, @"Unable to find an entity description for entity: %@",
