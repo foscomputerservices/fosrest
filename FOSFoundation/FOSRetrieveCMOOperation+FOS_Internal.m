@@ -15,8 +15,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
 
 + (instancetype)fetchRelatedManagedObjectUsingDataOperation:(FOSRetrieveCMODataOperation *)fetchOp
                                              ofRelationship:(NSRelationshipDescription *)relDesc
-                                               withBindings:(NSMutableDictionary *)bindings
-                                    andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                                               withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(fetchOp != nil);
     NSParameterAssert(bindings != nil);
 
@@ -24,15 +23,13 @@ extern NSMutableDictionary *_outstandingFEORequests;
                                isTopLevelFetch:NO
                              forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
                              forLifecycleStyle:nil
-                                  withBindings:bindings
-                       andParentFetchOperation:parentFetchOp];
+                                  withBindings:bindings];
 }
 
 + (instancetype)fetchRelatedManagedObjectForEntity:(NSEntityDescription *)entity
                                     ofRelationship:(NSRelationshipDescription *)relDesc
                                             withId:(FOSJsonId)jsonId
-                                      withBindings:(NSMutableDictionary *)bindings
-                           andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                                      withBindings:(NSMutableDictionary *)bindings {
 
     NSParameterAssert(entity != nil);
     NSParameterAssert(jsonId != nil);
@@ -44,8 +41,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
                                                   isTopLevelFetch:NO
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
                                                 forLifecycleStyle:nil
-                                                     withBindings:bindings
-                                          andParentFetchOperation:parentFetchOp];
+                                                     withBindings:bindings];
 
     return result;
 }
@@ -53,8 +49,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
 + (instancetype)fetchRelatedManagedObjectForEntity:(NSEntityDescription *)entity
                                     ofRelationship:(NSRelationshipDescription *)relDesc
                                           withJson:(id<NSObject>)json
-                                      withBindings:(NSMutableDictionary *)bindings
-                           andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                                      withBindings:(NSMutableDictionary *)bindings {
 
     NSParameterAssert(entity != nil);
     NSParameterAssert(json != nil);
@@ -66,8 +61,7 @@ extern NSMutableDictionary *_outstandingFEORequests;
                                                   isTopLevelFetch:NO
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
                                                 forLifecycleStyle:nil
-                                                     withBindings:bindings
-                                          andParentFetchOperation:parentFetchOp];
+                                                     withBindings:bindings];
 
     return result;
 }

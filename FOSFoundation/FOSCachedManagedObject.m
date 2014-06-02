@@ -295,8 +295,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     NSEntityDescription *entity = [self entityDescription];
     FOSRetrieveCMOOperation *fetchOp = [FOSRetrieveCMOOperation retrieveCMOForEntity:entity
-                                                                              withId:jsonId
-                                                                  andParentOperation:nil];
+                                                                              withId:jsonId];
 
     return fetchOp;
 }

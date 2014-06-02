@@ -221,6 +221,13 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 
 #pragma mark - Public methods
 
+/*!
+ * @method markClean
+ *
+ * Marks the receiver clean with respect to the REST service.  Any outstanding
+ * indications that local changes were made to the receiver are erased
+ * (e.g. propertiesModifiedSinceLastUpload will be empty).
+ */
 - (void)markClean;
 
 /*!

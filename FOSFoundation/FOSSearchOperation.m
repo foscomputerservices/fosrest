@@ -103,8 +103,7 @@
                     FOSRetrieveCMOOperation *fetchEntityOp =
                         [FOSRetrieveCMOOperation retrieveCMOForEntity:entity
                                                                     withJson:nextPlaceDict
-                                                                withBindings:bindings
-                                                     andParentOperation:nil];
+                                                                withBindings:bindings];
 
                     // Process the results of the fetch request
                     FOSBackgroundOperation *newTopLevelOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *ignore) {

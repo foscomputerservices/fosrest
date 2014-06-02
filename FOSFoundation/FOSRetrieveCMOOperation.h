@@ -20,8 +20,6 @@
 @property (nonatomic, readonly) NSManagedObjectID *managedObjectID;
 @property (nonatomic, readonly) FOSCachedManagedObject *managedObject;
 @property (nonatomic, readonly) BOOL isTopLevelFetch;
-@property (nonatomic, readonly) NSMutableDictionary *bindings;
-@property (nonatomic, readonly) FOSRetrieveCMOOperation *parentFetchOp;
 @property (nonatomic, assign) BOOL allowFastTrack;
 
 #pragma mark - Class Methods
@@ -31,22 +29,18 @@
                             forLifecycleStyle:(NSString *)lifecycleStyle;
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
-                              withId:(FOSJsonId)jsonId
-                  andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+                              withId:(FOSJsonId)jsonId;
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                               withId:(FOSJsonId)jsonId
-                        withBindings:(NSMutableDictionary *)bindings
-                  andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+                        withBindings:(NSMutableDictionary *)bindings;
+
++ (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
+                            withJson:(NSDictionary *)json;
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                             withJson:(NSDictionary *)json
-                  andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
-
-+ (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
-                            withJson:(NSDictionary *)json
-                        withBindings:(NSMutableDictionary *)bindings
-                  andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+                        withBindings:(NSMutableDictionary *)bindings;
 
 + (NSMutableDictionary *)primeBindingsForEntity:(NSEntityDescription *)entity
                                     withJsonIDs:(NSArray *)jsonIds;
@@ -66,15 +60,13 @@
         forLifecycleStyle:(NSString *)lifecycleStyle
                    entity:(NSEntityDescription *)entity
            ofRelationship:(NSRelationshipDescription *)relDesc
-             withBindings:(NSMutableDictionary *)bindings
-  andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+             withBindings:(NSMutableDictionary *)bindings;
 
 - (id)initWithDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
             isTopLevelFetch:(BOOL)isTopLevelFetch
           forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
           forLifecycleStyle:(NSString *)lifecycleStyle
-               withBindings:(NSMutableDictionary *)bindings
-    andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+               withBindings:(NSMutableDictionary *)bindings;
 
 - (id)initForEntity:(NSEntityDescription *)entity
      ofRelationship:(NSRelationshipDescription *)relDesc
@@ -82,8 +74,7 @@
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
   forLifecycleStyle:(NSString *)lifecycleStyle
-       withBindings:(NSMutableDictionary *)bindings
-andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+       withBindings:(NSMutableDictionary *)bindings;
 
 - (id)initForEntity:(NSEntityDescription *)entity
      ofRelationship:(NSRelationshipDescription *)relDesc
@@ -91,8 +82,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
   forLifecycleStyle:(NSString *)lifecycleStyle
-       withBindings:(NSMutableDictionary *)bindings
-andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+       withBindings:(NSMutableDictionary *)bindings;
 
 #pragma mark - Binding Methods
 

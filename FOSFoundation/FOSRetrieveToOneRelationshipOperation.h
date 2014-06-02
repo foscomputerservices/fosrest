@@ -11,12 +11,10 @@
 @property (nonatomic, readonly) NSRelationshipDescription *relationship;
 @property (nonatomic, readonly) id<NSObject>jsonFragment;
 @property (nonatomic, readonly) NSError *error;
-@property (nonatomic, readonly) FOSRetrieveCMOOperation *parentFetchOp;
 
 + (instancetype)fetchToOneRelationship:(NSRelationshipDescription *)relDesc
                           jsonFragment:(id<NSObject>)jsonFragment
-                          withBindings:(NSMutableDictionary *)bindings
-               andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp;
+                          withBindings:(NSMutableDictionary *)bindings;
 
 - (void)bindToOwner:(NSManagedObjectID *)ownerId;
 

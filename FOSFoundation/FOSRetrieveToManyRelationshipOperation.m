@@ -19,29 +19,25 @@
 + (instancetype)fetchToManyRelationship:(NSRelationshipDescription *)relDesc
                               ownerJson:(id<NSObject>)ownerJson
                             ownerJsonId:(FOSJsonId)ownerJsonId
-                           withBindings:(NSMutableDictionary *)bindings
-                andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                           withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(ownerJsonId != nil);
 
     return [[self alloc] initToManyRelationship:relDesc
                                       ownerJson:ownerJson
                                     ownerJsonId:ownerJsonId
-                                   withBindings:bindings
-                        andParentFetchOperation:parentFetchOp];
+                                   withBindings:bindings];
 }
 
 - (id)initToManyRelationship:(NSRelationshipDescription *)relDesc
                    ownerJson:(id<NSObject>)ownerJson
                  ownerJsonId:(FOSJsonId)ownerJsonId
-                withBindings:(NSMutableDictionary *)bindings
-     andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(ownerJsonId != nil);
 
     if ((self = [super init]) != nil) {
         _relationship = relDesc;
-        _parentFetchOp = parentFetchOp;
 
         NSError *localError = nil;
 
@@ -621,8 +617,7 @@
             [FOSRetrieveCMOOperation fetchRelatedManagedObjectForEntity:destEntity
                                                          ofRelationship:relDesc
                                                                withJson:nextFragment
-                                                           withBindings:bindings
-                                                andParentFetchOperation:_parentFetchOp];
+                                                           withBindings:bindings];
 
         [_childRetrieveCMOOps addObject:nextFetchOp];
 

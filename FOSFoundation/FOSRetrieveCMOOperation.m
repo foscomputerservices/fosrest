@@ -34,13 +34,11 @@
                                isTopLevelFetch:YES
                              forLifecyclePhase:lifecyclePhase
                              forLifecycleStyle:lifecycleStyle
-                                  withBindings:bindings
-                       andParentFetchOperation:nil];
+                                  withBindings:bindings];
 }
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
-                              withId:(FOSJsonId)jsonId
-                  andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                              withId:(FOSJsonId)jsonId {
     NSMutableDictionary *bindings = [NSMutableDictionary dictionaryWithCapacity:100];
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
                                                    ofRelationship:nil
@@ -48,16 +46,14 @@
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                                 forLifecycleStyle:nil
-                                                     withBindings:bindings
-                                          andParentFetchOperation:parentFetchOp];
+                                                     withBindings:bindings];
 
     return result;
 }
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                               withId:(FOSJsonId)jsonId
-                        withBindings:(NSMutableDictionary *)bindings
-                  andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                        withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(bindings != nil);
 
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
@@ -66,15 +62,13 @@
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                                 forLifecycleStyle:nil
-                                                     withBindings:bindings
-                                          andParentFetchOperation:parentFetchOp];
+                                                     withBindings:bindings];
 
     return result;
 }
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
-                            withJson:(NSDictionary *)json
-                  andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                            withJson:(NSDictionary *)json {
 
     NSMutableDictionary *bindings = [NSMutableDictionary dictionaryWithCapacity:100];
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
@@ -83,16 +77,14 @@
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                                 forLifecycleStyle:nil
-                                                     withBindings:bindings
-                                          andParentFetchOperation:parentFetchOp];
+                                                     withBindings:bindings];
 
     return result;
 }
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                             withJson:(NSDictionary *)json
-                        withBindings:(NSMutableDictionary *)bindings
-                  andParentOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                        withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(bindings != nil);
 
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
@@ -101,8 +93,7 @@
                                                   isTopLevelFetch:YES
                                                 forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                                 forLifecycleStyle:nil
-                                                     withBindings:bindings
-                                          andParentFetchOperation:parentFetchOp];
+                                                     withBindings:bindings];
 
     return result;
 }
@@ -276,8 +267,7 @@
         forLifecycleStyle:(NSString *)lifecycleStyle
                    entity:(NSEntityDescription *)entity
            ofRelationship:(NSRelationshipDescription *)relDesc
-             withBindings:(NSMutableDictionary *)bindings
-  andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+             withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(entity != nil);
     NSParameterAssert(bindings != nil);
 
@@ -286,7 +276,6 @@
         _entity = entity;
         _bindings = bindings;
         _allowFastTrack = YES;
-        _parentFetchOp = parentFetchOp;
 
         NSError *localError = nil;
 
@@ -320,8 +309,7 @@
             isTopLevelFetch:(BOOL)isTopLevelFetch
           forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
           forLifecycleStyle:(NSString *)lifecycleStyle
-               withBindings:(NSMutableDictionary *)bindings
-    andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+               withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(fetchDataOp != nil);
     NSParameterAssert(bindings != nil);
 
@@ -331,8 +319,7 @@
                     isTopLevelFetch:isTopLevelFetch
                  forLifecyclePhase:lifecyclePhase
                   forLifecycleStyle:lifecycleStyle
-                       withBindings:bindings
-            andParentFetchOperation:parentFetchOp]) != nil) {
+                       withBindings:bindings]) != nil) {
         __block FOSRetrieveCMOOperation *blockSelf = self;
 
         FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
@@ -387,8 +374,7 @@
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
   forLifecycleStyle:(NSString *)lifecycleStyle
-       withBindings:(NSMutableDictionary *)bindings
-andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+       withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(entity != nil);
     NSParameterAssert(bindings != nil);
 
@@ -397,8 +383,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                         forLifecycleStyle:lifecycleStyle
                                    entity:entity
                            ofRelationship:relDesc
-                             withBindings:bindings
-                  andParentFetchOperation:parentFetchOp]) != nil) {
+                             withBindings:bindings]) != nil) {
         if (jsonId != nil) {
             self.jsonId = jsonId;
         }
@@ -413,8 +398,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     isTopLevelFetch:(BOOL)isTopLevelFetch
   forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
   forLifecycleStyle:(NSString *)lifecycleStyle
-       withBindings:(NSMutableDictionary *)bindings
-andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+       withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(json != nil);
     NSParameterAssert(entity != nil);
     NSParameterAssert(bindings != nil);
@@ -424,8 +408,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                         forLifecycleStyle:lifecycleStyle
                                    entity:entity
                            ofRelationship:relDesc
-                             withBindings:bindings
-                  andParentFetchOperation:parentFetchOp]) != nil) {
+                             withBindings:bindings]) != nil) {
 
         if (self.error == nil) {
             NSError *localError = nil;
@@ -663,10 +646,6 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
     return result;
 }
 
-- (NSMutableDictionary *)bindings {
-    return _bindings;
-}
-
 #pragma mark - Binding Methods
 
 - (void)finishBinding {
@@ -889,7 +868,6 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
             // Create the new entity
             FOSCachedManagedObject *newCMO = [self _objectFromJSON:_json
                                                         withJsonId:_jsonId
-                                          withParentFetchOperation:_parentFetchOp
                                                          forEntity:_entity
                                                       withBindings:_bindings
                                                       twoWayBinder:recordBinder
@@ -1019,7 +997,6 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
 
 - (FOSCachedManagedObject *)_objectFromJSON:(id<NSObject>)json
                                  withJsonId:(FOSJsonId)jsonId
-                   withParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp
                                   forEntity:(NSEntityDescription *)entity
                                withBindings:(NSMutableDictionary *)bindings
                                twoWayBinder:(id<FOSTwoWayRecordBinding>)twoWayBinder
@@ -1128,8 +1105,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                  relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
                 nextOp = [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
                                                                        jsonFragment:json
-                                                                       withBindings:_bindings
-                                                            andParentFetchOperation:self];
+                                                                       withBindings:_bindings];
 
                 [toOneOps addObject:nextOp];
             }
@@ -1193,7 +1169,7 @@ andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
                         nextOp = [FOSRetrieveToManyRelationshipOperation fetchToManyRelationship:relDesc
                                                                                     ownerJson:json
                                                                                   ownerJsonId:jsonOwnerId
-                                                                                 withBindings:_bindings andParentFetchOperation:self];
+                                                                                 withBindings:_bindings];
 
                         [toManyOps addObject:nextOp];
                     }

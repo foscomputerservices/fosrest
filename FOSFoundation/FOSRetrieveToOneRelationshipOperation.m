@@ -22,16 +22,14 @@
 
 + (instancetype)fetchToOneRelationship:(NSRelationshipDescription *)relDesc
                           jsonFragment:(id<NSObject>)jsonFragment
-                          withBindings:(NSMutableDictionary *)bindings
-               andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+                          withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(jsonFragment != nil);
     NSParameterAssert(bindings != nil);
 
     return [[self alloc] initToOneRelationship:relDesc
                                   jsonFragment:jsonFragment
-                                  withBindings:bindings
-                       andParentFetchOperation:parentFetchOp];
+                                  withBindings:bindings];
 }
 
 - (NSError *)error {
@@ -46,8 +44,7 @@
 
 - (id)initToOneRelationship:(NSRelationshipDescription *)relDesc
                jsonFragment:(id<NSObject>)jsonFragment
-               withBindings:(NSMutableDictionary *)bindings
-    andParentFetchOperation:(FOSRetrieveCMOOperation *)parentFetchOp {
+               withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(jsonFragment != nil);
     NSParameterAssert(bindings != nil);
@@ -56,7 +53,6 @@
         _relationship = relDesc;
         _jsonFragment = jsonFragment;
         _bindings = bindings;
-        _parentFetchOp = parentFetchOp;
 
         NSEntityDescription *destEntity = _relationship.destinationEntity;
         NSError *localError = nil;
@@ -107,8 +103,7 @@
                             [FOSRetrieveCMOOperation fetchRelatedManagedObjectForEntity:destEntity
                                                                          ofRelationship:relDesc
                                                                                  withId:jsonId
-                                                                           withBindings:bindings
-                                                                andParentFetchOperation:parentFetchOp];
+                                                                           withBindings:bindings];
 
                         [self addDependency:_fetchRelatedEntityOp];
                     }
