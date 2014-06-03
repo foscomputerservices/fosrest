@@ -42,6 +42,7 @@
 #import "FOSCachedManagedObject.h"
 #import "FOSModifiedProperty.h"
 #import "FOSRelationshipFault.h"
+#import "FOSRetrieveRelationshipUpdatesOperation.h"
 
 // Logging
 #import "FOSAnalytics.h"

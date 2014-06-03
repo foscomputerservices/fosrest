@@ -1005,4 +1005,61 @@ TEARDOWN_LOGIN
 }
 #endif
 
+#pragma mark - Refresh Relationship Tests
+
+- (void)testRefreshToOneRelationship {
+    START_TEST
+
+    User *loggedInUser = self.loggedInUser;
+    NSInteger testCreateInitialCount = loggedInUser.testCreations.count;
+
+    NSString *endPoint = @"1/classes/TestCreate";
+
+    NSDictionary *json = @{
+                           @"name" : @"test refresh",
+                           @"user" : @{
+                                   @"__type" : @"Pointer",
+                                   @"className" : @"_User",
+                               @"objectId" : loggedInUser.jsonIdValue
+                            }
+                         };
+
+    NSArray *frags = @[ json ];
+    FOSWebServiceRequest *createTestRecord =
+        [FOSWebServiceRequest requestWithRequestType:FOSRequestMethodPOST
+                                            endPoint:endPoint
+                                        uriFragments:frags];
+
+    endPoint = [NSString stringWithFormat:@"1/classes/_User/%@", self.loggedInUser.jsonIdValue];
+    json = @{ @"testCreationsChildCount_" : @(-1) };
+    frags = @[ json ];
+    FOSWebServiceRequest *updateUserRecord =
+        [FOSWebServiceRequest requestWithRequestType:FOSRequestMethodPUT
+                                            endPoint:endPoint
+                                        uriFragments:frags];
+
+    [updateUserRecord addDependency:createTestRecord];
+
+    FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
+        XCTAssertFalse(cancelled, @"Cancelled???");
+        XCTAssertEqual(error.code, 201, @"Error: %@", error.description);
+
+        [loggedInUser refreshRelationshipNamed:@"testCreations" handler:^(BOOL cancelled, NSError *error) {
+            XCTAssertFalse(cancelled, @"Cancelled???");
+            XCTAssertNil(error, @"Error: %@", error.description);
+
+            XCTAssertTrue(self.loggedInUser.testCreations.count > testCreateInitialCount,
+                          @"No new records???");
+
+            END_TEST
+        }];
+    }];
+
+    [[FOSRESTConfig sharedInstance].cacheManager queueOperation:updateUserRecord
+                                        withCompletionOperation:bgOp
+                                                  withGroupName:@"TestCreate"];
+
+    WAIT_FOR_TEST_END
+}
+
 @end

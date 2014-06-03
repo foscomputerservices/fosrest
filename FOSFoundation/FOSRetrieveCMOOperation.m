@@ -24,6 +24,7 @@
     BOOL _createdFaults;
     NSMutableDictionary *_bindings;
     FOSURLBinding *_urlBinding;
+    FOSItemMatcher *_relationshipsToPull;
 }
 
 + (instancetype)retrieveCMOUsingDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
@@ -288,6 +289,10 @@
                        withBindings:bindings]) != nil) {
         __block FOSRetrieveCMOOperation *blockSelf = self;
 
+        if ([fetchDataOp respondsToSelector:@selector(relationshipsToPull)]) {
+            _relationshipsToPull = fetchDataOp.relationshipsToPull;
+        }
+
         FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
             if (fetchDataOp.error == nil) {
                 NSError *localError = nil;
@@ -314,7 +319,9 @@
 
                     // Also store the 'originalJson' in the bindings if we're the top-level
                     // data pull as it can have related-CMO data as well.
-                    bindings[@"originalJsonResult"] = fetchDataOp.originalJsonResult;
+                    if (fetchDataOp.originalJsonResult != nil) {
+                        bindings[@"originalJsonResult"] = fetchDataOp.originalJsonResult;
+                    }
                 }
 
                 if (localError != nil) {
@@ -1015,15 +1022,24 @@
                 [cmo setJsonIdValue:jsonId];
             }
 
-            // Bind the local vars to the json
-            if ([twoWayBinder updateCMO:cmo
-                               fromJSON:json
-                      forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                  error:&localError]) {
+            // Store the json
+            if ([NSJSONSerialization isValidJSONObject:json]) {
+                cmo.originalJsonData = [NSJSONSerialization dataWithJSONObject:json
+                                                                       options:0
+                                                                         error:&localError];
+            }
 
-                NSAssert([cmo.jsonIdValue isEqual:jsonId], @"Ids not equal???");
+            if (localError == nil) {
+                // Bind the local vars to the json
+                if ([twoWayBinder updateCMO:cmo
+                                   fromJSON:json
+                          forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                      error:&localError]) {
 
-                result = cmo;
+                    NSAssert([cmo.jsonIdValue isEqual:jsonId], @"Ids not equal???");
+
+                    result = cmo;
+                }
             }
         }
 
@@ -1055,9 +1071,11 @@
 - (NSArray *)_resolveToOneReferences {
     NSMutableArray *result = [NSMutableArray array];
 
+    NSSet *filteredRels = [self _filterRelationships:self.entity.cmoToOneRelationships];
+
     // Process toOne relationships, optional relationships will be hooked up
     // at the last minute by FOSCachedManagedObject::willAccessValueForKey
-    for (NSRelationshipDescription *relDesc in self.entity.cmoToOneRelationships) {
+    for (NSRelationshipDescription *relDesc in filteredRels) {
         FOSOperation *nextOp = nil;
         
         if (// Skip the inverse ownership relationship, as it will be resolved via finishBinding if
@@ -1080,8 +1098,10 @@
 - (NSArray *)_resolveToManyReferences {
     NSMutableArray *result = [NSMutableArray array];
 
+    NSSet *filteredRels = [self _filterRelationships:self.entity.cmoOwnedToManyRelationships];
+
     // Process toMany relationships, but only from the 'owner's' side
-    for (NSRelationshipDescription *relDesc in self.entity.cmoOwnedToManyRelationships) {
+    for (NSRelationshipDescription *relDesc in filteredRels) {
         
         // Let's see if we can short circuit out
         // -1 => unknown, need to fetch to see
@@ -1117,6 +1137,23 @@
                             format:msg, relDesc.name, relDesc.entity.name];
             }
         }
+    }
+
+    return result;
+}
+
+- (NSSet *)_filterRelationships:(NSSet *)relationships {
+    NSSet *result = relationships;
+
+    if (_relationshipsToPull != nil) {
+        NSDictionary *context = @{ @"ENTITY" : self.entity };
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wselector"
+        result = [_relationshipsToPull matchedItems:relationships
+                                      matchSelector:@selector(name)
+                                            context:context];
+#pragma clang diagnostic pop
     }
 
     return result;

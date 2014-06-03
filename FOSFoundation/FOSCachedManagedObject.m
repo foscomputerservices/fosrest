@@ -804,11 +804,13 @@ static NSMutableDictionary *_processingFaults = nil;
 #pragma mark - Public methods
 
 
-- (NSDictionary *)originalJson {
+- (id<NSObject>)originalJson {
     NSDictionary *result = nil;
 
     if (self.originalJsonData != nil) {
-        result = [NSKeyedUnarchiver unarchiveObjectWithData:self.originalJsonData];
+        result = [NSJSONSerialization JSONObjectWithData:self.originalJsonData
+                                                 options:0
+                                                   error:nil];
     }
 
     return result;
@@ -844,68 +846,25 @@ static NSMutableDictionary *_processingFaults = nil;
                              handler:(FOSBackgroundRequest)handler {
     NSParameterAssert(relNames != nil);
 
-    NSManagedObjectID *ownerId = self.objectID;
-    NSDictionary *rels = self.entity.relationshipsByName;
-    NSMutableArray *toOneOps = [NSMutableArray array];
-    NSMutableArray *toManyOps = [NSMutableArray array];
+    NSMutableSet *exprs = [NSMutableSet set];
+    for (NSString *relName in relNames) {
+        id<FOSExpression> expr = [FOSConstantExpression constantExpressionWithValue:relName];
+        [exprs addObject:expr];
+    }
+    FOSItemMatcher *relMatcher = [FOSItemMatcher matcher:FOSItemMatchItems
+                                      forItemExpressions:exprs];
+
+    FOSRetrieveRelationshipUpdatesOperation *relUpdatesOp =
+        [FOSRetrieveRelationshipUpdatesOperation retrieveRealtionshipUpdatesForCMO:self
+                                                                          matching:relMatcher];
 
     FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
-
-        NSError *localError = error;
-
-        // Finish Binding to-One ops
-        for (FOSRetrieveToOneRelationshipOperation *toOneOp in toOneOps) {
-            [toOneOp bindToOwner:ownerId];
-            if (localError == nil) {
-                localError = toOneOp.error;
-            }
-        }
-
-        // Finish Binding to-Many ops
-        for (FOSRetrieveToManyRelationshipOperation *toManyOp in toManyOps) {
-            [toManyOp bindToOwner:ownerId];
-            [toManyOp finishOrdering];
-            [toManyOp finishValidation];
-
-            if (localError == nil) {
-                localError = toManyOp.error;
-            }
-
-            [toManyOp finishCleanup:localError != nil];
-        }
-
-        handler(cancelled, localError);
+        handler(cancelled, error);
     } callRequestIfCancelled:YES];
 
-    for (NSString *relName in relNames) {
-        NSRelationshipDescription *relDesc = rels[relName];
-
-        FOSOperation *refreshRelOp = nil;
-
-        NSMutableDictionary *bindings =
-            [FOSRetrieveCMOOperation primeBindingsForEntity:self.entity
-                                                withJsonIDs:@[self.jsonIdValue]];
-
-        if (!relDesc.isToMany) {
-            refreshRelOp =
-                [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
-                                                                 jsonFragment:self.originalJson
-                                                                 withBindings:bindings];
-
-            [toOneOps addObject:refreshRelOp];
-        }
-        else {
-            refreshRelOp =
-                [FOSRetrieveToManyRelationshipOperation fetchToManyRelationship:relDesc
-                                                                      ownerJson:self.originalJson
-                                                                    ownerJsonId:self.jsonIdValue
-                                                                   withBindings:bindings];
-
-            [toManyOps addObject:refreshRelOp];
-        }
-
-        [finalOp addDependency:refreshRelOp];
-    }
+    [self.restConfig.cacheManager queueOperation:relUpdatesOp
+                         withCompletionOperation:finalOp
+                                   withGroupName:@"Refresh relationships"];
 }
 
 - (void)refreshAllRelationships:(FOSBackgroundRequest)handler {

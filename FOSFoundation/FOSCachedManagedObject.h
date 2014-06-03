@@ -32,7 +32,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 @property (nonatomic) BOOL hasModifiedProperties;
 @property (nonatomic) BOOL isFaultObject;
 @property (nonatomic) BOOL isLocalOnly;
-@property (nonatomic, retain) NSData * originalJsonData;
+@property (nonatomic, strong) NSData *originalJsonData;
 
 #pragma mark - Public Properties
 
@@ -233,10 +233,9 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 /*!
  * @method originalJson
  *
- * The original json that was received at the last updateWithJSONDictionary:
- * call.
+ * The original json from which the receiver was created.
  */
-- (NSDictionary *)originalJson;
+- (id<NSObject>)originalJson;
 
 /*!
  * @method hasBeenUploadedToServer

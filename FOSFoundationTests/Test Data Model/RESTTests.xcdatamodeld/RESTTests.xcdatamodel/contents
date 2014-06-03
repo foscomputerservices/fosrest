@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="FOSParseCachedManagedObject" representedClassName="FOSParseCachedManagedObject" isAbstract="YES" syncable="YES">
         <userInfo>
             <entry key="isPlaceholder" value="YES"/>
@@ -86,15 +86,15 @@
         <relationship name="widgets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Widget" inverseName="widgetInfo" inverseEntity="Widget" syncable="YES"/>
     </entity>
     <elements>
-        <element name="FOSParseCachedManagedObject" positionX="-414" positionY="-537" width="180" height="43"/>
-        <element name="FOSParseUser" positionX="-720" positionY="-241" width="128" height="43"/>
+        <element name="FOSParseCachedManagedObject" positionX="-414" positionY="-537" width="180" height="45"/>
+        <element name="FOSParseUser" positionX="-720" positionY="-241" width="128" height="45"/>
         <element name="Note" positionX="-288" positionY="-195" width="128" height="105"/>
         <element name="Role" positionX="-522" positionY="-216" width="128" height="90"/>
         <element name="TestCreate" positionX="-117" positionY="-324" width="128" height="105"/>
         <element name="TestToMany" positionX="-434" positionY="-18" width="128" height="105"/>
         <element name="TestToManyDestMax" positionX="-261" positionY="-15" width="128" height="60"/>
         <element name="TestToManyDestMin" positionX="-630" positionY="18" width="128" height="60"/>
-        <element name="User" positionX="-720" positionY="-126" width="128" height="105"/>
+        <element name="User" positionX="-720" positionY="-126" width="128" height="103"/>
         <element name="Widget" positionX="-560" positionY="-360" width="128" height="120"/>
         <element name="WidgetInfo" positionX="-306" positionY="-405" width="128" height="90"/>
     </elements>

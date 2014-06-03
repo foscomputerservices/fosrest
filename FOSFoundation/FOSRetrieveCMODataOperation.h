@@ -12,8 +12,12 @@
 
 @property (nonatomic, readonly) NSEntityDescription *entity;
 @property (nonatomic, readonly) FOSJsonId jsonId;
-@property (nonatomic, readonly) NSDictionary *jsonResult;
+@property (nonatomic, readonly) id<NSObject> jsonResult;
 @property (nonatomic, readonly) id<NSObject> originalJsonResult;
+
+@optional
+
+@property (nonatomic, readonly) FOSItemMatcher *relationshipsToPull;
 
 @end
 
