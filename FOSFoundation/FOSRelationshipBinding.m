@@ -36,15 +36,17 @@
     NSMutableSet *result = [NSMutableSet set];
     NSDictionary *context = @{ @"ENTITY" : entity };
 
-    for (NSPropertyDescription *propDesc in entity.properties) {
+    __block FOSRelationshipBinding *blockSelf = self;
+
+    [entity enumerateOnlyOwned:NO relationships:^BOOL(NSRelationshipDescription *relDesc) {
 
         // Also much match the relationshipMatcher
-        if ([self.relationshipMatcher itemIsIncluded:propDesc.name context:context]) {
-            if ([propDesc isKindOfClass:[NSRelationshipDescription class]]) {
-                [result addObject:propDesc];
-            }
+        if ([blockSelf.relationshipMatcher itemIsIncluded:relDesc.name context:context]) {
+            [result addObject:relDesc];
         }
-    }
+
+        return YES;
+    }];
 
     return result;
 }

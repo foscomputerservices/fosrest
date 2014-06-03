@@ -474,7 +474,7 @@ attribute_binding
         CAPTURE_ATOM_INFO(AT_"ID_ATTRIBUTE", @1, $$);
     }
     | RECEIVE_ONLY_ATTRIBUTE attribute_binding_spec {
-        [(__bridge FOSAttributeBinding *)$2 setIsSendOnlyAttribute:YES];
+        [(__bridge FOSAttributeBinding *)$2 setIsReceiveOnlyAttribute:YES];
 
         $$ = $2;
 

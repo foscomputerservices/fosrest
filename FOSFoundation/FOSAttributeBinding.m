@@ -112,7 +112,8 @@
     NSError *localError = nil;
 
     BOOL result = [self _ensureCMO:cmo andProp:propDesc error:error];
-    if (result && !self.isReceiveOnlyAttribute &&
+    if (result &&
+        !self.isReceiveOnlyAttribute &&
         // Don't push the identity property on create, there won't be one...
         !(lifecyclePhase == FOSLifecyclePhaseCreateServerRecord && self.isIdentityAttribute)) {
         NSDictionary *context = @{ @"CMO" : cmo, @"ATTRDESC" : propDesc };
