@@ -111,14 +111,7 @@ SETUP_TEARDOWN_NOLOGIN
 
 - (void)testVariable_RELDESC {
     NSEntityDescription *entityDesc = [TestCreate entityDescription];
-    NSPropertyDescription *relDesc = nil;
-
-    for (NSPropertyDescription *propDesc in entityDesc.properties) {
-        if ([propDesc isKindOfClass:[NSRelationshipDescription class]]) {
-            relDesc = propDesc;
-            break;
-        }
-    }
+    NSPropertyDescription *relDesc = entityDesc.cmoRelationships.anyObject;
 
     NSAssert(relDesc != nil, @"Test is broken!");
 

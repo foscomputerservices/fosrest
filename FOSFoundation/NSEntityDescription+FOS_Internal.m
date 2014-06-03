@@ -104,13 +104,7 @@
 
         NSEntityDescription *nextEntity = self;
         do {
-
-            for (NSPropertyDescription *nextProp in nextEntity.properties) {
-                if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
-                    ![(NSRelationshipDescription *)nextProp isFOSRelationship]) {
-                    [result addObject:nextProp];
-                }
-            }
+            [result unionSet:nextEntity.cmoRelationships];
 
             nextEntity = nextEntity.superentity;
         } while (nextEntity != nil && !nextEntity.isFOSEntity);
@@ -259,7 +253,7 @@
     return result;
 }
 
-- (id<NSFastEnumeration>)cmoAttibutes {
+- (NSSet *)cmoAttibutes {
     NSArray *props = self.properties;
     NSMutableSet *result = [NSMutableSet setWithCapacity:props.count];
 
@@ -273,7 +267,22 @@
     return result;
 }
 
-- (id<NSFastEnumeration>)cmoRelationships {
+// TODO: Below the algorithms could be optimized a bit as they build on one
+//       another, which generates temporary garbage.
+//
+//       This implementaiton was chosen for the following reasons:
+//         1) Reduce the likeliness that errors will get in
+//            if things were to change in the future
+//
+//         2) Show the true cost of iterating the properties, where as
+//            previously the cost was spread across the entire framework
+//            in different areas
+//
+//       Probably the best way to optimize this would be to cache the results
+//       in a static dictionary keyed by entity name, if this becomes too
+//       expensive.
+
+- (NSSet *)cmoRelationships {
     NSArray *props = self.properties;
     NSMutableSet *result = [NSMutableSet setWithCapacity:props.count];
 
@@ -287,15 +296,52 @@
     return result;
 }
 
-- (id<NSFastEnumeration>)cmoOwnedRelationships {
-    NSArray *props = self.properties;
-    NSMutableSet *result = [NSMutableSet setWithCapacity:props.count];
+- (NSSet *)cmoToOneRelationships {
+    NSSet *cmoRels = self.cmoRelationships;
+    NSMutableSet *result = [NSMutableSet setWithCapacity:cmoRels.count];
 
-    for (NSPropertyDescription *nextProp in props) {
-        if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
-            !((NSRelationshipDescription *)nextProp).isFOSRelationship &&
-            ((NSRelationshipDescription *)nextProp).isOwnershipRelationship) {
-            [result addObject:nextProp];
+    for (NSRelationshipDescription *relDesc in cmoRels) {
+        if (!relDesc.isToMany) {
+            [result addObject:relDesc];
+        }
+    }
+
+    return result;
+}
+
+- (NSSet *)cmoToManyRelationships {
+    NSSet *cmoRels = self.cmoRelationships;
+    NSMutableSet *result = [NSMutableSet setWithCapacity:cmoRels.count];
+
+    for (NSRelationshipDescription *relDesc in cmoRels) {
+        if (relDesc.isToMany) {
+            [result addObject:relDesc];
+        }
+    }
+
+    return result;
+}
+
+- (NSSet *)cmoOwnedRelationships {
+    NSSet *cmoRels = self.cmoRelationships;
+    NSMutableSet *result = [NSMutableSet setWithCapacity:cmoRels.count];
+
+    for (NSRelationshipDescription *relDesc in cmoRels) {
+        if (relDesc.isOwnershipRelationship) {
+            [result addObject:relDesc];
+        }
+    }
+
+    return result;
+}
+
+- (NSSet *)cmoOwnedToManyRelationships {
+    NSSet *cmoRels = self.cmoOwnedRelationships;
+    NSMutableSet *result = [NSMutableSet setWithCapacity:cmoRels.count];
+
+    for (NSRelationshipDescription *relDesc in cmoRels) {
+        if (relDesc.isToMany) {
+            [result addObject:relDesc];
         }
     }
 

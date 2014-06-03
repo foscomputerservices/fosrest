@@ -49,30 +49,24 @@ static NSMutableDictionary *_processingFaults = nil;
 - (BOOL)hasLocalOnlyParent {
     BOOL result = NO;
 
-    for (NSPropertyDescription *nextProp in self.entity.properties) {
-        if ([nextProp isKindOfClass:[NSRelationshipDescription class]]) {
-            NSRelationshipDescription *relDesc = (NSRelationshipDescription *)nextProp;
+    for (NSRelationshipDescription *relDesc in self.entity.cmoRelationships) {
+        // If we're not the owner ** and ** the inverse is the owner (otherwise
+        // this relationship is a graph reference that can be ignored)
+        if ((!relDesc.isOwnershipRelationship &&
+             relDesc.inverseRelationship.isOwnershipRelationship)) {
+            id relObj = [self valueForKey:relDesc.name];
 
-            if (!relDesc.isFOSRelationship) {
-                // If we're not the owner ** and ** the inverse is the owner (otherwise
-                // this relationship is a graph reference that can be ignored)
-                if ((!relDesc.isOwnershipRelationship &&
-                     relDesc.inverseRelationship.isOwnershipRelationship)) {
-                    id relObj = [self valueForKey:relDesc.name];
-
-                    if ([relObj isKindOfClass:[FOSCachedManagedObject class]]) {
-                        FOSCachedManagedObject *parentCMO = (FOSCachedManagedObject *)relObj;
-                        result = parentCMO.isLocalOnly || parentCMO.hasLocalOnlyParent;
-                    }
-
-                    // The owner *is* (by definition) local, as it's not an FOSCachedManagedObject
-                    else {
-                        result = YES;
-                    }
-
-                    break;
-                }
+            if ([relObj isKindOfClass:[FOSCachedManagedObject class]]) {
+                FOSCachedManagedObject *parentCMO = (FOSCachedManagedObject *)relObj;
+                result = parentCMO.isLocalOnly || parentCMO.hasLocalOnlyParent;
             }
+
+            // The owner *is* (by definition) local, as it's not an FOSCachedManagedObject
+            else {
+                result = YES;
+            }
+
+            break;
         }
     }
 
@@ -786,25 +780,19 @@ static NSMutableDictionary *_processingFaults = nil;
 
     // All relationships that are *not* owned by this type must be uploaded
     // before we can be uploaded
-    for (NSPropertyDescription *nextProp in self.entity.properties) {
-        if ([nextProp isKindOfClass:[NSRelationshipDescription class]]) {
-            NSRelationshipDescription *relDesc = (NSRelationshipDescription *)nextProp;
+    for (NSRelationshipDescription *relDesc in self.entity.cmoToOneRelationships) {
+        if (!relDesc.isOwnershipRelationship) {
+            FOSCachedManagedObject *relObj = [self valueForKey:relDesc.name];
 
-            if (!relDesc.isToMany &&
-                !relDesc.isOwnershipRelationship &&
-                !relDesc.isFOSRelationship) {
-                FOSCachedManagedObject *relObj = [self valueForKey:relDesc.name];
+            if (relObj != nil && !relObj.hasBeenUploadedToServer) {
+                result = NO;
 
-                if (relObj != nil && !relObj.hasBeenUploadedToServer) {
-                    result = NO;
+                FOSLogError(@"%@ NOT UPLOADED because %@ NOT UPLOADED via RELATIONSHIP %@",
+                      [[self class] description],
+                      [[relObj class] description],
+                      relDesc.name);
 
-                    FOSLogError(@"%@ NOT UPLOADED because %@ NOT UPLOADED via RELATIONSHIP %@",
-                          [[self class] description],
-                          [[relObj class] description],
-                          relDesc.name);
-
-                    [relObj _debugReferencesGraph];
-                }
+                [relObj _debugReferencesGraph];
             }
         }
     }
@@ -1125,18 +1113,14 @@ static NSMutableDictionary *_processingFaults = nil;
 
     NSMutableDictionary *context = [@{ @"ENTITY" : entity} mutableCopy];
 
-    for (NSPropertyDescription *propDesc in entity.properties) {
-        if ([propDesc isKindOfClass:[NSAttributeDescription class]] &&
-            !((NSAttributeDescription *)propDesc).isFOSAttribute) {
+    for (NSAttributeDescription *attrDesc in entity.cmoAttibutes) {
+        context[@"ATTRDESC"] = attrDesc;
 
-            context[@"ATTRDESC"] = propDesc;
-
-            for (FOSAttributeBinding *attrBinding in attrBindings) {
-                if (!attrBinding.isIdentityAttribute &&
-                    [attrBinding.attributeMatcher itemIsIncluded:propDesc.name
-                                                         context:context]) {
-                    [result addObject:propDesc.name];
-                }
+        for (FOSAttributeBinding *attrBinding in attrBindings) {
+            if (!attrBinding.isIdentityAttribute &&
+                [attrBinding.attributeMatcher itemIsIncluded:attrDesc.name
+                                                     context:context]) {
+                [result addObject:attrDesc.name];
             }
         }
     }
@@ -1159,29 +1143,23 @@ static NSMutableDictionary *_processingFaults = nil;
 
 - (void)_awake {
     if (self.isFaultObject) {
-        for (NSPropertyDescription *nextProp in self.entity.properties) {
-            if ([nextProp isKindOfClass:[NSAttributeDescription class]] &&
-                ![NSAttributeDescription isFOSAttribute:nextProp.name]) {
-                [self addObserver:self forKeyPath:nextProp.name options:0 context:nil];
-            }
-            else if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
-                     !((NSRelationshipDescription *)nextProp).isFOSRelationship) {
-                [self addObserver:self forKeyPath:nextProp.name options:0 context:nil];
-            }
+        for (NSAttributeDescription *attrDesc in self.entity.cmoAttibutes) {
+            [self addObserver:self forKeyPath:attrDesc.name options:0 context:nil];
+        }
+
+        for (NSRelationshipDescription *relDesc in self.entity.cmoRelationships) {
+            [self addObserver:self forKeyPath:relDesc.name options:0 context:nil];
         }
     }
 }
 
 - (void)_removeObservers {
-    for (NSPropertyDescription *nextProp in self.entity.properties) {
-        if ([nextProp isKindOfClass:[NSAttributeDescription class]] &&
-            ![NSAttributeDescription isFOSAttribute:nextProp.name]) {
-            [self removeObserver:self forKeyPath:nextProp.name];
-        }
-        else if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
-                 !((NSRelationshipDescription *)nextProp).isFOSRelationship) {
-            [self removeObserver:self forKeyPath:nextProp.name];
-        }
+    for (NSAttributeDescription *attrDesc in self.entity.cmoAttibutes) {
+        [self removeObserver:self forKeyPath:attrDesc.name];
+    }
+
+    for (NSRelationshipDescription *relDesc in self.entity.cmoRelationships) {
+        [self removeObserver:self forKeyPath:relDesc.name];
     }
 }
 
@@ -1316,16 +1294,12 @@ static NSMutableDictionary *_processingFaults = nil;
 
             if (relDesc.isToMany) {
                 // Find the attribute corresponding to the json property
-                for (NSPropertyDescription *nextPropDesc in self.entity.properties) {
-                    if ([nextPropDesc isKindOfClass:[NSAttributeDescription class]]) {
-                        NSAttributeDescription *attrDesc = (NSAttributeDescription *)nextPropDesc;
+                for (NSAttributeDescription *attrDesc in self.entity.cmoAttibutes) {
+                    if ([idRelationshipKeyPath isEqualToString:attrDesc.name]) {
+                        NSString *objProp = attrDesc.name;
+                        id newValue = changedVals[nextProp];
 
-                        if ([idRelationshipKeyPath isEqualToString:attrDesc.name]) {
-                            NSString *objProp = attrDesc.name;
-                            id newValue = changedVals[nextProp];
-
-                            [self setValue:newValue forKey:objProp];
-                        }
+                        [self setValue:newValue forKey:objProp];
                     }
                 }
             }
