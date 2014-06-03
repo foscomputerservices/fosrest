@@ -572,9 +572,7 @@
                 _jsonId = jsonId;
             }
 
-            [self _resolveReferencesForJSON:_json
-                                 withJsonOwnerId:_jsonId
-                                  forEntity:_entity];
+            [self _resolveReferences];
 
             // Queue subops, if we're already queued
             if (self.isQueued) {
@@ -1041,100 +1039,75 @@
     return result;
 }
 
-- (void)_resolveReferencesForJSON:(id<NSObject>)json
-                  withJsonOwnerId:(FOSJsonId)jsonOwnerId
-                        forEntity:(NSEntityDescription *)entity {
-    NSParameterAssert(json != nil);
-    NSParameterAssert(entity != nil);
+- (void)_resolveReferences {
 
-    NSMutableArray *toOneOps = [NSMutableArray array];
-    NSMutableArray *toManyOps = [NSMutableArray array];
+    _toOneOps = [self _resolveToOneReferences];
+    _toManyOps = [self _resolveToManyReferences];
+
+    for (FOSOperation *nextOp in _toOneOps) {
+        [self addDependency:nextOp];
+    }
+    for (FOSOperation *nextOp in _toManyOps) {
+        [self addDependency:nextOp];
+    }
+}
+
+- (NSArray *)_resolveToOneReferences {
+    NSMutableArray *result = [NSMutableArray array];
 
     // Process toOne relationships, optional relationships will be hooked up
     // at the last minute by FOSCachedManagedObject::willAccessValueForKey
-    for (NSRelationshipDescription *relDesc in entity.cmoToOneRelationships) {
+    for (NSRelationshipDescription *relDesc in self.entity.cmoToOneRelationships) {
         FOSOperation *nextOp = nil;
-
+        
         if (// Skip the inverse ownership relationship, as it will be resolved via finishBinding if
             // this isn't a topLevelFetch, otherwise, we'll have to go get it.
             ((!relDesc.isOptional &&
               (!relDesc.inverseRelationship.isOwnershipRelationship || self.isTopLevelFetch)) ||
              relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
-
+                
             nextOp = [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
-                                                                   jsonFragment:json
-                                                                   withBindings:_bindings];
+                                                                      jsonFragment:self.json
+                                                                      withBindings:_bindings];
 
-            [toOneOps addObject:nextOp];
-            [self addDependency:nextOp];
+            [result addObject:nextOp];
         }
     }
 
+    return result;
+}
+
+- (NSArray *)_resolveToManyReferences {
+    NSMutableArray *result = [NSMutableArray array];
+
     // Process toMany relationships, but only from the 'owner's' side
-    for (NSRelationshipDescription *relDesc in entity.cmoOwnedToManyRelationships) {
-
+    for (NSRelationshipDescription *relDesc in self.entity.cmoOwnedToManyRelationships) {
+        
         // Let's see if we can short circuit out
-        NSInteger childCount = -1; // -1 => unknown, need to fetch to see
-
-        if ([json isKindOfClass:[NSDictionary class]]) {
-
-            // Don't check counts between static table classes and non-static table entities.
-            if (!entity.isStaticTableEntity || relDesc.destinationEntity.isStaticTableEntity) {
-                NSString *childCountKey = [NSString stringWithFormat:@"%@ChildCount_",
-                                           relDesc.name];
-                id childCountJson = ((NSDictionary *)json)[childCountKey];
-                if ([childCountJson isKindOfClass:[NSNumber class]]) {
-                    childCount = ((NSNumber *)childCountJson).integerValue;
-                }
-            }
-            else {
-                childCount = 0;
-            }
-        }
-
+        // -1 => unknown, need to fetch to see
+        NSInteger childCount = [self _serverChildCountForToManyRelationship:relDesc];
+        
         // If we *know* that there are no children, we can skip trying to fetch them
         if ((childCount != 0 && relDesc.jsonRelationshipForcePull == FOSForcePullType_UseCount) ||
             !relDesc.isOptional ||
             relDesc.jsonRelationshipForcePull == FOSForcePullType_Always) {
-
-            // We don't auto-pull on optional relationships, unless they tell us to
-            // do so.
+            
+            // We don't auto-pull on optional relationships, unless they tell us to do so.
             if (relDesc.isOptional && relDesc.jsonRelationshipForcePull == FOSForcePullType_Never) {
-
-                // Does the user want to auto-pull the relationship when it is
-                // crossed?
-                if (relDesc.destinationEntity.jsonAllowFault) {
-                    NSPredicate *pred = [FOSRelationshipFault predicateForEntity:entity
-                                                                          withId:jsonOwnerId
-                                                            forRelationshipNamed:relDesc.name];
-                    NSArray *relationshipFaults =
-                        [self.restConfig.databaseManager fetchEntitiesNamed:@"FOSRelationshipFault"
-                                                              withPredicate:pred];
-
-                    if (relationshipFaults.count == 0) {
-                        FOSRelationshipFault *relFault = [[FOSRelationshipFault alloc] init];
-
-                        relFault.jsonId = (NSString *)jsonOwnerId;
-                        relFault.managedObjectClassName = entity.name;
-                        relFault.relationshipName = relDesc.name;
-
-                        _createdFaults = YES;
-                    }
-                }
+                [self _configureFaultingForRelationship:relDesc];
             }
-
+            
             // Nope, must process many-to-one relationship now!
             else if (!relDesc.inverseRelationship.isToMany) {
                 FOSOperation *nextOp =
                     [FOSRetrieveToManyRelationshipOperation fetchToManyRelationship:relDesc
-                                                                          ownerJson:json
-                                                                        ownerJsonId:jsonOwnerId
+                                                                          ownerJson:self.json
+                                                                        ownerJsonId:self.jsonId
                                                                        withBindings:_bindings];
-
-                [toManyOps addObject:nextOp];
-                [self addDependency:nextOp];
+                
+                [result addObject:nextOp];
             }
-
+            
             // Process many-to-many relationships
             // Only process toMany rels from the 'owner' side.  The 'owner' is
             // the entity that has 'cascade' delete rule
@@ -1146,8 +1119,52 @@
         }
     }
 
-    _toOneOps = toOneOps;
-    _toManyOps = toManyOps;
+    return result;
+}
+
+- (NSInteger)_serverChildCountForToManyRelationship:(NSRelationshipDescription *)relDesc {
+    NSInteger childCount = -1; // -1 => unknown, need to fetch to see
+
+    if ([self.json isKindOfClass:[NSDictionary class]]) {
+
+        // Don't check counts between static table classes and non-static table entities.
+        if (!self.entity.isStaticTableEntity || relDesc.destinationEntity.isStaticTableEntity) {
+            NSString *childCountKey = [NSString stringWithFormat:@"%@ChildCount_",
+                                       relDesc.name];
+            id childCountJson = ((NSDictionary *)self.json)[childCountKey];
+            if ([childCountJson isKindOfClass:[NSNumber class]]) {
+                childCount = ((NSNumber *)childCountJson).integerValue;
+            }
+        }
+        else {
+            childCount = 0;
+        }
+    }
+
+    return childCount;
+}
+
+- (void)_configureFaultingForRelationship:(NSRelationshipDescription *)relDesc {
+    // Does the user want to auto-pull the relationship when it is crossed?
+    if (relDesc.destinationEntity.jsonAllowFault) {
+        NSPredicate *pred = [FOSRelationshipFault predicateForEntity:self.entity
+                                                              withId:self.jsonId
+                                                forRelationshipNamed:relDesc.name];
+        NSArray *relationshipFaults =
+            [self.restConfig.databaseManager fetchEntitiesNamed:@"FOSRelationshipFault"
+                                                  withPredicate:pred];
+
+        if (relationshipFaults.count == 0) {
+            FOSRelationshipFault *relFault = [[FOSRelationshipFault alloc] init];
+
+            // TODO : http://fosmain.foscomputerservices.com:8080/browse/FF-6
+            relFault.jsonId = (NSString *)self.jsonId;
+            relFault.managedObjectClassName = self.entity.name;
+            relFault.relationshipName = relDesc.name;
+
+            _createdFaults = YES;
+        }
+    }
 }
 
 - (BOOL)_bindToJSONInBindings {
