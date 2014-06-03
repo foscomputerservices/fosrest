@@ -152,10 +152,4 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
 
 @property (nonatomic, readonly) BOOL hasUserDefinedProperties;
 
-#pragma mark - Custom Enumeration Methods
-
-- (void)enumerateAttributes:(FOSAttributeHandler)handler;
-- (void)enumerateOnlyOwned:(BOOL)onlyOwned relationships:(FOSRelationshipHandler)handler;
-- (void)enumerateOnlyNotOwned:(BOOL)onlyOwned relationships:(FOSRelationshipHandler)handler;
-
 @end

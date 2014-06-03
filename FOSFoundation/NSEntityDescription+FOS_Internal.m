@@ -107,7 +107,7 @@
 
             for (NSPropertyDescription *nextProp in nextEntity.properties) {
                 if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
-                    ![(NSRelationshipDescription *)nextProp isCMORelationship]) {
+                    ![(NSRelationshipDescription *)nextProp isFOSRelationship]) {
                     [result addObject:nextProp];
                 }
             }
@@ -236,7 +236,7 @@
 
             BOOL result =
                 [property isKindOfClass:[NSRelationshipDescription class]] &&
-                !((NSRelationshipDescription *)property).isCMORelationship &&
+                !((NSRelationshipDescription *)property).isFOSRelationship &&
                 ((NSRelationshipDescription *)property).inverseRelationship.isOwnershipRelationship;
 
             return result;
@@ -254,6 +254,49 @@
             ([self.properties filteredArrayUsingPredicate:ownerPropertyPred].count == 0);
 
         entityCache[selName] = result ? @YES : @NO;
+    }
+
+    return result;
+}
+
+- (id<NSFastEnumeration>)cmoAttibutes {
+    NSArray *props = self.properties;
+    NSMutableSet *result = [NSMutableSet setWithCapacity:props.count];
+
+    for (NSPropertyDescription *nextProp in props) {
+        if ([nextProp isKindOfClass:[NSAttributeDescription class]] &&
+            !((NSAttributeDescription *)nextProp).isFOSAttribute) {
+            [result addObject:nextProp];
+        }
+    }
+
+    return result;
+}
+
+- (id<NSFastEnumeration>)cmoRelationships {
+    NSArray *props = self.properties;
+    NSMutableSet *result = [NSMutableSet setWithCapacity:props.count];
+
+    for (NSPropertyDescription *nextProp in props) {
+        if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
+            !((NSRelationshipDescription *)nextProp).isFOSRelationship) {
+            [result addObject:nextProp];
+        }
+    }
+
+    return result;
+}
+
+- (id<NSFastEnumeration>)cmoOwnedRelationships {
+    NSArray *props = self.properties;
+    NSMutableSet *result = [NSMutableSet setWithCapacity:props.count];
+
+    for (NSPropertyDescription *nextProp in props) {
+        if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
+            !((NSRelationshipDescription *)nextProp).isFOSRelationship &&
+            ((NSRelationshipDescription *)nextProp).isOwnershipRelationship) {
+            [result addObject:nextProp];
+        }
     }
 
     return result;

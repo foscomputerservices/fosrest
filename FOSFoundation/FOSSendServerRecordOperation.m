@@ -229,7 +229,7 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
     }];
 
     // Traverse our owned relationships and send them to the server as well
-    [self.cmo.entity enumerateOnlyOwned:YES relationships:^BOOL(NSRelationshipDescription *relDesc) {
+    for (NSRelationshipDescription *relDesc in self.cmo.entity.cmoOwnedRelationships) {
         FOSOperation *relOp = nil;
 
         // To-one relationship
@@ -250,10 +250,7 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
 
             [finalOp addDependency:relOp];
         }
-
-        // Keep going
-        return YES;
-    }];
+    }
 
     return finalOp;
 }

@@ -10,7 +10,7 @@
 
 @implementation NSRelationshipDescription (FOS_Internal)
 
-- (BOOL)isCMORelationship {
+- (BOOL)isFOSRelationship {
     BOOL result = NO;
 
     return result;
@@ -22,7 +22,7 @@
         (self.deleteRule == NSCascadeDeleteRule || self.deleteRule == NSDenyDeleteRule) &&
 
         // Skip FOS's internal relationships
-        !self.isCMORelationship;
+        !self.isFOSRelationship;
 
     return result;
 }

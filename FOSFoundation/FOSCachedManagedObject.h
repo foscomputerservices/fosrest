@@ -25,7 +25,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 #pragma mark - DB properties
 
 // NOTE: If any properties are added, add them to the skip list
-//       in NSAttributeDescription's +isCMOProperty: impl.
+//       in NSAttributeDescription's +isFOSAttribute: impl.
 @property (nonatomic, strong) NSDate *updatedWithServerAt;
 @property (nonatomic) BOOL markedClean;
 @property (nonatomic) BOOL hasRelationshipFaults;

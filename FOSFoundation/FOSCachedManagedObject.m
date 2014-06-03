@@ -53,7 +53,7 @@ static NSMutableDictionary *_processingFaults = nil;
         if ([nextProp isKindOfClass:[NSRelationshipDescription class]]) {
             NSRelationshipDescription *relDesc = (NSRelationshipDescription *)nextProp;
 
-            if (!relDesc.isCMORelationship) {
+            if (!relDesc.isFOSRelationship) {
                 // If we're not the owner ** and ** the inverse is the owner (otherwise
                 // this relationship is a graph reference that can be ignored)
                 if ((!relDesc.isOwnershipRelationship &&
@@ -97,7 +97,7 @@ static NSMutableDictionary *_processingFaults = nil;
     __block BOOL result = self.isDirty;
 
     if (!result) {
-        [self.entity enumerateOnlyOwned:YES relationships:^BOOL(NSRelationshipDescription *relDesc) {
+        for (NSRelationshipDescription *relDesc in self.entity.cmoOwnedRelationships) {
             if (!relDesc.isToMany) {
                 FOSCachedManagedObject *cmo = [self primitiveValueForKey:relDesc.name];
 
@@ -116,7 +116,7 @@ static NSMutableDictionary *_processingFaults = nil;
             }
 
             return !result;
-        }];
+        }
     }
 
     return result;
@@ -147,9 +147,7 @@ static NSMutableDictionary *_processingFaults = nil;
 - (FOSCachedManagedObject *)owner {
     __block FOSCachedManagedObject *result = nil;
 
-    [self.entity enumerateOnlyOwned:NO relationships:^BOOL(NSRelationshipDescription *relDesc) {
-        BOOL continueEnumeration = YES;
-
+    for (NSRelationshipDescription *relDesc in self.entity.cmoRelationships) {
         // Does the inverse of this rel own us?
         if (relDesc.inverseRelationship.isOwnershipRelationship) {
             NSAssert(!relDesc.isToMany, @"Expected only a to-One owner relationship");
@@ -158,11 +156,11 @@ static NSMutableDictionary *_processingFaults = nil;
 
             // We're done if we found an id, otherwise we might have
             // multiple potential owners.
-            continueEnumeration = (result != nil);
+            if (result != nil) {
+                break;
+            }
         }
-        
-        return continueEnumeration;
-    }];
+    }
 
     return result;
 }
@@ -460,7 +458,7 @@ static NSMutableDictionary *_processingFaults = nil;
         // KVO-compliant
         [self addObserver:self forKeyPath:@"lastModifiedAt" options:0 context:nil];
 
-        [self.entity enumerateOnlyOwned:YES relationships:^BOOL(NSRelationshipDescription *relDesc) {
+        for (NSRelationshipDescription *relDesc in self.entity.cmoOwnedRelationships) {
             if (!relDesc.isToMany) {
                 FOSCachedManagedObject *cmo = [self primitiveValueForKey:relDesc.name];
 
@@ -474,9 +472,7 @@ static NSMutableDictionary *_processingFaults = nil;
                     [cmo addObserver:self forKeyPath:@"isSubTreeDirty" options:0 context:nil];
                 }
             }
-
-            return YES;
-        }];
+        }
     }
 }
 
@@ -491,7 +487,7 @@ static NSMutableDictionary *_processingFaults = nil;
     // NOTE: Perform isCMOPoperty check 1st, so that at startup internal properties
     // can be accessed before FOSRESTConfig is fully initialized.
     if ([NSThread isMainThread] &&
-        ![NSAttributeDescription isCMOProperty:key] &&
+        ![NSAttributeDescription isFOSAttribute:key] &&
         restConfig.isFaultingEnabled &&
         !restConfig.cacheManager.updatingMainThreadMOC &&
         restConfig.networkStatus != FOSNetworkStatusNotReachable) {
@@ -747,7 +743,7 @@ static NSMutableDictionary *_processingFaults = nil;
     }
     else {
         // We're no longer a fault if we have changed values
-        if (self.isFaultObject && ![NSAttributeDescription isCMOProperty:keyPath]) {
+        if (self.isFaultObject && ![NSAttributeDescription isFOSAttribute:keyPath]) {
             [self _removeObservers];
 
             // 'NO' is not really an object
@@ -796,7 +792,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
             if (!relDesc.isToMany &&
                 !relDesc.isOwnershipRelationship &&
-                !relDesc.isCMORelationship) {
+                !relDesc.isFOSRelationship) {
                 FOSCachedManagedObject *relObj = [self valueForKey:relDesc.name];
 
                 if (relObj != nil && !relObj.hasBeenUploadedToServer) {
@@ -1080,8 +1076,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSSet *relBindings = urlBinding.cmoBinding.relationshipBindings;
     NSMutableSet *result = [NSMutableSet set];
 
-    [entity enumerateOnlyOwned:NO relationships:^BOOL(NSRelationshipDescription *relDesc) {
-
+    for (NSRelationshipDescription *relDesc in entity.cmoRelationships) {
         context[@"RELDESC"] = relDesc;
 
         // Find the binding that matches this relationship
@@ -1109,9 +1104,7 @@ static NSMutableDictionary *_processingFaults = nil;
                 }
             }
         }
-
-        return YES;
-    }];
+    }
 
     return result;
 }
@@ -1134,7 +1127,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     for (NSPropertyDescription *propDesc in entity.properties) {
         if ([propDesc isKindOfClass:[NSAttributeDescription class]] &&
-            !((NSAttributeDescription *)propDesc).isCMOProperty) {
+            !((NSAttributeDescription *)propDesc).isFOSAttribute) {
 
             context[@"ATTRDESC"] = propDesc;
 
@@ -1168,11 +1161,11 @@ static NSMutableDictionary *_processingFaults = nil;
     if (self.isFaultObject) {
         for (NSPropertyDescription *nextProp in self.entity.properties) {
             if ([nextProp isKindOfClass:[NSAttributeDescription class]] &&
-                ![NSAttributeDescription isCMOProperty:nextProp.name]) {
+                ![NSAttributeDescription isFOSAttribute:nextProp.name]) {
                 [self addObserver:self forKeyPath:nextProp.name options:0 context:nil];
             }
             else if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
-                     !((NSRelationshipDescription *)nextProp).isCMORelationship) {
+                     !((NSRelationshipDescription *)nextProp).isFOSRelationship) {
                 [self addObserver:self forKeyPath:nextProp.name options:0 context:nil];
             }
         }
@@ -1182,11 +1175,11 @@ static NSMutableDictionary *_processingFaults = nil;
 - (void)_removeObservers {
     for (NSPropertyDescription *nextProp in self.entity.properties) {
         if ([nextProp isKindOfClass:[NSAttributeDescription class]] &&
-            ![NSAttributeDescription isCMOProperty:nextProp.name]) {
+            ![NSAttributeDescription isFOSAttribute:nextProp.name]) {
             [self removeObserver:self forKeyPath:nextProp.name];
         }
         else if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
-                 !((NSRelationshipDescription *)nextProp).isCMORelationship) {
+                 !((NSRelationshipDescription *)nextProp).isFOSRelationship) {
             [self removeObserver:self forKeyPath:nextProp.name];
         }
     }
@@ -1278,8 +1271,8 @@ static NSMutableDictionary *_processingFaults = nil;
     NSManagedObjectContext *moc = self.managedObjectContext;
 
     for (NSString *nextKey in changedVals) {
-        if ([NSAttributeDescription isCMOProperty:nextKey] &&
-            ![NSAttributeDescription isUploadableCMOProperty:nextKey]) {
+        if ([NSAttributeDescription isFOSAttribute:nextKey] &&
+            ![NSAttributeDescription isUploadableFOSProperty:nextKey]) {
             [changedVals removeObjectForKey:nextKey];
         }
     }

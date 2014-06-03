@@ -10,7 +10,7 @@
 
 @interface NSRelationshipDescription (FOS_Internal)
 
-@property (nonatomic, readonly) BOOL isCMORelationship;
+@property (nonatomic, readonly) BOOL isFOSRelationship;
 @property (nonatomic, readonly) BOOL isOwnershipRelationship;
 
 @end

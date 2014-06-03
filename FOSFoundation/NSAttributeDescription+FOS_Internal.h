@@ -10,10 +10,10 @@
 
 @interface NSAttributeDescription (FOS_Internal)
 
-+ (BOOL)isCMOProperty:(NSString *)propertyName;
-+ (BOOL)isUploadableCMOProperty:(NSString *)propertyName;
++ (BOOL)isFOSAttribute:(NSString *)propertyName;
++ (BOOL)isUploadableFOSProperty:(NSString *)propertyName;
 
-@property (nonatomic, readonly) BOOL isCMOProperty;
-@property (nonatomic, readonly) BOOL isUploadableCMOProperty;
+@property (nonatomic, readonly) BOOL isFOSAttribute;
+@property (nonatomic, readonly) BOOL isUploadableFOSProperty;
 
 @end

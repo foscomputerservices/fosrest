@@ -30,6 +30,30 @@
 @property (nonatomic, readonly) NSSet *flattenedOwnershipRelationships;
 @property (nonatomic, readonly) BOOL isStaticTableEntity;
 
+/*!
+ * @method nonFOSRelationships
+ *
+ * The set of properties that are of type NSAttributeDescription and
+ * !relDesc.isFOSProperty.
+ */
+@property (nonatomic, readonly) id<NSFastEnumeration> cmoAttibutes;
+
+/*!
+ * @method cmoRelationships
+ *
+ * The set of properties that are of type NSRelationshipDescription and
+ * !relDesc.isFOSRelationship.
+ */
+@property (nonatomic, readonly) id<NSFastEnumeration> cmoRelationships;
+
+/*!
+ * @method cmoOwnedRelationships
+ *
+ * The set of properties that are of type NSRelationshipDescription and
+ * !relDesc.isFOSRelationship && relDesc.isOwnershipRelationship.
+ */
+@property (nonatomic, readonly) id<NSFastEnumeration> cmoOwnedRelationships;
+
 #pragma mark - Public Methods
 
 - (BOOL)isFOSEntityWithRestConfig:(FOSRESTConfig *)restConfig;

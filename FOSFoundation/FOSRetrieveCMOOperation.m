@@ -176,8 +176,7 @@
 
                 NSAssert([jsonDict isKindOfClass:[NSDictionary class]], @"It's not a dictionary???");
 
-                // Find all of the user-defined fields
-                [entity enumerateAttributes:^BOOL(NSAttributeDescription *attrDesc) {
+                for (NSAttributeDescription *attrDesc in entity.cmoAttibutes) {
 
                     // Only match records that locally have no server identities attached
                     if ([attrDesc.name isEqualToString:idProp]) {
@@ -204,9 +203,7 @@
                                 [svrValue isKindOfClass:[NSString class]];
                         }
                     }
-
-                    return YES; // Continue
-                }];
+                };
 
                 if (foundStringProp && matchPredStr.length > 0) {
                     NSPredicate *pred = [NSPredicate predicateWithFormat:matchPredStr
@@ -642,15 +639,14 @@
         if (!encounteredErrors) {
             // Check each of the toOne optional relationships to make sure that the destination
             // hasn't been deleted.
-            __block FOSRetrieveCMOOperation *blockSelf = self;
 
-            [_entity enumerateOnlyOwned:NO relationships:^BOOL(NSRelationshipDescription *relDesc) {
+            for (NSRelationshipDescription *relDesc in _entity.cmoRelationships) {
                 if (!relDesc.isToMany && relDesc.isOptional) {
 
                     NSError *localError = nil;
-                    FOSCMOBinding *cmoBinding = blockSelf->_urlBinding.cmoBinding;
-                    FOSJsonId jsonRelId = [cmoBinding jsonIdFromJSON:blockSelf->_json
-                                                           forEntity:blockSelf->_entity
+                    FOSCMOBinding *cmoBinding = _urlBinding.cmoBinding;
+                    FOSJsonId jsonRelId = [cmoBinding jsonIdFromJSON:_json
+                                                           forEntity:_entity
                                                                error:&localError];
 
                     if (localError == nil) {
@@ -659,12 +655,14 @@
                         }
                     }
                     else {
-                        blockSelf->_error = localError;
+                        _error = localError;
                     }
                 }
 
-                return blockSelf->_error == nil;
-            }];
+                if (_error != nil) {
+                    break;
+                }
+            };
 
             // Bind the to-many relationships
             for (FOSRetrieveToManyRelationshipOperation *nextToManyOp in _toManyOps) {

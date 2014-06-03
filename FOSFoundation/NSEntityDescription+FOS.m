@@ -78,13 +78,15 @@
 #pragma mark - Inferred Properties
 
 - (BOOL)hasOwner {
-    __block BOOL result = NO;
+    BOOL result = NO;
 
-    [self enumerateOnlyOwned:NO relationships:^BOOL(NSRelationshipDescription *relDesc) {
+    for (NSRelationshipDescription *relDesc in self.cmoRelationships) {
         result = relDesc.inverseRelationship.isOwnershipRelationship;
 
-        return !result;
-    }];
+        if (result) {
+            break;
+        }
+    }
 
     return result;
 }
@@ -100,60 +102,6 @@
     }
 
     return result;
-}
-
-#pragma mark - Custom Enumeration Methods
-
-- (void)enumerateAttributes:(FOSAttributeHandler)handler {
-    NSParameterAssert(handler != nil);
-
-    for (NSPropertyDescription *propDesc in self.properties) {
-        if ([propDesc isKindOfClass:[NSAttributeDescription class]]) {
-            NSAttributeDescription *attrDesc = (NSAttributeDescription *)propDesc;
-
-            if (!attrDesc.isCMOProperty) {
-                if (!handler(attrDesc)) {
-                    break;
-                }
-            }
-        }
-    }
-}
-
-- (void)enumerateOnlyOwned:(BOOL)onlyOwned relationships:(FOSRelationshipHandler)handler {
-    NSParameterAssert(handler != nil);
-
-    for (NSPropertyDescription *propDesc in self.properties) {
-        if ([propDesc isKindOfClass:[NSRelationshipDescription class]]) {
-            NSRelationshipDescription *relDesc = (NSRelationshipDescription *)propDesc;
-
-            if (!relDesc.isCMORelationship) {
-                if (!onlyOwned || relDesc.isOwnershipRelationship) {
-                    if (!handler(relDesc)) {
-                        break;
-                    }
-                }
-            }
-        }
-    }
-}
-
-- (void)enumerateOnlyNotOwned:(BOOL)onlyNotOwned relationships:(FOSRelationshipHandler)handler {
-    NSParameterAssert(handler != nil);
-
-    for (NSPropertyDescription *propDesc in self.properties) {
-        if ([propDesc isKindOfClass:[NSRelationshipDescription class]]) {
-            NSRelationshipDescription *relDesc = (NSRelationshipDescription *)propDesc;
-
-            if (!relDesc.isCMORelationship) {
-                if (!onlyNotOwned || !relDesc.isOwnershipRelationship) {
-                    if (!handler(relDesc)) {
-                        break;
-                    }
-                }
-            }
-        }
-    }
 }
 
 #pragma mark - Private methods

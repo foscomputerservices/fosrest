@@ -12,7 +12,7 @@
 #pragma mark - Public Properties
 
 // NOTE: If any properties are added, add them to the skip list
-//       in NSAttributeDescription's +isCMOProperty: impl.
+//       in NSAttributeDescription's +isFOSAttribute: impl.
 @property (nonatomic, readonly) NSDate *createdAt;
 @property (nonatomic, readonly) NSDate *lastModifiedAt;
 @property (nonatomic, readonly) BOOL willSaveHasRecursed;

@@ -90,7 +90,7 @@
                                                                          context:context]) {
 
         // Must not be a CMO Property
-        if ([attrDesc isKindOfClass:[NSAttributeDescription class]] && !attrDesc.isCMOProperty) {
+        if ([attrDesc isKindOfClass:[NSAttributeDescription class]] && !attrDesc.isFOSAttribute) {
             [result addObject:attrDesc];
         }
     }

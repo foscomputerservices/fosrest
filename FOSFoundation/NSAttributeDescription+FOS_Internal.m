@@ -10,7 +10,7 @@
 
 @implementation NSAttributeDescription (FOS_Internal)
 
-+ (BOOL)isCMOProperty:(NSString *)propertyName {
++ (BOOL)isFOSAttribute:(NSString *)propertyName {
     BOOL result = NO;
 
     // TODO : Consider generating this list from Obj-C meta data.
@@ -45,8 +45,8 @@
     return result;
 }
 
-+ (BOOL)isUploadableCMOProperty:(NSString *)propertyName {
-    NSParameterAssert([self isCMOProperty:propertyName]);
++ (BOOL)isUploadableFOSProperty:(NSString *)propertyName {
+    NSParameterAssert([self isFOSAttribute:propertyName]);
 
     BOOL result = NO;
 
@@ -61,14 +61,14 @@
     return result;
 }
 
-- (BOOL)isCMOProperty {
-    BOOL result = [[self class] isCMOProperty:self.name];
+- (BOOL)isFOSAttribute {
+    BOOL result = [[self class] isFOSAttribute:self.name];
 
     return result;
 }
 
-- (BOOL)isUploadableCMOProperty {
-    BOOL result = [[self class] isUploadableCMOProperty:self.name];
+- (BOOL)isUploadableFOSProperty {
+    BOOL result = [[self class] isUploadableFOSProperty:self.name];
 
     return result;
 }
