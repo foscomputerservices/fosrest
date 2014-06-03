@@ -225,7 +225,7 @@
 
                 NSString *base64ByteString = [data base64EncodedString];
 
-                result = @{ @"__type" : @"Bytes", @"base64" : base64ByteString };
+                result = base64ByteString;
             }
             else {
                 result = [transformer transformedValue:cmoValue];

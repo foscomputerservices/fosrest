@@ -194,7 +194,8 @@ const NSTimeInterval kQueueingDelay = 0.26f;
               [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
               requestDebugData == nil
                 ? @""
-                : [NSString stringWithFormat:@"\nHTTPData: %@", requestDebugData]);
+                : [NSString stringWithFormat:@"\nHTTPData: %@",
+                   [requestDebugData stringByRemovingPercentEncoding]]);
         
         [self _completionHandlerForRequest:webServiceRequest
                             withURLRequest:urlRequest
