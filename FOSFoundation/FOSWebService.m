@@ -189,12 +189,15 @@ const NSTimeInterval kQueueingDelay = 0.26f;
                                              returningResponse:&response
                                                          error:&error];
 
-        FOSLogDebug(@"FOSWebService (%li) Sync: %@ - %@%@",
+        FOSLogDebug(@"FOSWebService (%li) Sync: %@ - %@%@%@",
               (long)currentRequestId, requestMethod,
               [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+              urlRequest.allHTTPHeaderFields.count > 0
+                ? [NSString stringWithFormat:@"\nHTTP-Headers: %@", urlRequest.allHTTPHeaderFields.description]
+                : @"",
               requestDebugData == nil
                 ? @""
-                : [NSString stringWithFormat:@"\nHTTPData: %@",
+                : [NSString stringWithFormat:@"\nHTTP-Data: %@",
                    [requestDebugData stringByRemovingPercentEncoding]]);
         
         [self _completionHandlerForRequest:webServiceRequest

@@ -119,16 +119,13 @@
     // Ensure that the cmo is managed by this request
     if ([self _matchEntity:cmo.entity error:error]) {
 
-        NSURL *baseURL = self._baseURL;
         NSError *localError = nil;
-        NSMutableString *endPointURLStr =
-            [[self _endPointURLStrForCMO:cmo error:&localError] mutableCopy];
 
-        if (endPointURLStr.length > 0 && localError == nil) {
-            baseURL = [baseURL URLByAppendingPathComponent:endPointURLStr];
+        NSURL *url = [self _urlForCMO:cmo withContext:nil error:&localError];
 
+        if (localError == nil) {
             // Assign URL
-            result = [NSMutableURLRequest requestWithURL:baseURL];
+            result = [NSMutableURLRequest requestWithURL:url];
 
             // Assign request method
             result.HTTPMethod = self._httpMethod;
@@ -463,42 +460,73 @@
     NSURL *result = self.baseURL;
 
     if (result == nil) {
-
         result = self._adapter.defaultBaseURL;
     }
 
     return result;
 }
 
-- (NSString *)_endPointURLStrForCMO:(FOSCachedManagedObject *)cmo error:(NSError **)error {
+- (NSURL *)_urlForCMO:(FOSCachedManagedObject *)cmo
+          withContext:(NSDictionary *)context
+                error:(NSError **)error {
     NSParameterAssert(error != nil);
 
-    NSDictionary *context = @{ @"CMO" : cmo };
+    NSURL *result = self._baseURL;
+    NSError *localError = nil;
+
+    if (context == nil) {
+        context = @{ @"CMO" : cmo, @"ENTITY" : cmo.entity };
+        if (cmo.jsonIdValue != nil) {
+            context = [context mutableCopy];
+            ((NSMutableDictionary *)context)[@"CMOID"] = cmo.jsonIdValue;
+        }
+    }
+
+    // Retrieve the base END_POINT
+    NSString *endPoint = [self _endPointStrForCMO:cmo withContext:context error:&localError];
+    if (localError == nil) {
+        result = [result URLByAppendingPathComponent:endPoint];
+    }
+
+    // Retrieve the query portion
+    NSString *endPointQuery = [self _endPointQueryForCMO:cmo
+                                             withContext:context
+                                                   error:&localError];
+    if (endPointQuery.length > 0) {
+        NSString *baseURLStr = result.absoluteString;
+        NSString *fullURLStr = [NSString stringWithFormat:@"%@?%@",
+                                baseURLStr, endPointQuery];
+
+        result = [NSURL URLWithString:fullURLStr];
+    }
+
+    if (localError != nil) {
+        *error = localError;
+        result = nil;
+    }
+
+    return result;
+}
+
+- (NSString *)_endPointQueryForCMO:(FOSCachedManagedObject *)cmo
+                       withContext:(NSDictionary *)context
+                             error:(NSError **)error {
+    NSParameterAssert(cmo != nil || context != nil);
+    NSParameterAssert(error != nil);
+
+    NSError *localError = nil;
     NSMutableString *result = nil;
 
-    id exprValue = [self.endPointURLExpression evaluateWithContext:context error:error];
-    if (![exprValue isKindOfClass:[NSString class]]) {
-        NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING %@";
-        NSString *msg = [NSString stringWithFormat:msgFmt,
-                         NSStringFromClass([exprValue class]),
-                         self.entityMatcher.description];
+    // Add any END_POINT_PARAMETERS
+    NSDictionary *endPointJson = [self _evaluateEndPointParametersWithContext:context error:&localError];
+    if (endPointJson != nil) {
+        NSAssert(localError == nil, @"Error assigned???");
 
-        *error = [NSError errorWithMessage:msg forAtom:self];
-    }
-    else {
-        result = [(NSString *)exprValue mutableCopy];
-    }
+        if (endPointJson != nil && endPointJson.count > 0 && localError == nil) {
+            NSString *webformEncoding = [self _webformEncodeJSON:endPointJson error:error];
 
-    // See if we need to encode the data into the URL too
-    if (self.requestFormat == FOSRequestFormatWebform &&
-        self.requestMethod == FOSRequestMethodGET) {
-
-        NSDictionary *json = [self _jsonBodyForCMO:cmo error:error];
-        if (json != nil && json.count > 0 && *error == nil) {
-            NSString *webformEncoding = [self _webformEncodeJSON:json error:error];
-
-            if ([result rangeOfString:@"?"].location == NSNotFound) {
-                [result appendString:@"?"];
+            if (result == nil) {
+                result = [NSMutableString string];
             }
             else {
                 [result appendString:@"&"];
@@ -508,65 +536,144 @@
         }
     }
 
-    return result;
-}
+    // See if we need to encode the data into the URL too
+    if (localError == nil &&
+        cmo != nil &&
+        self.requestFormat == FOSRequestFormatWebform &&
+        self.requestMethod == FOSRequestMethodGET) {
 
-- (NSString *)_endPointURLStrWithContext:(NSDictionary *)context
-                                error:(NSError **)error {
-    NSParameterAssert(error != nil);
+        NSDictionary *json = [self _jsonBodyForCMO:cmo error:error];
+        if (json != nil && json.count > 0 && localError == nil) {
+            NSString *webformEncoding = [self _webformEncodeJSON:json error:error];
 
-    NSMutableString *result = nil;
+            if (result == nil) {
+                result = [NSMutableString string];
+            }
+            else {
+                [result appendString:@"&"];
+            }
 
-    id exprValue = [self.endPointURLExpression evaluateWithContext:context error:error];
-    if (![exprValue isKindOfClass:[NSString class]]) {
-        NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING";
-        NSString *msg = [NSString stringWithFormat:msgFmt,
-                         NSStringFromClass([exprValue class])];
-
-        *error = [NSError errorWithMessage:msg forAtom:self];
-    }
-    else {
-        NSString *escapedExprValue =
-            [exprValue stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        result = [escapedExprValue mutableCopy];
+            [result appendString:webformEncoding];
+        }
     }
     
-    // Add any parameters that were provided
-    BOOL paramsAdded = NO;
-    for (id<FOSExpression> paramExpr in self.endPointParameters) {
-        id paramExprVal = [paramExpr evaluateWithContext:context error:error];
-        
-        if (paramExprVal && *error == nil) {
-            if (![paramExprVal isKindOfClass:[NSString class]]) {
-                NSString *msg = [NSString stringWithFormat:@"endPointParameters yieled an instance of type %@, expected an NSString", NSStringFromClass([paramExprVal class])];
-                
-                *error = [NSError errorWithMessage:msg forAtom:self];
-                break;
-            }
-            
-            NSString *paramSep = paramsAdded ? @"&" : @"?";
-            NSString *paramStr = (NSString *)paramExprVal;
-            
-            if (paramStr.length > 0) {
-                
-                // Escape the user-provided string!
-                NSString *escapedParamStr =
-                    [paramStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                [result appendString:paramSep];
-                [result appendString:escapedParamStr];
-                
-                paramsAdded = YES;
-            }
-        }
-        else if (*error != nil) {
-            break;
-        }
-    }
-
-    if (*error != nil) {
+    if (localError != nil) {
+        *error = localError;
         result = nil;
     }
 
+    return result;
+}
+
+- (NSDictionary *)_evaluateEndPointParametersWithContext:(NSDictionary *)context error:(NSError **)error  {
+    NSParameterAssert(error != nil);
+
+    NSMutableDictionary *result = nil;
+
+    // Add any parameters that were provided
+    NSError *localError;
+    NSUInteger entryNum = 0;
+    for (NSArray *paramTuple in self.endPointParameters) {
+        if (![paramTuple isKindOfClass:[NSArray class]]) {
+            NSString *msgFmt = @"END_POINT_PARAMETERS expression yielded a result of type %@, expected NSArray.";
+            NSString *msg = [NSString stringWithFormat:msgFmt,
+                             NSStringFromClass([paramTuple class])];
+
+            localError = [NSError errorWithMessage:msg forAtom:self];
+        }
+
+        NSString *msgFmt = @"The %@ hand expression of END_POINT_PARAMETERS entry #%lu yieled a type of %@, expected NSString";
+
+        // Evaluate the LHS expression
+        id lhsResult = nil;
+
+        if (localError == nil) {
+            id<FOSExpression> lhsExpr = paramTuple[0];
+            lhsResult = [lhsExpr evaluateWithContext:context error:&localError];
+            if (localError == nil) {
+                if (![lhsResult isKindOfClass:[NSString class]]) {
+                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                     @"left",
+                                     (unsigned long)entryNum,
+                                     NSStringFromClass([lhsResult class])];
+
+                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                }
+            }
+        }
+
+        // Evaluate the RHS expression
+        id rhsResult = nil;
+        if (localError == nil) {
+            id<FOSExpression> rhsExpr = paramTuple[1];
+            rhsResult = [rhsExpr evaluateWithContext:context error:&localError];
+
+            if (localError == nil) {
+                if (![rhsResult isKindOfClass:[NSString class]]) {
+                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                     @"right",
+                                     (unsigned long)entryNum,
+                                     NSStringFromClass([rhsResult class])];
+
+                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                }
+            }
+        }
+
+        // Save off the expression results
+        if (localError == nil) {
+            if (rhsResult != nil &&
+                (![rhsResult isKindOfClass:[NSString class]] ||
+                 ((NSString *)rhsResult).length > 0)) {
+
+                if (result == nil) {
+                    result = [NSMutableDictionary dictionary];
+                }
+
+                result[lhsResult] = rhsResult;
+            }
+        }
+        else {
+            break;
+        }
+
+        entryNum++;
+    }
+    
+    if (localError != nil) {
+        *error = localError;
+        result = nil;
+    }
+    
+    return result;
+}
+
+- (NSString *)_endPointStrForCMO:(FOSCachedManagedObject *)cmo
+                            withContext:(NSDictionary *)context
+                                  error:(NSError **)error {
+    NSParameterAssert(error != nil);
+
+    NSError *localError = nil;
+    NSString *result = nil;
+
+    id exprValue = [self.endPointURLExpression evaluateWithContext:context error:error];
+    if (![exprValue isKindOfClass:[NSString class]]) {
+        NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING %@";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         NSStringFromClass([exprValue class]),
+                         self.entityMatcher.description];
+
+        localError = [NSError errorWithMessage:msg forAtom:self];
+    }
+    else {
+        result = (NSString *)exprValue;
+    }
+
+    if (localError != nil) {
+        *error = localError;
+        result = nil;
+    }
+    
     return result;
 }
 
@@ -580,15 +687,11 @@
     NSMutableURLRequest *result= nil;
     if ((entity == nil) || [self _matchEntity:entity error:error]) {
         
-        NSURL *baseURL = self._baseURL;
+        NSURL *url = [self _urlForCMO:nil withContext:context error:error];
         
-        NSString *endPointURLStr = [self _endPointURLStrWithContext:context error:error];
-        
-        if (endPointURLStr.length > 0 && *error == nil) {
-            baseURL = [NSURL URLWithString:endPointURLStr relativeToURL:baseURL];
-            
+        if (*error == nil) {
             // Assign URL
-            result = [NSMutableURLRequest requestWithURL:baseURL];
+            result = [NSMutableURLRequest requestWithURL:url];
             
             // Assign request method
             result.HTTPMethod = self._httpMethod;
@@ -624,15 +727,11 @@
     if ([self _matchEntity:entity error:error] &&
         [self.relationshipMatcher itemIsIncluded:relDesc.name context:context]) {
 
-        NSURL *baseURL = self._baseURL;
+        NSURL *url = [self _urlForCMO:nil withContext:context error:error];
 
-        NSString *endPointURLStr = [self _endPointURLStrWithContext:context error:error];
-
-        if (endPointURLStr.length > 0 && *error == nil) {
-            baseURL = [NSURL URLWithString:endPointURLStr relativeToURL:baseURL];
-
+        if (*error == nil) {
             // Assign URL
-            result = [NSMutableURLRequest requestWithURL:baseURL];
+            result = [NSMutableURLRequest requestWithURL:url];
 
             // Assign request method
             result.HTTPMethod = self._httpMethod;
@@ -721,9 +820,12 @@
 }
 
 - (NSDictionary *)_jsonBodyForCMO:(FOSCachedManagedObject *)cmo error:(NSError **)error {
+    NSParameterAssert(cmo != nil);
     NSParameterAssert(error != nil);
 
-    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    NSMutableDictionary *result = nil;
+
+    result = [NSMutableDictionary dictionary];
 
     // These are the only 2 lifecycle phases that we send json.
     // TODO : Consider whether this logic needs to be in the adapter
@@ -737,13 +839,23 @@
         }
     }
 
+    NSDictionary *context = @{ @"CMO" : cmo , @"ENTITY" : cmo.entity };
+    if (cmo.jsonIdValue != nil) {
+        context = [context mutableCopy];
+        ((NSMutableDictionary *)context)[@"CMOID"] = cmo.jsonIdValue;
+    }
+    NSDictionary *jsonBody = [self _jsonBodyWithContext:context error:error];
+    if (jsonBody.count > 0) {
+        [result addEntriesFromDictionary:jsonBody];
+    }
+
     return result;
 }
 
 - (NSData *)_httpBodyForCommandWithContext:(NSDictionary *)context error:(NSError **)error {
     NSParameterAssert(error != nil);
 
-    NSDictionary *json = [self _jsonBodyForCommandWithContext:context error:error];
+    NSDictionary *json = [self _jsonBodyWithContext:context error:error];
     NSData *result = [self _httpBodyForJSON:json context:context error:error];
 
     return result;
@@ -780,7 +892,7 @@
     return result;
 }
 
-- (NSDictionary *)_jsonBodyForCommandWithContext:(NSDictionary *)context error:(NSError **)error {
+- (NSDictionary *)_jsonBodyWithContext:(NSDictionary *)context error:(NSError **)error {
     NSParameterAssert(error != nil);
 
     *error = nil;

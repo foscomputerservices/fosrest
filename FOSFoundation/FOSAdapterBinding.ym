@@ -423,7 +423,7 @@ end_point_url
 
 end_point_parameters
     : /* empty */ { $$ = nil; }
-    | END_POINT_PARAMETERS SEP expression_list SEMI { $$ = $3; }
+    | END_POINT_PARAMETERS SEP key_value_pair_list SEMI { $$ = $3; }
     ;
 
 cmo_binding

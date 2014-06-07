@@ -35,10 +35,10 @@
     NSEntityDescription *entity = [self.managedClass entityDescription];
     NSError *localError = nil;
 
-    // DSLQUERY = where={"user" : {"__type" : "Pointer", "className" : "_User", "objectId" : "EcpQ2bE3fx"}}
-    NSMutableString *dslQuery = [NSMutableString stringWithString:@"where={"];
+    // DSLQUERY = {"user" : {"__type" : "Pointer", "className" : "_User", "objectId" : "EcpQ2bE3fx"}}
+    NSMutableString *dslQuery = [NSMutableString stringWithString:@"{"];
     if (self.uid != nil) {
-        [dslQuery appendFormat:@"where={ \"user\" : {\"__type\" : \"Pointer\", \"className\" : \"_User\", \"objectId\" : \"%@\"} }", self.uid];
+        [dslQuery appendFormat:@"{ \"user\" : {\"__type\" : \"Pointer\", \"className\" : \"_User\", \"objectId\" : \"%@\"} }", self.uid];
     }
     else {
         [dslQuery appendFormat:@"%@\"name\" : \"%@\"",
