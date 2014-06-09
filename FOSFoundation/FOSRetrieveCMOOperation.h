@@ -21,6 +21,7 @@
 @property (nonatomic, readonly) FOSCachedManagedObject *managedObject;
 @property (nonatomic, readonly) BOOL isTopLevelFetch;
 @property (nonatomic, assign) BOOL allowFastTrack;
+@property (nonatomic, strong) NSString *dslQuery;
 
 #pragma mark - Class Methods
 

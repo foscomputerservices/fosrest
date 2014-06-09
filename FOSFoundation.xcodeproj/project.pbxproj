@@ -48,8 +48,6 @@
 		6310F94E16991F3900981E85 /* FOSManagedObject+FOS_Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 6310F94C16991F3900981E85 /* FOSManagedObject+FOS_Internal.m */; };
 		63127DB71688D70600F70BF9 /* NSObject+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 63127DB51688D70600F70BF9 /* NSObject+FOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63127DB81688D70600F70BF9 /* NSObject+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 63127DB61688D70600F70BF9 /* NSObject+FOS.m */; };
-		6315136C1925A59E004A55A6 /* FOSFoundationResources-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6315136A1925A59E004A55A6 /* FOSFoundationResources-Info.plist */; };
-		6315136F1925A5B6004A55A6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6315136D1925A5B6004A55A6 /* InfoPlist.strings */; };
 		631513741925A989004A55A6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632B5403168E06BE003AD474 /* CoreData.framework */; };
 		6315724B190432420044CC90 /* NSManagedObjectModel+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 63157249190432420044CC90 /* NSManagedObjectModel+FOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6315724C190432420044CC90 /* NSManagedObjectModel+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 63157249190432420044CC90 /* NSManagedObjectModel+FOS.h */; };
@@ -384,6 +382,7 @@
 		63B14EDD172720FC00A631C4 /* FOSPullStaticTablesOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B14EDA172720FC00A631C4 /* FOSPullStaticTablesOperation.m */; };
 		63B14EDE172720FC00A631C4 /* FOSPullStaticTablesOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B14EDA172720FC00A631C4 /* FOSPullStaticTablesOperation.m */; };
 		63B81279185537E400C54585 /* FOSThreadSleep.h in Headers */ = {isa = PBXBuildFile; fileRef = 63FD636C18552C2C00D47ED5 /* FOSThreadSleep.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63BDED2E1946737B00A43222 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6315136D1925A5B6004A55A6 /* InfoPlist.strings */; };
 		63BFA37B1481A85700FE1C0C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63BFA37A1481A85700FE1C0C /* Foundation.framework */; };
 		63BFA38C1481A85700FE1C0C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63BFA37A1481A85700FE1C0C /* Foundation.framework */; };
 		63BFA3951481A85700FE1C0C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 63BFA3931481A85700FE1C0C /* InfoPlist.strings */; };
@@ -1893,8 +1892,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6315136C1925A59E004A55A6 /* FOSFoundationResources-Info.plist in Resources */,
-				6315136F1925A5B6004A55A6 /* InfoPlist.strings in Resources */,
+				63BDED2E1946737B00A43222 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

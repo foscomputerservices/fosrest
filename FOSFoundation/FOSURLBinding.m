@@ -154,6 +154,7 @@
 
 - (NSURLRequest *)urlRequestServerRecordOfType:(NSEntityDescription *)entity
                                     withJsonId:(FOSJsonId)jsonId
+                                  withDSLQuery:(NSString *)dslQuery
                                          error:(NSError **)error {
     NSParameterAssert(entity != nil);
     NSParameterAssert(jsonId != nil);
@@ -161,7 +162,11 @@
     if (error != nil) { *error = nil; }
 
     NSDictionary *context = @{ @"CMOID" : jsonId, @"ENTITY" : entity };
-    
+    if (dslQuery != nil) {
+        context = [context mutableCopy];
+        ((NSMutableDictionary *)context)[@"DSLQUERY"] = dslQuery;
+    }
+
     NSError *localError = nil;
     NSURLRequest *result = [self _urlRequestForEntity:entity withContext:context error:&localError];
     

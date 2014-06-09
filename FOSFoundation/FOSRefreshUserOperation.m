@@ -64,6 +64,7 @@
     NSError *localError = nil;
     NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entityDesc
                                                              withJsonId:loggedInUid
+                                                           withDSLQuery:nil
                                                                   error:&localError];
 
     if (urlRequest != nil && localError == nil) {

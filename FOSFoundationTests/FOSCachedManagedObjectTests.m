@@ -1044,7 +1044,7 @@ TEARDOWN_LOGIN
         XCTAssertFalse(cancelled, @"Cancelled???");
         XCTAssertEqual(error.code, 201, @"Error: %@", error.description);
 
-        [loggedInUser refreshRelationshipNamed:@"testCreations" handler:^(BOOL cancelled, NSError *error) {
+        [loggedInUser refreshRelationshipNamed:@"testCreations" dslQuery:nil handler:^(BOOL cancelled, NSError *error) {
             XCTAssertFalse(cancelled, @"Cancelled???");
             XCTAssertNil(error, @"Error: %@", error.description);
 

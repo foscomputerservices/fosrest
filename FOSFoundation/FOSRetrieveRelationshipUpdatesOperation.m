@@ -49,22 +49,27 @@ forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
 
 #pragma mark - Class Methods
 
-+ (instancetype)retrieveRealtionshipUpdatesForCMO:(FOSCachedManagedObject *)cmo {
-    return [[self alloc] initForCMO:cmo];
++ (instancetype)retrieveRealtionshipUpdatesForCMO:(FOSCachedManagedObject *)cmo
+                                         dslQuery:(NSString *)dslQuery {
+    return [[self alloc] initForCMO:cmo dslQuery:dslQuery];
 }
 
 + (instancetype)retrieveRealtionshipUpdatesForCMO:(FOSCachedManagedObject *)cmo
+                                         dslQuery:(NSString *)dslQuery
                                          matching:(FOSItemMatcher *)relationshipNameMatcher {
-    return [[self alloc] initForCMO:cmo forRelationships:relationshipNameMatcher];
+    return [[self alloc] initForCMO:cmo dslQuery:dslQuery forRelationships:relationshipNameMatcher];
 }
 
 #pragma mark - Initialization Methods
 
-- (id)initForCMO:(FOSCachedManagedObject *)cmo {
-    return [self initForCMO:cmo forRelationships:[FOSItemMatcher matcherMatchingAllItems]];
+- (id)initForCMO:(FOSCachedManagedObject *)cmo dslQuery:(NSString *)dslQuery {
+    return [self initForCMO:cmo
+                   dslQuery:dslQuery
+           forRelationships:[FOSItemMatcher matcherMatchingAllItems]];
 }
 
 - (id)initForCMO:(FOSCachedManagedObject *)cmo
+        dslQuery:(NSString *)dslQuery
 forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
     NSParameterAssert(cmo != nil);
     NSParameterAssert(relationshipNameMatcher != nil);
@@ -77,6 +82,7 @@ forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
             [FOSRetrieveCMOOperation retrieveCMOUsingDataOperation:dataOpPackage
                                                  forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                                  forLifecycleStyle:self.lifecycleStyle];
+        retrieveCMO.dslQuery = dslQuery;
 
         [self addDependency:retrieveCMO];
     }

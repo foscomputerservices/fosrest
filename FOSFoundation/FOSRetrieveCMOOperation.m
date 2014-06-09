@@ -475,6 +475,7 @@
         if (!foundJson) {
             NSURLRequest *urlRequest = [_urlBinding urlRequestServerRecordOfType:self.entity
                                                                       withJsonId:jsonId
+                                                                    withDSLQuery:self.dslQuery
                                                                            error:&localError];
 
             // Fetch the data for entity with the given jsonId from the server

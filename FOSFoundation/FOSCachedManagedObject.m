@@ -838,11 +838,14 @@ static NSMutableDictionary *_processingFaults = nil;
 
 #pragma mark - Relationship Refresh methods
 
-- (void)refreshRelationshipNamed:(NSString *)relName handler:(FOSBackgroundRequest)handler {
-    [self refreshAllRelationshipsNamed:@[relName] handler:handler];
+- (void)refreshRelationshipNamed:(NSString *)relName
+                        dslQuery:(NSString *)dslQuery
+                         handler:(FOSBackgroundRequest)handler {
+    [self refreshAllRelationshipsNamed:@[relName] dslQuery:dslQuery handler:handler];
 }
 
 - (void)refreshAllRelationshipsNamed:(id<NSFastEnumeration>)relNames
+                            dslQuery:(NSString *)dslQuery
                              handler:(FOSBackgroundRequest)handler {
     NSParameterAssert(relNames != nil);
 
@@ -856,6 +859,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     FOSRetrieveRelationshipUpdatesOperation *relUpdatesOp =
         [FOSRetrieveRelationshipUpdatesOperation retrieveRealtionshipUpdatesForCMO:self
+                                                                          dslQuery:dslQuery
                                                                           matching:relMatcher];
 
     FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
@@ -867,8 +871,10 @@ static NSMutableDictionary *_processingFaults = nil;
                                    withGroupName:@"Refresh relationships"];
 }
 
-- (void)refreshAllRelationships:(FOSBackgroundRequest)handler {
-    [self refreshAllRelationshipsNamed:self.entity.ownerRelationships handler:handler];
+- (void)refreshAllRelationshipsWithDslQuery:(NSString *)dslQuery handler:(FOSBackgroundRequest)handler {
+    [self refreshAllRelationshipsNamed:self.entity.ownerRelationships
+                              dslQuery:dslQuery
+                               handler:handler];
 }
 
 #pragma mark - Override Points

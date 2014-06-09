@@ -385,12 +385,19 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
 - (NSURLRequest *)urlRequestForCMO:(FOSCachedManagedObject *)cmo error:(NSError **)error;
 
 /*!
- * @method urlRequestServerRecordOfType:withJsonId:error:
+ * @method urlRequestServerRecordOfType:withJsonId:withDSLQuery:error:
  *
  * Creates an NSURLRequest that will retrieve the given server record.
+ *
+ * @discussion
+ *
+ * @link dslQuery @/link Is a 'Domain Specific Query', which is simply a string
+ * that is added as a parameter to the request url.  The query is specific to the
+ * REST Service.
  */
 - (NSURLRequest *)urlRequestServerRecordOfType:(NSEntityDescription *)entity
                                     withJsonId:(FOSJsonId)jsonId
+                                  withDSLQuery:(NSString *)dslQuery
                                          error:(NSError **)error;
 
 /*!

@@ -27,6 +27,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
                                                              withJsonId:@"bMjY1bcxHP"
+                                                           withDSLQuery:nil
                                                                   error:&error];
 
     FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
@@ -60,6 +61,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
                                                              withJsonId:@"__badUID__"
+                                                           withDSLQuery:nil
                                                                   error:&error];
 
     FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
@@ -91,6 +93,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
                                                              withJsonId:@"bMjY1bcxHP"
+                                                           withDSLQuery:nil
                                                                   error:&error];
 
     FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
@@ -133,6 +136,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
                                                              withJsonId:uid
+                                                           withDSLQuery:nil
                                                                   error:&error];
 
     FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest

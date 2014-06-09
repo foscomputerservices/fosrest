@@ -267,7 +267,9 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  *
  * Refreshes the receiver's named relationship with the REST server.
  */
-- (void)refreshRelationshipNamed:(NSString *)relName handler:(FOSBackgroundRequest)handler;
+- (void)refreshRelationshipNamed:(NSString *)relName
+                        dslQuery:(NSString *)dslQuery
+                         handler:(FOSBackgroundRequest)handler;
 
 /*!
  * @method refreshRelationshipNamed:handler:
@@ -275,6 +277,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  * Refreshes the receiver's named relationships with the REST server.
  */
 - (void)refreshAllRelationshipsNamed:(id<NSFastEnumeration>)relNames
+                            dslQuery:(NSString *)dslQuery
                              handler:(FOSBackgroundRequest)handler;
 
 /*!
@@ -282,7 +285,8 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  *
  * Refreshes the receiver's managed relationships with the REST server.
  */
-- (void)refreshAllRelationships:(FOSBackgroundRequest)handler;
+- (void)refreshAllRelationshipsWithDslQuery:(NSString *)dslQuery
+                                    handler:(FOSBackgroundRequest)handler;
 
 #pragma mark - Override Points
 
