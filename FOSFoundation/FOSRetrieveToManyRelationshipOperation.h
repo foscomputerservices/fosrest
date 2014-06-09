@@ -14,6 +14,7 @@
 + (instancetype)fetchToManyRelationship:(NSRelationshipDescription *)relDesc
                               ownerJson:(id<NSObject>)ownerJson
                             ownerJsonId:(FOSJsonId)ownerJsonId
+                               dslQuery:(NSString *)dslQuery
                            withBindings:(NSMutableDictionary *)bindings;
 
 - (void)bindToOwner:(NSManagedObjectID *)ownerId;

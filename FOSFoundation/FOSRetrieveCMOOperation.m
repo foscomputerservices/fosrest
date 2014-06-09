@@ -315,6 +315,7 @@
                                                 forEntity:blockSelf->_entity
                                                     error:&localError]) {
                     blockSelf->_jsonId = fetchDataOp.jsonId;
+                    blockSelf.dslQuery = fetchDataOp.dslQuery;
                     blockSelf.json = fetchDataOp.jsonResult;
 
                     // Also store the 'originalJson' in the bindings if we're the top-level
@@ -1124,6 +1125,7 @@
                     [FOSRetrieveToManyRelationshipOperation fetchToManyRelationship:relDesc
                                                                           ownerJson:self.json
                                                                         ownerJsonId:self.jsonId
+                                                                           dslQuery:self.dslQuery
                                                                        withBindings:_bindings];
                 
                 [result addObject:nextOp];

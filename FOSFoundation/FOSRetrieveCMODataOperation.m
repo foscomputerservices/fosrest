@@ -82,6 +82,10 @@
     return _jsonId;
 }
 
+- (NSString *)dslQuery {
+    return nil;
+}
+
 #pragma mark - Method Overrides
 
 - (void)setOriginalJsonResult:(id<NSObject>)jsonResult {

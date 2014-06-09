@@ -71,6 +71,10 @@
     return _jsonId;
 }
 
+- (NSString *)dslQuery {
+    return nil;
+}
+
 #pragma mark - Method Overrides
 
 - (NSError *)error {

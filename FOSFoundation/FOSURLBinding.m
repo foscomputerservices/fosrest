@@ -210,13 +210,18 @@
 
 - (NSURLRequest *)urlRequestServerRecordsOfRelationship:(NSRelationshipDescription *)relDesc
                                    forDestinationEntity:(NSEntityDescription *)destEntity
-                                                       withOwnerId:(FOSJsonId)ownerId
-                                                             error:(NSError **)error {
+                                            withOwnerId:(FOSJsonId)ownerId
+                                           withDSLQuery:(NSString *)dslQuery
+                                                  error:(NSError **)error {
     NSParameterAssert(relDesc != nil);
 
     if (error != nil) { *error = nil; }
 
     NSDictionary *context = @{ @"ENTITY" : destEntity, @"RELDESC": relDesc, @"OWNERID" :ownerId };
+    if (dslQuery != nil) {
+        context = [context mutableCopy];
+        ((NSMutableDictionary *)context)[@"DSLQUERY"] = dslQuery;
+    }
 
     NSError *localError = nil;
     NSURLRequest *result = [self _urlRequestForRelationship:relDesc

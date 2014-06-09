@@ -11,6 +11,7 @@
 @interface _FOSCMODataOpPackage : FOSOperation<FOSRetrieveCMODataOperationProtocol>
 
 + (instancetype)packageFor:(FOSCachedManagedObject *)cmo
+                  dslQuery:(NSString *)dslQuery
                   matching:(FOSItemMatcher *)relationshipNameMatcher;
 
 @end
@@ -19,16 +20,19 @@
 
 @synthesize entity = _entity;
 @synthesize jsonId = _jsonId;
+@synthesize dslQuery = _dslQuery;
 @synthesize jsonResult = _jsonResult;
 @synthesize originalJsonResult = _originalJsonResult;
 @synthesize relationshipsToPull = _relationshipsToPull;
 
 + (instancetype)packageFor:(FOSCachedManagedObject *)cmo
+                  dslQuery:(NSString *)dslQuery
                   matching:(FOSItemMatcher *)relationshipNameMatcher {
-    return [[self alloc] initForCMO:cmo forRelationships:relationshipNameMatcher];
+    return [[self alloc] initForCMO:cmo dslQuery:dslQuery forRelationships:relationshipNameMatcher];
 }
 
 - (id)initForCMO:(FOSCachedManagedObject *)cmo
+        dslQuery:(NSString *)dslQuery
 forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
     NSParameterAssert(cmo != nil);
     NSParameterAssert(relationshipNameMatcher != nil);
@@ -37,6 +41,7 @@ forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
         _entity = cmo.entity;
         _jsonId = cmo.jsonIdValue;
         _jsonResult = cmo.originalJson;
+        _dslQuery = dslQuery;
         _relationshipsToPull = relationshipNameMatcher;
     }
 
@@ -76,6 +81,7 @@ forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
 
     if ((self = [super init]) != nil) {
         _FOSCMODataOpPackage *dataOpPackage = [_FOSCMODataOpPackage packageFor:cmo
+                                                                      dslQuery:dslQuery
                                                                       matching:relationshipNameMatcher];
 
         FOSRetrieveCMOOperation *retrieveCMO =

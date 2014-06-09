@@ -61,7 +61,7 @@
 
             id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
             _urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
-                                                forLifecycleStyle:nil
+                                             forLifecycleStyle:nil
                                                forRelationship:relDesc
                                                      forEntity:destEntity];
 
@@ -164,10 +164,10 @@
                                                                      error:&localError];
 
                 if (localError == nil && childId != nil) {
-                    childObj = [[FOSRetrieveCMOOperation class] cmoForEntity:childEntity
-                                                                  withJsonId:childId
-                                                                fromBindings:_bindings
-                                                   respectingPreviousLookups:NO];
+                    childObj = [FOSRetrieveCMOOperation cmoForEntity:childEntity
+                                                          withJsonId:childId
+                                                        fromBindings:_bindings
+                                           respectingPreviousLookups:NO];
                 }
                 else {
                     _error = localError;

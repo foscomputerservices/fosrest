@@ -14,6 +14,7 @@
 @property (nonatomic, readonly) FOSJsonId jsonId;
 @property (nonatomic, readonly) id<NSObject> jsonResult;
 @property (nonatomic, readonly) id<NSObject> originalJsonResult;
+@property (nonatomic, readonly) NSString *dslQuery;
 
 @optional
 

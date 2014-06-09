@@ -19,6 +19,7 @@
 + (instancetype)fetchToManyRelationship:(NSRelationshipDescription *)relDesc
                               ownerJson:(id<NSObject>)ownerJson
                             ownerJsonId:(FOSJsonId)ownerJsonId
+                               dslQuery:(NSString *)dslQuery
                            withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(ownerJsonId != nil);
@@ -26,12 +27,14 @@
     return [[self alloc] initToManyRelationship:relDesc
                                       ownerJson:ownerJson
                                     ownerJsonId:ownerJsonId
+                                       dslQuery:dslQuery
                                    withBindings:bindings];
 }
 
 - (id)initToManyRelationship:(NSRelationshipDescription *)relDesc
                    ownerJson:(id<NSObject>)ownerJson
                  ownerJsonId:(FOSJsonId)ownerJsonId
+                    dslQuery:(NSString *)dslQuery
                 withBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(ownerJsonId != nil);
@@ -61,6 +64,7 @@
                                                    leafEntities:leafEntities
                                                        bindings:bindings
                                                     ownerJsonId:ownerJsonId
+                                                       dslQuery:dslQuery
                                                           error:&localError];
         }
 
@@ -369,6 +373,7 @@
                                  leafEntities:(NSSet *)leafEntities
                                      bindings:(NSDictionary *)bindings
                                   ownerJsonId:(FOSJsonId)ownerJsonId
+                                     dslQuery:(NSString *)dslQuery
                                         error:(NSError **)error {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(leafEntities != nil);
@@ -381,7 +386,7 @@
     for (NSEntityDescription *nextLeafEntity in leafEntities) {
         FOSURLBinding *urlBinding =
             [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
-                                  forLifecycleStyle:nil
+                               forLifecycleStyle:nil
                                  forRelationship:relDesc
                                        forEntity:nextLeafEntity];
 
@@ -390,6 +395,7 @@
                 [urlBinding urlRequestServerRecordsOfRelationship:relDesc
                                              forDestinationEntity:nextLeafEntity
                                                       withOwnerId:ownerJsonId
+                                                     withDSLQuery:dslQuery
                                                             error:&localError];
 
             FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest

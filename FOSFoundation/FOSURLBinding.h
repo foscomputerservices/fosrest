@@ -413,7 +413,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * REST Service.
  */
 - (NSURLRequest *)urlRequestServerRecordOfType:(NSEntityDescription *)entity
-                                    withDSLQuery:(NSString *)dslQuery
+                                  withDSLQuery:(NSString *)dslQuery
                                          error:(NSError **)error;
 
 /*!
@@ -424,8 +424,9 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  */
 - (NSURLRequest *)urlRequestServerRecordsOfRelationship:(NSRelationshipDescription *)relDesc
                                    forDestinationEntity:(NSEntityDescription *)destEntity
-                                                       withOwnerId:(FOSJsonId)ownerId
-                                                             error:(NSError **)error;
+                                            withOwnerId:(FOSJsonId)ownerId
+                                           withDSLQuery:(NSString *)dslQuery
+                                                  error:(NSError **)error;
 
 /*!
  * @method urlRequestForContext:error:
