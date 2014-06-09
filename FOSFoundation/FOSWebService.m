@@ -9,8 +9,7 @@
 #import "FOSWebService_Internal.h"
 #import "FOSWebServiceRequest+FOS_Internal.h"
 
-const NSTimeInterval kDefaultTimeout = 20.0f; // 20 seconds
-const NSTimeInterval kQueueingDelay = 0.26f;
+const NSTimeInterval kFOSQueueingDelay = 0.26f;
 
 @implementation FOSWebService {
     __weak FOSRESTConfig *_restConfig;
@@ -57,7 +56,7 @@ const NSTimeInterval kQueueingDelay = 0.26f;
             [_timerQueue cancelAllOperations];
 
             FOSSleepOperation *nextSleepOp =
-                [FOSSleepOperation sleepOperationWithSleepInterval:kQueueingDelay];
+                [FOSSleepOperation sleepOperationWithSleepInterval:kFOSQueueingDelay];
 
             FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
                 if (!cancelled && error == nil) {
