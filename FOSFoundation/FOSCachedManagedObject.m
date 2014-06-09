@@ -858,9 +858,9 @@ static NSMutableDictionary *_processingFaults = nil;
         [FOSRetrieveRelationshipUpdatesOperation retrieveRealtionshipUpdatesForCMO:self
                                                                           matching:relMatcher];
 
-    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
         handler(cancelled, error);
-    } callRequestIfCancelled:YES];
+    }];
 
     [self.restConfig.cacheManager queueOperation:relUpdatesOp
                          withCompletionOperation:finalOp
