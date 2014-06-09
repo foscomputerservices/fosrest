@@ -352,47 +352,49 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 - (void)refreshLoggedInUser:(FOSLoginHandler)handler {
     NSAssert([NSThread isMainThread], @"User refresh should only be done from the main thread.");
 
-    if (!self.isLoggedIn) {
-        [NSException raise:@"FOSNotLoggedIn"
-                    format:NSLocalizedString(@"Cannot refresh user when no one is logged in.", @"")];
-    }
+    if (self.isLoggedIn) {
+        FOSUser *loggedInUser = self.loggedInUser;
 
-    FOSUser *loggedInUser = self.loggedInUser;
+        if (_restConfig.networkStatus != FOSNetworkStatusNotReachable) {
 
-    if (_restConfig.networkStatus != FOSNetworkStatusNotReachable) {
+            if (!loggedInUser.isLocalOnly) {
+                // Ensure that the static tables have all been pulled before attempting to create
+                // any further objects
+                FOSPullStaticTablesOperation *pullStaticTablesOp =
+                    [[FOSPullStaticTablesOperation alloc] initResettingProcessedTables:NO];
 
-        if (!loggedInUser.isLocalOnly) {
-            // Ensure that the static tables have all been pulled before attempting to create
-            // any further objects
-            FOSPullStaticTablesOperation *pullStaticTablesOp =
-                [[FOSPullStaticTablesOperation alloc] initResettingProcessedTables:NO];
+                FOSRefreshUserOperation *refreshOp = [FOSRefreshUserOperation refreshUserOperation];
+                [refreshOp addDependency:pullStaticTablesOp];
 
-            FOSRefreshUserOperation *refreshOp = [FOSRefreshUserOperation refreshUserOperation];
-            [refreshOp addDependency:pullStaticTablesOp];
+                FOSBackgroundOperation *handlerOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
+                    if (handler != nil) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            handler(refreshOp.error == nil, refreshOp.error);
+                        });
+                    }
+                } callRequestIfCancelled:YES];
 
-            FOSBackgroundOperation *handlerOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-                if (handler != nil) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        handler(refreshOp.error == nil, refreshOp.error);
-                    });
-                }
-            } callRequestIfCancelled:YES];
-
-            [_restConfig.cacheManager queueOperation:refreshOp
-                             withCompletionOperation:handlerOp
-                                       withGroupName:@"Refresh user"];
+                [_restConfig.cacheManager queueOperation:refreshOp
+                                 withCompletionOperation:handlerOp
+                                           withGroupName:@"Refresh user"];
+            }
+            else if (handler != nil) {
+                handler(YES, nil);
+            }
         }
         else if (handler != nil) {
-            handler(YES, nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString *msg = NSLocalizedString(@"Unable to refresh user unless connected to the Internet.  Please check your network connection.", @"");
+
+                NSError *error = [NSError errorWithMessage:msg];
+
+                handler(NO, error);
+            });
         }
     }
-    else if (handler != nil) {
+    else {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *msg = NSLocalizedString(@"Unable to refresh user unless connected to the Internet.  Please check your network connection.", @"");
-
-            NSError *error = [NSError errorWithMessage:msg];
-
-            handler(NO, error);
+            handler(NO, nil);
         });
     }
 }
@@ -530,7 +532,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
                     NSAssert(!user.isLoginUser, @"We should *never* have a loginUser here!");
 
-                    if (user.uid == nil) {
+                    if (user == nil) {
                         isIdInvalid = YES;
                     }
                 }
