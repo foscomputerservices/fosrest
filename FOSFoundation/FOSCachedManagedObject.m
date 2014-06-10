@@ -836,7 +836,21 @@ static NSMutableDictionary *_processingFaults = nil;
     return result;
 }
 
-#pragma mark - Relationship Refresh methods
+#pragma mark - Refresh methods
+
+- (void)refreshWithHandler:(FOSBackgroundRequest)handler {
+    FOSRetrieveCMOOperation *retrieveCMOOp =
+        [FOSRetrieveCMOOperation retrieveCMOForEntity:self.entity
+                                               withId:self.jsonIdValue];
+
+    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
+        handler(cancelled, error);
+    }];
+
+    [self.restConfig.cacheManager queueOperation:retrieveCMOOp
+                         withCompletionOperation:finalOp
+                                   withGroupName:@"Refresh CMO"];
+}
 
 - (void)refreshRelationshipNamed:(NSString *)relName
                         dslQuery:(NSString *)dslQuery
@@ -854,6 +868,7 @@ static NSMutableDictionary *_processingFaults = nil;
         id<FOSExpression> expr = [FOSConstantExpression constantExpressionWithValue:relName];
         [exprs addObject:expr];
     }
+
     FOSItemMatcher *relMatcher = [FOSItemMatcher matcher:FOSItemMatchItems
                                       forItemExpressions:exprs];
 

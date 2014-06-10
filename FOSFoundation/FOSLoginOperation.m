@@ -117,7 +117,10 @@
     NSURLRequest *urlRequest = nil;
 
     if (localError == nil) {
-        NSDictionary *context = @{ @"USER_NAME" : _user.jsonUsername, @"PASSWORD" : _user.password };
+        NSDictionary *context = @{ @"CMO" : _user,
+                                   @"USER_NAME" : _user.jsonUsername ? _user.jsonUsername : @"",
+                                   @"PASSWORD" : _user.password ? _user.password : @""
+                                };
 
         urlRequest = [urlBinding urlRequestForServerCommandWithContext:context
                                                                  error:&localError];

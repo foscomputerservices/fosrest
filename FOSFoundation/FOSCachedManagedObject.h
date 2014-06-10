@@ -259,8 +259,15 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  */
 - (NSSet *)propertiesModifiedSinceLastUpload;
 
-/*! @methodgroup Relationship Refresh */
-#pragma mark - Relationship Refresh methods
+/*! @methodgroup Refresh */
+#pragma mark - Refresh methods
+
+/*!
+ * @method refresh
+ *
+ * Refreshes the receiver and it's 'forcePull' relationships with the REST server.
+ */
+- (void)refreshWithHandler:(FOSBackgroundRequest)handler;
 
 /*!
  * @method refreshRelationshipNamed:handler:

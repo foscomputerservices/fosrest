@@ -920,7 +920,7 @@
         if (*error == nil) {
             id value = [valueExpr evaluateWithContext:context error:error];
             if (*error == nil) {
-                json[key] = value;
+                json[key] = value ? value : [NSNull null];
             }
         }
 
