@@ -135,11 +135,15 @@
     NSMutableSet *result = [NSMutableSet set];
 
     for (id item in subjectGroup) {
-        // This allows for dynamic invoke of a selector w/o ARC problems
-        // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
-        IMP imp = [item methodForSelector:matchSelector];
-        id (*func)(id, SEL) = (void *)imp;
-        id itemMatch = func(item, matchSelector);
+        id itemMatch = item;
+
+        if (matchSelector != nil) {
+            // This allows for dynamic invoke of a selector w/o ARC problems
+            // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
+            IMP imp = [item methodForSelector:matchSelector];
+            id (*func)(id, SEL) = (void *)imp;
+            itemMatch = func(item, matchSelector);
+        }
 
         if ([self itemIsIncluded:itemMatch context:context] == match) {
             [result addObject:item];

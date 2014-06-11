@@ -249,15 +249,10 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 + (NSArray *)fetchWithPredicate:(NSPredicate *)pred withSortDescriptors:(NSArray *)sortDescriptors {
-    NSArray *result = nil;
-
-    if (pred != nil) {
-        NSString *classStr = NSStringFromClass([self class]);
-        result = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:classStr
-                                                                      withPredicate:pred
-                                                                withSortDescriptors:sortDescriptors];
-    }
-
+    NSString *classStr = NSStringFromClass([self class]);
+    NSArray *result = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:classStr
+                                                                           withPredicate:pred
+                                                                     withSortDescriptors:sortDescriptors];
     return result;
 }
 
@@ -980,7 +975,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     NSEntityDescription *entity = [self entityDescription];
 
-    NSDictionary *context = @{ @"ENTITY" : entity };
+    NSMutableDictionary *context = [@{ @"ENTITY" : entity } mutableCopy];
 
     id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
     FOSURLBinding *urlBinding =
@@ -1022,14 +1017,21 @@ static NSMutableDictionary *_processingFaults = nil;
         @throw e;
     }
 
+    NSDictionary *propsByName = entity.propertiesByName;
+    NSArray *propNames = propsByName.allKeys;
+    NSSet *identNames = [[identityBinding attributeMatcher] matchedItems:propNames
+                                                           matchSelector:nil
+                                                                 context:context];
+    context[@"ATTRDESC"] = propsByName[identNames.anyObject];
+
     id<FOSExpression> expr = identityBinding.cmoKeyPathExpression;
     NSError *localError = nil;
     NSString *result = [expr evaluateWithContext:context error:&localError];
 
     if (localError != nil) {
-        NSString *msgFmt = @"Error evaluating the ID_ATTRIBUTE's CMO expression for entity '%@' managed by the %@ adapter.";
+        NSString *msgFmt = @"Error evaluating the ID_ATTRIBUTE's CMO expression for entity '%@' managed by the %@ adapter: %@";
         NSString *msg = [NSString stringWithFormat:msgFmt,
-                         entity.name, NSStringFromClass([adapter class])];
+                         entity.name, NSStringFromClass([adapter class]), localError.description];
         NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
 
         @throw e;
