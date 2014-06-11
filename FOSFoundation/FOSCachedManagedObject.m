@@ -168,39 +168,41 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 + (BOOL)idIsInDatabase:(FOSJsonId)jsonId {
-    NSParameterAssert(jsonId != nil);
     BOOL result = NO;
 
-    NSEntityDescription *entity = [self entityDescription];
-    NSString *cmoKeyPath = [self _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
+    if (jsonId != nil) {
+        NSEntityDescription *entity = [self entityDescription];
+        NSString *cmoKeyPath = [self _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
 
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@",
-                         cmoKeyPath, jsonId];
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@",
+                             cmoKeyPath, jsonId];
 
-    NSUInteger count = [[FOSRESTConfig sharedInstance].databaseManager countOfEntities:entity
-                                                                     matchingPredicate:pred];
+        NSUInteger count = [[FOSRESTConfig sharedInstance].databaseManager countOfEntities:entity
+                                                                         matchingPredicate:pred];
 
-    result = (count > 0);
+        result = (count > 0);
+    }
 
     return result;
 }
 
 + (instancetype)fetchWithId:(FOSJsonId)jsonId {
-    NSParameterAssert(jsonId != nil);
     id result = nil;
 
-    NSString *cmoKeyPath = [self _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@", cmoKeyPath, jsonId];
+    if (jsonId != nil) {
+        NSString *cmoKeyPath = [self _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@", cmoKeyPath, jsonId];
 
-    NSString *entityName = [self entityName];
-    NSArray *entities = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:entityName
-                                                                             withPredicate:pred];
+        NSString *entityName = [self entityName];
+        NSArray *entities = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:entityName
+                                                                                 withPredicate:pred];
 
-    if (entities.count > 0) {
-        NSAssert(entities.count == 1, @"Fetched more than one %@ with the same id (%@)",
-                 entityName, jsonId);
+        if (entities.count > 0) {
+            NSAssert(entities.count == 1, @"Fetched more than one %@ with the same id (%@)",
+                     entityName, jsonId);
 
-        result = entities.lastObject;
+            result = entities.lastObject;
+        }
     }
     
     return result;
@@ -222,17 +224,19 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 + (NSSet *)fetchWithRelId:(FOSJsonId)jsonRelId forJsonRelation:(NSString *)jsonRelation {
-    NSParameterAssert(jsonRelId != nil);
-    NSParameterAssert(jsonRelation != nil);
+    NSSet *result = nil;
 
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@",
-                         jsonRelation, jsonRelId];
+    if (jsonRelId != nil && jsonRelation != nil) {
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@",
+                             jsonRelation, jsonRelId];
 
-    NSString *entityName = [self entityName];
-    NSArray *entities = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:entityName
-                                                                             withPredicate:pred];
+        NSString *entityName = [self entityName];
+        NSArray *entities = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:entityName
+                                                                                 withPredicate:pred];
 
-    NSSet *result = [NSSet setWithArray:entities];
+        result = [NSSet setWithArray:entities];
+    }
+
     return result;
 }
 
@@ -245,10 +249,14 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 + (NSArray *)fetchWithPredicate:(NSPredicate *)pred withSortDescriptors:(NSArray *)sortDescriptors {
-    NSString *classStr = NSStringFromClass([self class]);
-    NSArray *result = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:classStr
-                                                                           withPredicate:pred
-                                                                     withSortDescriptors:sortDescriptors];
+    NSArray *result = nil;
+
+    if (pred != nil) {
+        NSString *classStr = NSStringFromClass([self class]);
+        result = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:classStr
+                                                                      withPredicate:pred
+                                                                withSortDescriptors:sortDescriptors];
+    }
 
     return result;
 }
@@ -260,8 +268,12 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 + (NSUInteger)countWithPredicate:(NSPredicate *)pred {
-    NSUInteger result = [[FOSRESTConfig sharedInstance].databaseManager countOfEntities:[self entityDescription]
-                                                                      matchingPredicate:pred];
+    NSUInteger result = 0;
+
+    if (pred != nil) {
+        result = [[FOSRESTConfig sharedInstance].databaseManager countOfEntities:[self entityDescription]
+                                                               matchingPredicate:pred];
+    }
 
     return result;
 }
