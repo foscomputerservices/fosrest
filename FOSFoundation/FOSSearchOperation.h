@@ -10,17 +10,14 @@
 
 @interface FOSSearchOperation : FOSOperation
 
-#pragma mark - Subclass Helper Methods & Properties
+#pragma mark - Public Properties
+@property (nonatomic, assign) Class managedClass;
 @property (nonatomic, assign) BOOL saveIndividualResults;
-- (FOSOperation *)processSearchResults:(FOSWebServiceRequest *)webRequest;
+@property (nonatomic, strong) NSString *dslQuery;
+@property (nonatomic, strong) NSSet *results;
 
 #pragma mark - Public methods
 - (void)performSearch;
 - (void)performSearchAndInform:(FOSCacheSearchHandler)searchHandler;
-
-#pragma mark - Abstract methods/properties
-@property (nonatomic, readonly) Class managedClass;
-@property (nonatomic, readonly) NSSet *dependentSearchOperations;
-@property (nonatomic, strong) NSSet *results;
 
 @end

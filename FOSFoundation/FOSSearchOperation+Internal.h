@@ -6,9 +6,11 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
-@interface FOSSearchOperation (Internal)
+@interface FOSSearchOperation ()
 
-#pragma mark - Methods
+@property (nonatomic, readonly) NSSet *dependentSearchOperations;
+
+- (FOSOperation *)processSearchResults:(FOSWebServiceRequest *)webRequest;
 - (void)finalizeDependencies;
 
 @end

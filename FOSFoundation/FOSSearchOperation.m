@@ -19,136 +19,6 @@
     BOOL _pullObjectsToForeground;
 }
 
-#pragma mark - Subclass Helper Methods
-
-- (FOSOperation *)processSearchResults:(FOSWebServiceRequest *)webRequest {
-    NSParameterAssert(webRequest != nil);
-
-    __block FOSSearchOperation *blockSelf = self;
-
-    __block NSMutableSet *newEntities = [NSMutableSet set];
-    __block NSError *searchError = nil;
-
-    // The top-level operation that will handle the pulled results
-    __block FOSBackgroundOperation *finalOp =  [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
-        FOSRecoveryOption result = blockSelf->_saveIndividualResults
-            ? FOSRecoveryOption_Recovered
-            : FOSRecoveryOption_NoRecovery;
-
-        blockSelf.results = newEntities;
-        blockSelf->_error = searchError;
-
-        return result;
-    }];
-
-    // An operation to process the results of the given webRequest
-    FOSBackgroundOperation *webProcOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-
-        if (!isCancelled && error == nil) {
-            NSError *localError = nil;
-            NSArray *jsonFragments = nil;
-
-            if ([webRequest.jsonResult isKindOfClass:[NSArray class]]) {
-                jsonFragments = (NSArray *)webRequest.jsonResult;
-            }
-            else {
-                NSString *msgFormat = @"Expected search response as an NSArray, but received %@";
-                NSString *msg = [NSString stringWithFormat:msgFormat,
-                                 NSStringFromClass([webRequest.jsonResult class])];
-
-                localError = [NSError errorWithMessage:msg];
-                blockSelf->_error = localError;
-            }
-
-            NSMutableArray *newTopLevelOps = [NSMutableArray arrayWithCapacity:jsonFragments.count];
-            NSEntityDescription *entity = [blockSelf.managedClass entityDescription];
-            NSMutableArray *fetchIds = [NSMutableArray arrayWithCapacity:jsonFragments.count];
-
-            if (localError == nil) {
-                Class entityClass = self.managedClass;
-
-                FOSURLBinding *urlBinding = webRequest.urlBinding;
-                id<FOSTwoWayRecordBinding> recordBinding = urlBinding.cmoBinding;
-
-                for (NSDictionary *jsonFragment in jsonFragments) {
-                    FOSJsonId jsonId = [recordBinding jsonIdFromJSON:jsonFragment
-                                                           forEntity:entity
-                                                               error:&localError];
-
-                    if (localError == nil) {
-                        // Make sure this object hasn't been deleted locally. No reason to fetch items
-                        // from the server that are queued to be deleted.
-                        BOOL itemDeleted = [FOSDeletedObject existsDeletedObjectWithId:jsonId
-                                                                               andType:entityClass];
-
-                        if (!itemDeleted) {
-                            [fetchIds addObject:jsonId];
-                        }
-                    }
-                    else {
-                        blockSelf->_error = localError;
-                    }
-                }
-            }
-
-            if (blockSelf->_error == nil) {
-                NSMutableDictionary *bindings = [FOSRetrieveCMOOperation primeBindingsForEntity:entity
-                                                                                    withJsonIDs:fetchIds];
-
-                // Process the fragments of the web request adding further dependencies
-                // to the 'finalOp' to complete the processing of each request.
-                for (NSDictionary *nextPlaceDict in jsonFragments) {
-                    
-                    // Get a fetch request for this json
-                    FOSRetrieveCMOOperation *fetchEntityOp =
-                        [FOSRetrieveCMOOperation retrieveCMOForEntity:entity
-                                                                    withJson:nextPlaceDict
-                                                                withBindings:bindings];
-
-                    // Process the results of the fetch request
-                    FOSBackgroundOperation *newTopLevelOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *ignore) {
-
-                        // The fetchEntityOp returns isCancelled if the entity is deleted locally
-                        if (!fetchEntityOp.isCancelled && fetchEntityOp.error == nil) {
-
-                            FOSCachedManagedObject *cmo = fetchEntityOp.managedObject;
-                            NSAssert(cmo != nil, @"Why don't we have a CMO on a successfully search?");
-
-                            [newEntities addObject:cmo];
-                        }
-                        else if (!self.saveIndividualResults) {
-                            newEntities = nil;
-                            searchError = fetchEntityOp.error;
-                        }
-                    }];
-
-                    [newTopLevelOp addDependency:fetchEntityOp];
-
-                    // Add further dependencies to finalOp (finalOp has already been queued)
-                    [finalOp addDependency:newTopLevelOp];
-
-                    [newTopLevelOps addObject:newTopLevelOp];
-                }
-
-                for (FOSOperation *nextTopLevelOp in newTopLevelOps) {
-                    [self addDependency:nextTopLevelOp];
-                }
-
-                [blockSelf.restConfig.cacheManager reQueueOperation:self];
-            }
-        }
-    }];
-
-    [webProcOp addDependency:webRequest];
-
-    // FinalOp is dependent on processing the results of webRequest *and*
-    // processing subsequently generated FOSFetchEntityOperations of webRequest
-    // (which are added to finalOp during weProcOp's processing)
-    [finalOp addDependency:webProcOp];
-
-    return finalOp;
-}
-
 #pragma mark - Public methods
 
 - (void)performSearch {
@@ -271,22 +141,168 @@
     }
 }
 
-#pragma mark - Abstract methods
+#pragma mark - Private Methods
 
-- (Class)managedClass {
-    NSString *msg = [NSString stringWithFormat:@"You must override %@ in a subclass",
-                     NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:msg
-                                 userInfo:nil];
+- (void)finalizeDependencies {
+    NSSet *depOps = self.dependentSearchOperations;
+
+    // This op is dependent on all other search ops
+    for (FOSOperation *nextDepOp in depOps) {
+        [self addDependency:nextDepOp];
+    }
 }
 
 - (NSSet *)dependentSearchOperations {
-    NSString *msg = [NSString stringWithFormat:@"You must override %@ in a subclass",
-                     NSStringFromSelector(_cmd)];
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:msg
-                                 userInfo:nil];
+    NSMutableSet *result = [NSMutableSet setWithCapacity:2];
+    NSEntityDescription *entity = [self.managedClass entityDescription];
+    NSError *localError = nil;
+
+    FOSURLBinding *urlBinding =
+    [self.restAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecords
+                                forLifecycleStyle:nil
+                                  forRelationship:nil
+                                        forEntity:entity];
+    NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
+                                                           withDSLQuery:self.dslQuery
+                                                                  error:&localError];
+    if (localError == nil) {
+        FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                      forURLBinding:urlBinding];
+
+        FOSOperation *procOp = [self processSearchResults:request];
+
+        [result addObject:procOp];
+    }
+
+    return result;
+}
+
+- (FOSOperation *)processSearchResults:(FOSWebServiceRequest *)webRequest {
+    NSParameterAssert(webRequest != nil);
+
+    __block FOSSearchOperation *blockSelf = self;
+
+    __block NSMutableSet *newEntities = [NSMutableSet set];
+    __block NSError *searchError = nil;
+
+    // The top-level operation that will handle the pulled results
+    __block FOSBackgroundOperation *finalOp =  [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
+        FOSRecoveryOption result = blockSelf->_saveIndividualResults
+        ? FOSRecoveryOption_Recovered
+        : FOSRecoveryOption_NoRecovery;
+
+        blockSelf.results = newEntities;
+        blockSelf->_error = searchError;
+
+        return result;
+    }];
+
+    // An operation to process the results of the given webRequest
+    FOSBackgroundOperation *webProcOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
+
+        if (!isCancelled && error == nil) {
+            NSError *localError = nil;
+            NSArray *jsonFragments = nil;
+
+            if ([webRequest.jsonResult isKindOfClass:[NSArray class]]) {
+                jsonFragments = (NSArray *)webRequest.jsonResult;
+            }
+            else {
+                NSString *msgFormat = @"Expected search response as an NSArray, but received %@";
+                NSString *msg = [NSString stringWithFormat:msgFormat,
+                                 NSStringFromClass([webRequest.jsonResult class])];
+
+                localError = [NSError errorWithMessage:msg];
+                blockSelf->_error = localError;
+            }
+
+            NSMutableArray *newTopLevelOps = [NSMutableArray arrayWithCapacity:jsonFragments.count];
+            NSEntityDescription *entity = [blockSelf.managedClass entityDescription];
+            NSMutableArray *fetchIds = [NSMutableArray arrayWithCapacity:jsonFragments.count];
+
+            if (localError == nil) {
+                Class entityClass = self.managedClass;
+
+                FOSURLBinding *urlBinding = webRequest.urlBinding;
+                id<FOSTwoWayRecordBinding> recordBinding = urlBinding.cmoBinding;
+
+                for (NSDictionary *jsonFragment in jsonFragments) {
+                    FOSJsonId jsonId = [recordBinding jsonIdFromJSON:jsonFragment
+                                                           forEntity:entity
+                                                               error:&localError];
+
+                    if (localError == nil) {
+                        // Make sure this object hasn't been deleted locally. No reason to fetch items
+                        // from the server that are queued to be deleted.
+                        BOOL itemDeleted = [FOSDeletedObject existsDeletedObjectWithId:jsonId
+                                                                               andType:entityClass];
+
+                        if (!itemDeleted) {
+                            [fetchIds addObject:jsonId];
+                        }
+                    }
+                    else {
+                        blockSelf->_error = localError;
+                    }
+                }
+            }
+
+            if (blockSelf->_error == nil) {
+                NSMutableDictionary *bindings = [FOSRetrieveCMOOperation primeBindingsForEntity:entity
+                                                                                    withJsonIDs:fetchIds];
+
+                // Process the fragments of the web request adding further dependencies
+                // to the 'finalOp' to complete the processing of each request.
+                for (NSDictionary *nextPlaceDict in jsonFragments) {
+
+                    // Get a fetch request for this json
+                    FOSRetrieveCMOOperation *fetchEntityOp =
+                    [FOSRetrieveCMOOperation retrieveCMOForEntity:entity
+                                                         withJson:nextPlaceDict
+                                                     withBindings:bindings];
+
+                    // Process the results of the fetch request
+                    FOSBackgroundOperation *newTopLevelOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *ignore) {
+
+                        // The fetchEntityOp returns isCancelled if the entity is deleted locally
+                        if (!fetchEntityOp.isCancelled && fetchEntityOp.error == nil) {
+
+                            FOSCachedManagedObject *cmo = fetchEntityOp.managedObject;
+                            NSAssert(cmo != nil, @"Why don't we have a CMO on a successfully search?");
+
+                            [newEntities addObject:cmo];
+                        }
+                        else if (!self.saveIndividualResults) {
+                            newEntities = nil;
+                            searchError = fetchEntityOp.error;
+                        }
+                    }];
+
+                    [newTopLevelOp addDependency:fetchEntityOp];
+
+                    // Add further dependencies to finalOp (finalOp has already been queued)
+                    [finalOp addDependency:newTopLevelOp];
+
+                    [newTopLevelOps addObject:newTopLevelOp];
+                }
+
+                for (FOSOperation *nextTopLevelOp in newTopLevelOps) {
+                    [self addDependency:nextTopLevelOp];
+                }
+
+                [blockSelf.restConfig.cacheManager reQueueOperation:self];
+            }
+        }
+    }];
+    
+    [webProcOp addDependency:webRequest];
+    
+    // FinalOp is dependent on processing the results of webRequest *and*
+    // processing subsequently generated FOSFetchEntityOperations of webRequest
+    // (which are added to finalOp during weProcOp's processing)
+    [finalOp addDependency:webProcOp];
+    
+    return finalOp;
 }
 
 @end

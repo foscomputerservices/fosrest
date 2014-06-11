@@ -114,8 +114,6 @@
 		634F072518AADF530093FCDF /* FOSProcessServiceRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 634F072318AADF530093FCDF /* FOSProcessServiceRequest.h */; };
 		634FA6661803828F00389821 /* FOSSearchOperation+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 634FA6641803828F00389821 /* FOSSearchOperation+Internal.h */; };
 		634FA6671803828F00389821 /* FOSSearchOperation+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 634FA6641803828F00389821 /* FOSSearchOperation+Internal.h */; };
-		634FA6681803828F00389821 /* FOSSearchOperation+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FA6651803828F00389821 /* FOSSearchOperation+Internal.m */; };
-		634FA6691803828F00389821 /* FOSSearchOperation+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FA6651803828F00389821 /* FOSSearchOperation+Internal.m */; };
 		634FA66B18038D8700389821 /* FOSPullStaticTablesOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FA66A18038D8700389821 /* FOSPullStaticTablesOperationTests.m */; };
 		634FA66C18038D8700389821 /* FOSPullStaticTablesOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FA66A18038D8700389821 /* FOSPullStaticTablesOperationTests.m */; };
 		635020AA19259A0000A78EED /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635020A919259A0000A78EED /* CoreFoundation.framework */; };
@@ -630,7 +628,6 @@
 		634F071E18AADF0A0093FCDF /* FOSParseFileService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FOSParseFileService.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		634F072318AADF530093FCDF /* FOSProcessServiceRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSProcessServiceRequest.h; sourceTree = "<group>"; };
 		634FA6641803828F00389821 /* FOSSearchOperation+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FOSSearchOperation+Internal.h"; sourceTree = "<group>"; };
-		634FA6651803828F00389821 /* FOSSearchOperation+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FOSSearchOperation+Internal.m"; sourceTree = "<group>"; };
 		634FA66A18038D8700389821 /* FOSPullStaticTablesOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSPullStaticTablesOperationTests.m; sourceTree = "<group>"; };
 		635020A819259A0000A78EED /* FOSFoundation.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FOSFoundation.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		635020A919259A0000A78EED /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -1150,7 +1147,6 @@
 			isa = PBXGroup;
 			children = (
 				634FA6641803828F00389821 /* FOSSearchOperation+Internal.h */,
-				634FA6651803828F00389821 /* FOSSearchOperation+Internal.m */,
 				63C343BA1686BBDB003D10B5 /* FOSSearchOperation.h */,
 				63C343BB1686BBDB003D10B5 /* FOSSearchOperation.m */,
 				6320C31A174BE4EA00A38256 /* FOSStaticTableSearchOperation.h */,
@@ -2071,7 +2067,6 @@
 				6337555E18F79AAC006559B0 /* FOSSendToOneRelationshipOperation.m in Sources */,
 				63A313C816E5B43D00DDE117 /* FOSWebService.m in Sources */,
 				63A313CC16E5B43D00DDE117 /* FOSWebServiceRequest+FOS_Internal.m in Sources */,
-				634FA6691803828F00389821 /* FOSSearchOperation+Internal.m in Sources */,
 				637C440D18D78D6A009C64BC /* FOSURLBinding.m in Sources */,
 				63A313CE16E5B43D00DDE117 /* FOSWebServiceRequest.m in Sources */,
 				6365D5DA171C69CE0023D45A /* FOSRetrieveCMOOperation+FOS_Internal.m in Sources */,
@@ -2148,7 +2143,6 @@
 				634F072118AADF0A0093FCDF /* FOSParseFileService.m in Sources */,
 				63C343D11686BBDB003D10B5 /* FOSCacheManager.m in Sources */,
 				63986F3218DD31C100D89CFD /* FOSBoundServiceAdapter.m in Sources */,
-				634FA6681803828F00389821 /* FOSSearchOperation+Internal.m in Sources */,
 				63C343D41686BBDB003D10B5 /* FOSLoginManager.m in Sources */,
 				6399F3CA1938E04C001D48DD /* NSError+FOS_Internal.m in Sources */,
 				63432DC317FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m in Sources */,
