@@ -58,10 +58,18 @@
     FOSJsonId result = nil;
     NSError *localError = nil;
 
-    id<FOSTwoWayPropertyBinding> identityBinding = self.identityBinding;
+    FOSAttributeBinding *identityBinding = self.identityBinding;
 
     if (identityBinding != nil) {
-        NSDictionary *context = @{ @"ENTITY" : entity };
+        NSMutableDictionary *context = [@{ @"ENTITY" : entity } mutableCopy];
+
+        NSDictionary *propsByName = entity.propertiesByName;
+        NSArray *propNames = propsByName.allKeys;
+        NSSet *identNames = [[identityBinding attributeMatcher] matchedItems:propNames
+                                                               matchSelector:nil
+                                                                     context:context];
+        context[@"ATTRDESC"] = propsByName[identNames.anyObject];
+
 
         json = [self _unwrappedJSON:json context:context error:&localError];
         if (json && localError == nil) {
@@ -78,7 +86,7 @@
     
 
     if (localError != nil) {
-        if (error != nil) { *error = nil; }
+        if (error != nil) { *error = localError; }
 
         result = nil;
     }

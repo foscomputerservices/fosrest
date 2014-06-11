@@ -847,7 +847,7 @@ return
      @"    $$PARSE_CMO_BINDING ::\n"
      @"      CMO_BINDING ::\n"
      @"        ATTRIBUTE_BINDINGS ::\n"
-     @"          ID_ATTRIBUTE { 'objectId' : 'objectId' } \n"
+     @"          ID_ATTRIBUTE { $ATTRDESC.name : $ATTRDESC.name } \n"
      @"              ATTRIBUTES :: ( 'objectId' ), \n"
      @"          { $ATTRDESC.name : $ATTRDESC.name } \n"
      @"              ATTRIBUTES :: ALL_EXCEPT  ( 'objectId', 'emailVerified', 'sessionToken', 'password' ), \n"

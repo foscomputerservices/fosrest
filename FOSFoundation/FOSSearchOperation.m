@@ -224,7 +224,7 @@
                 Class entityClass = self.managedClass;
 
                 FOSURLBinding *urlBinding = webRequest.urlBinding;
-                id<FOSTwoWayRecordBinding> recordBinding = urlBinding.cmoBinding;
+                FOSCMOBinding *recordBinding = urlBinding.cmoBinding;
 
                 for (NSDictionary *jsonFragment in jsonFragments) {
                     FOSJsonId jsonId = [recordBinding jsonIdFromJSON:jsonFragment
@@ -232,13 +232,22 @@
                                                                error:&localError];
 
                     if (localError == nil) {
-                        // Make sure this object hasn't been deleted locally. No reason to fetch items
-                        // from the server that are queued to be deleted.
-                        BOOL itemDeleted = [FOSDeletedObject existsDeletedObjectWithId:jsonId
-                                                                               andType:entityClass];
+                        if (jsonId != nil) {
+                            // Make sure this object hasn't been deleted locally. No reason to fetch items
+                            // from the server that are queued to be deleted.
+                            BOOL itemDeleted = [FOSDeletedObject existsDeletedObjectWithId:jsonId
+                                                                                   andType:entityClass];
 
-                        if (!itemDeleted) {
-                            [fetchIds addObject:jsonId];
+                            if (!itemDeleted) {
+                                [fetchIds addObject:jsonId];
+                            }
+                        }
+                        else {
+                            NSString *msgFmt = @"The CMO_BINDING returned a nil for the ID_ATTRIBUTE binding when binding against the json fragment: %@";
+                            NSString *msg = [NSString stringWithFormat:msgFmt, jsonFragment.description];
+
+                            blockSelf->_error = [NSError errorWithMessage:msg
+                                                                  forAtom:recordBinding.identityBinding];
                         }
                     }
                     else {
