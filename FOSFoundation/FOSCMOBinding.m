@@ -76,6 +76,16 @@
             result = [identityBinding jsonIdFromJSON:json
                                          withContext:context
                                                error:&localError];
+
+            if ([result isKindOfClass:[NSDictionary class]] ||
+                [result isKindOfClass:[NSArray class]]) {
+                NSString *msgFmt = @"Unexpected type '%@' received while binding ID_ATTRIBUTE. Expected a value type from JSON: %@";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 NSStringFromClass([result class]), json];
+
+                localError = [NSError errorWithMessage:msg
+                                               forAtom:identityBinding];
+            }
         }
     }
     else {

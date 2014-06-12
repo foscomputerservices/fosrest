@@ -1062,4 +1062,37 @@ TEARDOWN_LOGIN
     WAIT_FOR_TEST_END
 }
 
+#pragma mark - Entity Retrieval methods
+
+- (void)testRetrieveFastTrack {
+    START_TEST
+
+    NSString *testWidgetId = @"8S6wb8n79J";
+    Widget *widget = [Widget fetchWithId:testWidgetId];
+
+    XCTAssertNotNil(widget, @"Missing widget??");
+
+    FOSRetrieveCMOOperation *retrieveOp =
+        [FOSRetrieveCMOOperation retrieveCMOForEntity:[Widget entityDescription]
+                                               withId:testWidgetId];
+    XCTAssertTrue(retrieveOp.allowFastTrack, @"allowFastTrack should be YES by default");
+
+    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+        XCTAssertFalse(cancelled, @"Cancelled???");
+        XCTAssertNil(error, @"Error: %@", error.description);
+
+        XCTAssertNotNil(retrieveOp.managedObject, @"Missing cmo???");
+        XCTAssertTrue([retrieveOp.managedObject.jsonIdValue isEqual:testWidgetId], @"Bad JSONID?");
+
+        END_TEST
+
+    } callRequestIfCancelled:YES];
+
+    [[FOSRESTConfig sharedInstance].cacheManager queueOperation:retrieveOp
+                                        withCompletionOperation:finalOp
+                                                  withGroupName:@"Test Fast Track"];
+
+    WAIT_FOR_TEST_END
+}
+
 @end

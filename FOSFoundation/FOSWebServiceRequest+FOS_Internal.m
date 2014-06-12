@@ -25,9 +25,11 @@
 
         NSError *localError = nil;
         id<NSObject> jsonResult = originalJsonResult;
+        BOOL isFastTrackID = [originalJsonResult isKindOfClass:[NSManagedObjectID class]];
 
-        // Unwrap the result, if specified to do so
-        if (self.urlBinding != nil) {
+        // Unwrap the result, if specified to do so && the json
+        // isn't a fast-tracked NSManagedObjectId
+        if (self.urlBinding != nil && !isFastTrackID) {
             jsonResult = [self.urlBinding unwrapJSON:originalJsonResult
                                              context:nil
                                                error:&localError];
@@ -35,13 +37,16 @@
 
         if (localError == nil) {
             [self willChangeValueForKey:@"jsonResult"];
-            [self willChangeValueForKey:@"originalJsonResult"];
 
             _jsonResult = jsonResult;
-            _originalJsonResult = originalJsonResult;
+
+            if (!isFastTrackID) {
+                [self willChangeValueForKey:@"originalJsonResult"];
+                _originalJsonResult = originalJsonResult;
+                [self didChangeValueForKey:@"originalJsonResult"];
+            }
 
             [self didChangeValueForKey:@"jsonResult"];
-            [self didChangeValueForKey:@"originalJsonResult"];
 
             [self _setToFinished];
         }

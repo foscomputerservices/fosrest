@@ -40,7 +40,9 @@
 
 + (instancetype)retrieveCMOForEntity:(NSEntityDescription *)entity
                               withId:(FOSJsonId)jsonId {
-    NSMutableDictionary *bindings = [NSMutableDictionary dictionaryWithCapacity:100];
+    NSMutableDictionary *bindings = [self primeBindingsForEntity:entity
+                                                     withJsonIDs:@[ jsonId ]];
+
     FOSRetrieveCMOOperation *result = [[self alloc] initForEntity:entity
                                                    ofRelationship:nil
                                                            withId:jsonId
