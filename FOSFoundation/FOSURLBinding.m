@@ -460,17 +460,11 @@
     return result;
 }
 
-- (id<FOSRESTServiceAdapter>)_adapter {
-    id<FOSRESTServiceAdapter> result = [FOSRESTConfig sharedInstance].restServiceAdapter;
-
-    return result;
-}
-
 - (NSURL *)_baseURL {
     NSURL *result = self.baseURL;
 
     if (result == nil) {
-        result = self._adapter.defaultBaseURL;
+        result = self.serviceAdapter.defaultBaseURL;
     }
 
     return result;
@@ -768,7 +762,7 @@
 }
 
 - (NSDictionary *)_mergedHeaderFields {
-    NSMutableDictionary *result = [[self._adapter headerFields] mutableCopy];
+    NSMutableDictionary *result = [[self.serviceAdapter headerFields] mutableCopy];
     NSDictionary *localHeaders = self.headerFields;
 
     // Set the content type
@@ -789,7 +783,7 @@
     NSTimeInterval result = self.timeoutInterval;
 
     if (result == 0.0f) {
-        result = self._adapter.defaultTimeout;
+        result = self.serviceAdapter.defaultTimeout;
     }
 
     return result;

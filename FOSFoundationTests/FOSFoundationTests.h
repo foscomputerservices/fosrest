@@ -9,13 +9,16 @@
 #import <XCTest/XCTest.h>
 #import "FOSLoginManagerTests.h"
 
+
 #define START_TEST \
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0); \
-    FOSLogDebug(@"###### Test START ######");
+    FOSLogInfo(@"###### Test START ######"); \
+    FOSSetLogLevel(FOSLogLevelPendantic);
 
 
 #define END_TEST { \
-    FOSLogDebug(@"###### Test END ######"); \
+    FOSSetLogLevel(FOSLogLevelInfo); \
+    FOSLogInfo(@"###### Test END ######"); \
     dispatch_semaphore_signal(semaphore); }
 
 #define WAIT_FOR_TEST_END { \
@@ -34,19 +37,23 @@
 
 #define SETUP_NOLOGIN \
 - (void)setUp { \
-    FOSLogDebug(@"###### Test SETUP NO Login ######"); \
+    FOSSetLogLevel(FOSLogLevelInfo); \
+    FOSLogInfo(@"###### Test SETUP NO Login ######"); \
     [super setUp]; \
     \
     [[FOSLoginManagerTests class] setupStandardWebServiceConfig]; \
+    FOSSetLogLevel(FOSLogLevelDebug); \
 }
 
 
 #define TEARDOWN_NOLOGIN \
 - (void)tearDown { \
-    FOSLogDebug(@"###### Test TEARDOWN ######"); \
+    FOSSetLogLevel(FOSLogLevelInfo); \
+    FOSLogInfo(@"###### Test TEARDOWN ######"); \
     [[FOSLoginManagerTests class] tearDownWebService]; \
     \
     [super tearDown]; \
+    FOSSetLogLevel(FOSLogLevelDebug); \
 }
 
 
@@ -56,17 +63,21 @@
 
 #define SETUP_LOGIN(options) \
 - (void)setUp { \
-    FOSLogDebug(@"###### Test SETUP WITH Login ######"); \
+    FOSSetLogLevel(FOSLogLevelInfo); \
+    FOSLogInfo(@"###### Test SETUP WITH Login ######"); \
     [super setUp]; \
 \
     [[FOSLoginManagerTests class] setupStandardWebServiceConfigAndLogInWithOptions:options]; \
+    FOSSetLogLevel(FOSLogLevelDebug); \
 }
 
 #define TEARDOWN_LOGIN \
 - (void)tearDown { \
+    FOSSetLogLevel(FOSLogLevelInfo); \
     [[FOSLoginManagerTests class] tearDownWebServiceAndLogOut]; \
 \
     [super tearDown]; \
+    FOSSetLogLevel(FOSLogLevelDebug); \
 }
 
 #define SETUP_TEARDOWN_LOGIN(options) \

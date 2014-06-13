@@ -50,6 +50,7 @@
     NSError *localError = nil;
     FOSAdapterBinding *adapterBinding =
         [FOSAdapterBinding parseAdapterBindingDescription:description
+                                               forAdapter:self
                                                     error:&localError];
 
     if (adapterBinding && localError == nil) {
@@ -71,7 +72,9 @@
     if (error != nil) { *error = nil; }
 
     NSError *localError = nil;
-    FOSAdapterBinding *bindings = [FOSAdapterBinding parseAdapterBindings:url error:&localError];
+    FOSAdapterBinding *bindings = [FOSAdapterBinding parseAdapterBindings:url
+                                                               forAdapter:self
+                                                                    error:&localError];
 
     if (bindings && localError == nil) {
         self = [self initWithBinding:bindings];

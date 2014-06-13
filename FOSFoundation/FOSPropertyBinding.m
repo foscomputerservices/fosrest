@@ -33,16 +33,16 @@
 }
 
 + (id)encodeCMOValueToJSON:(id)cmoValue
-                     ofType:(NSAttributeDescription *)attrDesc
+                    ofType:(NSAttributeDescription *)attrDesc
+        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                       error:(NSError **)error {
     NSParameterAssert(attrDesc != nil);
     NSParameterAssert([attrDesc isKindOfClass:[NSAttributeDescription class]]);
 
     id result = cmoValue;
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
-    if ([adapter respondsToSelector:@selector(encodeCMOValueToJSON:ofType:error:)]) {
-        result = [adapter encodeCMOValueToJSON:cmoValue ofType:attrDesc error:error];
+    if ([serviceAdapter respondsToSelector:@selector(encodeCMOValueToJSON:ofType:error:)]) {
+        result = [serviceAdapter encodeCMOValueToJSON:cmoValue ofType:attrDesc error:error];
     }
 
     return result;
@@ -50,15 +50,15 @@
 
 + (id)decodeJSONValueToCMO:(id)jsonValue
                      ofType:(NSAttributeDescription *)attrDesc
+        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                       error:(NSError **)error {
     NSParameterAssert(attrDesc != nil);
     NSParameterAssert([attrDesc isKindOfClass:[NSAttributeDescription class]]);
 
     id result = jsonValue;
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
-    if ([adapter respondsToSelector:@selector(decodeJSONValueToCMOValue:ofType:error:)]) {
-        result = [adapter decodeJSONValueToCMOValue:jsonValue ofType:attrDesc error:error];
+    if ([serviceAdapter respondsToSelector:@selector(decodeJSONValueToCMOValue:ofType:error:)]) {
+        result = [serviceAdapter decodeJSONValueToCMOValue:jsonValue ofType:attrDesc error:error];
     }
 
     return result;

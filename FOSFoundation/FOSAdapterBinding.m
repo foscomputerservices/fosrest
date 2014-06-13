@@ -27,17 +27,22 @@
     return result;
 }
 
-+ (instancetype)parseAdapterBindingDescription:(NSString *)bindings error:(NSError **)error {
++ (instancetype)parseAdapterBindingDescription:(NSString *)bindings
+                                    forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                                         error:(NSError **)error {
     NSParameterAssert(bindings != nil);
     if (error != nil) { *error = nil; }
 
     FOSAdapterBinding *result = [FOSAdapterBindingParser parseAdapterBinding:bindings
+                                                                  forAdapter:serviceAdapter
                                                                        error:error];
 
     return result;
 }
 
-+ (instancetype)parseAdapterBindings:(NSURL *)url error:(NSError **)error {
++ (instancetype)parseAdapterBindings:(NSURL *)url
+                          forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                               error:(NSError **)error {
     NSParameterAssert(url != nil);
     if (error != nil) { *error = nil; }
 
@@ -48,7 +53,9 @@
                                                      encoding:NSASCIIStringEncoding
                                                         error:&localError];
     if (adapterDesc && localError == nil) {
-        result = [self parseAdapterBindingDescription:adapterDesc error:&localError];
+        result = [self parseAdapterBindingDescription:adapterDesc
+                                           forAdapter:serviceAdapter
+                                                error:&localError];
     }
 
     if (localError != nil) {

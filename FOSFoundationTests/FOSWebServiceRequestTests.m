@@ -30,6 +30,8 @@ SETUP_TEARDOWN_NOLOGIN
                                                            withDSLQuery:nil
                                                                   error:&error];
 
+    XCTAssertNotNil(urlRequest, @"Null urlRequest???");
+
     FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
                                                                   forURLBinding:urlBinding];
     __block FOSWebServiceRequest *blockRequest = request;
@@ -37,7 +39,7 @@ SETUP_TEARDOWN_NOLOGIN
     request.completionBlock = ^{
 
         // If this fails, check for UID 'bMjY1bcxHP' in parse.com's user test table
-        XCTAssertNil(blockRequest.error, @"Should have succeeded!");
+        XCTAssertNil(blockRequest.error, @"Should have succeeded! Received error: %@", blockRequest.error.description);
         XCTAssertFalse(blockRequest.isCancelled, @"Cancelled?");
         XCTAssertFalse(blockRequest.isExecuting, @"Executing???");
         XCTAssertNotNil(blockRequest.jsonResult, @"No real data?");
@@ -179,6 +181,9 @@ SETUP_TEARDOWN_NOLOGIN
                                                                endPoint:expr
                                                           requestFormat:FOSRequestFormatNoData
                                                        andEntityMatcher:entityMatcher];
+
+    urlBinding.serviceAdapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+
     return urlBinding;
 }
 

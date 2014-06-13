@@ -133,6 +133,7 @@
                 // Allow the FOSRESTServiceAdapter to encode the value
                 value = [[self class] encodeCMOValueToJSON:value
                                                     ofType:(NSAttributeDescription *)propDesc
+                                        withServiceAdapter:self.serviceAdapter
                                                      error:&localError];
 
                 // Update the JSON dictionary (handling nested dictionaries)
@@ -191,7 +192,8 @@
 
                     // Allow the FOSRESTServiceAdapter to decode the value
                     value = [[self class] decodeJSONValueToCMO:value
-                                                 ofType:(NSAttributeDescription *)propDesc
+                                                        ofType:(NSAttributeDescription *)propDesc
+                                            withServiceAdapter:self.serviceAdapter
                                                   error:&localError];
 
                     // Update the CMO's value

@@ -12,7 +12,9 @@
 
 @interface FOSAdapterBindingParser : NSObject
 
-+ (FOSAdapterBinding *)parseAdapterBinding:(NSString *)binding error:(NSError **)error;
++ (FOSAdapterBinding *)parseAdapterBinding:(NSString *)binding
+                                forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                                     error:(NSError **)error;
 
 #ifdef DEBUG
 // TODO : This is historical only, need to replace.

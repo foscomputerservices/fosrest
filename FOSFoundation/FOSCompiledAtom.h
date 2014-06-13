@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol FOSRESTServiceAdapter;
+
 @protocol FOSCompiledAtomInfo <NSObject>
 
 @property (nonatomic, assign) NSInteger atomStartLineNum;
 @property (nonatomic, assign) NSInteger atomStartColNum;
 @property (nonatomic, strong) NSString *atomName;
 @property (nonatomic, readonly) NSString *atomDescription;
+@property (nonatomic, weak) id<FOSRESTServiceAdapter> serviceAdapter;
 
 @end
 

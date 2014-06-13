@@ -25,17 +25,19 @@
 + (void)setValue:(id)value ofJson:(NSMutableDictionary *)json forKeyPath:(NSString *)jsonKeyPath;
 
 /*!
- * @method encodeCMOValueToJSON:ofType:error:
+ * @method encodeCMOValueToJSON:ofType:withServiceAdapter:error:
  */
 + (id)encodeCMOValueToJSON:(id)cmoValue
                     ofType:(NSAttributeDescription *)attrDesc
+        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                      error:(NSError **)error;
 
 /*!
- @method decodeJSONValueToCMO:ofType:error:
+ @method decodeJSONValueToCMO:ofType:withServiceAdapter:error:
  */
 + (id)decodeJSONValueToCMO:(id)jsonValue
                     ofType:(NSAttributeDescription *)attrDesc
+        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                      error:(NSError **)error;
 
 /*!

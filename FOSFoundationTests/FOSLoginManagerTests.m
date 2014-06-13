@@ -14,6 +14,30 @@
 #import "FOSLoginManager_Internal.h"
 #import <stdlib.h>
 
+#define START_CONFIG_OP \
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0); \
+    FOSLogInfo(@"###### Test START ######"); \
+    FOSSetLogLevel(FOSLogLevelError);
+
+#define END_CONFIG_OP { \
+    FOSLogInfo(@"###### Test END ######"); \
+    dispatch_semaphore_signal(semaphore); }
+
+#define WAIT_FOR_CONFIG_OP_END { \
+    CGFloat interval = 0.5f; \
+    NSUInteger loopCount = 0, maxCount = (NSUInteger)((1.0f / interval) * 60.0f); \
+    while (dispatch_semaphore_wait(semaphore, DISPATCH_TIME_NOW)) { \
+        if (loopCount++ < maxCount) { \
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode \
+            beforeDate:[NSDate dateWithTimeIntervalSinceNow:interval]]; \
+        } \
+        else { \
+            [NSException raise:@"FOSTesting" format:@"###### Test timed out!!! ######"]; \
+        } \
+    } \
+}
+
+
 @implementation FOSLoginManagerTests
 #pragma mark - Class methods
 
@@ -57,7 +81,8 @@
 }
 
 + (void)tearDownWebService {
-    START_TEST
+    START_CONFIG_OP
+    FOSSetLogLevel(FOSLogLevelInfo);
 
     // Reset the current MOC in case there are bad entries in it so that they don't
     // affect other tests.
@@ -75,24 +100,27 @@
     }
 
     [[FOSRESTConfig sharedInstance].cacheManager flushCaches:^(BOOL cancelled, NSError *error) {
-        END_TEST
+        END_CONFIG_OP
     }];
 
-    WAIT_FOR_TEST_END
+    WAIT_FOR_CONFIG_OP_END
 }
 
 + (void)setupStandardWebServiceConfigAndLogInWithOptions:(FOSRESTConfigOptions)configOptions {
-    START_TEST
+    START_CONFIG_OP
+    FOSSetLogLevel(FOSLogLevelInfo);
 
     [self setupStandardWebServiceConfigAndLogInWithOptions:configOptions andCallback:^{
-        END_TEST
+        END_CONFIG_OP
     }];
 
-    WAIT_FOR_TEST_END
+    WAIT_FOR_CONFIG_OP_END
 }
 
 + (void)setupStandardWebServiceConfigAndLogInWithOptions:(FOSRESTConfigOptions)configOptions andCallback:(TestCallBack)handler {
     NSParameterAssert(handler != nil);
+
+    FOSSetLogLevel(FOSLogLevelError);
 
     [self setupStandardWebServiceConfigWithOptions:configOptions];
 
@@ -118,6 +146,7 @@
     [self tearDownWebService];
 
     START_TEST
+    FOSSetLogLevel(FOSLogLevelInfo);
 
     FOSLoginManager *lm = [FOSRESTConfig sharedInstance].loginManager;
     if (lm.isLoggedIn) {

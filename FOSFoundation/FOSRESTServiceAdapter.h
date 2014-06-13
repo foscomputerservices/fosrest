@@ -112,7 +112,7 @@
                          forRequests:(NSArray *)requests;
 
 /*!
- * @method encodeCMOValuetoJSON:ofType:error:
+ * @method encodeCMOValuetoJSON:ofType:forServiceAdapter:error:
  *
  * Provides a mechanism for the encoding of non-standard object types into
  * standard JSON types.
@@ -129,7 +129,7 @@
                                error:(NSError **)error;
 
 /*!
- * @method decodeJSONValueToCMOValue:ofType:error:
+ * @method decodeJSONValueToCMOValue:ofType:forServiceAdapter:error:
  *
  * Provides a mechanism for the decodeing of standard JSON types into
  * non-standard object types.

@@ -31,6 +31,7 @@
  * Parses the given binding description string.
  */
 + (instancetype)parseAdapterBindingDescription:(NSString *)bindings
+                                    forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                                          error:(NSError **)error;
 
 /*!
@@ -39,7 +40,9 @@
  * Loads the Adapter Binding description using the given URL.  The file at the URL
  * is expected to be formatted in ASCII format.
  */
-+ (instancetype)parseAdapterBindings:(NSURL *)url error:(NSError **)error;
++ (instancetype)parseAdapterBindings:(NSURL *)url
+                          forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                               error:(NSError **)error;
 
 /*!
  * @group Public Properties

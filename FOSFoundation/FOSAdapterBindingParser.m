@@ -11,15 +11,24 @@
 
 // externed from FOSBinding.ym
 FOSAdapterBinding *parsedAdapterBinding;
+__weak id<FOSRESTServiceAdapter> parsedServiceAdapter;
 id parsedBinding;
 
 @implementation FOSAdapterBindingParser
 
-+ (FOSAdapterBinding *)parseAdapterBinding:(NSString *)binding error:(NSError **)error {
++ (FOSAdapterBinding *)parseAdapterBinding:(NSString *)binding
+                                forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                                     error:(NSError **)error {
     NSError *localError = nil;
     if (error != nil) { *error = nil; }
 
+    // Hand off adapter to bind into AST
+    parsedServiceAdapter = serviceAdapter;
+
     FOSAdapterBinding *result = [self _parse:binding error:&localError];
+
+    // We're done with it now, so let it go
+    parsedServiceAdapter = nil;
 
     if (localError != nil) {
         if (error != nil) {

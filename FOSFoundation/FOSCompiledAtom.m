@@ -14,7 +14,7 @@
 @synthesize atomStartLineNum = _atomStartLineNum;
 @synthesize atomStartColNum = _atomStartColNum;
 @synthesize atomName = _atomName;
-
+@synthesize serviceAdapter = _serviceAdapter;
 
 - (NSString *)atomDescription {
     return [NSString stringWithFormat:@"(%li:%li) - %@",

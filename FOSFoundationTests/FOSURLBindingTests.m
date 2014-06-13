@@ -178,6 +178,8 @@ SETUP_TEARDOWN_NOLOGIN
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
     expectedHeaderFields[@"Content-Type"] = @"application/json; charset=UTF-8";
 
+    urlBinding.serviceAdapter = adapter;
+
     NSTimeInterval expectedTimeInterval = adapter.defaultTimeout;
 
     NSURLRequest *result = [urlBinding urlRequestForCMO:cmo error:nil];
@@ -215,6 +217,8 @@ SETUP_TEARDOWN_NOLOGIN
 
     // Set overrides
     urlBinding.baseURL = baseURL;
+    urlBinding.serviceAdapter = adapter;
+
 
     NSURLRequest *result = [urlBinding urlRequestForCMO:cmo error:nil];
     XCTAssertNotNil(result, @"Bad result");
@@ -251,6 +255,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     // Set overrides
     urlBinding.requestMethod = FOSRequestMethodPUT;
+    urlBinding.serviceAdapter = adapter;
 
     NSURLRequest *result = [urlBinding urlRequestForCMO:cmo error:nil];
     XCTAssertNotNil(result, @"Bad result");
@@ -288,6 +293,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     // Set overrides
     urlBinding.headerFields = @{ @"X-Test" : @"My Test" };
+    urlBinding.serviceAdapter = adapter;
 
     NSURLRequest *result = [urlBinding urlRequestForCMO:cmo error:nil];
     XCTAssertNotNil(result, @"Bad result");
@@ -327,6 +333,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     // Set overrides
     urlBinding.headerFields = @{ overrideKey : @"My Test" };
+    urlBinding.serviceAdapter = adapter;
 
     NSURLRequest *result = [urlBinding urlRequestForCMO:cmo error:nil];
     XCTAssertNotNil(result, @"Bad result");
@@ -363,6 +370,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     // Set overrides
     urlBinding.headerFields = @{ @"Content-Type" : @"My Test" };
+    urlBinding.serviceAdapter = adapter;
 
     NSURLRequest *result = [urlBinding urlRequestForCMO:cmo error:nil];
     XCTAssertNotNil(result, @"Bad result");
@@ -399,6 +407,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     // Set overrides
     urlBinding.requestFormat = FOSRequestFormatWebform;
+    urlBinding.serviceAdapter = adapter;
 
     NSURLRequest *result = [urlBinding urlRequestForCMO:cmo error:nil];
     XCTAssertNotNil(result, @"Bad result");
@@ -434,6 +443,7 @@ SETUP_TEARDOWN_NOLOGIN
 
     // Set overrides
     urlBinding.requestFormat = FOSRequestFormatNoData;
+    urlBinding.serviceAdapter = adapter;
 
     NSURLRequest *result = [urlBinding urlRequestForCMO:cmo error:nil];
     XCTAssertNotNil(result, @"Bad result");

@@ -7,6 +7,7 @@
     extern void yyerror(char* s, ...);
     extern int yylex();
     extern FOSAdapterBinding *parsedAdapterBinding;
+    extern id<FOSRESTServiceAdapter> parsedServiceAdapter;
     extern id parsedBinding;
 
     #undef YYMAXDEPTH
@@ -55,6 +56,7 @@
     ((__bridge id<FOSCompiledAtomInfo>)(atom)).atomStartLineNum = (loc).first_line; \
     ((__bridge id<FOSCompiledAtomInfo>)(atom)).atomStartColNum = (loc).first_column; \
     ((__bridge id<FOSCompiledAtomInfo>)(atom)).atomName = (atomNameStr); \
+    ((__bridge id<FOSCompiledAtomInfo>)(atom)).serviceAdapter = (parsedServiceAdapter); \
 }
 
 %}

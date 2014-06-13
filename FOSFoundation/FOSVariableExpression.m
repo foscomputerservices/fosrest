@@ -87,10 +87,7 @@
 
         // Try to find the identifier directly in the context
         if (result == nil) {
-            // Try FOSRestServiceAdapter
-            id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
-
-            result = [adapter valueForExpressionVariable:ident matched:&matched error:&localError];
+            result = [self.serviceAdapter valueForExpressionVariable:ident matched:&matched error:&localError];
         }
     }
 
