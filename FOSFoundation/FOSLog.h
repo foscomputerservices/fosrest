@@ -14,7 +14,8 @@ typedef NS_ENUM(NSUInteger, FOSLogLevel) {
     FOSLogLevelError,
     FOSLogLevelWarning,
     FOSLogLevelInfo,
-    FOSLogLevelDebug
+    FOSLogLevelDebug,
+    FOSLogLevelPendantic
 };
 
 /*!
@@ -58,6 +59,24 @@ void FOSLogInfo (NSString *format, ...);
  * To set a lower threshold, see @link FOSSetLogLevel @/link.
  */
 void FOSLogDebug (NSString *format, ...);
+
+/*!
+ * @function FOSLogPendantic
+ *
+ * Displays a log message at the FOSLogLevelPendantic logging level.
+ *
+ * This log level is used to display extremely verbose debugging information
+ * which may be difficult to sift through in general, but extremely useful
+ * when things are going wrong.
+ *
+ * @discussion
+ *
+ * By default messages sent by this function will *not* be displayed
+ * as FOSLogLevelPendantic is lower than the default level FOSLogLevelInfo.
+ *
+ * To set a lower threshold, see @link FOSSetLogLevel @/link.
+ */
+void FOSLogPendantic (NSString *format, ...);
 
 /*!
  * @function FOSSetLogLevel

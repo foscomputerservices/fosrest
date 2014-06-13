@@ -188,16 +188,17 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
                                              returningResponse:&response
                                                          error:&error];
 
-        FOSLogDebug(@"FOSWebService (%li) Sync: %@ - %@%@%@",
-              (long)currentRequestId, requestMethod,
-              [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-              urlRequest.allHTTPHeaderFields.count > 0
-                ? [NSString stringWithFormat:@"\nHTTP-Headers: %@", urlRequest.allHTTPHeaderFields.description]
-                : @"",
-              requestDebugData == nil
-                ? @""
-                : [NSString stringWithFormat:@"\nHTTP-Data: %@",
-                   [requestDebugData stringByRemovingPercentEncoding]]);
+        FOSLogDebug(@"FOSWebService (%li) Sync: %@ - %@",
+                    (long)currentRequestId, requestMethod,
+                    [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]);
+        if (urlRequest.allHTTPHeaderFields.count > 0) {
+            FOSLogPendantic(@"\nHTTP-Headers: %@",
+                             urlRequest.allHTTPHeaderFields.description);
+        }
+        if (requestDebugData != nil) {
+            FOSLogPendantic(@"\nHTTP-Data: %@",
+                   [requestDebugData stringByRemovingPercentEncoding]);
+        }
         
         [self _completionHandlerForRequest:webServiceRequest
                             withURLRequest:urlRequest
@@ -277,10 +278,12 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
         [webServiceRequest setOriginalJsonResult:jsonResult];
     }
     else {
-        FOSLogError(@"    FOSWebService Response ERROR: %@", localError.description);
+        FOSLogError(@"    FOSWebService ERROR -- Message: %@", localError.description);
 
         [webServiceRequest setError:localError];
     }
+
+    FOSLogPendantic(@"\nJSON: %@", jsonResult ? jsonResult : @"<none>");
 }
 
 @end
