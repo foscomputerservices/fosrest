@@ -27,7 +27,11 @@ typedef FOSRecoveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSE
 
 @class FOSUser;
 
-@interface FOSCacheManager : NSObject
+@interface FOSCacheManager : NSObject {
+@private
+    __weak FOSRESTConfig *_restConfig;
+    BOOL _updatingMainThreadMOC;
+}
 
 #pragma mark - Class methods
 

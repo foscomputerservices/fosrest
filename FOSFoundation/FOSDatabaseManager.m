@@ -10,6 +10,7 @@
 #import "FOSMergePolicy.h"
 #import "FOSOperationQueue.h"
 #import "FOSRESTConfig.h"
+#import "FOSManagedObjectContext.h"
 
 @implementation FOSDatabaseManager {
     __weak FOSRESTConfig *_restConfig;
@@ -24,7 +25,8 @@
     if ([NSThread isMainThread]) {
         if (_mainThreadMOC == nil) {
             _mainThreadMOC =
-                [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+                [[FOSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+           ((FOSManagedObjectContext *)_mainThreadMOC).cacheManager = _restConfig.cacheManager;
             _mainThreadMOC.persistentStoreCoordinator = _restConfig.storeCoordinator;
             _mainThreadMOC.mergePolicy =
                 [[FOSMergePolicy alloc] initWithMergeType:NSMergeByPropertyStoreTrumpMergePolicyType];

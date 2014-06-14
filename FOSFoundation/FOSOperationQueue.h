@@ -8,12 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class FOSRESTConfig;
+@class FOSManagedObjectContext;
+
 @interface FOSOperationQueue : NSOperationQueue {
 
 @protected
-    NSManagedObjectContext *_moc;
+    FOSManagedObjectContext *_moc;
 }
 
+@property (nonatomic, weak) FOSRESTConfig *restConfig;
 @property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, readonly) FOSOperation *currentOperation;
 

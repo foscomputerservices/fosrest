@@ -9,6 +9,7 @@
 #import "FOSOperationQueue.h"
 #import "FOSMergePolicy.h"
 #import "FOSOperation+FOS_Internal.h"
+#import "FOSManagedObjectContext.h"
 
 @implementation FOSOperationQueue {
     BOOL _allOpsCanceled;
@@ -18,7 +19,8 @@
 - (NSManagedObjectContext *)managedObjectContext {
     @synchronized(self) {
         if (_moc == nil) {
-            _moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
+            _moc = [[FOSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
+            _moc.cacheManager = self.restConfig.cacheManager;
             _moc.persistentStoreCoordinator = [FOSRESTConfig sharedInstance].storeCoordinator;
             _moc.mergePolicy =
                 [[FOSMergePolicy alloc] initWithMergeType:NSMergeByPropertyStoreTrumpMergePolicyType];
