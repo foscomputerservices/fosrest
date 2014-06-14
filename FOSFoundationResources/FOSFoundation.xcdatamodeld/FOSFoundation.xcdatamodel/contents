@@ -12,8 +12,8 @@
         <attribute name="updatedWithServerAt" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="FOSDeletedObject" representedClassName="FOSDeletedObject" syncable="YES">
-        <attribute name="deletedEntityName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="deletedJsonId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="deletedEntityName" attributeType="String" minValueString="1" syncable="YES"/>
+        <attribute name="deletedJsonId" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
     <entity name="FOSManagedObject" representedClassName="FOSManagedObject" isAbstract="YES" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
@@ -47,6 +47,6 @@
         <element name="FOSParseCachedManagedObject" positionX="-54" positionY="-180" width="189" height="58"/>
         <element name="FOSParseUser" positionX="-216" positionY="-118" width="128" height="118"/>
         <element name="FOSRelationshipFault" positionX="-263" positionY="-378" width="164" height="88"/>
-        <element name="FOSUser" positionX="-218" positionY="-184" width="128" height="45"/>
+        <element name="FOSUser" positionX="-218" positionY="-184" width="128" height="43"/>
     </elements>
 </model>

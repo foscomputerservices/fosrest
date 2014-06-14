@@ -907,7 +907,10 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 - (void)refreshAllRelationshipsWithDslQuery:(NSString *)dslQuery handler:(FOSBackgroundRequest)handler {
-    [self refreshAllRelationshipsNamed:self.entity.ownerRelationships
+    NSArray *ownerRelationshipNames =
+        [self.entity.ownerRelationships valueForKeyPath:@"name"];
+
+    [self refreshAllRelationshipsNamed:ownerRelationshipNames
                               dslQuery:dslQuery
                                handler:handler];
 }

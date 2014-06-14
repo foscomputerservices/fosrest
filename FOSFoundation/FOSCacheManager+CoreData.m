@@ -44,29 +44,42 @@
         //        Parse.com doesn't care, but other RDBMSs do.
         for (FOSDeletedObject *nextDelete in outstandingDeletions) {
 
+            NSError *localError = nil;
             NSManagedObjectID *nextDeleteID = nextDelete.objectID;
             FOSJsonId deleteJsonId = nextDelete.deletedJsonId;
             NSString *deleteEntityName = nextDelete.deletedEntityName;
 
             NSEntityDescription *nextDeleteEntity =
-            [NSEntityDescription entityForName:deleteEntityName
-                        inManagedObjectContext:moc];
+                [NSEntityDescription entityForName:deleteEntityName
+                            inManagedObjectContext:moc];
 
             id<FOSRESTServiceAdapter> adapter = _restConfig.restServiceAdapter;
             FOSURLBinding *urlBinding =
-            [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseDestroyServerRecord
-                               forLifecycleStyle:nil
-                                 forRelationship:nil
-                                       forEntity:nextDeleteEntity];
+                [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseDestroyServerRecord
+                                   forLifecycleStyle:nil
+                                     forRelationship:nil
+                                           forEntity:nextDeleteEntity];
 
             NSDictionary *context = @{
                                       @"CMOID" : deleteJsonId,
                                       @"ENTITY" : nextDeleteEntity
                                       };
-            NSError *localError = nil;
 
-            NSURLRequest *urlRequest = [urlBinding urlRequestForServerCommandWithContext:context
-                                                                                   error:&localError];
+            if (urlBinding == nil) {
+                NSString *msgFmt = @"Missing URL_BINDING for %@ phase for entity %@.";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseDestroyServerRecord],
+                                 nextDeleteEntity.name];
+
+                localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            }
+
+            NSURLRequest *urlRequest = nil;
+
+            if (localError == nil) {
+                urlRequest = [urlBinding urlRequestForServerCommandWithContext:context
+                                                                         error:&localError];
+            }
 
             if (localError != nil) {
                 // This is an error in the specification, throw
@@ -194,7 +207,7 @@
                 FOSDeletedObject *newEntry = [[FOSDeletedObject alloc] initWithEntity:entityDesc
                                                        insertIntoManagedObjectContext:moc];
 
-                newEntry.deletedJsonId = (NSString *)cmo.jsonIdValue;
+                newEntry.deletedJsonId = (NSString *)cmo.jsonIdValue.description;
                 newEntry.deletedEntityName = cmo.entity.name;
 
                 FOSLogDebug(@"MARKED FOR DELETION: %@ (%@)",
