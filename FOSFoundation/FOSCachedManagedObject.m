@@ -39,6 +39,7 @@ static NSMutableDictionary *_processingFaults = nil;
 @dynamic hasModifiedProperties;
 @dynamic isFaultObject;
 @dynamic isLocalOnly;
+@dynamic isSendOnly;
 @dynamic originalJsonData;
 @dynamic skipServerDelete;
 
@@ -888,9 +889,21 @@ static NSMutableDictionary *_processingFaults = nil;
         handler(cancelled, error);
     }];
 
+    NSMutableString *groupName = [@"Refresh relationships: " mutableCopy];
+    BOOL first = YES;
+    for (NSString *nextName in relNames) {
+        if (first) {
+            first = NO;
+        }
+        else {
+            [groupName appendString:@", "];
+        }
+        [groupName appendString:nextName];
+    }
+
     [self.restConfig.cacheManager queueOperation:relUpdatesOp
                          withCompletionOperation:finalOp
-                                   withGroupName:@"Refresh relationships"];
+                                   withGroupName:groupName];
 }
 
 - (void)refreshAllRelationshipsWithDslQuery:(NSString *)dslQuery handler:(FOSBackgroundRequest)handler {

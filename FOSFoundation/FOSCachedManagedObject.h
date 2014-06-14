@@ -32,6 +32,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 @property (nonatomic) BOOL hasModifiedProperties;
 @property (nonatomic) BOOL isFaultObject;
 @property (nonatomic) BOOL isLocalOnly;
+@property (nonatomic) BOOL isSendOnly;
 @property (nonatomic, strong) NSData *originalJsonData;
 
 #pragma mark - Public Properties

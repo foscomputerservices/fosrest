@@ -28,6 +28,7 @@
         [propertyName isEqualToString:@"isFaultObject"] ||
         [propertyName isEqualToString:@"isLocalOnly"] ||
         [propertyName isEqualToString:@"isReadOnly"] ||
+        [propertyName isEqualToString:@"isSendOnly"] ||
         [propertyName isEqualToString:@"isUploadable"] ||
         [propertyName isEqualToString:@"originalJsonData"] ||
 

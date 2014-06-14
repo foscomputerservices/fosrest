@@ -197,6 +197,15 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
                     // only saved when pulled through GET.
                     if (![blockSelf.cmo isKindOfClass:[FOSUser class]]) {
 
+                        // Send only records don't have any ids, so once their pushed
+                        // to the server, delete them.
+                        if (blockSelf.cmo.isSendOnly) {
+                            blockSelf.cmo.skipServerDelete = YES;
+
+                            NSManagedObjectContext *moc = blockSelf.managedObjectContext;
+                            [moc deleteObject:blockSelf.cmo];
+                        }
+
                         // Push those changes to the DB now!  This is so that we don't
                         // lose any objectIds that come back from the server.
                         [blockSelf.restConfig.databaseManager saveChanges];

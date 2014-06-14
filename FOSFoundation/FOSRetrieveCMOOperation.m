@@ -291,8 +291,24 @@
                        withBindings:bindings]) != nil) {
         __block FOSRetrieveCMOOperation *blockSelf = self;
 
+        NSError *localError = nil;
+
         if ([fetchDataOp respondsToSelector:@selector(relationshipsToPull)]) {
+            // It's only possible to update 'owned' relationships
+
             _relationshipsToPull = fetchDataOp.relationshipsToPull;
+            NSSet *filteredRels = [self _filterRelationships:self.entity.cmoToManyRelationships];
+
+            for (NSRelationshipDescription *relDesc in filteredRels) {
+                if (!relDesc.isOwnershipRelationship) {
+                    NSString *msgFmt = @"Invalid request to refresh relationship '%@' on entity '%@'.  Only owned relationships can be refreshed.";
+                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                     relDesc.name, fetchDataOp.entity.name];
+
+                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    break;
+                }
+            }
         }
 
         FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
@@ -339,6 +355,10 @@
 
         [bgOp addDependency:fetchDataOp];
         [self addDependency:bgOp];
+
+        if (localError != nil) {
+            _error = localError;
+        }
     }
 
     return self;
@@ -1114,10 +1134,12 @@
         // If we *know* that there are no children, we can skip trying to fetch them
         if ((childCount != 0 && relDesc.jsonRelationshipForcePull == FOSForcePullType_UseCount) ||
             !relDesc.isOptional ||
-            relDesc.jsonRelationshipForcePull == FOSForcePullType_Always) {
+            relDesc.jsonRelationshipForcePull == FOSForcePullType_Always ||
+            (_relationshipsToPull != nil)) {
             
             // We don't auto-pull on optional relationships, unless they tell us to do so.
-            if (relDesc.isOptional && relDesc.jsonRelationshipForcePull == FOSForcePullType_Never) {
+            if (relDesc.isOptional && relDesc.jsonRelationshipForcePull == FOSForcePullType_Never &&
+                (_relationshipsToPull == nil)) {
                 [self _configureFaultingForRelationship:relDesc];
             }
             

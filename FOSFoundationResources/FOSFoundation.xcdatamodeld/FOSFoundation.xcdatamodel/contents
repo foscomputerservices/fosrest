@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="FOSCachedManagedObject" representedClassName="FOSCachedManagedObject" isAbstract="YES" parentEntity="FOSManagedObject" syncable="YES">
-        <attribute name="hasModifiedProperties" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="hasRelationshipFaults" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasModifiedProperties" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="hasRelationshipFaults" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="isFaultObject" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="isLocalOnly" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isLocalOnly" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="isSendOnly" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="markedClean" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="originalJsonData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="skipServerDelete" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -39,13 +40,13 @@
     </entity>
     <entity name="FOSUser" representedClassName="FOSUser" isAbstract="YES" parentEntity="FOSCachedManagedObject" syncable="YES"/>
     <elements>
-        <element name="FOSCachedManagedObject" positionX="-47" positionY="-378" width="173" height="163"/>
+        <element name="FOSCachedManagedObject" positionX="-47" positionY="-378" width="173" height="178"/>
         <element name="FOSDeletedObject" positionX="-423" positionY="-378" width="128" height="73"/>
         <element name="FOSManagedObject" positionX="-144" positionY="-496" width="128" height="73"/>
         <element name="FOSModifiedProperty" positionX="-423" positionY="-468" width="128" height="73"/>
         <element name="FOSParseCachedManagedObject" positionX="-54" positionY="-180" width="189" height="58"/>
         <element name="FOSParseUser" positionX="-216" positionY="-118" width="128" height="118"/>
         <element name="FOSRelationshipFault" positionX="-263" positionY="-378" width="164" height="88"/>
-        <element name="FOSUser" positionX="-218" positionY="-184" width="128" height="43"/>
+        <element name="FOSUser" positionX="-218" positionY="-184" width="128" height="45"/>
     </elements>
 </model>
