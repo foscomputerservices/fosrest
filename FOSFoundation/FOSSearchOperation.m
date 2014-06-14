@@ -31,32 +31,38 @@
     _searchHandler = [searchHandler copy];
     _pullObjectsToForeground = YES;
 
+    NSError *localError = nil;
     __block FOSSearchOperation *blockSelf = self;
 
     if (self.restConfig.networkStatus != FOSNetworkStatusNotReachable) {
-        NSSet *depOps = self.dependentSearchOperations;
+        NSSet *depOps = [self dependentSearchOperations:&localError];
 
-        // This operation will 'cover' any errors found if they were to be ignored, which
-        // allows the final operation to save the changes to the database.
-        FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
-            FOSRecoveryOption result = blockSelf->_saveIndividualResults
-                ? FOSRecoveryOption_Recovered
-                : FOSRecoveryOption_NoRecovery;
+        if (localError == nil) {
+            // This operation will 'cover' any errors found if they were to be ignored, which
+            // allows the final operation to save the changes to the database.
+            FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
+                FOSRecoveryOption result = blockSelf->_saveIndividualResults
+                    ? FOSRecoveryOption_Recovered
+                    : FOSRecoveryOption_NoRecovery;
 
-            return result;
-        }];
+                return result;
+            }];
 
-        // This op is dependent on all other search ops
-        for (FOSOperation *nextDepOp in depOps) {
-            [finalOp addDependency:nextDepOp];
+            // This op is dependent on all other search ops
+            for (FOSOperation *nextDepOp in depOps) {
+                [finalOp addDependency:nextDepOp];
+            }
+
+            // Queue the ops
+            NSString *groupName = [NSString stringWithFormat:@"Performing %@ search",
+                                   NSStringFromClass([self class])];
+            [self.restConfig.cacheManager queueOperation:finalOp
+                                 withCompletionOperation:self
+                                           withGroupName:groupName];
         }
-
-        // Queue the ops
-        NSString *groupName = [NSString stringWithFormat:@"Performing %@ search",
-                               NSStringFromClass([self class])];
-        [self.restConfig.cacheManager queueOperation:finalOp
-                             withCompletionOperation:self
-                                       withGroupName:groupName];
+        else if (_searchHandler != nil) {
+            searchHandler(nil, localError);
+        }
     }
     else if (_searchHandler != nil) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -144,7 +150,11 @@
 #pragma mark - Private Methods
 
 - (void)finalizeDependencies {
-    NSSet *depOps = self.dependentSearchOperations;
+    NSError *localError = nil;
+    NSSet *depOps = [self dependentSearchOperations:&localError];
+
+    // TODO : Something doesn't seem quite right as nothing is calling this method.
+    NSAssert(localError == nil, @"Error: %@", localError.description);
 
     // This op is dependent on all other search ops
     for (FOSOperation *nextDepOp in depOps) {
@@ -152,26 +162,46 @@
     }
 }
 
-- (NSSet *)dependentSearchOperations {
+- (NSSet *)dependentSearchOperations:(NSError **)error {
+    NSParameterAssert(error != nil);
+
+    *error = nil;
     NSMutableSet *result = [NSMutableSet setWithCapacity:2];
     NSEntityDescription *entity = [self.managedClass entityDescription];
     NSError *localError = nil;
 
     FOSURLBinding *urlBinding =
-    [self.restAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecords
-                                forLifecycleStyle:nil
-                                  forRelationship:nil
-                                        forEntity:entity];
-    NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
-                                                           withDSLQuery:self.dslQuery
-                                                                  error:&localError];
+        [self.restAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecords
+                                    forLifecycleStyle:nil
+                                      forRelationship:nil
+                                            forEntity:entity];
+
+    if (urlBinding == nil) {
+        NSString *msgFmt = @"Missing required URL_BINDING for %@ phase for entity %@.";
+        NSString *msg = [NSString stringWithFormat:msgFmt,
+                         [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecords],
+                         entity.name];
+
+        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+    }
+
     if (localError == nil) {
-        FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
-                                                                      forURLBinding:urlBinding];
+        NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
+                                                               withDSLQuery:self.dslQuery
+                                                                      error:&localError];
+        if (localError == nil) {
+            FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                          forURLBinding:urlBinding];
 
-        FOSOperation *procOp = [self processSearchResults:request];
+            FOSOperation *procOp = [self processSearchResults:request];
 
-        [result addObject:procOp];
+            [result addObject:procOp];
+        }
+    }
+
+    if (localError != nil) {
+        *error = localError;
+        result = nil;
     }
 
     return result;
