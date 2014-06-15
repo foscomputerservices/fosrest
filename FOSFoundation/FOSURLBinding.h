@@ -323,9 +323,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * the adapter's CMO instances.
  *
  * Setting this property or sharedBindingReference is required unless
- *   requestFormat == FOSRequestFormatNoData &&
- *   lifecyclePhase != FOSLifecyclePhaseCreateServerRecord &&
- *   lifecyclePhase != FOSLifecyclePhaseUpdateServerRecord.
+ *   requestFormat == FOSRequestFormatNoData.
  */
 @property (nonatomic, strong) FOSCMOBinding *cmoBinding;
 
@@ -347,9 +345,7 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * jsonBindingExpression.
  *
  * Setting this property or cmoBinder is required unless
- *   requestFormat == FOSRequestFormatNoData &&
- *   lifecyclePhase != FOSLifecyclePhaseCreateServerRecord &&
- *   lifecyclePhase != FOSLifecyclePhaseUpdateServerRecord.
+ *   requestFormat == FOSRequestFormatNoData.
  */
 @property (nonatomic, strong) FOSSharedBindingReference *sharedBindingReference;
 

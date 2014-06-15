@@ -54,9 +54,7 @@
                         andEntityMatcher:(FOSItemMatcher *)entityMatcher {
     NSParameterAssert(endPoint != nil);
     NSParameterAssert(entityMatcher != nil);
-    NSParameterAssert(lifecyclePhase != FOSLifecyclePhaseCreateServerRecord &&
-                      lifecyclePhase != FOSLifecyclePhaseUpdateServerRecord &&
-                      requestFormat == FOSRequestFormatNoData);
+    NSParameterAssert(requestFormat == FOSRequestFormatNoData);
 
     FOSURLBinding *result = [[self alloc] init];
     result.lifecyclePhase = lifecyclePhase;

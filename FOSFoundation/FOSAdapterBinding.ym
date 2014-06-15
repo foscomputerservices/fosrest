@@ -222,6 +222,9 @@ url_binding
         /* 14 */ optional_json_binding      /* optional */
         /* 15 */ cmo_binding                /* optional */
         /* 16 */ optional_relationships     /* optional */
+
+// TODO FF-7 : Review why entityMatcher can be optional.  How would we match to the binding if
+//        we don't have an entity matcher??
         /* 17 */ optional_matching_entities /* optional */ {
 
         FOSLifecyclePhase lifecyclePhase = ($3);
@@ -260,8 +263,6 @@ url_binding
                                             andEntityMatcher:entityMatcher];
         }
         else if (
-            lifecyclePhase != FOSLifecyclePhaseCreateServerRecord &&
-            lifecyclePhase != FOSLifecyclePhaseUpdateServerRecord &&
             lifecyclePhase != FOSLifecyclePhaseRetrieveServerRecord &&
             requestFormat == FOSRequestFormatNoData
         ) {
@@ -281,6 +282,9 @@ url_binding
                                                          endPoint:endPoint
                                                     requestFormat:requestFormat
                                                andJSONExpressions:jsonBindingExpressions];
+
+// TODO : Review why entityMatcher can be optional
+               binding.entityMatcher = entityMatcher;
             }
             else {
                 binding.jsonBindingExpressions = jsonBindingExpressions;

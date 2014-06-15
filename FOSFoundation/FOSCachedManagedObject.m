@@ -348,6 +348,7 @@ static NSMutableDictionary *_processingFaults = nil;
     }
 
     // This method gets called *a lot* any performance hits *will* be impactful!!!
+    // jsonIdValue will return NSNull if there was no identity property specified.
     if (self.jsonIdValue == nil) {
         return YES;
     }
@@ -434,8 +435,10 @@ static NSMutableDictionary *_processingFaults = nil;
     //
     //       Thus, we'll also accept '0' as 'nil' for the id, if it's of type NSNumber, which
     //       makes this assert a bit heavy, but oh well...
-    NSAssert((self.jsonIdValue != nil && self.updatedWithServerAt != nil) ||
-             ((self.jsonIdValue == nil ||
+    //
+    //       There are also some records that don't have an id at all and jsonIdValue == [NSNull null]
+    NSAssert(((self.jsonIdValue != nil || self.jsonIdValue == [NSNull null]) && self.updatedWithServerAt != nil) ||
+             ((self.jsonIdValue == nil || self.jsonIdValue == [NSNull null] ||
                ([self.jsonIdValue isKindOfClass:[NSNumber class]] && ((NSNumber *)self.jsonIdValue).integerValue == 0)) &&
               self.updatedWithServerAt == nil) ||
              !self.isUploadable ||
@@ -758,17 +761,15 @@ static NSMutableDictionary *_processingFaults = nil;
 
 - (FOSJsonId)jsonIdValue {
     // REVIEW : I'm not positive that this is the best way to accomplish this...
-    NSString *idProp = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
+    // NOTE: Not all entities are going to have identities.  Some may be send only, for example.
+    NSString *idProp = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]
+                                              notFoundOK:YES];
 
-    if (idProp == nil) {
-        NSString *msgFmt = @"Missing ID_ATTRIBUTE mapping for entity: %@";
-        NSString *msg = [NSString stringWithFormat:msgFmt, self.entity.name];
+    FOSJsonId result = [NSNull null];
 
-        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
-        @throw e;
+    if (idProp != nil) {
+        result = [self primitiveValueForKey:idProp];
     }
-
-    NSString *result = [self primitiveValueForKey:idProp];
 
     return result;
 }
@@ -987,7 +988,14 @@ static NSMutableDictionary *_processingFaults = nil;
 #pragma mark - Private methods
 
 + (NSString *)_cmoIdentityKeyPath:(FOSRESTConfig *)restConfig {
+    return [self _cmoIdentityKeyPath:restConfig notFoundOK:NO];
+}
+
+// NOTE: Not all entities are going to have identities.  Some may be send only, for example.
++ (NSString *)_cmoIdentityKeyPath:(FOSRESTConfig *)restConfig notFoundOK:(BOOL)notFoundOK {
     NSParameterAssert(restConfig != nil);
+
+    NSString *result = nil;
 
     NSEntityDescription *entity = [self entityDescription];
 
@@ -1002,7 +1010,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     // Any errors encountered by this method are yielded as exceptions as they're something
     // very wrong with the adapter's configuration.
-    if (urlBinding == nil) {
+    if (urlBinding == nil && !notFoundOK) {
         NSString *msgFmt = @"Missing ULR_BINDING for the RETRIEVE_SERVER_RECORD lifecycle of entity '%@' managed by %@.";
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          entity.name, NSStringFromClass([adapter class])];
@@ -1013,7 +1021,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     FOSCMOBinding *cmoBinding = urlBinding.cmoBinding;
 
-    if (cmoBinding == nil) {
+    if (cmoBinding == nil && !notFoundOK) {
         NSString *msgFmt = @"Missing CMO_BINDING for entity '%@' managed by %@.";
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          entity.name, NSStringFromClass([adapter class])];
@@ -1024,7 +1032,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     FOSAttributeBinding *identityBinding = cmoBinding.identityBinding;
 
-    if (identityBinding == nil) {
+    if (identityBinding == nil && !notFoundOK) {
         NSString *msgFmt = @"Missing ID_ATTRIBUTE in the ATTRIBUTE_BINDINGS for entity '%@' managed by %@.";
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          entity.name, NSStringFromClass([adapter class])];
@@ -1033,24 +1041,26 @@ static NSMutableDictionary *_processingFaults = nil;
         @throw e;
     }
 
-    NSDictionary *propsByName = entity.propertiesByName;
-    NSArray *propNames = propsByName.allKeys;
-    NSSet *identNames = [[identityBinding attributeMatcher] matchedItems:propNames
-                                                           matchSelector:nil
-                                                                 context:context];
-    context[@"ATTRDESC"] = propsByName[identNames.anyObject];
+    if (identityBinding != nil) {
+        NSDictionary *propsByName = entity.propertiesByName;
+        NSArray *propNames = propsByName.allKeys;
+        NSSet *identNames = [[identityBinding attributeMatcher] matchedItems:propNames
+                                                               matchSelector:nil
+                                                                     context:context];
+        context[@"ATTRDESC"] = propsByName[identNames.anyObject];
 
-    id<FOSExpression> expr = identityBinding.cmoKeyPathExpression;
-    NSError *localError = nil;
-    NSString *result = [expr evaluateWithContext:context error:&localError];
+        id<FOSExpression> expr = identityBinding.cmoKeyPathExpression;
+        NSError *localError = nil;
+        result =  [expr evaluateWithContext:context error:&localError];
 
-    if (localError != nil) {
-        NSString *msgFmt = @"Error evaluating the ID_ATTRIBUTE's CMO expression for entity '%@' managed by the %@ adapter: %@";
-        NSString *msg = [NSString stringWithFormat:msgFmt,
-                         entity.name, NSStringFromClass([adapter class]), localError.description];
-        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        if (localError != nil) {
+            NSString *msgFmt = @"Error evaluating the ID_ATTRIBUTE's CMO expression for entity '%@' managed by the %@ adapter: %@";
+            NSString *msg = [NSString stringWithFormat:msgFmt,
+                             entity.name, NSStringFromClass([adapter class]), localError.description];
+            NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
 
-        @throw e;
+            @throw e;
+        }
     }
 
     return result;
@@ -1276,14 +1286,15 @@ static NSMutableDictionary *_processingFaults = nil;
     NSString *idRelationshipKeyPath = nil;
     NSSet *knownRelNames = [[self class] _mappedRelationshipNames:[FOSRESTConfig sharedInstance]
                                                    idRelationship:&idRelationshipKeyPath];
-    NSString *primaryKey = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
+    NSString *primaryKey = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]
+                                                  notFoundOK:YES];
 
     // Remember which properties have been modified
     for (NSString *nextProp in changedVals) {
 
         // Skip the primary key, as you cannot update the PK on the server,
         // so the only reason it would change is syncing from the server.
-        if ([nextProp isEqualToString:primaryKey]) {
+        if ([nextProp isEqual:primaryKey]) {
             continue;
         }
 
