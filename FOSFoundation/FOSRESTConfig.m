@@ -170,6 +170,13 @@ __strong FOSRESTConfig *__sharedInstance = nil;
         [self willChangeValueForKey:@"networkStatus"];
         _networkStatus = _statusMonitor.networkStatus;
         [self didChangeValueForKey:@"networkStatus"];
+
+        // If we came back online and we're to auto sync, push
+        // any delayed changes.
+        if ((_networkStatus != FOSNetworkStatusNotReachable) &&
+            (_configOptions & FOSRESTConfigAutomaticallySynchronize)) {
+            [self.cacheManager flushCaches:nil];
+        }
     }
 }
 
