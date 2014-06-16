@@ -13,12 +13,13 @@
 #pragma mark - Initialization methods
 
 - (id)initWithCMO:(FOSCachedManagedObject *)cmo
-  forRelationship:(NSRelationshipDescription *)relDesc {
+  forRelationship:(NSRelationshipDescription *)relDesc
+    parentSentIDs:parentSentIDs {
 
-    if ((self = [super initWithCMO:cmo forRelationship:relDesc]) != nil) {
+    if ((self = [super initWithCMO:cmo forRelationship:relDesc parentSentIDs:parentSentIDs]) != nil) {
         FOSCachedManagedObject *relObj = (FOSCachedManagedObject *)[cmo valueForKey:relDesc.name];
-        if (relObj != nil) {
-            [self addDependency:[relObj sendServerRecordWithLifecycleStyle:nil]];
+        if (relObj != nil && ![parentSentIDs containsObject:relObj.objectID]) {
+            [self addDependency:[relObj sendServerRecordWithLifecycleStyle:nil parentSentIDs:parentSentIDs]];
         }
     }
 

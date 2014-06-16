@@ -22,7 +22,8 @@
  * @method operationForCMO:forRelationship:
  */
 + (instancetype)operationForCMO:(FOSCachedManagedObject *)cmo
-                forRelationship:(NSRelationshipDescription *)relDesc;
+                forRelationship:(NSRelationshipDescription *)relDesc
+                  parentSentIDs:(NSSet *)parentSentIDs;
 
 /*!
  * @group Properties
@@ -38,12 +39,15 @@
  */
 @property (nonatomic, readonly) NSRelationshipDescription *relDesc;
 
+@property (nonatomic, readonly) NSSet *parentSentIDs;
+
 /*!
  * @methodgroup Initialization methods
  */
 #pragma mark - Initialization Methods
 
 - (id)initWithCMO:(FOSCachedManagedObject *)cmo
-  forRelationship:(NSRelationshipDescription *)relDesc;
+  forRelationship:(NSRelationshipDescription *)relDesc
+    parentSentIDs:(NSSet *)parentSentIDs;
 
 @end

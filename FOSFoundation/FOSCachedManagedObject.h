@@ -180,6 +180,8 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  */
 - (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle;
 
+- (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle parentSentIDs:parentSentIDs;
+
 /*!
  * @method createAndRetrieveServerRecordWithJSON:
  *

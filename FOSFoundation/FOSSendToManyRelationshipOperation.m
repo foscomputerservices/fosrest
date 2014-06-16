@@ -13,17 +13,21 @@
 #pragma mark - Initialization Methods
 
 - (id)initWithCMO:(FOSCachedManagedObject *)cmo
-  forRelationship:(NSRelationshipDescription *)relDesc {
+  forRelationship:(NSRelationshipDescription *)relDesc
+    parentSentIDs:(NSSet *)parentSentIDs {
+    if ((self = [super initWithCMO:cmo forRelationship:relDesc parentSentIDs:parentSentIDs]) != nil) {
 
-    if ((self = [super initWithCMO:cmo forRelationship:relDesc]) != nil) {
         id<NSFastEnumeration> relatedCMOs = [cmo primitiveValueForKey:relDesc.name];
         if (relatedCMOs != nil) {
 
             for (FOSCachedManagedObject *relatedCMO in relatedCMOs) {
-                FOSSendServerRecordOperation *sendOp =
-                    [relatedCMO sendServerRecordWithLifecycleStyle:nil];
 
-                [self addDependency:sendOp];
+                if (![parentSentIDs containsObject:relatedCMO.objectID]) {
+                    FOSSendServerRecordOperation *sendOp =
+                        [relatedCMO sendServerRecordWithLifecycleStyle:nil parentSentIDs:parentSentIDs];
+
+                    [self addDependency:sendOp];
+                }
             }
         }
     }

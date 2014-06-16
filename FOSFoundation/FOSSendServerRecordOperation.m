@@ -241,14 +241,23 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
     for (NSRelationshipDescription *relDesc in self.cmo.entity.cmoOwnedRelationships) {
         FOSOperation *relOp = nil;
 
+        NSMutableSet *parentIDs = self.parentSentIDs == nil
+            ? [NSMutableSet set]
+            : [self.parentSentIDs mutableCopy];
+
+        NSAssert(![parentIDs containsObject:self.cmo.objectID], @"Shouldn't have made it in !");
+        [parentIDs addObject:self.cmo.objectID];
+
         // To-one relationship
         if (!relDesc.isToMany && sendToOneRecords) {
             relOp = [FOSSendToOneRelationshipOperation operationForCMO:blockSelf.cmo
-                                                       forRelationship:relDesc];
+                                                       forRelationship:relDesc
+                                                         parentSentIDs:parentIDs];
         }
-        else if (!sendToOneRecords) {
+        else if (relDesc.isToMany && !sendToOneRecords) {
             relOp = [FOSSendToManyRelationshipOperation operationForCMO:blockSelf.cmo
-                                                        forRelationship:relDesc];
+                                                        forRelationship:relDesc
+                                                          parentSentIDs:parentIDs];
         }
 
         if (relOp != nil) {

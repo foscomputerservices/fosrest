@@ -44,6 +44,15 @@
 @property (nonatomic, readonly) NSString *lifecycleStyle;
 
 /*!
+ * @property parentSentIDs
+ *
+ * A set of NSManagedObjectID instances that have already been sent by
+ * parent scopes.  This list is added to as scopes are processed to
+ * terminate any cycles in the graph.
+ */
+@property (nonatomic, strong) NSSet *parentSentIDs;
+
+/*!
  * @methodgroup Initialization Methods
  */
 #pragma mark - Initialization Methods

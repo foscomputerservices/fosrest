@@ -15,9 +15,10 @@
 #pragma mark - Class Methods
 
 + (instancetype)operationForCMO:(FOSCachedManagedObject *)cmo
-                forRelationship:(NSRelationshipDescription *)relDesc {
+                forRelationship:(NSRelationshipDescription *)relDesc
+                  parentSentIDs:(NSSet *)parentSentIDs {
 
-    return [[self alloc] initWithCMO:cmo forRelationship:relDesc];
+    return [[self alloc] initWithCMO:cmo forRelationship:relDesc parentSentIDs:parentSentIDs];
 }
 
 #pragma mark - Property Overides
@@ -29,10 +30,12 @@
 #pragma mark - Initialization methods
 
 - (id)initWithCMO:(FOSCachedManagedObject *)cmo
-  forRelationship:(NSRelationshipDescription *)relDesc {
+  forRelationship:(NSRelationshipDescription *)relDesc
+    parentSentIDs:(NSSet *)parentSentIDs {
     if ((self = [super init]) != nil) {
         _cmoID = cmo.objectID;
         _relDesc = relDesc;
+        _parentSentIDs = parentSentIDs;
     }
     
     return self;

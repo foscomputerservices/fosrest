@@ -277,6 +277,11 @@ static NSMutableDictionary *_processingFaults = nil;
 #pragma mark - FOSLifecyclePhase Methods
 
 - (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle {
+    return [self sendServerRecordWithLifecycleStyle:lifecycleStyle parentSentIDs:nil];
+}
+
+- (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle
+                                                       parentSentIDs:parentSentIDs {
     FOSSendServerRecordOperation *result = nil;
 
     if (!self.hasBeenUploadedToServer) {
@@ -287,6 +292,8 @@ static NSMutableDictionary *_processingFaults = nil;
         result = [FOSUpdateServerRecordOperation updateOperationForCMO:self
                                                     withLifecycleStyle:lifecycleStyle];
     }
+
+    result.parentSentIDs = parentSentIDs;
 
     return result;
 }
