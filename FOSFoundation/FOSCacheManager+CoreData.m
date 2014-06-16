@@ -67,11 +67,12 @@
 
             if (urlBinding == nil) {
                 NSString *msgFmt = @"Missing URL_BINDING for %@ phase for entity %@.";
-                NSString *msg = [NSString stringWithFormat:msgFmt,
-                                 [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseDestroyServerRecord],
-                                 nextDeleteEntity.name];
 
-                localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                // Not all entities might be able to be destoryed on the server, so if there's
+                // no destroy, just log it and move on.
+                FOSLogDebug(msgFmt,
+                            [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseDestroyServerRecord],
+                            nextDeleteEntity.name);
             }
 
             NSURLRequest *urlRequest = nil;
@@ -90,8 +91,16 @@
                 @throw e;
             }
 
-            FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
-                                                                          forURLBinding:urlBinding];
+            FOSOperation *request = nil;
+
+            if (urlRequest != nil) {
+                request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                        forURLBinding:urlBinding];
+            }
+            else {
+                // Just a dummy to allow the whole process to complete
+                request = [[FOSOperation alloc] init];
+            }
 
             FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
 
