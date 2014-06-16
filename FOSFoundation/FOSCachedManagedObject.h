@@ -55,6 +55,17 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 @property (nonatomic, readonly) BOOL isUploadable;
 
 /*!
+ * @property prepareForSendOperation
+ *
+ * Allows the CMO to perform work before the receiver
+ * is delivered to the server.
+ *
+ * Subclasses should make their operation dependant on
+ * the super class's result, if not nil.
+ */
+@property (nonatomic, readonly) FOSOperation *prepareForSendOperation;
+
+/*!
  * @property skipServerDelete
  *
  * Mark the receiver as not to be deleted from the server.

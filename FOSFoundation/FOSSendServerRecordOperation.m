@@ -170,13 +170,19 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
         }
     }];
 
+    FOSOperation *prepareForSendOp = self.cmo.prepareForSendOperation;
+
+    if (prepareForSendOp != nil) {
+        [result addDependency:prepareForSendOp];
+    }
+
     return result;
 }
 
 - (FOSOperation *)_updateCMO {
     __block FOSSendServerRecordOperation *blockSelf = self;
 
-    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+    FOSBackgroundOperation *result = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
 
         if (!cancelled && (error == nil)) {
             NSError *localError = nil;
@@ -226,8 +232,14 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
             }
         }
     }];
-    
-    return finalOp;
+
+    FOSOperation *prepareForSendOp = self.cmo.prepareForSendOperation;
+
+    if (prepareForSendOp != nil) {
+        [result addDependency:prepareForSendOp];
+    }
+
+    return result;
 }
 
 - (FOSOperation *)_sendDependentServerRecords:(BOOL)sendToOneRecords {

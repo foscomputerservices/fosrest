@@ -138,14 +138,14 @@
         NSString *msg = nil;
 
         if (foundRelBinding) {
-            NSString *msgFmt = @"Missing JSON_ID_BINDING in RELATINSHIP_BINDING for Entity '%@', a destination entity of relationship '%@' with parent Entity '%@'.";
+            NSString *msgFmt = @"Missing JSON_ID_BINDING in RELATIONSHIP_BINDING for Entity '%@', a destination entity of relationship '%@' with parent Entity '%@'.";
             msg = [NSString stringWithFormat:msgFmt,
                    relDesc.destinationEntity.name,
                    relDesc.name,
                    relDesc.entity.name];
         }
         else {
-            NSString *msgFmt = @"Missing RELATINSHIP_BINDING from Entity '%@' to Entity '%@' across relationship '%@'.";
+            NSString *msgFmt = @"Missing RELATIONSHIP_BINDING from Entity '%@' to Entity '%@' across relationship '%@'.";
             msg = [NSString stringWithFormat:msgFmt,
                    relDesc.entity.name,
                    relDesc.destinationEntity.name,

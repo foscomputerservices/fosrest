@@ -30,6 +30,7 @@
         [propertyName isEqualToString:@"isReadOnly"] ||
         [propertyName isEqualToString:@"isSendOnly"] ||
         [propertyName isEqualToString:@"isUploadable"] ||
+        [propertyName isEqualToString:@"prepareForSendOperation"] ||
         [propertyName isEqualToString:@"originalJsonData"] ||
 
         [propertyName isEqualToString:@"isDirty"] ||

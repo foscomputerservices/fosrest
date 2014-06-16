@@ -128,6 +128,10 @@ static NSMutableDictionary *_processingFaults = nil;
     return result;
 }
 
+- (FOSOperation *)prepareForSendOperation {
+    return nil;
+}
+
 - (BOOL)skipServerDeleteTree {
     __block BOOL result = self.skipServerDelete;
 
