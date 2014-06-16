@@ -1010,6 +1010,9 @@ static NSMutableDictionary *_processingFaults = nil;
 
     // Any errors encountered by this method are yielded as exceptions as they're something
     // very wrong with the adapter's configuration.
+    // FF-8 TODO : We need to do a better job of finding the correct lifecycle while retrieving the
+    //             identity as it's not required to have RETRIEVE_SERVER_RECORD if the only way
+    //             to get a CMO is through a relationship.
     if (urlBinding == nil && !notFoundOK) {
         NSString *msgFmt = @"Missing ULR_BINDING for the RETRIEVE_SERVER_RECORD lifecycle of entity '%@' managed by %@.";
         NSString *msg = [NSString stringWithFormat:msgFmt,
