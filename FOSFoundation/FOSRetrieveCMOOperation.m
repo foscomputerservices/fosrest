@@ -1275,7 +1275,16 @@
         if (unwrappedJson != nil && [unwrappedJson isKindOfClass:[NSArray class]]) {
             FOSCMOBinding *cmoBinding = _urlBinding.cmoBinding;
 
+            // FF-11 TODO : Fefactor all such impls into a single impl on FOSAttributeBinding.
             FOSAttributeBinding *identityBinding = cmoBinding.identityBinding;
+
+            NSDictionary *propsByName = self.entity.propertiesByName;
+            NSArray *propNames = propsByName.allKeys;
+            NSSet *identNames = [[identityBinding attributeMatcher] matchedItems:propNames
+                                                                   matchSelector:nil
+                                                                         context:context];
+            context = [context mutableCopy];
+            ((NSMutableDictionary *)context)[@"ATTRDESC"] = propsByName[identNames.anyObject];
 
             id<FOSExpression> jsonKeyExpression = identityBinding.jsonKeyExpression;
             NSString *jsonIdKeyPath = [jsonKeyExpression evaluateWithContext:context
@@ -1294,6 +1303,8 @@
 
             // For now we'll ignore any errors as this is just fast tracking...
             else {
+                FOSLogPendantic(@"Skipping binding to _bindings[\"originalJsonResult\"] for entity %@ due to error :%@",
+                                localError.description);
                 localError = nil;
             }
         }
