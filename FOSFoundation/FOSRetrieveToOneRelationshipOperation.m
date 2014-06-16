@@ -108,15 +108,20 @@
                         [self addDependency:_fetchRelatedEntityOp];
                     }
                     else {
+                        // There are two reasons why we couldn't find an identity:
+                        //   1) The adapterbinding is wrong
+                        //   2) The REST service provided <null>
+                        //
+                        // Thus, we cannot treat this an an error condition, we just log it and
+                        // move on.  The database schema should handle the case where a <null>
+                        // is not acceptible.
                         NSString *msgFmt = @"Unable to find identity for lifecycle %@ for Relationship '%@' between Entity '%@' and Entity '%@' in json: %@";
-                        NSString *msg = [NSString stringWithFormat:msgFmt,
-                                         [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecordRelationship],
-                                         relDesc.name,
-                                         _relationship.entity.name,
-                                         destEntity.name,
-                                         jsonFragment];
-
-                        localError = [NSError errorWithMessage:msg forAtom:_urlBinding.cmoBinding];
+                        FOSLogDebug(msgFmt,
+                                    [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecordRelationship],
+                                    relDesc.name,
+                                    _relationship.entity.name,
+                                    destEntity.name,
+                                    jsonFragment);
                     }
                 }
             }
@@ -258,6 +263,16 @@
             }
         }
     }
+}
+
+- (NSError *)finishValidation {
+    NSError *result = [_fetchRelatedEntityOp finishValidation];
+
+    return result;
+}
+
+- (void)finishCleanup:(BOOL)forceDestroy {
+    [_fetchRelatedEntityOp finishCleanup:forceDestroy];
 }
 
 #pragma mark - Overrides

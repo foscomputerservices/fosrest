@@ -586,7 +586,7 @@ static NSMutableDictionary *_processingFaults = nil;
                                             FOSCachedManagedObject *localSelf =
                                                 (FOSCachedManagedObject *)[moc objectWithID:selfID];
 
-                                            NSAssert([(NSString *)self.jsonIdValue isEqualToString:(NSString *)localSelf.jsonIdValue], @"Ids not equal?");
+                                            NSAssert([self.jsonIdValue isEqual:localSelf.jsonIdValue], @"Ids not equal?");
 
                                             [localSelf setValue:resolver.managedObject forKey:key];
                                         }

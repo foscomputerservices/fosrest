@@ -84,7 +84,7 @@
 
 - (void)finishBinding;
 - (void)finishOrdering;
-- (void)finishValidation;
+- (NSError *)finishValidation;
 - (void)finishCleanup:(BOOL)forceDestroy;
 
 @end

@@ -19,7 +19,7 @@
 
 - (void)bindToOwner:(NSManagedObjectID *)ownerId;
 - (void)finishOrdering;
-- (void)finishValidation;
+- (NSError *)finishValidation;
 - (void)finishCleanup:(BOOL)forceDestroy;
 
 @end

@@ -158,7 +158,7 @@
                     blockSelf->_loggedInMOID = loggedInUser.objectID;
 
                     NSAssert(blockSelf->_loggedInUid != nil, @"Why is the loggedInUid nil?");
-                    NSAssert([(NSString *)blockSelf->_loggedInUser.uid isEqualToString:(NSString *)blockSelf->_loggedInUid],
+                    NSAssert([blockSelf->_loggedInUser.uid isEqual:blockSelf->_loggedInUid],
                              @"Why aren't the uids equal???");
 
                     // This is not 'dirty' as we pulled it from the web service

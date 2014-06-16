@@ -250,10 +250,14 @@
     }
 }
 
-- (void)finishValidation {
+- (NSError *)finishValidation {
+    NSError *result = nil;
+
     for (FOSRetrieveCMOOperation *nextOp in _childRetrieveCMOOps) {
-        [nextOp finishValidation];
+        result = [nextOp finishValidation];
     }
+
+    return result;
 }
 
 - (void)finishCleanup:(BOOL)forceDestroy {

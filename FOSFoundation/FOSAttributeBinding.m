@@ -60,6 +60,11 @@
 
         if (jsonKeyPath && localError == nil) {
             result = [(NSObject *)json valueForKeyPath:jsonKeyPath];
+
+            // FF-10 TODO: Decode this value correctly
+            if ([result isKindOfClass:[NSNull class]]) {
+                result = nil;
+            }
         }
     }
     else {

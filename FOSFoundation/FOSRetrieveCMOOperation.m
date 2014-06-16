@@ -17,6 +17,7 @@
     NSArray *_toOneOps;
     NSArray *_toManyOps;
     NSError *_error;
+    NSError *_validationError;
     BOOL _finishedBinding;
     BOOL _finishedOrdering;
     BOOL _finishedValidation;
@@ -481,7 +482,7 @@
 }
 
 - (void)setJsonId:(FOSJsonId)jsonId {
-    NSParameterAssert(jsonId != nil);
+    NSParameterAssert(jsonId != nil && ![jsonId isKindOfClass:[NSNull class]]);
 
     NSError *localError = nil;
 
@@ -519,7 +520,10 @@
                                                                     fromBindings:blockSelf->_bindings
                                                        respectingPreviousLookups:NO];
 
-                        result = cmo.objectID;
+                        if (cmo != nil) {
+                            result = cmo.objectID;
+                            blockSelf->_bindings[jsonId] = result;
+                        }
                     }
                 }
 
@@ -539,7 +543,7 @@
 
                         FOSCachedManagedObject *cmo = (FOSCachedManagedObject *)[self.managedObjectContext objectWithID:blockSelf->_managedObjectID];
 
-                        NSAssert([(NSString *)blockSelf->_jsonId isEqualToString:(NSString *)cmo.jsonIdValue],
+                        NSAssert([blockSelf->_jsonId isEqual:(NSString *)cmo.jsonIdValue],
                                  @"Ids aren't the same?");
 
                         blockSelf->_json = cmo.originalJson;
@@ -775,33 +779,38 @@
     }
 }
 
-- (void)finishValidation {
+- (NSError *)finishValidation {
+    NSError *localError = nil;
+
     // Our subtree should now be valid
     if (!_finishedValidation && !self.isCancelled) {
         _finishedValidation = YES;
 
-        BOOL encounteredErrors = (self.error != nil);
+        [self.managedObject validateForInsert:&localError];
 
-        if (!encounteredErrors) {
-            NSError *error = nil;
-            if (![self.managedObject validateForInsert:&error]) {
-                _error = error;
-                encounteredErrors = YES;
+        if (localError == nil) {
+            for (FOSRetrieveToOneRelationshipOperation *nextToOneOp in _toOneOps) {
+                localError = [nextToOneOp finishValidation];
+
+                if (localError != nil) {
+                    break;
+                }
             }
         }
 
-        if (!encounteredErrors) {
+        if (localError == nil) {
             // Traverse the owned hierarchy
             for (FOSRetrieveToManyRelationshipOperation *nextToManyOp in _toManyOps) {
-                [nextToManyOp finishValidation];
+                localError = [nextToManyOp finishValidation];
 
-                encounteredErrors = (nextToManyOp.error != nil);
-                if (encounteredErrors) {
+                if (localError != nil) {
                     break;
                 }
             }
         }
     }
+
+    return localError;
 }
 
 - (void)finishCleanup:(BOOL)forceDestroy {
@@ -809,6 +818,10 @@
         _finishedCleanup = YES;
 
         // Traverse the owned hierarchy
+        for (FOSRetrieveToOneRelationshipOperation *nextToOneOp in _toOneOps) {
+            [nextToOneOp finishCleanup:forceDestroy];
+        }
+
         for (FOSRetrieveToManyRelationshipOperation *nextToManyOp in _toManyOps) {
             [nextToManyOp finishCleanup:forceDestroy];
         }
@@ -823,9 +836,6 @@
                 : nil;
 
             if (cmo != nil) {
-                FOSLogDebug(@"DISCARDING INSTANCE: The entity %@ (%@-%@) failed binding/ordering/validation and has been discarded: %@", self.entity.name, cmo.jsonIdValue, cmo.objectID.description,
-                      _isTopLevelFetch ? self.error.description : @"");
-
                 [self.managedObjectContext deleteObject:cmo];
                 _managedObjectID = nil;
             }
@@ -916,8 +926,24 @@
             if (_isTopLevelFetch) {
                 [self finishBinding];
                 [self finishOrdering];
-                [self finishValidation];
-                [self finishCleanup:self.error != nil];
+                NSError *localError = self.error;
+                if (localError == nil) {
+                    localError = [self finishValidation];
+                }
+
+                if (localError != nil) {
+                    NSManagedObjectContext *moc = self.managedObjectContext;
+                    FOSCachedManagedObject *cmo =  _managedObjectID != nil
+                        ? (FOSCachedManagedObject *)[moc objectWithID:_managedObjectID]
+                        : nil;
+
+                    if (cmo != nil) {
+                        FOSLogDebug(@"DISCARDING INSTANCE: The entity %@ (%@-%@) failed binding/ordering/validation and has been discarded: %@", self.entity.name, cmo.jsonIdValue, cmo.objectID.description,
+                                    _isTopLevelFetch ? self.error.description : @"");
+                    }
+                }
+
+                [self finishCleanup:(localError != nil)];
             }
 
             // We're now done binding the object, mark it as clean w.r.t. the server

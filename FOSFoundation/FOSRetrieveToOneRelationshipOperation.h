@@ -17,5 +17,7 @@
                           withBindings:(NSMutableDictionary *)bindings;
 
 - (void)bindToOwner:(NSManagedObjectID *)ownerId;
+- (NSError *)finishValidation;
+- (void)finishCleanup:(BOOL)forceDestroy;
 
 @end
