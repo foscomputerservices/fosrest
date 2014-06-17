@@ -108,6 +108,10 @@
 		63432DC317FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63432DC017FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m */; };
 		63432DC417FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63432DC017FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m */; };
 		63455B4616EF7FD8007B0383 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63455B4516EF7FD8007B0383 /* SystemConfiguration.framework */; };
+		63458C8C194FB8210080E74D /* FOSEnsureNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 63458C8A194FB8210080E74D /* FOSEnsureNetworkConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63458C8D194FB8210080E74D /* FOSEnsureNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 63458C8A194FB8210080E74D /* FOSEnsureNetworkConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63458C8E194FB8210080E74D /* FOSEnsureNetworkConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 63458C8B194FB8210080E74D /* FOSEnsureNetworkConnection.m */; };
+		63458C8F194FB8210080E74D /* FOSEnsureNetworkConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 63458C8B194FB8210080E74D /* FOSEnsureNetworkConnection.m */; };
 		634953FE18DA831400DDCB45 /* FOSAdapterBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 634953FC18DA831400DDCB45 /* FOSAdapterBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		634953FF18DA831400DDCB45 /* FOSAdapterBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 634953FC18DA831400DDCB45 /* FOSAdapterBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6349540018DA831400DDCB45 /* FOSAdapterBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 634953FD18DA831400DDCB45 /* FOSAdapterBinding.m */; };
@@ -633,6 +637,8 @@
 		63432DBF17FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSAtomicCreateServerRecordOperation.h; sourceTree = "<group>"; };
 		63432DC017FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSAtomicCreateServerRecordOperation.m; sourceTree = "<group>"; };
 		63455B4516EF7FD8007B0383 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		63458C8A194FB8210080E74D /* FOSEnsureNetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSEnsureNetworkConnection.h; sourceTree = "<group>"; };
+		63458C8B194FB8210080E74D /* FOSEnsureNetworkConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSEnsureNetworkConnection.m; sourceTree = "<group>"; };
 		634953FC18DA831400DDCB45 /* FOSAdapterBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSAdapterBinding.h; sourceTree = "<group>"; };
 		634953FD18DA831400DDCB45 /* FOSAdapterBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSAdapterBinding.m; sourceTree = "<group>"; };
 		634955B218D8B30B00EFA5F4 /* FOSVariableExpressionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSVariableExpressionTests.m; sourceTree = "<group>"; };
@@ -1102,6 +1108,8 @@
 				63C343A51686BBDB003D10B5 /* FOSBackgroundOperation.m */,
 				63C343A61686BBDB003D10B5 /* FOSBeginOperation.h */,
 				63C343A71686BBDB003D10B5 /* FOSBeginOperation.m */,
+				63458C8A194FB8210080E74D /* FOSEnsureNetworkConnection.h */,
+				63458C8B194FB8210080E74D /* FOSEnsureNetworkConnection.m */,
 				636763A716B7288100A9B268 /* FOSOperation+FOS_Internal.h */,
 				636763A816B7288100A9B268 /* FOSOperation+FOS_Internal.m */,
 				63C343B21686BBDB003D10B5 /* FOSOperation.h */,
@@ -1644,6 +1652,7 @@
 				63B14EDC172720FC00A631C4 /* FOSPullStaticTablesOperation.h in Headers */,
 				632D497F194CED5D002E5049 /* FOSCacheManager+CoreData.h in Headers */,
 				6320C31D174BE4EA00A38256 /* FOSStaticTableSearchOperation.h in Headers */,
+				63458C8D194FB8210080E74D /* FOSEnsureNetworkConnection.h in Headers */,
 				63CF779219352ADC0098D784 /* NSEntityDescription+Parse.h in Headers */,
 				6376C64D18D7B2F80075FAE1 /* FOSAdapterBindingParser.h in Headers */,
 				CB7458F617E6585300485B2A /* FOSAnalytics.h in Headers */,
@@ -1670,6 +1679,7 @@
 				63BFA3EF1482815400FE1C0C /* NSString+FOS.h in Headers */,
 				637B861B14AA546600776F5E /* NSMutableString+FOS.h in Headers */,
 				634FA6661803828F00389821 /* FOSSearchOperation+Internal.h in Headers */,
+				63458C8C194FB8210080E74D /* FOSEnsureNetworkConnection.h in Headers */,
 				63CCC1E8156D681900C45259 /* NSError+FOS.h in Headers */,
 				63F11E4218D88B7B0070D19A /* FOSExpression.h in Headers */,
 				6389977C18F8AA6B00E9DD90 /* FOSTwoWayRecordBinding.h in Headers */,
@@ -2078,6 +2088,7 @@
 				6370756D18F4B72F00D28B3F /* FOSUpdateServerRecordOperation.m in Sources */,
 				63A313B916E5B43D00DDE117 /* FOSSaveOperation.m in Sources */,
 				63A313BB16E5B43D00DDE117 /* FOSSleepOperation.m in Sources */,
+				63458C8F194FB8210080E74D /* FOSEnsureNetworkConnection.m in Sources */,
 				63A313BD16E5B43D00DDE117 /* FOSSearchOperation.m in Sources */,
 				63A313BF16E5B43D00DDE117 /* FOSTimeFilter.m in Sources */,
 				63A313C316E5B43D00DDE117 /* FOSRetrieveCMOOperation.m in Sources */,
@@ -2245,6 +2256,7 @@
 				63B14EDD172720FC00A631C4 /* FOSPullStaticTablesOperation.m in Sources */,
 				6320C31E174BE4EA00A38256 /* FOSStaticTableSearchOperation.m in Sources */,
 				CB7458FD17E6598400485B2A /* FOSParseAnalyticsManager.m in Sources */,
+				63458C8E194FB8210080E74D /* FOSEnsureNetworkConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -191,6 +191,10 @@ static NSMutableDictionary *_processingFaults = nil;
     return result;
 }
 
++ (BOOL)canHaveDuplicateJsonIds {
+    return NO;
+}
+
 + (instancetype)fetchWithId:(FOSJsonId)jsonId {
     id result = nil;
 
@@ -203,7 +207,9 @@ static NSMutableDictionary *_processingFaults = nil;
                                                                                  withPredicate:pred];
 
         if (entities.count > 0) {
-            NSAssert(entities.count == 1, @"Fetched more than one %@ with the same id (%@)",
+            // See: http://fosmain.foscomputerservices.com:8080/browse/FF-12
+            NSAssert([[self class] canHaveDuplicateJsonIds] || entities.count == 1,
+                     @"Fetched more than one %@ with the same id (%@)",
                      entityName, jsonId);
 
             result = entities.lastObject;

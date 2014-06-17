@@ -190,6 +190,7 @@
     if (!_cancelled) {
         _cancelled = YES;
 
+        NSAssert(self.operationQueue != nil, @"No operation queue yet???");
         [self.operationQueue markOperationAsCancelled:self];
     }
 }

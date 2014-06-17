@@ -64,6 +64,7 @@
 #import <FOSFoundation/FOSOperation.h>
 #import <FOSFoundation/FOSBackgroundOperation.h>
 #import <FOSFoundation/FOSBeginOperation.h>
+#import <FOSFoundation/FOSEnsureNetworkConnection.h>
 #import <FOSFoundation/FOSSendServerRecordOperation.h>
 #import <FOSFoundation/FOSAtomicCreateServerRecordOperation.h>
 #import <FOSFoundation/FOSCreateServerRecordOperation.h>

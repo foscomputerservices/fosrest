@@ -104,6 +104,9 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 
 + (BOOL)idIsInDatabase:(FOSJsonId)jsonId;
 
+// See: http://fosmain.foscomputerservices.com:8080/browse/FF-12
++ (BOOL)canHaveDuplicateJsonIds;
+
 /*!
  * @method fetchWithId:
  *
