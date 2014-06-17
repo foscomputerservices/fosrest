@@ -126,10 +126,17 @@
 
     // This is expensive, so don't let it out into any other build types
 #ifdef CONFIGURATION_Debug
-    NSManagedObjectID *id1 = result.objectID;
-    NSManagedObjectID *id2 = [[NSClassFromString(entity.managedObjectClassName) fetchWithId:jsonId] objectID];
+    {
+        Class class = NSClassFromString(entity.managedObjectClassName);
 
-    NSAssert(id1 == id2 || [id1 isEqual:id2], @"Something's really out of whack!");
+        // See: http://fosmain.foscomputerservices.com:8080/browse/FF-12
+        if (![class canHaveDuplicateJsonIds]) {
+            NSManagedObjectID *id1 = result.objectID;
+            NSManagedObjectID *id2 = [[NSClassFromString(entity.managedObjectClassName) fetchWithId:jsonId] objectID];
+
+            NSAssert(id1 == id2 || [id1 isEqual:id2], @"Something's really out of whack!");
+        }
+    }
 #endif
 
     return result;
