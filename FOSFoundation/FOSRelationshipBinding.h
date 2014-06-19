@@ -62,6 +62,21 @@
 @property (nonatomic, strong) id<FOSExpression> jsonIdBindingExpression;
 
 /*!
+ * @property jsonWrapperKey
+ *
+ * The key that server expects objects to be wrapped under.  If the object is
+ * not under any key, this value should be nil.
+ *
+ * @discussion
+ *
+ * This key is also used to look into parent-supplied results to see if parent
+ * server queries might have provided the child's information.
+ *
+ * Setting this property is optional.
+ */
+@property (nonatomic, strong) id<FOSExpression> jsonWrapperKey;
+
+/*!
  * @property relationshipMatcher
  *
  * A matcher that will match to NSRelationshipDescription.name to determine
@@ -80,5 +95,18 @@
  * Setting this property is required.
  */
 @property (nonatomic, strong) FOSItemMatcher *entityMatcher;
+
+/*!
+ * @method unwrapJSON:context:error:
+ *
+ * If the receiver's jsonWrapperKey is specified, it will be evaluated against the
+ * provided context and the resulting string will be used against (NSDictionary *)json
+ * to return the inner wrapped json.
+ *
+ * If the receiver's jsonWrapperKey is nil, then json is returned unaltered.
+ */
+- (id<NSObject>)unwrapJSON:(id<NSObject>)json
+                   context:(NSDictionary *)context
+                     error:(NSError **)error;
 
 @end

@@ -14,33 +14,40 @@
     NSMutableSet *_childRetrieveCMOOps;
     BOOL _ignoreDependentErrors;
     NSError *_error;
+    FOSCMOBinding *_parentCMOBinding;
 }
 
 + (instancetype)fetchToManyRelationship:(NSRelationshipDescription *)relDesc
                               ownerJson:(id<NSObject>)ownerJson
                             ownerJsonId:(FOSJsonId)ownerJsonId
                                dslQuery:(NSString *)dslQuery
-                           withBindings:(NSMutableDictionary *)bindings {
+                           withBindings:(NSMutableDictionary *)bindings
+                    andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(ownerJsonId != nil);
+    NSParameterAssert(parentCMOBinding != nil);
 
     return [[self alloc] initToManyRelationship:relDesc
                                       ownerJson:ownerJson
                                     ownerJsonId:ownerJsonId
                                        dslQuery:dslQuery
-                                   withBindings:bindings];
+                                   withBindings:bindings
+                            andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding];
 }
 
 - (id)initToManyRelationship:(NSRelationshipDescription *)relDesc
                    ownerJson:(id<NSObject>)ownerJson
                  ownerJsonId:(FOSJsonId)ownerJsonId
                     dslQuery:(NSString *)dslQuery
-                withBindings:(NSMutableDictionary *)bindings {
+                withBindings:(NSMutableDictionary *)bindings
+         andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding {
     NSParameterAssert(relDesc != nil);
     NSParameterAssert(ownerJsonId != nil);
+    NSParameterAssert(parentCMOBinding != nil);
 
     if ((self = [super init]) != nil) {
         _relationship = relDesc;
+        _parentCMOBinding = parentCMOBinding;
 
         NSError *localError = nil;
 
@@ -338,34 +345,24 @@
     NSParameterAssert(ownerJsonId != nil);
 
     NSMutableSet *result = nil;
-    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
 
     for (NSEntityDescription *nextLeafEntity in leafEntities) {
-        FOSURLBinding *urlBinding =
-            [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
-                                  forLifecycleStyle:nil
-                                 forRelationship:relDesc
-                                       forEntity:nextLeafEntity];
+        // Let's see if we can find a parent-supplied set of values
+        NSArray *json = [self _bindToJSONInBindings:bindings
+                                     forRelaionship:relDesc
+                                         destEntity:nextLeafEntity
+                                     andOwnerJsonId:ownerJsonId];
 
-        if (urlBinding != nil) {
-            // Let's see if we can find a parent-supplied set of values
-            NSArray *json = [self _bindToJSONInBindings:bindings
-                                         forRelaionship:relDesc
-                                             destEntity:nextLeafEntity
-                                         withUrlBinding:urlBinding
-                                         andOwnerJsonId:ownerJsonId];
+        if (json != nil) {
+            result = [NSMutableSet setWithCapacity:json.count];
 
-            if (json != nil) {
-                result = [NSMutableSet setWithCapacity:json.count];
+            if (json.count > 0) {
+                NSDictionary *nextEntry = @{
+                                            @"DestEntity" : nextLeafEntity,
+                                            @"JSON" : json
+                                          };
 
-                if (json.count > 0) {
-                    NSDictionary *nextEntry = @{
-                                                @"DestEntity" : nextLeafEntity,
-                                                @"JSON" : json
-                                              };
-
-                    [result addObject:nextEntry];
-                }
+                [result addObject:nextEntry];
             }
         }
     }
@@ -434,7 +431,6 @@
 - (NSArray *)_bindToJSONInBindings:(NSDictionary *)bindings
                     forRelaionship:(NSRelationshipDescription *)relDesc
                         destEntity:(NSEntityDescription *)destEntity
-                    withUrlBinding:(FOSURLBinding *)urlBinding
                     andOwnerJsonId:(FOSJsonId)ownerJsonId {
     NSError *localError = nil;
     NSArray *results = nil;
@@ -442,26 +438,26 @@
     // Can we find the json in bindings?
     id<NSObject> originalJson = bindings[@"originalJsonResult"];
     if (originalJson != nil) {
+        FOSRelationshipBinding *relBinding = nil;
+
         NSDictionary *context = @{ @"ENTITY" : destEntity, @"RELDESC" : relDesc };
 
-        id<NSObject> unwrappedJson = [urlBinding unwrapJSON:originalJson
-                                                     context:context
-                                                       error:&localError];
+        for (FOSRelationshipBinding *nextRelBinding in _parentCMOBinding.relationshipBindings) {
+            if ([nextRelBinding.entityMatcher itemIsIncluded:destEntity.name
+                                                     context:context]) {
+                relBinding = nextRelBinding;
+                break;
+            }
+        }
+
+        id<NSObject> unwrappedJson = [relBinding unwrapJSON:originalJson
+                                                    context:context
+                                                      error:&localError];
+
 
         // We expect an array of possibilities here. We'll look into
         // the array and attempt to match jsonId.
         if (unwrappedJson != nil && [unwrappedJson isKindOfClass:[NSArray class]]) {
-            FOSCMOBinding *cmoBinding = urlBinding.cmoBinding;
-
-            FOSRelationshipBinding *relBinding = nil;
-
-            for (FOSRelationshipBinding *nextRelBinding in cmoBinding.relationshipBindings) {
-                if ([nextRelBinding.entityMatcher itemIsIncluded:destEntity.name
-                                                         context:context]) {
-                    relBinding = nextRelBinding;
-                    break;
-                }
-            }
 
             // TODO : Could issue a warning...
             if (relBinding != nil) {

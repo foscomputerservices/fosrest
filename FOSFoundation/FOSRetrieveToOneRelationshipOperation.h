@@ -14,7 +14,8 @@
 
 + (instancetype)fetchToOneRelationship:(NSRelationshipDescription *)relDesc
                           jsonFragment:(id<NSObject>)jsonFragment
-                          withBindings:(NSMutableDictionary *)bindings;
+                          withBindings:(NSMutableDictionary *)bindings
+                   andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding;
 
 - (void)bindToOwner:(NSManagedObjectID *)ownerId;
 - (NSError *)finishValidation;

@@ -26,6 +26,7 @@
     NSMutableDictionary *_bindings;
     FOSURLBinding *_urlBinding;
     FOSItemMatcher *_relationshipsToPull;
+    NSRelationshipDescription *_relDesc;
 }
 
 + (instancetype)retrieveCMOUsingDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
@@ -253,6 +254,7 @@
         _entity = entity;
         _bindings = bindings;
         _allowFastTrack = YES;
+        _relDesc = relDesc;
 
         NSError *localError = nil;
 
@@ -504,45 +506,63 @@
 
         // No need to pull the jsonData if we already have it
         if (!foundJson) {
-            NSURLRequest *urlRequest = [_urlBinding urlRequestServerRecordOfType:self.entity
-                                                                      withJsonId:jsonId
-                                                                    withDSLQuery:self.dslQuery
-                                                                           error:&localError];
+            NSURLRequest *urlRequest = nil;
+
+            if (_relDesc == nil) {
+                urlRequest = [_urlBinding urlRequestServerRecordOfType:self.entity
+                                                            withJsonId:jsonId
+                                                          withDSLQuery:self.dslQuery
+                                                                 error:&localError];
+            }
+            else {
+                urlRequest = [_urlBinding urlRequestServerRecordsOfRelationship:_relDesc
+                                                           forDestinationEntity:self.entity
+                                                                    withOwnerId:jsonId
+                                                                   withDSLQuery:self.dslQuery
+                                                                          error:&localError];
+            }
 
             // Fetch the data for entity with the given jsonId from the server
-            FOSWebServiceRequest *jsonDataRequest =
-                [FOSWebServiceRequest requestWithURLRequest:urlRequest forURLBinding:_urlBinding];
+            FOSWebServiceRequest *jsonDataRequest = nil;
 
-            jsonDataRequest.willProcessHandler = /* (NSManagedObjectID *)(^)() */ ^{
+            if (localError == nil) {
 
-                NSManagedObjectID *result = nil;
+                jsonDataRequest = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                forURLBinding:_urlBinding];
 
-                // Can we FAST-TRACK to an existing object and skip pulling down this instance?
-                if (blockSelf->_allowFastTrack) {
-                    result = blockSelf->_managedObjectID;
+                jsonDataRequest.willProcessHandler = /* (NSManagedObjectID *)(^)() */ ^{
 
-                    if (result == nil) {
-                        FOSCachedManagedObject *cmo = [[self class] cmoForEntity:blockSelf->_entity
-                                                                      withJsonId:jsonId
-                                                                    fromBindings:blockSelf->_bindings
-                                                       respectingPreviousLookups:NO];
+                    NSManagedObjectID *result = nil;
 
-                        if (cmo != nil) {
-                            result = cmo.objectID;
-                            blockSelf->_bindings[jsonId] = result;
+                    // Can we FAST-TRACK to an existing object and skip pulling down this instance?
+                    if (blockSelf->_allowFastTrack) {
+                        result = blockSelf->_managedObjectID;
+
+                        if (result == nil) {
+                            FOSCachedManagedObject *cmo = [[self class] cmoForEntity:blockSelf->_entity
+                                                                          withJsonId:jsonId
+                                                                        fromBindings:blockSelf->_bindings
+                                                           respectingPreviousLookups:NO];
+
+                            if (cmo != nil) {
+                                result = cmo.objectID;
+                                blockSelf->_bindings[jsonId] = result;
+                            }
                         }
                     }
-                }
 
-                return result;
-            };
+                    return result;
+                };
+            }
 
             // Chain in an op that will add new dependencies to ourself after
             // they're determined from resolving the new FOSCachedManagedObject.  This
             // effectively creates a recursive structure for resolution.  Of course,
             // there hadn't better be any loops.
             FOSBackgroundOperation *queueSubOps = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-                if (!jsonDataRequest.isCancelled && jsonDataRequest.error == nil) {
+                if (jsonDataRequest != nil &&
+                    !jsonDataRequest.isCancelled &&
+                    jsonDataRequest.error == nil) {
 
                     // We got the object early! Woohoo!
                     if ([jsonDataRequest.jsonResult isKindOfClass:[NSManagedObjectID class]]) {
@@ -575,7 +595,10 @@
                 }
             }];
 
-            [queueSubOps addDependency:jsonDataRequest];
+            if (jsonDataRequest != nil) {
+                [queueSubOps addDependency:jsonDataRequest];
+            }
+
             [self addDependency:queueSubOps];
         }
 
@@ -1143,7 +1166,8 @@
                 
             nextOp = [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
                                                                       jsonFragment:self.json
-                                                                      withBindings:_bindings];
+                                                                      withBindings:_bindings
+                                                               andParentCMOBinding:_urlBinding.cmoBinding];
 
             [result addObject:nextOp];
         }
@@ -1183,7 +1207,8 @@
                                                                           ownerJson:self.json
                                                                         ownerJsonId:self.jsonId
                                                                            dslQuery:self.dslQuery
-                                                                       withBindings:_bindings];
+                                                                       withBindings:_bindings
+                                                                andParentCMOBinding:_urlBinding.cmoBinding];
                 
                 [result addObject:nextOp];
             }

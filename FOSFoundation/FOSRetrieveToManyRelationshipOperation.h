@@ -15,7 +15,8 @@
                               ownerJson:(id<NSObject>)ownerJson
                             ownerJsonId:(FOSJsonId)ownerJsonId
                                dslQuery:(NSString *)dslQuery
-                           withBindings:(NSMutableDictionary *)bindings;
+                           withBindings:(NSMutableDictionary *)bindings
+                    andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding;
 
 - (void)bindToOwner:(NSManagedObjectID *)ownerId;
 - (void)finishOrdering;

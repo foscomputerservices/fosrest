@@ -536,17 +536,19 @@ relationship_binding_list
     ;
 
 relationship_binding
-    : RELATIONSHIP_BINDING SEP json_binding json_id_binding relationships matching_entities {
-        NSArray *jsonBindingExpressions = (__bridge NSArray *)$3;
-        id<FOSExpression> destCMOBindingExpr = (__bridge id<FOSExpression>)$4;
-        FOSItemMatcher *relationshipMatcher = (__bridge FOSItemMatcher *)$5;
-        FOSItemMatcher *entityMatcher = (__bridge FOSItemMatcher *)$6;
+    : RELATIONSHIP_BINDING SEP json_binding json_id_binding json_wrapper_key relationships matching_entities {
+        NSArray *jsonBindingExpressions = (__bridge NSArray *)($3);
+        id<FOSExpression> destCMOBindingExpr = (__bridge id<FOSExpression>)($4);
+        id<FOSExpression> jsonWrapperKey = (__bridge id<FOSExpression>)($5);
+        FOSItemMatcher *relationshipMatcher = (__bridge FOSItemMatcher *)($6);
+        FOSItemMatcher *entityMatcher = (__bridge FOSItemMatcher *)($7);
 
         $$ = (__bridge void *)
             [FOSRelationshipBinding bindingWithJsonBindings:jsonBindingExpressions
                                     jsonIdBindingExpression:destCMOBindingExpr
                                         relationshipMatcher:relationshipMatcher
                                               entityMatcher:entityMatcher];
+        ((__bridge FOSRelationshipBinding *)$$).jsonWrapperKey = jsonWrapperKey;
 
         CAPTURE_ATOM_INFO(AT_"RELATIONSHIP_BINDING", @1, $$);
     }

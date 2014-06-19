@@ -30,6 +30,46 @@
     return result;
 }
 
+- (id<NSObject>)unwrapJSON:(id<NSObject>)json
+                   context:(NSDictionary *)context
+                     error:(NSError **)error {
+
+    if (error != nil) { *error = nil; }
+    id<NSObject> result = json;
+
+    NSError *localError = nil;
+
+    if (self.jsonWrapperKey != nil && json != nil) {
+        NSString *jsonKey = [self.jsonWrapperKey evaluateWithContext:context error:&localError];
+
+        if (jsonKey != nil && localError == nil) {
+            if (![json isKindOfClass:[NSDictionary class]]) {
+                NSString *msgFmt = @"The json provided to JSON_WRAPPER_KEY was of type %@, an NSDictionary was expected for ULR_BINDING %@.";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 NSStringFromClass([json class]),
+                                 self.entityMatcher.description];
+
+                localError = [NSError errorWithMessage:msg forAtom:self];
+            }
+            else {
+                NSDictionary *jsonDict = (NSDictionary *)json;
+
+                result = jsonDict[jsonKey];
+            }
+        }
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+        
+        result = nil;
+    }
+    
+    return result;
+}
+
 #pragma mark - FOSTwoWayPropertyBinding Methods
 
 - (NSSet *)propertyDescriptionsForEntity:(NSEntityDescription *)entity {

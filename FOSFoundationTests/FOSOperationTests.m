@@ -27,6 +27,8 @@ SETUP_TEARDOWN_NOLOGIN
 #pragma mark - Tests
 
 - (void)testCancelKVO {
+    START_TEST
+
     FOSOperation *op = [[FOSOperation alloc] init];
 
     __block BOOL kvoHandlerCalled = NO;
@@ -44,7 +46,15 @@ SETUP_TEARDOWN_NOLOGIN
     };
     [op addObserver:self forKeyPath:@"isCancelled" options:0 context:nil];
 
-    [op cancel];
+    FOSBackgroundOperation *cancelItOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+        [op cancel];
+
+        END_TEST
+    }];
+
+    [[FOSRESTConfig sharedInstance].cacheManager queueOperation:cancelItOp withCompletionOperation:op withGroupName:@"Cancel It"];
+
+    WAIT_FOR_TEST_END
 
     [op removeObserver:self forKeyPath:@"isCancelled"];
 
