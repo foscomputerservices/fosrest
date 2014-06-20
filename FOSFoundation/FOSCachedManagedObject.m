@@ -845,6 +845,8 @@ static NSMutableDictionary *_processingFaults = nil;
 - (BOOL)hasBeenUploadedToServer {
     BOOL uploaded =
         (self.jsonIdValue != nil) &&
+        (![self.jsonIdValue isKindOfClass:[NSNumber class]] ||
+         ((NSNumber *)self.jsonIdValue).integerValue != 0) &&
         ((self.updatedWithServerAt != nil) ||
          self.markedClean);
 
