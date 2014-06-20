@@ -889,39 +889,46 @@ static NSMutableDictionary *_processingFaults = nil;
                              handler:(FOSBackgroundRequest)handler {
     NSParameterAssert(relNames != nil);
 
-    NSMutableSet *exprs = [NSMutableSet set];
-    for (NSString *relName in relNames) {
-        id<FOSExpression> expr = [FOSConstantExpression constantExpressionWithValue:relName];
-        [exprs addObject:expr];
-    }
-
-    FOSItemMatcher *relMatcher = [FOSItemMatcher matcher:FOSItemMatchItems
-                                      forItemExpressions:exprs];
-
-    FOSRetrieveRelationshipUpdatesOperation *relUpdatesOp =
-        [FOSRetrieveRelationshipUpdatesOperation retrieveRealtionshipUpdatesForCMO:self
-                                                                          dslQuery:dslQuery
-                                                                          matching:relMatcher];
-
-    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
-        handler(cancelled, error);
-    }];
-
-    NSMutableString *groupName = [@"Refresh relationships: " mutableCopy];
-    BOOL first = YES;
-    for (NSString *nextName in relNames) {
-        if (first) {
-            first = NO;
+    // Nothing to refresh on localOnly instances
+    if (!self.isLocalOnly) {
+        NSMutableSet *exprs = [NSMutableSet set];
+        for (NSString *relName in relNames) {
+            id<FOSExpression> expr = [FOSConstantExpression constantExpressionWithValue:relName];
+            [exprs addObject:expr];
         }
-        else {
-            [groupName appendString:@", "];
-        }
-        [groupName appendString:nextName];
-    }
 
-    [self.restConfig.cacheManager queueOperation:relUpdatesOp
-                         withCompletionOperation:finalOp
-                                   withGroupName:groupName];
+        FOSItemMatcher *relMatcher = [FOSItemMatcher matcher:FOSItemMatchItems
+                                          forItemExpressions:exprs];
+
+        FOSRetrieveRelationshipUpdatesOperation *relUpdatesOp =
+            [FOSRetrieveRelationshipUpdatesOperation retrieveRealtionshipUpdatesForCMO:self
+                                                                              dslQuery:dslQuery
+                                                                              matching:relMatcher];
+
+        FOSBackgroundOperation *finalOp = nil;
+        if (handler != nil) {
+            finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:handler];
+        }
+
+        NSMutableString *groupName = [@"Refresh relationships: " mutableCopy];
+        BOOL first = YES;
+        for (NSString *nextName in relNames) {
+            if (first) {
+                first = NO;
+            }
+            else {
+                [groupName appendString:@", "];
+            }
+            [groupName appendString:nextName];
+        }
+
+        [self.restConfig.cacheManager queueOperation:relUpdatesOp
+                             withCompletionOperation:finalOp
+                                       withGroupName:groupName];
+    }
+    else if (handler != nil) {
+        handler(NO, nil);
+    }
 }
 
 - (void)refreshAllRelationshipsWithDslQuery:(NSString *)dslQuery handler:(FOSBackgroundRequest)handler {
