@@ -35,7 +35,7 @@
         result = _mainThreadMOC;
     }
     else {
-        FOSOperationQueue *opQueue = [FOSOperationQueue currentQueue];
+        FOSOperationQueue *opQueue = (FOSOperationQueue *)[FOSOperationQueue currentQueue];
         NSAssert(opQueue == nil || [opQueue isKindOfClass:[FOSOperationQueue class]],
                  @"Received %@, expected FOSOperationQueue.",
                  NSStringFromClass([opQueue class]));

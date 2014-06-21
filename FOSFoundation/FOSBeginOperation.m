@@ -65,7 +65,7 @@
     FOSLogDebug(@"-------------------- EXECUTING: Queue group - %@ --------------------", self.groupName);
 
     // Bring in changes from the store to eliminate conflicts
-    FOSOperationQueue *myQueue = [FOSOperationQueue currentQueue];
+    FOSOperationQueue *myQueue = (FOSOperationQueue *)[FOSOperationQueue currentQueue];
     [myQueue resetMOC];
 
     NSAssert(self.managedObjectContext != nil, @"No MOC???");

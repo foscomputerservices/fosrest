@@ -22,7 +22,8 @@
 
             for (FOSCachedManagedObject *relatedCMO in relatedCMOs) {
 
-                if (![parentSentIDs containsObject:relatedCMO.objectID]) {
+                if (![parentSentIDs containsObject:relatedCMO.objectID] &&
+                    !relatedCMO.isLocalOnly) {
                     FOSSendServerRecordOperation *sendOp =
                         [relatedCMO sendServerRecordWithLifecycleStyle:nil parentSentIDs:parentSentIDs];
 

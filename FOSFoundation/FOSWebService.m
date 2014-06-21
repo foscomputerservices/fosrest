@@ -207,7 +207,7 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
                              responseError:error];
     }
     else {
-        FOSOperationQueue *queue = [FOSOperationQueue currentQueue];
+        FOSOperationQueue *queue = (FOSOperationQueue *)[FOSOperationQueue currentQueue];
         NSAssert(queue != nil, @"No current queue???");
         NSAssert([queue isKindOfClass:[FOSOperationQueue class]],
                  @"Expected FOSOperationQueue, got %@.",
