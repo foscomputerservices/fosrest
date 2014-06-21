@@ -29,7 +29,8 @@ typedef FOSRecoveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSE
 
 @interface FOSCacheManager : NSObject {
 @private
-    __weak FOSRESTConfig *_restConfig;
+    // TODO : Restore to __weak when Swift fixes bug
+    /* __weak */ __unsafe_unretained FOSRESTConfig *_restConfig;
     BOOL _updatingMainThreadMOC;
 }
 
