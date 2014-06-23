@@ -192,11 +192,11 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
                     (long)currentRequestId, requestMethod,
                     [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]);
         if (urlRequest.allHTTPHeaderFields.count > 0) {
-            FOSLogPendantic(@"\nHTTP-Headers: %@",
+            FOSLogPedantic(@"\nHTTP-Headers: %@",
                              urlRequest.allHTTPHeaderFields.description);
         }
         if (requestDebugData != nil) {
-            FOSLogPendantic(@"\nHTTP-Data: %@",
+            FOSLogPedantic(@"\nHTTP-Data: %@",
                    [requestDebugData stringByRemovingPercentEncoding]);
         }
         
@@ -283,7 +283,7 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
         [webServiceRequest setError:localError];
     }
 
-    FOSLogPendantic(@"\nJSON: %@", jsonResult ? jsonResult : @"<none>");
+    FOSLogPedantic(@"\nJSON: %@", jsonResult ? jsonResult : @"<none>");
 }
 
 @end

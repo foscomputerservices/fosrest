@@ -1335,7 +1335,7 @@
 
             // For now we'll ignore any errors as this is just fast tracking...
             else {
-                FOSLogPendantic(@"Skipping binding to _bindings[\"originalJsonResult\"] for entity %@ due to error :%@",
+                FOSLogPedantic(@"Skipping binding to _bindings[\"originalJsonResult\"] for entity %@ due to error :%@",
                                 localError.description);
                 localError = nil;
             }
