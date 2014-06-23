@@ -173,7 +173,28 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
     FOSOperation *prepareForSendOp = self.cmo.prepareForSendOperation;
 
     if (prepareForSendOp != nil) {
-        [result addDependency:prepareForSendOp];
+
+        // They almost certainly will have made changes to the CMO when preparing for send.
+        // We must have FOSModifiedProperties entered so that the properties will be sent.
+        //
+        // We're not creating an FOSSaveOperation as we don't want to broadcast all of this
+        // out to the command line, just save it if it all worked, or let the outside
+        // FOSSaveOperation handle things if something fails.
+        FOSBackgroundOperation *saveOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+            if (!cancelled && (error == nil)) {
+                NSError *localError = nil;
+
+                [blockSelf.restConfig.databaseManager saveChanges:&localError];
+
+                if (localError != nil) {
+                    blockSelf->_error = localError;
+                }
+            }
+        }];
+
+        [saveOp addDependency:prepareForSendOp];
+
+        [result addDependency:saveOp];
     }
 
     return result;
