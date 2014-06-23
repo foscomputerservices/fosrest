@@ -13,7 +13,7 @@
 #define START_TEST \
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0); \
     FOSLogInfo(@"###### Test START ######"); \
-    FOSSetLogLevel(FOSLogLevelPendantic);
+    FOSSetLogLevel(FOSLogLevelPedantic);
 
 
 #define END_TEST { \
