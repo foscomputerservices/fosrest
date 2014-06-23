@@ -1372,6 +1372,8 @@ static NSMutableDictionary *_processingFaults = nil;
 
     _modifiedPropertiesCache = nil;
     self.hasModifiedProperties = YES;
+
+    FOSLogPendantic(@"Entity modified: %@::%@!", self.entity.name, propertyName);
 }
 
 - (void)_updateParentsLastModifiedAt {

@@ -148,7 +148,7 @@
 
     // Without more info, about all we can do is pull out the JSON, if there was one
     if (httpResponse.statusCode == 200) {
-        if (responseData != nil) {
+        if (responseData != nil && responseData.length > 0) {
             *jsonResult = [NSJSONSerialization JSONObjectWithData:responseData
                                                           options:0
                                                             error:&localError];
