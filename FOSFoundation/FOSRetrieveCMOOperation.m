@@ -434,10 +434,14 @@
                     //       We allow _allowFastTrack to be delay-set as FOSFetchEntityOperation instances
                     //       are created by a variety of mechanisms and passed back to the user.  It would
                     //       be impractical to flow the value through all API calls into init.
+
+                    // We don't 'respect previous' as we might have been handed an 'originalJson'
+                    // packet from a top-level pull in which the bindings will not have
+                    // this entry.
                     FOSCachedManagedObject *cmo = [self cmoForEntity:_entity
                                                             withJson:json
                                                         fromBindings:_bindings
-                                           respectingPreviousLookups:YES];
+                                           respectingPreviousLookups:NO];
                     _managedObjectID = cmo.objectID;
                     if (_managedObjectID != nil) {
                         _bindings[_jsonId] = cmo.objectID;

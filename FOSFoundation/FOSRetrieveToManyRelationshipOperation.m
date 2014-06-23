@@ -137,7 +137,11 @@
 
             for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
                 if (nextDeadCMO.hasBeenUploadedToServer) {
-                    NSAssert(!nextDeadCMO.isDirty, @"Attempting to delete a dirty object.");
+                    if (nextDeadCMO.isDirty) {
+                        FOSLogDebug(@"Deleting a dirty object: %@ (%@)",
+                                    NSStringFromClass([nextDeadCMO class]),
+                                    nextDeadCMO.jsonIdValue);
+                    }
 
                     // Tell the underlying delete code not to attempt to remove this obj from
                     // the server, as it's already been done.
