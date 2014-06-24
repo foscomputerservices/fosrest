@@ -624,12 +624,11 @@
 - (void)setJson:(id<NSObject>)json {
     _json = json;
 
-    FOSCachedManagedObject *cmo = self.managedObject;
     NSError *localError = nil;
 
-    // If we fast-tracked in, then there's no need to retrieve the references as
-    // they're already taken care of.
-    if ((!self.isCancelled && self.error == nil) && (cmo == nil)) {
+    // We resolve references even if we have fast-tracked as we might be refreshing
+    // those relationships and some might be marked as pull = 'Always'.
+    if (!self.isCancelled && self.error == nil) {
 
         // Let's see if there's an updated jsonId in the given JSON
         FOSJsonId jsonId = [_urlBinding.cmoBinding jsonIdFromJSON:json
@@ -651,8 +650,6 @@
                 // We re-queue ourself so that we can find the begin op
                 [self.restConfig.cacheManager reQueueOperation:self];
             }
-
-        //    FOSLogDebug(@"FOSFETCHENTITY - BEGIN (setJson): %@ (%@)", _entity.name, _jsonId);
         }
     }
 
