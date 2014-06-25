@@ -138,22 +138,24 @@
 
         // There no longer exist any relations, so make sure to clear the local relationships.
         if (_childRetrieveCMOOps.count == 0) {
-            id<NSFastEnumeration> deadCMOs = [relationshipMutableSet mutableCopy];
+            if (!_mergeResults) {
+                id<NSFastEnumeration> deadCMOs = [relationshipMutableSet mutableCopy];
 
-            for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
-                if (nextDeadCMO.hasBeenUploadedToServer) {
-                    if (nextDeadCMO.isDirty) {
-                        FOSLogDebug(@"Deleting a dirty object: %@ (%@)",
-                                    NSStringFromClass([nextDeadCMO class]),
-                                    nextDeadCMO.jsonIdValue);
+                for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
+                    if (nextDeadCMO.hasBeenUploadedToServer) {
+                        if (nextDeadCMO.isDirty) {
+                            FOSLogDebug(@"Deleting a dirty object: %@ (%@)",
+                                        NSStringFromClass([nextDeadCMO class]),
+                                        nextDeadCMO.jsonIdValue);
+                        }
+
+                        // Tell the underlying delete code not to attempt to remove this obj from
+                        // the server, as it's already been done.
+                        nextDeadCMO.skipServerDelete = YES;
+
+                        [relationshipMutableSet removeObject:nextDeadCMO];
+                        [nextDeadCMO.managedObjectContext deleteObject:nextDeadCMO];
                     }
-
-                    // Tell the underlying delete code not to attempt to remove this obj from
-                    // the server, as it's already been done.
-                    nextDeadCMO.skipServerDelete = YES;
-
-                    [relationshipMutableSet removeObject:nextDeadCMO];
-                    [nextDeadCMO.managedObjectContext deleteObject:nextDeadCMO];
                 }
             }
         }
@@ -218,10 +220,8 @@
             }
 
             if (!encounteredErrors) {
-                if (!_mergeResults) {
-                    // Clean up the entries that might be locally deleted
-                    [self _removeDeadCMOSFromRelationshipSet:relationshipMutableSet newEntries:newEntries];
-                }
+                // Clean up the entries that might be locally deleted
+                [self _removeDeadCMOSFromRelationshipSet:relationshipMutableSet newEntries:newEntries];
 
                 // Combine with the new entries
                 [relationshipMutableSet unionSet:newEntries];
@@ -316,33 +316,35 @@
 - (void)_removeDeadCMOSFromRelationshipSet:(id)relationshipMutableSet
                                 newEntries:(NSMutableSet *)newEntries {
 
-    // Remove entries that are no longer found on the server.
-    // NOTE: We cannot just assign mutableSet to newEntries, so we need to
-    //       manually remove dead entries.  Additionally, we want to keep the number
-    //       of changes to the absolute minimum as to not send false KVO notifications.
-    NSMutableSet *deadObjectIDs = [[relationshipMutableSet valueForKeyPath:@"objectID"] mutableCopy];
-    NSMutableSet *newObjectIDs = [newEntries valueForKeyPath:@"objectID"];
+    if (!_mergeResults) {
+        // Remove entries that are no longer found on the server.
+        // NOTE: We cannot just assign mutableSet to newEntries, so we need to
+        //       manually remove dead entries.  Additionally, we want to keep the number
+        //       of changes to the absolute minimum as to not send false KVO notifications.
+        NSMutableSet *deadObjectIDs = [[relationshipMutableSet valueForKeyPath:@"objectID"] mutableCopy];
+        NSMutableSet *newObjectIDs = [newEntries valueForKeyPath:@"objectID"];
 
-    [deadObjectIDs minusSet:newObjectIDs];
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"objectID in %@", deadObjectIDs];
-    id<NSFastEnumeration> deadCMOs = nil;
-    if (_relationship.isOrdered) {
-        deadCMOs = [relationshipMutableSet filteredOrderedSetUsingPredicate:pred];
-    }
-    else {
-        deadCMOs = [relationshipMutableSet filteredSetUsingPredicate:pred];
-    }
+        [deadObjectIDs minusSet:newObjectIDs];
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"objectID in %@", deadObjectIDs];
+        id<NSFastEnumeration> deadCMOs = nil;
+        if (_relationship.isOrdered) {
+            deadCMOs = [relationshipMutableSet filteredOrderedSetUsingPredicate:pred];
+        }
+        else {
+            deadCMOs = [relationshipMutableSet filteredSetUsingPredicate:pred];
+        }
 
-    for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
-        if (nextDeadCMO.hasBeenUploadedToServer) {
-            NSAssert(!nextDeadCMO.isDirty, @"Attempting to delete a dirty object.");
+        for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
+            if (nextDeadCMO.hasBeenUploadedToServer) {
+                NSAssert(!nextDeadCMO.isDirty, @"Attempting to delete a dirty object.");
 
-            // Tell the underlying delete code not to attempt to remove this obj from
-            // the server, as it's already been done.
-            nextDeadCMO.skipServerDelete = YES;
+                // Tell the underlying delete code not to attempt to remove this obj from
+                // the server, as it's already been done.
+                nextDeadCMO.skipServerDelete = YES;
 
-            [relationshipMutableSet removeObject:nextDeadCMO];
-            [nextDeadCMO.managedObjectContext deleteObject:nextDeadCMO];
+                [relationshipMutableSet removeObject:nextDeadCMO];
+                [nextDeadCMO.managedObjectContext deleteObject:nextDeadCMO];
+            }
         }
     }
 }
