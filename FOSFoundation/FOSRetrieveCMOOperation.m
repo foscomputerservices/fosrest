@@ -344,6 +344,7 @@
                                                     error:&localError]) {
                     blockSelf->_jsonId = fetchDataOp.jsonId;
                     blockSelf.dslQuery = fetchDataOp.dslQuery;
+                        blockSelf.mergeResults = fetchDataOp.mergeResults;
                     blockSelf.json = fetchDataOp.jsonResult;
 
                     // Also store the 'originalJson' in the bindings if we're the top-level
@@ -1208,6 +1209,7 @@
                                                                           ownerJson:self.json
                                                                         ownerJsonId:self.jsonId
                                                                            dslQuery:self.dslQuery
+                                                                       mergeResults:self.mergeResults
                                                                        withBindings:_bindings
                                                                 andParentCMOBinding:_urlBinding.cmoBinding];
                 

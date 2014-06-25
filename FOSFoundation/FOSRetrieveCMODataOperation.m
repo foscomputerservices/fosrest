@@ -86,6 +86,10 @@
     return nil;
 }
 
+- (BOOL)mergeResults {
+    return NO;
+}
+
 #pragma mark - Method Overrides
 
 - (void)setOriginalJsonResult:(id<NSObject>)jsonResult {

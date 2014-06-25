@@ -22,6 +22,7 @@
 @property (nonatomic, readonly) BOOL isTopLevelFetch;
 @property (nonatomic, assign) BOOL allowFastTrack;
 @property (nonatomic, strong) NSString *dslQuery;
+@property (nonatomic, assign) BOOL mergeResults;
 
 #pragma mark - Class Methods
 

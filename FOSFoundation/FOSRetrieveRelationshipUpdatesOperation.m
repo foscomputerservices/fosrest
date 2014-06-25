@@ -12,6 +12,7 @@
 
 + (instancetype)packageFor:(FOSCachedManagedObject *)cmo
                   dslQuery:(NSString *)dslQuery
+              mergeResults:(BOOL)mergeResults
                   matching:(FOSItemMatcher *)relationshipNameMatcher;
 
 @end
@@ -21,18 +22,24 @@
 @synthesize entity = _entity;
 @synthesize jsonId = _jsonId;
 @synthesize dslQuery = _dslQuery;
+@synthesize mergeResults = _mergeResults;
 @synthesize jsonResult = _jsonResult;
 @synthesize originalJsonResult = _originalJsonResult;
 @synthesize relationshipsToPull = _relationshipsToPull;
 
 + (instancetype)packageFor:(FOSCachedManagedObject *)cmo
                   dslQuery:(NSString *)dslQuery
+              mergeResults:(BOOL)mergeResults
                   matching:(FOSItemMatcher *)relationshipNameMatcher {
-    return [[self alloc] initForCMO:cmo dslQuery:dslQuery forRelationships:relationshipNameMatcher];
+    return [[self alloc] initForCMO:cmo
+                           dslQuery:dslQuery
+                       mergeResults:mergeResults
+                   forRelationships:relationshipNameMatcher];
 }
 
 - (id)initForCMO:(FOSCachedManagedObject *)cmo
         dslQuery:(NSString *)dslQuery
+    mergeResults:(BOOL)mergeResults
 forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
     NSParameterAssert(cmo != nil);
     NSParameterAssert(relationshipNameMatcher != nil);
@@ -42,6 +49,7 @@ forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
         _jsonId = cmo.jsonIdValue;
         _jsonResult = cmo.originalJson;
         _dslQuery = dslQuery;
+        _mergeResults = mergeResults;
         _relationshipsToPull = relationshipNameMatcher;
     }
 
@@ -55,33 +63,43 @@ forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
 #pragma mark - Class Methods
 
 + (instancetype)retrieveRealtionshipUpdatesForCMO:(FOSCachedManagedObject *)cmo
-                                         dslQuery:(NSString *)dslQuery {
-    return [[self alloc] initForCMO:cmo dslQuery:dslQuery];
+                                         dslQuery:(NSString *)dslQuery
+                                     mergeResults:(BOOL)mergeResults {
+    return [[self alloc] initForCMO:cmo dslQuery:dslQuery mergeResults:mergeResults];
 }
 
 + (instancetype)retrieveRealtionshipUpdatesForCMO:(FOSCachedManagedObject *)cmo
                                          dslQuery:(NSString *)dslQuery
+                                     mergeResults:(BOOL)mergeResults
                                          matching:(FOSItemMatcher *)relationshipNameMatcher {
-    return [[self alloc] initForCMO:cmo dslQuery:dslQuery forRelationships:relationshipNameMatcher];
+    return [[self alloc] initForCMO:cmo dslQuery:dslQuery
+                       mergeResults:mergeResults
+                   forRelationships:relationshipNameMatcher];
 }
 
 #pragma mark - Initialization Methods
 
-- (id)initForCMO:(FOSCachedManagedObject *)cmo dslQuery:(NSString *)dslQuery {
+- (id)initForCMO:(FOSCachedManagedObject *)cmo
+        dslQuery:(NSString *)dslQuery
+    mergeResults:(BOOL)mergeResults {
     return [self initForCMO:cmo
                    dslQuery:dslQuery
+               mergeResults:mergeResults
            forRelationships:[FOSItemMatcher matcherMatchingAllItems]];
 }
 
 - (id)initForCMO:(FOSCachedManagedObject *)cmo
         dslQuery:(NSString *)dslQuery
+    mergeResults:(BOOL)mergeResults
 forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
+
     NSParameterAssert(cmo != nil);
     NSParameterAssert(relationshipNameMatcher != nil);
 
     if ((self = [super init]) != nil) {
         _FOSCMODataOpPackage *dataOpPackage = [_FOSCMODataOpPackage packageFor:cmo
                                                                       dslQuery:dslQuery
+                                                                  mergeResults:mergeResults
                                                                       matching:relationshipNameMatcher];
 
         FOSRetrieveCMOOperation *retrieveCMO =
@@ -89,6 +107,7 @@ forRelationships:(FOSItemMatcher *)relationshipNameMatcher {
                                                  forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                                  forLifecycleStyle:self.lifecycleStyle];
         retrieveCMO.dslQuery = dslQuery;
+        retrieveCMO.mergeResults = mergeResults;
 
         [self addDependency:retrieveCMO];
     }

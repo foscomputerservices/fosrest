@@ -283,7 +283,14 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
         [webServiceRequest setError:localError];
     }
 
-    FOSLogPedantic(@"\nJSON: %@", jsonResult ? jsonResult : @"<none>");
+    if (FOSGetLogLevel() >= FOSLogLevelPedantic) {
+        // Let's format this is JSON format as opposed to [NSObjet description] format.
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonResult options:0 error:nil];
+
+        NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+        FOSLogPedantic(@"\nJSON: %@", json ? json : @"<none>");
+    }
 }
 
 @end

@@ -13,6 +13,7 @@
 @property (nonatomic, readonly) NSEntityDescription *entity;
 @property (nonatomic, readonly) FOSJsonId jsonId;
 @property (nonatomic, readonly) id<NSObject> jsonResult;
+@property (nonatomic, readonly) BOOL mergeResults;
 @property (nonatomic, readonly) id<NSObject> originalJsonResult;
 @property (nonatomic, readonly) NSString *dslQuery;
 

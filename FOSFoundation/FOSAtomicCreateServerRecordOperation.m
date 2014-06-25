@@ -75,6 +75,10 @@
     return nil;
 }
 
+- (BOOL)mergeResults {
+    return NO;
+}
+
 #pragma mark - Method Overrides
 
 - (NSError *)error {

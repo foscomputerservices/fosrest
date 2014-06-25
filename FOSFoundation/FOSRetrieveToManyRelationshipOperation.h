@@ -15,6 +15,7 @@
                               ownerJson:(id<NSObject>)ownerJson
                             ownerJsonId:(FOSJsonId)ownerJsonId
                                dslQuery:(NSString *)dslQuery
+                           mergeResults:(BOOL)mergeResults
                            withBindings:(NSMutableDictionary *)bindings
                     andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding;
 

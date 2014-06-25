@@ -79,6 +79,13 @@ void FOSLogDebug (NSString *format, ...);
 void FOSLogPedantic (NSString *format, ...);
 
 /*!
+ * @function FOSGetLogLevel
+ *
+ * Returns the current log level setting.
+ */
+FOSLogLevel FOSGetLogLevel();
+
+/*!
  * @function FOSSetLogLevel
  *
  * Sets the 'lowest' level which will be output to STDERR.

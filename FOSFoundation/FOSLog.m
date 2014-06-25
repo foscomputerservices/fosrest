@@ -42,6 +42,10 @@ __FOS_MAKE_LOG_FUNCTION(FOSLogLevelInfo, ASL_LEVEL_INFO, FOSLogInfo)
 __FOS_MAKE_LOG_FUNCTION(FOSLogLevelDebug, ASL_LEVEL_DEBUG, FOSLogDebug)
 __FOS_MAKE_LOG_FUNCTION(FOSLogLevelPedantic, ASL_LEVEL_DEBUG, FOSLogPedantic)
 
+FOSLogLevel FOSGetLogLevel() {
+    return __fosLogLevelFilter;
+}
+
 void FOSSetLogLevel(FOSLogLevel logLevel) {
     // I couldn't get asl_set_filter to work on iOS, so just made my own.
     // This way will actually be better anyway as we won't incur the overhead of creating

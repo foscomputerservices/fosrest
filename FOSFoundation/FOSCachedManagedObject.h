@@ -287,12 +287,41 @@ typedef id<NSObject,NSCopying> FOSJsonId;
 - (void)refreshWithHandler:(FOSBackgroundRequest)handler;
 
 /*!
- * @method refreshRelationshipNamed:handler:
+ * @method refreshRelationshipNamed:dslQuery:mergeResults:handler:
+ *
+ * @param relName The name of the CMOs relationship to refresh
+ *
+ * @param dslQuery A 'Domain Specific Query' that will be bound to the $DSLQUERY
+ *                 variable when the URL_BINDING is bound to a URL.
+ *
+ * Refreshes the receiver's named relationship with the REST server.
+ *
+ * @discussion
+ *
+ * This method calls efreshRelationshipNamed:dslQuery:mergeResults:handler: with
+ * mergeResults = NO; that is, results will be synchronized.
+ */
+- (void)refreshRelationshipNamed:(NSString *)relName
+                        dslQuery:(NSString *)dslQuery
+                         handler:(FOSBackgroundRequest)handler;
+
+/*!
+ * @method refreshRelationshipNamed:dslQuery:mergeResults:handler:
+ *
+ * @param relName The name of the CMOs relationship to refresh
+ *
+ * @param dslQuery A 'Domain Specific Query' that will be bound to the $DSLQUERY
+ *                 variable when the URL_BINDING is bound to a URL.
+ *
+ * @param mergeResults YES will inhibit the synchronization of the server results with
+ *                     the existing results.  This allows the relationship to be
+ *                     incrementally add to as opposed to synchronized.
  *
  * Refreshes the receiver's named relationship with the REST server.
  */
 - (void)refreshRelationshipNamed:(NSString *)relName
                         dslQuery:(NSString *)dslQuery
+                    mergeResults:(BOOL)mergeResults
                          handler:(FOSBackgroundRequest)handler;
 
 /*!
@@ -301,7 +330,6 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  * Refreshes the receiver's named relationships with the REST server.
  */
 - (void)refreshAllRelationshipsNamed:(id<NSFastEnumeration>)relNames
-                            dslQuery:(NSString *)dslQuery
                              handler:(FOSBackgroundRequest)handler;
 
 /*!
@@ -309,8 +337,7 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  *
  * Refreshes the receiver's managed relationships with the REST server.
  */
-- (void)refreshAllRelationshipsWithDslQuery:(NSString *)dslQuery
-                                    handler:(FOSBackgroundRequest)handler;
+- (void)refreshAllRelationships:(FOSBackgroundRequest)handler;
 
 #pragma mark - Override Points
 

@@ -13,17 +13,22 @@
 #pragma mark - Class Methods
 
 + (instancetype)retrieveRealtionshipUpdatesForCMO:(FOSCachedManagedObject *)cmo
-                                         dslQuery:(NSString *)dslQuery;
+                                         dslQuery:(NSString *)dslQuery
+                                     mergeResults:(BOOL)mergeResults;
 
 + (instancetype)retrieveRealtionshipUpdatesForCMO:(FOSCachedManagedObject *)cmo
                                          dslQuery:(NSString *)dslQuery
+                                     mergeResults:(BOOL)mergeResults
                                          matching:(FOSItemMatcher *)relationshipNameMatcher;
 
 #pragma mark - Initialization Methods
 
-- (id)initForCMO:(FOSCachedManagedObject *)cmo dslQuery:(NSString *)dslQuery;
 - (id)initForCMO:(FOSCachedManagedObject *)cmo
         dslQuery:(NSString *)dslQuery
+    mergeResults:(BOOL)mergeResults;
+- (id)initForCMO:(FOSCachedManagedObject *)cmo
+        dslQuery:(NSString *)dslQuery
+    mergeResults:(BOOL)mergeResults
 forRelationships:(FOSItemMatcher *)relationshipNameMatcher;
 
 #pragma mark - Properties

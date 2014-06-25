@@ -883,11 +883,49 @@ static NSMutableDictionary *_processingFaults = nil;
 - (void)refreshRelationshipNamed:(NSString *)relName
                         dslQuery:(NSString *)dslQuery
                          handler:(FOSBackgroundRequest)handler {
-    [self refreshAllRelationshipsNamed:@[relName] dslQuery:dslQuery handler:handler];
+    return [self refreshRelationshipNamed:relName
+                                 dslQuery:dslQuery
+                             mergeResults:NO
+                                  handler:handler];
+}
+
+- (void)refreshRelationshipNamed:(NSString *)relName
+                        dslQuery:(NSString *)dslQuery
+                    mergeResults:(BOOL)mergeResults
+                         handler:(FOSBackgroundRequest)handler {
+    NSParameterAssert(relName != nil);
+
+    // Nothing to refresh on localOnly instances
+    if (!self.isLocalOnly) {
+        id<FOSExpression> expr = [FOSConstantExpression constantExpressionWithValue:relName];
+        NSMutableSet *exprs = [NSMutableSet setWithObject:expr];
+
+        FOSItemMatcher *relMatcher = [FOSItemMatcher matcher:FOSItemMatchItems
+                                          forItemExpressions:exprs];
+
+        FOSRetrieveRelationshipUpdatesOperation *relUpdatesOp =
+            [FOSRetrieveRelationshipUpdatesOperation retrieveRealtionshipUpdatesForCMO:self
+                                                                              dslQuery:dslQuery
+                                                                          mergeResults:mergeResults
+                                                                              matching:relMatcher];
+
+        FOSBackgroundOperation *finalOp = nil;
+        if (handler != nil) {
+            finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:handler];
+        }
+
+        NSString *groupName = [NSString stringWithFormat:@"Refresh relationship: %@", relName];
+
+        [self.restConfig.cacheManager queueOperation:relUpdatesOp
+                             withCompletionOperation:finalOp
+                                       withGroupName:groupName];
+    }
+    else if (handler != nil) {
+        handler(NO, nil);
+    }
 }
 
 - (void)refreshAllRelationshipsNamed:(id<NSFastEnumeration>)relNames
-                            dslQuery:(NSString *)dslQuery
                              handler:(FOSBackgroundRequest)handler {
     NSParameterAssert(relNames != nil);
 
@@ -904,7 +942,8 @@ static NSMutableDictionary *_processingFaults = nil;
 
         FOSRetrieveRelationshipUpdatesOperation *relUpdatesOp =
             [FOSRetrieveRelationshipUpdatesOperation retrieveRealtionshipUpdatesForCMO:self
-                                                                              dslQuery:dslQuery
+                                                                              dslQuery:nil
+                                                                          mergeResults:NO
                                                                               matching:relMatcher];
 
         FOSBackgroundOperation *finalOp = nil;
@@ -933,12 +972,11 @@ static NSMutableDictionary *_processingFaults = nil;
     }
 }
 
-- (void)refreshAllRelationshipsWithDslQuery:(NSString *)dslQuery handler:(FOSBackgroundRequest)handler {
+- (void)refreshAllRelationships:(FOSBackgroundRequest)handler {
     NSArray *ownerRelationshipNames =
         [self.entity.ownerRelationships valueForKeyPath:@"name"];
 
     [self refreshAllRelationshipsNamed:ownerRelationshipNames
-                              dslQuery:dslQuery
                                handler:handler];
 }
 

@@ -15,12 +15,14 @@
     BOOL _ignoreDependentErrors;
     NSError *_error;
     FOSCMOBinding *_parentCMOBinding;
+    BOOL _mergeResults;
 }
 
 + (instancetype)fetchToManyRelationship:(NSRelationshipDescription *)relDesc
                               ownerJson:(id<NSObject>)ownerJson
                             ownerJsonId:(FOSJsonId)ownerJsonId
                                dslQuery:(NSString *)dslQuery
+                           mergeResults:(BOOL)mergeResults
                            withBindings:(NSMutableDictionary *)bindings
                     andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding {
     NSParameterAssert(relDesc != nil);
@@ -31,6 +33,7 @@
                                       ownerJson:ownerJson
                                     ownerJsonId:ownerJsonId
                                        dslQuery:dslQuery
+                                   mergeResults:mergeResults
                                    withBindings:bindings
                             andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding];
 }
@@ -39,6 +42,7 @@
                    ownerJson:(id<NSObject>)ownerJson
                  ownerJsonId:(FOSJsonId)ownerJsonId
                     dslQuery:(NSString *)dslQuery
+                mergeResults:(BOOL)mergeResults
                 withBindings:(NSMutableDictionary *)bindings
          andParentCMOBinding:(FOSCMOBinding *)parentCMOBinding {
     NSParameterAssert(relDesc != nil);
@@ -48,6 +52,7 @@
     if ((self = [super init]) != nil) {
         _relationship = relDesc;
         _parentCMOBinding = parentCMOBinding;
+        _mergeResults = mergeResults;
 
         NSError *localError = nil;
 
@@ -213,8 +218,10 @@
             }
 
             if (!encounteredErrors) {
-                // Clean up the entries that might be locally deleted
-                [self _removeDeadCMOSFromRelationshipSet:relationshipMutableSet newEntries:newEntries];
+                if (!_mergeResults) {
+                    // Clean up the entries that might be locally deleted
+                    [self _removeDeadCMOSFromRelationshipSet:relationshipMutableSet newEntries:newEntries];
+                }
 
                 // Combine with the new entries
                 [relationshipMutableSet unionSet:newEntries];
