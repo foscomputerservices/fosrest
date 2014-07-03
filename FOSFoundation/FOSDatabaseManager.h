@@ -42,6 +42,7 @@
               inObjectContext:(NSManagedObjectContext *)manageObjectContext;
 
 - (void)saveChanges;
+- (void)saveChangesToRESTServiceAndInform:(FOSBackgroundRequest)handler;
 - (BOOL)saveChanges:(NSError **)error;
 
 @end

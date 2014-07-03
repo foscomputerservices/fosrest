@@ -11,6 +11,7 @@
 #import "FOSOperationQueue.h"
 #import "FOSRESTConfig.h"
 #import "FOSManagedObjectContext.h"
+#import "FOSPushAllCacheChangesOperation.h"
 
 @implementation FOSDatabaseManager {
     __weak FOSRESTConfig *_restConfig;
@@ -180,6 +181,33 @@
         FOSLogDebug(@"%@", msg);
         [self.currentMOC rollback];
 #endif
+    }
+}
+
+- (void)saveChangesToRESTServiceAndInform:(FOSBackgroundRequest)handler {
+
+    NSError *localError = nil;
+
+    // Pause auto-syncing for 1 model update.  This allows us to push the changes
+    // instead of the auto-sync process.
+    _restConfig.cacheManager.pauseAutoSync = YES;
+
+    if ([self saveChanges:&localError]) {
+        FOSOperation *op = [FOSPushAllCacheChangesOperation pushAllChangesOperation];
+        FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
+            FOSLogDebug(@"*** Database *** finished pushing changes to server.");
+
+            if (handler != nil) {
+                handler(cancelled, error);
+            }
+        }];
+
+        [_restConfig.cacheManager queueOperation:op
+                         withCompletionOperation:finalOp
+                                   withGroupName:@"Saving changes from MAIN thread"];
+    }
+    else if (handler != nil) {
+        handler(NO, localError);
     }
 }
 

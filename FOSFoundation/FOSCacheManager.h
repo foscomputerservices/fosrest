@@ -46,6 +46,7 @@ typedef FOSRecoveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSE
 #pragma mark - Public Properties
 
 @property (nonatomic, readonly) BOOL updatingMainThreadMOC;
+@property (nonatomic, assign) BOOL pauseAutoSync;
 
 #pragma mark - Public methods
 

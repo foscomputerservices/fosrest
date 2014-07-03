@@ -180,6 +180,9 @@
                    withGroupName:@"Saving changes from MAIN thread"];
         }
 
+        // Reset pause auto sync
+        self.pauseAutoSync = NO;
+
         // Process deletions
         NSSet *deletedSet;
         deletedSet = [notification.userInfo objectForKey:NSDeletedObjectsKey];

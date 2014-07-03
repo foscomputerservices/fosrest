@@ -62,7 +62,7 @@ __strong FOSRESTConfig *__sharedInstance = nil;
 }
 
 - (BOOL)isAutomaticallySynchronizing {
-    return ((_configOptions & FOSRESTConfigAutomaticallySynchronize) == FOSRESTConfigAutomaticallySynchronize);
+    return ((_configOptions & FOSRESTConfigAutomaticallySynchronize) == FOSRESTConfigAutomaticallySynchronize) && !self.cacheManager.pauseAutoSync;
 }
 
 - (BOOL)userNamesAreCaseSensitive {
