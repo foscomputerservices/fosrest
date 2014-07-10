@@ -17,7 +17,7 @@ static void _FOSLogStderr() {
 }
 
 // Based on a concept from:
-//   http://doing-it-wrong.mikeweller.com/2012/07/youre-doing-it-wrong-1-FOSLogdebug-ios.html
+//   http://doing-it-wrong.mikeweller.com/2012/07/youre-doing-it-wrong-1-nslogdebug-ios.html
 
 #define __FOS_MAKE_LOG_FUNCTION(FOS_LEVEL, ASL_LEVEL, NAME) \
     void NAME (NSString *format, ...) { \
