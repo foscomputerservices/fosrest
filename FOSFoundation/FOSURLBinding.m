@@ -311,6 +311,13 @@
                 NSDictionary *jsonDict = (NSDictionary *)json;
 
                 result = jsonDict[jsonKey];
+
+                if (result == nil) {
+                    NSString *msgFmt = @"Unwrapping the JSON %@ using JSON_WRAPPER_KEY %@ lead to an empty result.";
+                    NSString *msg = [NSString stringWithFormat:msgFmt, [jsonDict description], jsonKey];
+
+                    localError = [NSError errorWithMessage:msg forAtom:self];
+                }
             }
         }
     }
@@ -768,6 +775,7 @@
     if (contentType != nil) {
         result[@"Content-Type"] = contentType;
     }
+    result[@"Accept"] = @"application/json";
 
     // Add any local entries
     if (localHeaders != nil) {

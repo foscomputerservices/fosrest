@@ -41,9 +41,38 @@
  * The key that server expects objects to be wrapped under.  If the object is
  * not under any key, this value should be nil.
  *
+ * This key is used both in the receive and send directions, if neither
+ * jsonReceiveWrapperKey nor jsonSendWrapperKey are specified.
+ *
  * Setting this property is optional.
  */
 @property (nonatomic, strong) id<FOSExpression> jsonWrapperKey;
+
+/*!
+ * @property jsonReceiveWrapperKey
+ *
+ * The key that server uses to wrap objects.  If the object is
+ * not under any key, this value should be nil.
+ *
+ * This key is used only when receiving data from the server and overrides
+ * whatever is specified in jsonWrapperKey.
+ *
+ * Setting this property is optional.
+ */
+@property (nonatomic, strong) id<FOSExpression> jsonReceiveWrapperKey;
+
+/*!
+ * @property jsonSendWrapperKey
+ *
+ * The key that server expects objects to be wrapped under.  If the object is
+ * not under any key, this value should be nil.
+ *
+ * This key is used only when sending data to the server and overrides
+ * whatever is specified in jsonWrapperKey.
+ *
+ * Setting this property is optional.
+ */
+@property (nonatomic, strong) id<FOSExpression> jsonSendWrapperKey;
 
 /*!
  * @property jsonBindingExpressions

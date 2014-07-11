@@ -204,16 +204,8 @@
             }
         }
 
-        if (localError == nil && self.jsonWrapperKey != nil) {
-
-            NSString *wrapperKey = [self.jsonWrapperKey evaluateWithContext:context
-                                                                      error:&localError];
-
-            if (wrapperKey != nil && localError == nil) {
-                NSMutableDictionary *innerDict = [NSMutableDictionary dictionary];
-                json[wrapperKey] = innerDict;
-                json = innerDict;
-            }
+        if (localError == nil) {
+            json = [self _wrapJSON:json context:context error:&localError];
         }
         
         if (localError == nil) {
@@ -308,16 +300,8 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
 
     BOOL result = [self _ensureCMO:cmo error:&localError];
     if (result) {
-        if (self.jsonWrapperKey) {
-            NSDictionary *context = @{ @"CMO" : cmo };
-
-            NSString *wrapperKey = [self.jsonWrapperKey evaluateWithContext:context
-                                                                      error:&localError];
-
-            if (wrapperKey != nil && localError == nil) {
-                json = json[wrapperKey];
-            }
-        }
+        NSDictionary *context = @{ @"CMO" : cmo };
+        id<NSObject> unwrappedJson = [self _unwrappedJSON:json context:context error:&localError];
 
         if (localError == nil) {
             // Use all property bindings
@@ -336,7 +320,7 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                           ((FOSAttributeBinding *)propBinding).isReceiveOnlyAttribute)
                         )) {
                         result = [propBinding updateCMO:cmo
-                                               fromJSON:json
+                                               fromJSON:unwrappedJson
                                             forProperty:propDesc
                                                   error:&localError];
                     }
@@ -416,6 +400,35 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
     return result;
 }
 
+- (NSMutableDictionary *)_wrapJSON:(NSMutableDictionary *)json
+                           context:(NSDictionary *)context
+                             error:(NSError **)error {
+    NSParameterAssert(json != nil);
+    NSParameterAssert(context != nil);
+    NSParameterAssert(error != nil);
+
+    *error = nil;
+    NSMutableDictionary *result = json;
+
+    id<FOSExpression> wrapperKeyExpr = self.jsonSendWrapperKey == nil
+        ? self.jsonWrapperKey
+        : self.jsonSendWrapperKey;
+
+    if (wrapperKeyExpr != nil) {
+        NSString *wrapperKey = [wrapperKeyExpr evaluateWithContext:context error:error];
+        if (wrapperKey != nil && *error == nil) {
+            result = [NSMutableDictionary dictionary];
+            json[wrapperKey] = result;
+        }
+    }
+
+    if (*error != nil) {
+        result = nil;
+    }
+
+    return result;
+}
+
 - (id<NSObject>)_unwrappedJSON:(id<NSObject>)json
                        context:(NSDictionary *)context
                          error:(NSError **)error {
@@ -426,10 +439,21 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
     *error = nil;
     id<NSObject> result = json;
 
-    if (self.jsonWrapperKey != nil) {
-        NSString *wrapperKey = [self.jsonWrapperKey evaluateWithContext:context error:error];
+    id<FOSExpression> wrapperKeyExpr = self.jsonReceiveWrapperKey == nil
+        ? self.jsonWrapperKey
+        : self.jsonReceiveWrapperKey;
+
+    if (wrapperKeyExpr != nil) {
+        NSString *wrapperKey = [wrapperKeyExpr evaluateWithContext:context error:error];
         if (wrapperKey != nil && *error == nil) {
             result = [(NSObject *)json valueForKeyPath:wrapperKey];
+        }
+
+        if (result == nil && *error == nil) {
+            NSString *msgFmt = @"Unwrapping the JSON %@ using JSON_WRAPPER_KEY %@ lead to an empty result.";
+            NSString *msg = [NSString stringWithFormat:msgFmt, [json description], wrapperKey];
+
+            *error = [NSError errorWithMessage:msg forAtom:self];
         }
     }
 

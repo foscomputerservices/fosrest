@@ -83,7 +83,8 @@
 %token RETRIEVE_SERVER_RECORD_COUNT RETRIEVE_RELATIONSHIP
 %token JSON WEBFORM NO_DATA
 %token GET POST PUT DELETE
-%token JSON_WRAPPER_KEY ATTRIBUTE_BINDINGS ID_ATTRIBUTE RECEIVE_ONLY_ATTRIBUTE SEND_ONLY_ATTRIBUTE
+%token JSON_WRAPPER_KEY JSON_RECEIVE_WRAPPER_KEY JSON_SEND_WRAPPER_KEY
+%token ATTRIBUTE_BINDINGS ID_ATTRIBUTE RECEIVE_ONLY_ATTRIBUTE SEND_ONLY_ATTRIBUTE
 %token RELATIONSHIP_BINDINGS RELATIONSHIP_BINDING
 %token JSON_BINDING JSON_ID_BINDING RELATIONSHIPS
 
@@ -99,7 +100,7 @@
 %type<requestMethod> request_method request_method_spec
 %type<object> end_point_parameters end_point_url
 %type<object> cmo_binding
-%type<object> json_wrapper_key
+%type<object> json_wrapper_key json_receive_wrapper_key json_send_wrapper_key
 %type<object> attribute_bindings attribute_binding
 %type<object> attribute_binding_spec attribute_binding_list
 
@@ -147,6 +148,8 @@ binding
     | request_method { $$ = (__bridge void *)AT_($1); }
     | end_point_url { $$ = $1; }
     | json_wrapper_key { $$ = $1; }
+    | json_receive_wrapper_key { $$ = $1; }
+    | json_send_wrapper_key { $$ = $1; }
     | attribute_bindings { $$ = $1; }
     | relationship_bindings { $$ = $1; }
     | cmo_binding { $$ = $1; }
@@ -434,18 +437,31 @@ end_point_parameters
 
 cmo_binding
     : /* empty */ { $$ = nil; }
-    | CMO_BINDING SEP json_wrapper_key optional_json_binding attribute_bindings relationship_bindings matching_entities SEMI {
+    | CMO_BINDING SEP
+        /* 3 */ json_wrapper_key
+        /* 4 */ json_receive_wrapper_key
+        /* 5 */ json_send_wrapper_key
+        /* 6 */ optional_json_binding
+        /* 7 */ attribute_bindings
+        /* 8 */ relationship_bindings
+        /* 9 */ matching_entities
+        SEMI {
+
         id<FOSExpression> jsonWrapperKey = (__bridge id<FOSExpression>)($3);
-        NSArray *jsonBindingExpressions = (__bridge NSArray *)($4);
-        NSSet *attributeBindings = (__bridge NSSet *)($5);
-        NSSet *relationshipBindings = (__bridge NSSet *)($6);
-        FOSItemMatcher *matchingEntities = (__bridge FOSItemMatcher *)($7);
+        id<FOSExpression> jsonReceiveWrapperKey = (__bridge id<FOSExpression>)($4);
+        id<FOSExpression> jsonSendWrapperKey = (__bridge id<FOSExpression>)($5);
+        NSArray *jsonBindingExpressions = (__bridge NSArray *)($6);
+        NSSet *attributeBindings = (__bridge NSSet *)($7);
+        NSSet *relationshipBindings = (__bridge NSSet *)($8);
+        FOSItemMatcher *matchingEntities = (__bridge FOSItemMatcher *)($9);
 
         $$ = (__bridge void *)[FOSCMOBinding bindingWithAttributeBindings:attributeBindings
                                                      relationshipBindings:relationshipBindings
                                                          andEntityMatcher:matchingEntities];
 
         ((__bridge FOSCMOBinding *)$$).jsonWrapperKey = jsonWrapperKey;
+        ((__bridge FOSCMOBinding *)$$).jsonReceiveWrapperKey = jsonReceiveWrapperKey;
+        ((__bridge FOSCMOBinding *)$$).jsonSendWrapperKey = jsonSendWrapperKey;
         ((__bridge FOSCMOBinding *)$$).jsonBindingExpressions = jsonBindingExpressions;
 
         CAPTURE_ATOM_INFO(AT_"CMO_BINDING", @1, $$);
@@ -460,6 +476,16 @@ cmo_binding
 json_wrapper_key
     : /* empty */ { $$ = nil; }
     | JSON_WRAPPER_KEY SEP expression SEMI { $$ = $3; }
+    ;
+
+json_receive_wrapper_key
+    : /* empty */ { $$ = nil; }
+    | JSON_RECEIVE_WRAPPER_KEY SEP expression SEMI { $$ = $3; }
+    ;
+
+json_send_wrapper_key
+    : /* empty */ { $$ = nil; }
+    | JSON_SEND_WRAPPER_KEY SEP expression SEMI { $$ = $3; }
     ;
 
 attribute_bindings
