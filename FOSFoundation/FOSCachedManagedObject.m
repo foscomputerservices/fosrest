@@ -1078,7 +1078,7 @@ static NSMutableDictionary *_processingFaults = nil;
     //             identity as it's not required to have RETRIEVE_SERVER_RECORD if the only way
     //             to get a CMO is through a relationship.
     if (urlBinding == nil && !notFoundOK) {
-        NSString *msgFmt = @"Missing ULR_BINDING for the RETRIEVE_SERVER_RECORD lifecycle of entity '%@' managed by %@.";
+        NSString *msgFmt = @"Missing URL_BINDING for the RETRIEVE_SERVER_RECORD lifecycle of entity '%@' managed by %@.";
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          entity.name, NSStringFromClass([adapter class])];
         NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
