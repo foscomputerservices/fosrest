@@ -30,7 +30,11 @@ static void _FOSLogStderr() {
             asl_log(NULL, NULL, (ASL_LEVEL), "%s", [message UTF8String]); \
             va_end(args); \
         } \
+    } \
+    void NAME ## S (NSString *message) { \
+        NAME (message); \
     }
+
 
 //__FOS_MAKE_LOG_FUNCTION(ASL_LEVEL_EMERG, FOSLogEmergency)
 //__FOS_MAKE_LOG_FUNCTION(ASL_LEVEL_ALERT, FOSLogAlert)

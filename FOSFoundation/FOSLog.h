@@ -24,6 +24,7 @@ typedef NS_ENUM(NSUInteger, FOSLogLevel) {
  * Displays a log message at the FOSLogLevelCritical logging level.
  */
 void FOSLogCritical (NSString *format, ...);
+void FOSLogCriticalS(NSString *message);
 
 /*!
  * @function FOSLogError
@@ -31,6 +32,7 @@ void FOSLogCritical (NSString *format, ...);
  * Displays a log message at the FOSLogLevelError logging level.
  */
 void FOSLogError (NSString *format, ...);
+void FOSLogErrorS(NSString *message);
 
 /*!
  * @function FOSLogWarning
@@ -38,6 +40,7 @@ void FOSLogError (NSString *format, ...);
  * Displays a log message at the FOSLogLevelWarning logging level.
  */
 void FOSLogWarning (NSString *format, ...);
+void FOSLogWarningS(NSString *message);
 
 /*!
  * @function FOSLogInfo
@@ -45,6 +48,7 @@ void FOSLogWarning (NSString *format, ...);
  * Displays a log message at the FOSLogLevelInfo logging level.
  */
 void FOSLogInfo (NSString *format, ...);
+void FOSLogInfoS(NSString *message);
 
 /*!
  * @function FOSLogDebug
@@ -59,6 +63,7 @@ void FOSLogInfo (NSString *format, ...);
  * To set a lower threshold, see @link FOSSetLogLevel @/link.
  */
 void FOSLogDebug (NSString *format, ...);
+void FOSLogDebugS(NSString *message);
 
 /*!
  * @function FOSLogPedantic
@@ -77,6 +82,7 @@ void FOSLogDebug (NSString *format, ...);
  * To set a lower threshold, see @link FOSSetLogLevel @/link.
  */
 void FOSLogPedantic (NSString *format, ...);
+void FOSLogPedanticS(NSString *message);
 
 /*!
  * @function FOSGetLogLevel
