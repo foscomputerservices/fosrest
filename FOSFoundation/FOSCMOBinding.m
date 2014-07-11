@@ -278,13 +278,13 @@
                         id<FOSExpression> keyExpr = nextBinding.jsonKeyExpression;
 
                         attrName = [keyExpr evaluateWithContext:nil error:&localError];
-                        break;
+
+                        if (localError == nil) {
+                            json[attrName] = ((FOSUser *)cmo).password;
+                        }
                     }
                 }
 
-                if (localError == nil) {
-                    json[attrName] = ((FOSUser *)cmo).password;
-                }
             }
         }
     }
