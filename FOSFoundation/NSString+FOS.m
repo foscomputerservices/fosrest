@@ -53,6 +53,17 @@
     return result;
 }
 
+- (NSString *)toUnderscore {
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(?<=[a-z])([A-Z])|([A-Z])(?=[a-z])"
+                                                                           options:0 error:nil];
+    NSString *result = [[regex stringByReplacingMatchesInString:self
+                                                        options:0
+                                                          range:NSMakeRange(0, self.length)
+                                                   withTemplate:@"_$1$2"] lowercaseString];
+
+    return result;
+}
+
 - (BOOL)containsString:(NSString *)otherString {
     NSRange range = [self rangeOfString:otherString];
 
