@@ -812,11 +812,22 @@
 - (NSData *)_httpBodyForCMO:(FOSCachedManagedObject *)cmo error:(NSError **)error {
     NSParameterAssert(error != nil);
 
-    NSDictionary *json = [self _jsonBodyForCMO:cmo error:error];
+    NSError *localError = nil;
+    NSData *result = nil;
 
-    NSDictionary *context = @{ @"CMO" : cmo };
+    NSDictionary *json = [self _jsonBodyForCMO:cmo error:&localError];
 
-    NSData *result = [self _httpBodyForJSON:json context:context error:error];
+    if (localError == nil) {
+        NSDictionary *context = @{ @"CMO" : cmo };
+
+        result = [self _httpBodyForJSON:json context:context error:&localError];
+    }
+
+    if (localError != nil) {
+        if (error != nil) { *error = localError; }
+
+        result = nil;
+    }
 
     return result;
 }
@@ -826,6 +837,7 @@
     NSParameterAssert(error != nil);
 
     NSMutableDictionary *result = nil;
+    NSError *localError = nil;
 
     result = [NSMutableDictionary dictionary];
 
@@ -836,19 +848,28 @@
         if (![self.cmoBinding updateJson:result
                                 fromCMO:cmo
                       forLifecyclePhase:self.lifecyclePhase
-                                  error:error]) {
+                                  error:&localError]) {
             result = nil;
         }
     }
 
-    NSDictionary *context = @{ @"CMO" : cmo , @"ENTITY" : cmo.entity };
-    if (cmo.jsonIdValue != nil) {
-        context = [context mutableCopy];
-        ((NSMutableDictionary *)context)[@"CMOID"] = cmo.jsonIdValue;
+    if (localError == nil) {
+        NSDictionary *context = @{ @"CMO" : cmo , @"ENTITY" : cmo.entity };
+        if (cmo.jsonIdValue != nil) {
+            context = [context mutableCopy];
+            ((NSMutableDictionary *)context)[@"CMOID"] = cmo.jsonIdValue;
+        }
+
+        NSDictionary *jsonBody = [self _jsonBodyWithContext:context error:&localError];
+        if (localError == nil && jsonBody.count > 0) {
+            [result addEntriesFromDictionary:jsonBody];
+        }
     }
-    NSDictionary *jsonBody = [self _jsonBodyWithContext:context error:error];
-    if (jsonBody.count > 0) {
-        [result addEntriesFromDictionary:jsonBody];
+
+    if (localError != nil) {
+        if (error != nil) { *error = localError; }
+
+        result = nil;
     }
 
     return result;
