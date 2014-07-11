@@ -478,6 +478,11 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                              withCompletionOperation:handlerOp
                                        withGroupName:@"Password reset"];
         }
+        else if (handler != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                handler(NO, localError);
+            });
+        }
     }
     else if (handler != nil) {
         dispatch_async(dispatch_get_main_queue(), ^{
