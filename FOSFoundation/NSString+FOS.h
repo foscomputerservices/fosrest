@@ -13,5 +13,6 @@
 - (NSString *)sentenceCapitalizedString;
 - (NSString *)lowercaseFirstCharString;
 - (BOOL)containsString:(NSString *)otherStr;
+- (NSString *)toUnderscore;
 
 @end
