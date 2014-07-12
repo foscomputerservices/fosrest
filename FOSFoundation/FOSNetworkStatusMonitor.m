@@ -33,12 +33,16 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
     SCNetworkReachabilityRef _reachabilityRef;
     BOOL _notifierRunning;
     FOSNetworkStatus _lastNetworkStatus;
+    BOOL _usingLocalHost;
 }
 
 #pragma mark - Class Methods
 
 + (FOSNetworkStatusMonitor *)statusMonitorWithHostName:(NSString *)hostName {
     FOSNetworkStatusMonitor* result = nil;
+
+    BOOL usingLocalHost = ([hostName.lowercaseString rangeOfString:@"localhost"].location == 0);
+
     SCNetworkReachabilityRef reachability =
         SCNetworkReachabilityCreateWithName(NULL, hostName.UTF8String);
 
@@ -48,6 +52,7 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
         if (result != nil) {
             result->_reachabilityRef = reachability;
             result->_localWiFiRef = NO;
+            result->_usingLocalHost = usingLocalHost;
         }
         else {
             CFRelease(reachability);
@@ -144,17 +149,22 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
 
     FOSNetworkStatus result = FOSNetworkStatusNotReachable;
     if (!self.isForcedOffline) {
-        SCNetworkReachabilityFlags flags;
-
-        if (_notifierRunning) {
-            result = _lastNetworkStatus;
+        if (_usingLocalHost) {
+            result = FOSNetworkStatusReachableViaWiFi;
         }
-        else if (SCNetworkReachabilityGetFlags(_reachabilityRef, &flags)) {
-            if(_localWiFiRef) {
-                result = [[self class] _localWiFiStatusForFlags:flags];
+        else {
+            SCNetworkReachabilityFlags flags;
+
+            if (_notifierRunning) {
+                result = _lastNetworkStatus;
             }
-            else {
-                result = [[self class] _networkStatusForFlags:flags];
+            else if (SCNetworkReachabilityGetFlags(_reachabilityRef, &flags)) {
+                if(_localWiFiRef) {
+                    result = [[self class] _localWiFiStatusForFlags:flags];
+                }
+                else {
+                    result = [[self class] _networkStatusForFlags:flags];
+                }
             }
         }
     }
@@ -265,11 +275,16 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
         FOSNetworkStatus newStatus = FOSNetworkStatusNotReachable;
 
         if (!statusMonitor.isForcedOffline) {
-            if(statusMonitor->_localWiFiRef) {
-                newStatus = [[statusMonitor class] _localWiFiStatusForFlags:flags];
+            if (statusMonitor->_usingLocalHost) {
+                newStatus = FOSNetworkStatusReachableViaWiFi;
             }
             else {
-                newStatus = [[statusMonitor class] _networkStatusForFlags:flags];
+                if(statusMonitor->_localWiFiRef) {
+                    newStatus = [[statusMonitor class] _localWiFiStatusForFlags:flags];
+                }
+                else {
+                    newStatus = [[statusMonitor class] _networkStatusForFlags:flags];
+                }
             }
         }
 
