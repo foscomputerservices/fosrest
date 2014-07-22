@@ -12,14 +12,14 @@
 /*!
  * @typedef FOSNetworkStatus
  */
-typedef enum : unsigned short {
+typedef NS_ENUM(NSUInteger, FOSNetworkStatus) {
     FOSNetworkStatusUnknown,
     FOSNetworkStatusNotReachable,
     FOSNetworkStatusReachableViaWiFi,
 #if	TARGET_OS_IPHONE
     FOSNetworkStatusReachableViaWWAN,
 #endif
-} FOSNetworkStatus;
+};
 
 #define kFOSNetworkStatusChangedNotification @"kFOSNetworkStatusChangedNotification"
 

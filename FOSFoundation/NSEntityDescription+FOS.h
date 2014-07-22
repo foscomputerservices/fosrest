@@ -144,6 +144,58 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
 @property (nonatomic, readonly) NSString *jsonAbstractRelationshipMaps;
 
 /*!
+ * @methodgroup Computed Attribute and Relationship properties
+ */
+
+/*!
+ * @property cmoAttibutes
+ *
+ * The set of properties that are of type NSAttributeDescription and
+ * !relDesc.isFOSProperty.
+ */
+@property (nonatomic, readonly) NSSet *cmoAttibutes;
+
+/*!
+ * @property cmoRelationships
+ *
+ * The set of properties that are of type NSRelationshipDescription and
+ * !relDesc.isFOSRelationship.
+ */
+@property (nonatomic, readonly) NSSet *cmoRelationships;
+
+/*!
+ * @property cmoToOneRelationships
+ *
+ * The set of properties that are of type NSRelationshipDescription and
+ * !relDesc.isFOSRelationship && !relDesc.isToMany.
+ */
+@property (nonatomic, readonly) NSSet *cmoToOneRelationships;
+
+/*!
+ * @property cmoToManyRelationships
+ *
+ * The set of properties that are of type NSRelationshipDescription and
+ * !relDesc.isFOSRelationship && relDesc.isToMany.
+ */
+@property (nonatomic, readonly) NSSet *cmoToManyRelationships;
+
+/*!
+ * @property cmoOwnedRelationships
+ *
+ * The set of properties that are of type NSRelationshipDescription and
+ * !relDesc.isFOSRelationship && relDesc.isOwnershipRelationship.
+ */
+@property (nonatomic, readonly) NSSet *cmoOwnedRelationships;
+
+/*!
+ * @property cmoOwnedToManyRelationships
+ *
+ * The set of properties that are of type NSRelationshipDescription and
+ * !relDesc.isFOSRelationship && relDesc.isOwnershipRelationship && relDesc.isToMany.
+ */
+@property (nonatomic, readonly) NSSet *cmoOwnedToManyRelationships;
+
+/*!
  * @methodgroup  Inferred Properties
  */
 #pragma mark - Inferred Properties

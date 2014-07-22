@@ -30,54 +30,6 @@
 @property (nonatomic, readonly) NSSet *flattenedOwnershipRelationships;
 @property (nonatomic, readonly) BOOL isStaticTableEntity;
 
-/*!
- * @method nonFOSRelationships
- *
- * The set of properties that are of type NSAttributeDescription and
- * !relDesc.isFOSProperty.
- */
-@property (nonatomic, readonly) NSSet *cmoAttibutes;
-
-/*!
- * @method cmoRelationships
- *
- * The set of properties that are of type NSRelationshipDescription and
- * !relDesc.isFOSRelationship.
- */
-@property (nonatomic, readonly) NSSet *cmoRelationships;
-
-/*!
- * @method cmoToOneRelationships
- *
- * The set of properties that are of type NSRelationshipDescription and
- * !relDesc.isFOSRelationship && !relDesc.isToMany.
- */
-@property (nonatomic, readonly) NSSet *cmoToOneRelationships;
-
-/*!
- * @method cmoToManyRelationships
- *
- * The set of properties that are of type NSRelationshipDescription and
- * !relDesc.isFOSRelationship && relDesc.isToMany.
- */
-@property (nonatomic, readonly) NSSet *cmoToManyRelationships;
-
-/*!
- * @method cmoOwnedRelationships
- *
- * The set of properties that are of type NSRelationshipDescription and
- * !relDesc.isFOSRelationship && relDesc.isOwnershipRelationship.
- */
-@property (nonatomic, readonly) NSSet *cmoOwnedRelationships;
-
-/*!
- * @method cmoOwnedToManyRelationships
- *
- * The set of properties that are of type NSRelationshipDescription and
- * !relDesc.isFOSRelationship && relDesc.isOwnershipRelationship && relDesc.isToMany.
- */
-@property (nonatomic, readonly) NSSet *cmoOwnedToManyRelationships;
-
 #pragma mark - Public Methods
 
 - (BOOL)isFOSEntityWithRestConfig:(FOSRESTConfig *)restConfig;
