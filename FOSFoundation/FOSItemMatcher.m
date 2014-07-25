@@ -38,6 +38,19 @@
     return result;
 }
 
++ (instancetype)matcher:(FOSItemMatch)match forConstants:(NSSet *)constantValues {
+    NSParameterAssert(constantValues != nil);
+    NSParameterAssert([constantValues isKindOfClass:[NSSet class]]);
+
+    NSMutableSet *exprs = [NSMutableSet setWithCapacity:constantValues.count];
+
+    for (id value in constantValues) {
+        [exprs addObject:[FOSConstantExpression constantExpressionWithValue:value]];
+    }
+
+    return [self matcher:match forItemExpressions:exprs];
+}
+
 #pragma mark - Public methods
 
 - (BOOL)itemIsIncluded:(id)item context:(NSDictionary *)context {

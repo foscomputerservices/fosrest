@@ -53,9 +53,14 @@ typedef NS_ENUM(NSUInteger, FOSItemMatch) {
 + (instancetype)matcher:(FOSItemMatch)match forItemExpression:(id<FOSExpression>)item;
 
 /*!
- * @method matcher:forItems:
+ * @method matcher:forItemExpressions:
  */
 + (instancetype)matcher:(FOSItemMatch)match forItemExpressions:(NSSet *)itemExpressions;
+
+/*!
+ * @method matcher:forConstants:
+ */
++ (instancetype)matcher:(FOSItemMatch)match forConstants:(NSSet *)constantValues;
 
 /*!
  * @group Public Properties
