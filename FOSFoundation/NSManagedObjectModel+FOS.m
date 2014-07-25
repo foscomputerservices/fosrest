@@ -70,6 +70,8 @@
     // Clear the placeholder
     [NSEntityDescription setPlaceholder:nil];
 
+    result.localizationDictionary = [self _mergedLocalizationDictionaries:models];
+
     return result;
 }
 
@@ -115,6 +117,21 @@
     for (NSManagedObjectModel *model in models) {
         for (NSEntityDescription *entity in model.entities) {
             [result addObject:entity];
+        }
+    }
+
+    return result;
+}
+
++ (NSDictionary *)_mergedLocalizationDictionaries:(NSArray *)models {
+
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+
+    for (NSManagedObjectModel *nextModel in models) {
+        NSDictionary *locDict = nextModel.localizationDictionary;
+
+        if (locDict != nil) {
+            [result addEntriesFromDictionary:locDict];
         }
     }
 
