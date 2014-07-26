@@ -665,8 +665,8 @@
     NSError *localError = nil;
     NSString *result = nil;
 
-    id exprValue = [self.endPointURLExpression evaluateWithContext:context error:error];
-    if (![exprValue isKindOfClass:[NSString class]]) {
+    id exprValue = [self.endPointURLExpression evaluateWithContext:context error:&localError];
+    if (error == nil && ![exprValue isKindOfClass:[NSString class]]) {
         NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING %@";
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          NSStringFromClass([exprValue class]),

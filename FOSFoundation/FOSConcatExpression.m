@@ -70,9 +70,13 @@
 
         if (exprResult != nil && localError == nil) {
 
+            if ([exprResult isKindOfClass:[NSNumber class]]) {
+                exprResult = ((NSNumber *)exprResult).description;
+            }
+
             // Only strings can be realized if there are multiple expressions
             if (![exprResult isKindOfClass:[NSString class]]) {
-                NSString *msg = [NSString stringWithFormat:@"Received type %@ during evaluation of concatenating expressions.  Only NSString types are allowed.",
+                NSString *msg = [NSString stringWithFormat:@"Received type %@ during evaluation of concatenating expressions; only NSString types are allowed.",
                                  NSStringFromClass([exprResult class])];
 
                 localError = [NSError errorWithMessage:msg forAtom:self];

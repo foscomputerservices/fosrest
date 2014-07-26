@@ -20,7 +20,10 @@
 - (id)init {
     if ((self = [super init]) != nil) {
         if (self.restConfig.loginManager.isLoggedIn) {
-            [self addDependency:self._refreshUserRequest];
+            FOSOperation *op = self._refreshUserRequest;
+            if (op && self.error == nil) {
+                [self addDependency:op];
+            }
         }
         else {
             NSString *msg = NSLocalizedString(@"No user is currenlty logged in to refresh.", @"");
