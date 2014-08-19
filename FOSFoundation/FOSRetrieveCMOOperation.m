@@ -86,7 +86,7 @@
     // Fill the bindings array with null entries telling the resolution mechanism
     // that we've already tried to resolve this jsonId.
     for (FOSJsonId nextId in jsonIds) {
-        bindings[nextId] = [NSNull null];
+        [self _setBindingValue:[NSNull null] forKey:nextId enity:entity inBindings:bindings];
     }
 
     // Replace the null entries with those that we've found
@@ -94,7 +94,7 @@
         NSManagedObjectID *nextObjID = nextCMO.objectID;
         FOSJsonId jsonId = nextCMO.jsonIdValue;
 
-        bindings[jsonId] = nextObjID;
+        [self _setBindingValue:nextObjID forKey:jsonId enity:nextCMO.entity inBindings:bindings];
     }
 
     return bindings;
@@ -111,7 +111,7 @@
     FOSCachedManagedObject *result = nil;
     NSManagedObjectContext *moc = [FOSRESTConfig sharedInstance].databaseManager.currentMOC;
 
-    id bindingVal = bindings[jsonId];
+    id bindingVal = [self _bindingValueForKey:jsonId entity:entity inBindings:bindings];
 
     if ([bindingVal isKindOfClass:[NSNull class]]) {
         bindingVal = nil;
@@ -445,7 +445,8 @@
                                            respectingPreviousLookups:NO];
                     _managedObjectID = cmo.objectID;
                     if (_managedObjectID != nil) {
-                        _bindings[_jsonId] = cmo.objectID;
+
+                        [[self class] _setBindingValue:cmo.objectID forKey:_jsonId enity:entity inBindings:_bindings];
                     }
 
                     self.json = json;
@@ -551,7 +552,11 @@
 
                             if (cmo != nil) {
                                 result = cmo.objectID;
-                                blockSelf->_bindings[jsonId] = result;
+
+                                [[blockSelf class] _setBindingValue:result
+                                                             forKey:jsonId
+                                                              enity:blockSelf->_entity
+                                                         inBindings:blockSelf->_bindings];
                             }
                         }
                     }
@@ -914,7 +919,10 @@
                     NSAssert([_jsonId isEqual:newCMO.jsonIdValue], @"Ids aren't the same???");
 
                     // Add to bindings dictionary
-                    _bindings[newCMO.jsonIdValue] = _managedObjectID;
+                    [[self class] _setBindingValue:_managedObjectID
+                                            forKey:newCMO.jsonIdValue
+                                             enity:_entity
+                                        inBindings:_bindings];
                 }
                 else {
                     _error = localError;
@@ -945,8 +953,8 @@
         }
 
         if (_error == nil) {
-            NSAssert(_bindings[_jsonId] != nil, @"Entity object missing from bindings???");
-            NSAssert(![_bindings[_jsonId] isKindOfClass:[NSNull class]],
+            NSAssert([[self class] _bindingValueForKey:_jsonId entity:_entity inBindings:_bindings] != nil, @"Entity object missing from bindings???");
+            NSAssert(![[[self class] _bindingValueForKey:_jsonId entity:_entity inBindings:_bindings] isKindOfClass:[NSNull class]],
                      @"Entity object missing from bindings???");
 #ifdef CONFIGURATION_Debug
             // This is expensive, so don't let it out into any other build type
@@ -1290,6 +1298,42 @@
             _createdFaults = YES;
         }
     }
+}
+
++ (void)_setBindingValue:(id)value forKey:(id<NSObject>)key enity:(NSEntityDescription *)entity inBindings:(NSMutableDictionary *)bindings {
+    NSParameterAssert(value != nil);
+    NSParameterAssert(key != nil);
+    NSParameterAssert(entity != nil);
+    NSParameterAssert(bindings != nil);
+
+    NSString *finalKey = [self _bindingKeyForKey:key entity:entity];
+    bindings[finalKey] = value;
+}
+
++ (id)_bindingValueForKey:(id<NSObject>)key entity:(NSEntityDescription *)entity inBindings:(NSDictionary *)bindings {
+    NSParameterAssert(key != nil);
+    NSParameterAssert(entity != nil);
+    NSParameterAssert(bindings != nil);
+
+    id result = nil;
+
+    NSString *finalKey = [self _bindingKeyForKey:key entity:entity];
+    result = bindings[finalKey];
+
+    return result;
+}
+
++ (NSString *)_bindingKeyForKey:(id<NSObject>)key entity:(NSEntityDescription *)entity {
+    NSParameterAssert(key != nil);
+    NSParameterAssert(entity != nil);
+
+    NSString *finalKey = key.description;
+
+    if (entity != nil) {
+        finalKey = [NSString stringWithFormat:@"%@:%@", entity.name, key.description];
+    }
+
+    return finalKey;
 }
 
 - (BOOL)_bindToJSONInBindings {
