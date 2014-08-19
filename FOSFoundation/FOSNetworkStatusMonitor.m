@@ -180,16 +180,25 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
     BOOL result = NO;
     SCNetworkReachabilityContext context = {0, (__bridge void *)(self), NULL, NULL, NULL};
 
-    if (SCNetworkReachabilitySetCallback(_reachabilityRef, _ReachabilityCallback, &context)) {
-        if (SCNetworkReachabilityScheduleWithRunLoop(_reachabilityRef,
-                                                     CFRunLoopGetCurrent(),
-                                                     kCFRunLoopDefaultMode)) {
-            result = YES;
+    // TODO: Possibly remove after iOS 8 stabilizes.  Currently getting false negatives for
+    // reachability on updates.
+    NSString *model = [[UIDevice currentDevice] model];
+    NSString *sysVer = [[UIDevice currentDevice] systemVersion];
 
-            [self willChangeValueForKey:@"isNotifierRunning"];
-            _notifierRunning = YES;
-            [self didChangeValueForKey:@"isNotifierRunning"];
+    if (!([sysVer isEqualToString:@"8.0"] && [model isEqualToString:@"iPhone Simulator"])) {
+
+        if (SCNetworkReachabilitySetCallback(_reachabilityRef, _ReachabilityCallback, &context)) {
+            if (SCNetworkReachabilityScheduleWithRunLoop(_reachabilityRef,
+                                                         CFRunLoopGetCurrent(),
+                                                         kCFRunLoopDefaultMode)) {
+                result = YES;
+
+                [self willChangeValueForKey:@"isNotifierRunning"];
+                _notifierRunning = YES;
+                [self didChangeValueForKey:@"isNotifierRunning"];
+            }
         }
+
     }
 
     return result;
