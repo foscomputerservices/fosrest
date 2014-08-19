@@ -51,65 +51,19 @@
 
 #pragma mark - Private methods
 
-- (FOSBackgroundOperation *)_refreshUserRequest {
-    FOSBackgroundOperation *result = nil;
+- (FOSOperation *)_refreshUserRequest {
+    FOSOperation *result = nil;
 
     FOSJsonId loggedInUid = self.restConfig.loginManager.loggedInUserId;
-
     NSEntityDescription *entityDesc = [self.restConfig.userSubType entityDescription];
 
-    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
-    FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                                      forLifecycleStyle:nil
-                                                     forRelationship:nil
-                                                       forEntity:entityDesc];
+    FOSRetrieveCMOOperation *retrieveOp = [FOSRetrieveCMOOperation retrieveCMOForEntity:entityDesc
+                                                                                 withId:loggedInUid];
+    retrieveOp.allowFastTrack = NO;
 
-    NSError *localError = nil;
-    NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entityDesc
-                                                             withJsonId:loggedInUid
-                                                           withDSLQuery:nil
-                                                                  error:&localError];
-
-    if (urlRequest != nil && localError == nil) {
-
-        FOSWebServiceRequest *refreshRequest = [FOSWebServiceRequest requestWithURLRequest:urlRequest forURLBinding:urlBinding];
-
-        __block FOSRefreshUserOperation *blockSelf = self;
-        FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-            if (refreshRequest.error == nil) {
-                FOSRESTConfig *restConfig = blockSelf.restConfig;
-
-                FOSUser *user = [restConfig.userSubType fetchWithId:loggedInUid];
-
-                FOSURLBinding *userBinding =
-                    [restConfig.restServiceAdapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                                                forLifecycleStyle:nil
-                                                               forRelationship:nil
-                                                                 forEntity:user.entity];
-
-                id<FOSTwoWayRecordBinding> binder = userBinding.cmoBinding;
-
-                NSError *error = nil;
-                if (![binder updateCMO:user
-                              fromJSON:(NSDictionary *)refreshRequest.jsonResult
-                     forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                 error:&error]) {
-                    blockSelf->_error = error;
-                }
-            }
-        }];
-
-        [finalOp addDependency:refreshRequest];
-
-        result = finalOp;
-    }
-
-    if (localError != nil) {
-        _error = localError;
-        result = nil;
-    }
+    result = retrieveOp;
 
     return result;
-};
+}
 
 @end

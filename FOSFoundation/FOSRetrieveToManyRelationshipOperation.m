@@ -412,18 +412,20 @@
                                                      withDSLQuery:dslQuery
                                                             error:&localError];
 
-            FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
-                                                                          forURLBinding:urlBinding];
-            NSDictionary *requestEntry = @{
-                                           @"DestEntity" : nextLeafEntity,
-                                           @"Request" : request
-                                           };
+            if (localError == nil) {
+                FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                              forURLBinding:urlBinding];
+                NSDictionary *requestEntry = @{
+                                               @"DestEntity" : nextLeafEntity,
+                                               @"Request" : request
+                                               };
 
-            if (result == nil) {
-                result = [NSMutableSet setWithObject:requestEntry];
-            }
-            else {
-                [result addObject:requestEntry];
+                if (result == nil) {
+                    result = [NSMutableSet setWithObject:requestEntry];
+                }
+                else {
+                    [result addObject:requestEntry];
+                }
             }
         }
 

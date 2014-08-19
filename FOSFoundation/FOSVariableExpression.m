@@ -64,7 +64,7 @@
     else if ([ident isEqualToString:@"OWNERID"]) {
         result = [self _evaluateWithContext:context
                                  identifier:ident
-                              expectingType:[NSString class]
+                              expectingType:[NSObject class]
                                       error:&localError];
 
         if (result == nil && localError == nil) {
