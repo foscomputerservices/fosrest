@@ -21,7 +21,7 @@
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
-    NSDateComponents *dateComponents = [calendar components:( NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit ) fromDate:utcNow];
+    NSDateComponents *dateComponents = [calendar components:( NSCalendarUnitYear | NSCalendarUnitMonth |  NSCalendarUnitDay ) fromDate:utcNow];
     [dateComponents setHour:-6];
     [dateComponents setMinute:0];
     [dateComponents setSecond:0];
