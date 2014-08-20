@@ -1373,14 +1373,17 @@ static NSMutableDictionary *_processingFaults = nil;
         // Is the change a relationship that we sync with the
         // web server?
         else if ([knownRelNames containsObject:nextProp]) {
-            [self _createModifiedPropertyForObjId:objIdStr propertyName:nextProp];
-
-            // We also need to maintain the local attribute associated
-            // with this FK relationships on toMany relationships
             NSRelationshipDescription *relDesc = self.entity.propertiesByName[nextProp];
             NSAssert(relDesc != nil, @"No relDesc, how'd we get here???");
 
-            if (relDesc.isToMany) {
+            // Only need modified properties for toOne relationships
+            if (!relDesc.isToMany) {
+                [self _createModifiedPropertyForObjId:objIdStr propertyName:nextProp];
+            }
+
+            // We also need to maintain the local attribute associated
+            // with this FK relationships on toMany relationships
+            else {
                 // Find the attribute corresponding to the json property
                 for (NSAttributeDescription *attrDesc in self.entity.cmoAttibutes) {
                     if ([idRelationshipKeyPath isEqualToString:attrDesc.name]) {
