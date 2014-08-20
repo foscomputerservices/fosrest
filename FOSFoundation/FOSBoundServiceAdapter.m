@@ -13,6 +13,7 @@
     FOSAdapterBinding *_bindings;
     FOSNetworkStatusMonitor *_networkStatusMonitor;
     NSURL *_baseURL;
+    NSDateFormatter *__serverDateFormatter;
 }
 
 #pragma mark - Class Methods
@@ -29,6 +30,13 @@
 
 + (instancetype)serviceAdapterFromBindingFile:(NSURL *)url error:(NSError **)error {
     return [[self alloc] initFromBindingFile:url error:error];
+}
+
++ (NSString *)serverDateFormat {
+    NSString *msg = [NSString stringWithFormat:@"Concrete subclasses of FOSBoundServiceAdapter must override and implement %@.", NSStringFromSelector(_cmd)];
+
+    @throw [NSException exceptionWithName:@"FOSFoundation_MustOverride"
+                                   reason:msg userInfo:nil];
 }
 
 #pragma mark - Initialization Methods
@@ -237,7 +245,7 @@
         else if ([result isKindOfClass:[NSDate class]]) {
             NSDate *date = (NSDate *)cmoValue;
 
-            result = [self _parseJsonValueForDate:date];
+            result = [self _jsonDateForDate:date];
         }
         else {
             result = [FOSCachedManagedObject jsonValueForObject:cmoValue forAttribute:attrDesc];
@@ -266,10 +274,10 @@
 
             result = [transformer reverseTransformedValue:jsonValue];
         }
-        else if ([result isKindOfClass:[NSDate class]]) {
-            NSDate *date = (NSDate *)jsonValue;
+        else if (attrDesc.attributeType == NSDateAttributeType) {
+            NSDate *date = [self _dateForJsonDate:jsonValue];
 
-            result = @(date.timeIntervalSince1970);
+            result = date;
         }
         else if ([result isKindOfClass:[NSData class]]) {
             NSData *data = (NSData *)jsonValue;
@@ -368,46 +376,48 @@
     return result;
 }
 
-- (id<NSObject>)_parseJsonValueForDate:(NSDate *)date {
-    NSDateFormatter *formatter = [[self class] _toServerDateFormatter];
+- (id<NSObject>)_jsonDateForDate:(NSDate *)date {
+    NSDateFormatter *formatter = [self _serverDateFormatter];
 
-    NSString *formattedDate = [formatter stringFromDate:date];
-
-    NSDictionary *result = @{ @"__type" : @"Date", @"iso" : formattedDate };
+    NSString *result = [formatter stringFromDate:date];
 
     return result;
 }
 
-+ (NSString *)_parseDateFormat {
-    return @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'";
-}
+- (NSDate *)_dateForJsonDate:(id<NSObject>)jsonDate {
+    NSDate *result = nil;
 
-+ (NSDateFormatter *)_toServerDateFormatter {
-    static NSDateFormatter *serverFormatter = nil;
+    if (jsonDate != nil) {
+        if ([jsonDate isKindOfClass:[NSString class]]) {
+            NSDateFormatter *formatter = [self _serverDateFormatter];
 
-    // Cache the instance according to Apple's documentation.
-    // (see https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/DataFormatting/Articles/dfDateFormatting10_4.html)
-    if (serverFormatter == nil) {
-        serverFormatter = [[NSDateFormatter alloc] init];
-        serverFormatter.dateFormat = [self _parseDateFormat];
-        serverFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+            NSString *jsonDateStr = (NSString *)jsonDate;
+
+            result = [formatter dateFromString:jsonDateStr];
+        }
+        else {
+            NSString *msgFmt = @"Error : Adapter received a jsonDate of type %@, expected NSString.";
+            NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromClass([jsonDate class])];
+
+            NSException *e = [NSException exceptionWithName:@"FOSBadJSONDateType" reason:msg userInfo:nil];
+
+            @throw e;
+        }
     }
 
-    return serverFormatter;
+    return result;
 }
 
-+ (NSDateFormatter *)_fromServerDateFormatter {
-    static NSDateFormatter *localFormatter = nil;
-
+- (NSDateFormatter *)_serverDateFormatter {
     // Cache the instance according to Apple's documentation.
     // (see https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/DataFormatting/Articles/dfDateFormatting10_4.html)
-    if (localFormatter == nil) {
-        localFormatter = [[NSDateFormatter alloc] init];
-        localFormatter.dateFormat = [self _parseDateFormat];
-        localFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+    if (__serverDateFormatter == nil) {
+        __serverDateFormatter = [[NSDateFormatter alloc] init];
+        __serverDateFormatter.dateFormat = [[self class] serverDateFormat];
+        __serverDateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
     }
 
-    return localFormatter;
+    return __serverDateFormatter;
 }
 
 @end

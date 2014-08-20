@@ -54,6 +54,16 @@
 + (instancetype)serviceAdapterFromBindingFile:(NSURL *)url error:(NSError **)error;
 
 /*!
+ * @method serverDateFormat
+ *
+ * A date format string to provide to NSDateFormatter.dateFormat to use for
+ * [en|de]coding dates to/from the server.
+ *
+ * Subclasses must override this method and provide their format.
+ */
++ (NSString *)serverDateFormat;
+
+/*!
  * @methodgroup Initialization Methods
  */
 
