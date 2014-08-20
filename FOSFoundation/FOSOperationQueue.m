@@ -24,6 +24,7 @@
             _moc.persistentStoreCoordinator = [FOSRESTConfig sharedInstance].storeCoordinator;
             _moc.mergePolicy =
                 [[FOSMergePolicy alloc] initWithMergeType:NSMergeByPropertyStoreTrumpMergePolicyType];
+            _moc.undoManager = nil;
         }
     }
 

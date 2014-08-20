@@ -31,6 +31,7 @@
             _mainThreadMOC.persistentStoreCoordinator = _restConfig.storeCoordinator;
             _mainThreadMOC.mergePolicy =
                 [[FOSMergePolicy alloc] initWithMergeType:NSMergeByPropertyStoreTrumpMergePolicyType];
+            _mainThreadMOC.undoManager = [[NSUndoManager alloc] init];
         }
 
         result = _mainThreadMOC;
