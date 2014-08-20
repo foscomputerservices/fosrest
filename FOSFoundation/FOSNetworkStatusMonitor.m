@@ -125,20 +125,13 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
         _forceOffline = forceOffline;
         [self didChangeValueForKey:@"forceOffline"];
 
-        if (_notifierRunning) {
-            SCNetworkReachabilityFlags flags = 0;
+        SCNetworkReachabilityFlags flags = 0;
 
-            if (!forceOffline) {
-                SCNetworkReachabilityGetFlags(_reachabilityRef, &flags);
-            }
-
-            _ReachabilityCallback(NULL, flags, (__bridge void *)(self));
+        if (!forceOffline) {
+            SCNetworkReachabilityGetFlags(_reachabilityRef, &flags);
         }
 
-        // Force refresh
-        else if (forceOffline) {
-            _ReachabilityCallback(NULL, 0, (__bridge void *)(self));
-        }
+        _ReachabilityCallback(NULL, flags, (__bridge void *)(self));
     }
 }
 
@@ -182,10 +175,10 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
 
     // TODO: Possibly remove after iOS 8 stabilizes.  Currently getting false negatives for
     // reachability on updates.
-    NSString *model = [[UIDevice currentDevice] model];
-    NSString *sysVer = [[UIDevice currentDevice] systemVersion];
+//    NSString *model = [[UIDevice currentDevice] model];
+//    NSString *sysVer = [[UIDevice currentDevice] systemVersion];
 
-    if (!([sysVer isEqualToString:@"8.0"] && [model isEqualToString:@"iPhone Simulator"])) {
+    /*if (!([sysVer isEqualToString:@"8.0"] && [model isEqualToString:@"iPhone Simulator"])) */ {
 
         if (SCNetworkReachabilitySetCallback(_reachabilityRef, _ReachabilityCallback, &context)) {
             if (SCNetworkReachabilityScheduleWithRunLoop(_reachabilityRef,

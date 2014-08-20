@@ -851,6 +851,7 @@ return
      @"              ATTRIBUTES :: ( 'objectId' ), \n"
      @"          { $ATTRDESC.name : $ATTRDESC.name } \n"
      @"              ATTRIBUTES :: ALL_EXCEPT  ( 'objectId', 'emailVerified', 'sessionToken', 'password' ), \n"
+     @"          { 'password' : $PASSWORD } ATTRIBUTES:: ( 'password' ), \n"
      @"          RECEIVE_ONLY_ATTRIBUTE { $ATTRDESC.name : $ATTRDESC.name } \n"
      @"              ATTRIBUTES :: ( 'emailVerified', 'sessionToken' ) \n"
      @"        ;\n"

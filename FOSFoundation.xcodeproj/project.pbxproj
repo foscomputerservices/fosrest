@@ -80,6 +80,7 @@
 		632D4985194CF030002E5049 /* FOSManagedObjectContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 632D4982194CF030002E5049 /* FOSManagedObjectContext.h */; };
 		632D4986194CF030002E5049 /* FOSManagedObjectContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 632D4983194CF030002E5049 /* FOSManagedObjectContext.m */; };
 		632D4987194CF030002E5049 /* FOSManagedObjectContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 632D4983194CF030002E5049 /* FOSManagedObjectContext.m */; };
+		632EB84019A5195900F9966E /* FOSRESTConfigTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 632EB83F19A5195900F9966E /* FOSRESTConfigTests.m */; };
 		633467D71686C06700ACD4EA /* FOSModifiedProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 633467D51686C06700ACD4EA /* FOSModifiedProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		633467D81686C06700ACD4EA /* FOSModifiedProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 633467D61686C06700ACD4EA /* FOSModifiedProperty.m */; };
 		633467E01686C12000ACD4EA /* FOSDatabaseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 633467DE1686C12000ACD4EA /* FOSDatabaseManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -625,6 +626,7 @@
 		632D497D194CED5D002E5049 /* FOSCacheManager+CoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FOSCacheManager+CoreData.m"; sourceTree = "<group>"; };
 		632D4982194CF030002E5049 /* FOSManagedObjectContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSManagedObjectContext.h; sourceTree = "<group>"; };
 		632D4983194CF030002E5049 /* FOSManagedObjectContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSManagedObjectContext.m; sourceTree = "<group>"; };
+		632EB83F19A5195900F9966E /* FOSRESTConfigTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSRESTConfigTests.m; sourceTree = "<group>"; };
 		633467D51686C06700ACD4EA /* FOSModifiedProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSModifiedProperty.h; sourceTree = "<group>"; };
 		633467D61686C06700ACD4EA /* FOSModifiedProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSModifiedProperty.m; sourceTree = "<group>"; };
 		633467DE1686C12000ACD4EA /* FOSDatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSDatabaseManager.h; sourceTree = "<group>"; };
@@ -1489,6 +1491,7 @@
 				63BFA3971481A85700FE1C0C /* FOSFoundationTests.m */,
 				63BFA3911481A85700FE1C0C /* Supporting Files */,
 				6310F9471699085D00981E85 /* Web Interaction Tests */,
+				632EB83F19A5195900F9966E /* FOSRESTConfigTests.m */,
 			);
 			path = FOSFoundationTests;
 			sourceTree = "<group>";
@@ -2304,6 +2307,7 @@
 				63F1C83A184D50BA008E16E2 /* User.m in Sources */,
 				63C9D378189D6D710022F518 /* FOSOperationQueueTests.m in Sources */,
 				632B5415168E1D7C003AD474 /* FOSLoginManagerTests.m in Sources */,
+				632EB84019A5195900F9966E /* FOSRESTConfigTests.m in Sources */,
 				632B5419168E2533003AD474 /* FOSCachedManagedObjectTests.m in Sources */,
 				632B5421168E2721003AD474 /* FOSSearchOperationTests.m in Sources */,
 				634FA66B18038D8700389821 /* FOSPullStaticTablesOperationTests.m in Sources */,

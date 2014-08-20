@@ -176,6 +176,7 @@ SETUP_TEARDOWN_NOLOGIN
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
+    expectedHeaderFields[@"Accept"] = @"application/json";
     expectedHeaderFields[@"Content-Type"] = @"application/json; charset=UTF-8";
 
     urlBinding.serviceAdapter = adapter;
@@ -212,6 +213,7 @@ SETUP_TEARDOWN_NOLOGIN
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
+    expectedHeaderFields[@"Accept"] = @"application/json";
     expectedHeaderFields[@"Content-Type"] = @"application/json; charset=UTF-8";
     NSTimeInterval expectedTimeInterval = adapter.defaultTimeout;
 
@@ -250,6 +252,7 @@ SETUP_TEARDOWN_NOLOGIN
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"PUT";
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
+    expectedHeaderFields[@"Accept"] = @"application/json";
     expectedHeaderFields[@"Content-Type"] = @"application/json; charset=UTF-8";
     NSTimeInterval expectedTimeInterval = adapter.defaultTimeout;
 
@@ -287,6 +290,7 @@ SETUP_TEARDOWN_NOLOGIN
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
+    expectedHeaderFields[@"Accept"] = @"application/json";
     expectedHeaderFields[@"Content-Type"] = @"application/json; charset=UTF-8";
     expectedHeaderFields[@"X-Test"] = @"My Test";
     NSTimeInterval expectedTimeInterval = adapter.defaultTimeout;
@@ -327,6 +331,7 @@ SETUP_TEARDOWN_NOLOGIN
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
+    expectedHeaderFields[@"Accept"] = @"application/json";
     expectedHeaderFields[@"Content-Type"] = @"application/json; charset=UTF-8";
     expectedHeaderFields[overrideKey] = @"My Test";
     NSTimeInterval expectedTimeInterval = adapter.defaultTimeout;
@@ -365,6 +370,7 @@ SETUP_TEARDOWN_NOLOGIN
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
+    expectedHeaderFields[@"Accept"] = @"application/json";
     expectedHeaderFields[@"Content-Type"] = @"My Test";
     NSTimeInterval expectedTimeInterval = adapter.defaultTimeout;
 
@@ -402,6 +408,7 @@ SETUP_TEARDOWN_NOLOGIN
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
+    expectedHeaderFields[@"Accept"] = @"application/json";
     expectedHeaderFields[@"Content-Type"] = @"application/x-www-form-urlencoded; charset=UTF-8";
     NSTimeInterval expectedTimeInterval = adapter.defaultTimeout;
 
@@ -439,6 +446,7 @@ SETUP_TEARDOWN_NOLOGIN
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
     NSMutableDictionary *expectedHeaderFields = [adapter.headerFields mutableCopy];
+    expectedHeaderFields[@"Accept"] = @"application/json";
     NSTimeInterval expectedTimeInterval = adapter.defaultTimeout;
 
     // Set overrides

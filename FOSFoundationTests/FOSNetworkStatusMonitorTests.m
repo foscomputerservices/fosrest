@@ -139,7 +139,7 @@ typedef void (^_FOSNSMNotificationHandler)(NSNotification *aNote);
     XCTAssertTrue(handlerCalled, @"Handler not called?");
     XCTAssertTrue([capturedKeyPath isEqualToString:@"networkStatus"], @"Wrong KVP!");
     XCTAssertTrue([capturedObject isKindOfClass:[FOSNetworkStatusMonitor class]], @"Wrong class! Expected FOSNetworkStatusMonitor, got: '%@'", NSStringFromClass([capturedObject class]));
-    XCTAssertEqual(capturedStatus, FOSNetworkStatusNotReachable, @"Wrong captured status. Expected %i got '%i'", FOSNetworkStatusNotReachable, capturedStatus);
+    XCTAssertEqual(capturedStatus, FOSNetworkStatusNotReachable, @"Wrong captured status. Expected %lu got '%lu'", (unsigned long)FOSNetworkStatusNotReachable, (unsigned long)capturedStatus);
 
     _kvpHandler = nil;
 }
@@ -166,12 +166,13 @@ typedef void (^_FOSNSMNotificationHandler)(NSNotification *aNote);
 
     // This should force offline and callback
     status.forceOffline = YES;
+    [status removeObserver:self forKeyPath:@"networkStatus"];
     [center removeObserver:self];
 
     XCTAssertTrue(status.networkStatus == FOSNetworkStatusNotReachable, @"Wrong start status");
     XCTAssertTrue(handlerCalled, @"Handler not called?");
     XCTAssertTrue([capturedNotification.object isKindOfClass:[FOSNetworkStatusMonitor class]], @"Wrong class! Expected FOSNetworkStatusMonitor, got: '%@'", NSStringFromClass([capturedNotification.object class]));
-    XCTAssertEqual(capturedStatus, FOSNetworkStatusNotReachable, @"Wrong captured status. Expected %i got '%i'", FOSNetworkStatusNotReachable, capturedStatus);
+    XCTAssertEqual(capturedStatus, FOSNetworkStatusNotReachable, @"Wrong captured status. Expected %lu got '%lu'", (unsigned long)FOSNetworkStatusNotReachable, (unsigned long)capturedStatus);
 
     _notificationHandler = nil;
 }
@@ -232,6 +233,7 @@ typedef void (^_FOSNSMNotificationHandler)(NSNotification *aNote);
 
     // This should force offline and callback
     status.forceOffline = NO;
+    [status removeObserver:self forKeyPath:@"networkStatus"];
     [center removeObserver:self];
 
     XCTAssertEqual(status.networkStatus, FOSNetworkStatusReachableViaWiFi, @"Wrong start status");

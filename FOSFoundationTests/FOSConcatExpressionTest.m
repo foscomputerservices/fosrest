@@ -94,7 +94,7 @@ SETUP_TEARDOWN_NOLOGIN
     XCTAssertNotNil(error, @"Bad error result, expected nil");
 }
 
-- (void)testMultipleNonExprExpression {
+- (void)testAutoConversionExprExpression {
     NSString *str1 = @"__test_string1";
     FOSConstantExpression *expr1 = [FOSConstantExpression constantExpressionWithValue:str1];
     NSNumber *num2 = @(2);
@@ -106,8 +106,8 @@ SETUP_TEARDOWN_NOLOGIN
     FOSConcatExpression *concatExpr = [FOSConcatExpression concatExpressionWithExpressions:exprs];
 
     NSError *error = nil;
-    XCTAssertNil([concatExpr evaluateWithContext:nil error:&error], @"Bad result");
-    XCTAssertNotNil(error, @"Bad error result, expected nil");
+    XCTAssertTrue([(NSString *)[concatExpr evaluateWithContext:nil error:&error] isEqualToString:@"__test_string12__test_string3"], @"Bad result");
+    XCTAssertNil(error, @"Error: %@", error.description);
 }
 
 @end
