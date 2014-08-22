@@ -161,7 +161,7 @@ extern NSString *FOSWebServiceServerErrorMessage;
         id<NSObject> jsonSuccess = batchRequestError == nil ? nextResponse[@"success"] : nil;
 
         if (jsonSuccess != nil) {
-            [nextRequest setOriginalJsonResult:jsonSuccess];
+            [nextRequest setOriginalJsonResult:jsonSuccess postProcessor:nil];
         }
         else {
             NSError *error = nil;

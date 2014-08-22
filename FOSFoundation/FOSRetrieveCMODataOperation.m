@@ -94,10 +94,11 @@
 
 #pragma mark - Method Overrides
 
-- (void)setOriginalJsonResult:(id<NSObject>)jsonResult {
+- (void)setOriginalJsonResult:(id<NSObject>)jsonResult
+                postProcessor:(FOSRequestPostProcessor)postProcessor {
     [self willChangeValueForKey:@"jsonId"];
 
-    [super setOriginalJsonResult:jsonResult];
+    [super setOriginalJsonResult:jsonResult postProcessor:postProcessor];
 
     [self didChangeValueForKey:@"jsonId"];
 }

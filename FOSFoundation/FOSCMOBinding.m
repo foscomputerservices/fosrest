@@ -450,9 +450,9 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
         }
 
         if (result == nil && *error == nil) {
-            NSString *msgFmt = @"Unwrapping using JSON_WRAPPER_KEY '%@' lead to an empty result. Using the original JSON %@";
-
-            FOSLogPedantic(msgFmt, wrapperKey, [json description]);
+//            NSString *msgFmt = @"Unwrapping using JSON_WRAPPER_KEY '%@' lead to an empty result. Using the original JSON %@";
+//
+//            FOSLogPedantic(msgFmt, wrapperKey, [json description]);
             result = json;
         }
     }

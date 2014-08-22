@@ -20,7 +20,8 @@
     }
 }
 
-- (void)setOriginalJsonResult:(id<NSObject>)originalJsonResult {
+- (void)setOriginalJsonResult:(id<NSObject>)originalJsonResult
+                postProcessor:(FOSRequestPostProcessor)postProcessor {
     @synchronized(self) {
 
         NSError *localError = nil;
@@ -47,6 +48,10 @@
             }
 
             [self didChangeValueForKey:@"jsonResult"];
+
+            if (postProcessor != nil) {
+                postProcessor(originalJsonResult, jsonResult);
+            }
 
             [self _setToFinished];
         }

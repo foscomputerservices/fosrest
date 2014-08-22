@@ -60,7 +60,7 @@
                                              userInfo:nil];
         }
 
-        [request setOriginalJsonResult:jsonResult];
+        [request setOriginalJsonResult:jsonResult postProcessor:nil];
     }
 }
 

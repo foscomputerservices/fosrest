@@ -25,47 +25,55 @@
     return  result;
 }
 
-- (void)setOriginalJsonResult:(id<NSObject>)jsonResult {
-    [super setOriginalJsonResult:jsonResult];
+- (void)setOriginalJsonResult:(id<NSObject>)jsonResult
+                postProcessor:(FOSRequestPostProcessor)postProcessor {
 
-    // NOTE:
-    //
-    // We need to capture user authentication information after we've authenticated
-    // with the server, but before the FOSRetrieveCMOOperation is run as the latter
-    // will potential recurse required deps, which may cause further server requests
-    // that need to be authenticated.  So we drop in an op to slide the fetched,
-    // but not saved, user instance into the login manager.
-    //
-    // It's a bit tricky, but we've kinda got a chicken & egg scenario here.
-    //
-    // A specific example is that the adapter binding might have HEADER_FIELDS
-    // specifications that retrieve properties off of the logged in user.  We
-    // cannot save the user yet, as not all required deps have been realized.
-    // However, in order to realize those deps, we need the user surfaced to the
-    // adapter bindings so that subsequent server requests can be made.
-
-    NSError *localError = nil;
+    __block FOSRetrieveLoginDataOperation *blockSelf = self;
 
     NSAssert(self.loginUser != nil, @"loginUser must be set!");
 
-    id<FOSRESTServiceAdapter> adapter = self.restAdapter;
-    FOSURLBinding *urlBindig =
-        [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogin
-                              forLifecycleStyle:nil
-                             forRelationship:nil
-                                   forEntity:self.loginUser.entity];
-    FOSCMOBinding *cmoBinding = urlBindig.cmoBinding;
+    [super setOriginalJsonResult:jsonResult postProcessor:^(id<NSObject> originalJson, id<NSObject> unwrappedJson) {
+        if (postProcessor != nil) {
+            postProcessor(originalJson, unwrappedJson);
+        }
 
-    [cmoBinding updateCMO:self.loginUser
-                 fromJSON:self.jsonResult
-        forLifecyclePhase:FOSLifecyclePhaseLogin
-                    error:&localError];
+        // NOTE:
+        //
+        // We need to capture user authentication information after we've authenticated
+        // with the server, but before the FOSRetrieveCMOOperation is run as the latter
+        // will potential recurse required deps, which may cause further server requests
+        // that need to be authenticated.  So we drop in an op to slide the fetched,
+        // but not saved, user instance into the login manager.
+        //
+        // It's a bit tricky, but we've kinda got a chicken & egg scenario here.
+        //
+        // A specific example is that the adapter binding might have HEADER_FIELDS
+        // specifications that retrieve properties off of the logged in user.  We
+        // cannot save the user yet, as not all required deps have been realized.
+        // However, in order to realize those deps, we need the user surfaced to the
+        // adapter bindings so that subsequent server requests can be made.
 
-    if (localError != nil) {
-        [self willChangeValueForKey:@"error"];
-        _error = localError;
-        [self didChangeValueForKey:@"error"];
-    }
+        NSError *localError = nil;
+
+        id<FOSRESTServiceAdapter> adapter = blockSelf.restAdapter;
+        FOSURLBinding *urlBindig =
+            [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogin
+                                  forLifecycleStyle:nil
+                                 forRelationship:nil
+                                       forEntity:blockSelf.loginUser.entity];
+        FOSCMOBinding *cmoBinding = urlBindig.cmoBinding;
+
+        [cmoBinding updateCMO:blockSelf.loginUser
+                     fromJSON:unwrappedJson
+            forLifecyclePhase:FOSLifecyclePhaseLogin
+                        error:&localError];
+
+        if (localError != nil) {
+            [blockSelf willChangeValueForKey:@"error"];
+            blockSelf->_error = localError;
+            [blockSelf didChangeValueForKey:@"error"];
+        }
+    }];
 }
 
 @end
