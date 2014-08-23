@@ -72,7 +72,7 @@
 
 %token<string> SHARED_BINDING_IDENTIFIER IDENTIFIER
 %token<string> STRING_LITERAL INTEGER_LITERAL STRING_CONSTANT
-%token SEP SEMI COLON COMMA LPAREN RPAREN LBRACE RBRACE DOT PLUS TIC
+%token SEP SEMI COLON COMMA LPAREN RPAREN LBRACE RBRACE DOT PLUS TIC PIPE
 %token ADAPTER URL_BINDINGS SHARED_BINDINGS
 %token URL_BINDING BASE_URL HEADER_FIELDS TIMEOUT_INTERVAL
 %token LIFECYCLE LIFECYCLE_STYLE REQUEST_METHOD REQUEST_FORMAT END_POINT END_POINT_PARAMETERS CMO_BINDING
@@ -295,12 +295,25 @@ url_binding
         }
 
         if (lifecyclePhase == FOSLifecyclePhaseRetrieveServerRecordRelationship) {
+
+            // Check the relationship matcher
             if (relationshipMatcher != nil) {
                 binding.relationshipMatcher = relationshipMatcher;
             }
             else {
                 yyerror("Missing RELATIONSHIPS specification.");
                 YYERROR;
+            }
+
+            // Check binding options
+            if (bindingOptions == FOSBindingOptionsNone) {
+                yyerror("Binding options must be specified for Lifecycle RETRIEVE_RELATIONSHIP.");
+                YYERROR;
+            }
+
+            // Default to unordered if order not specified
+            else if ((bindingOptions & (FOSBindingOptionsUnorderedRelationship | FOSBindingOptionsOrderedRelationship)) == FOSBindingOptionsNone) {
+                bindingOptions |= FOSBindingOptionsUnorderedRelationship;
             }
         }
 
@@ -389,7 +402,7 @@ binding_options
 
 binding_options_list
     : binding_option { $$ = $1; }
-    | binding_options_list binding_option { $$ |= $2; }
+    | binding_options_list PIPE binding_option { $$ |= $3; }
     ;
 
 binding_option

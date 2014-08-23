@@ -96,6 +96,21 @@
         context[@"RELDESC"] = relDesc;
     }
 
+    FOSBindingOptions bindingOptions = FOSBindingOptionsNone;
+
+    if (relDesc != nil) {
+        bindingOptions = relDesc.isToMany
+            ? FOSBindingOptionsOneToManyRelationship
+            : FOSBindingOptionsOneToOneRelationship;
+
+        if (relDesc.isOrdered) {
+            bindingOptions |= FOSBindingOptionsOrderedRelationship;
+        }
+        else {
+            bindingOptions |= FOSBindingOptionsUnorderedRelationship;
+        }
+    }
+
     for (FOSURLBinding *binding in self.urlBindings) {
         // Match the destination entity name, not the source for relationship bindings
         NSString *entityName = lifecyclePhase == FOSLifecyclePhaseRetrieveServerRecordRelationship
@@ -105,6 +120,7 @@
         if ((binding.entityMatcher == nil ||
             [binding.entityMatcher itemIsIncluded:entityName context:context]) &&
             binding.lifecyclePhase == lifecyclePhase &&
+            (binding.bindingOptions & bindingOptions) == bindingOptions &&
             [binding.lifecycleStyle itemIsIncluded:lifecycleStyle context:context] &&
             (relDesc == nil ||
              [binding.relationshipMatcher itemIsIncluded:relDesc.name context:context])) {

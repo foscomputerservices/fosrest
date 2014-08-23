@@ -39,7 +39,10 @@
         if ([user.entity.name isEqual:restUserEntity.name]) {
             _user = user;
 
-            [self addDependency:self._resolveUserRequest];
+            FOSOperation *resolveUserReq = self._resolveUserRequest;
+            if (_error == nil) {
+                [self addDependency:resolveUserReq];
+            }
         }
         else {
             NSString *msgFmt = @"FOSLoginOperation was initialized with a user of type %@, but the FOSRESTConfig specified %@ as the user type.";

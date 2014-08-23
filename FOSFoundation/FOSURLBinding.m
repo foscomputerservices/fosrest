@@ -215,7 +215,14 @@
 
     if (error != nil) { *error = nil; }
 
-    NSDictionary *context = @{ @"ENTITY" : destEntity, @"RELDESC": relDesc, @"OWNERID" :ownerId };
+    NSMutableDictionary *context = [@{ @"ENTITY" : destEntity, @"RELDESC": relDesc } mutableCopy];
+    if (relDesc.isToMany) {
+        context[@"OWNERID"] = ownerId;
+    }
+    else {
+        context[@"CMOID"] = ownerId;
+    }
+
     if (dslQuery != nil) {
         context = [context mutableCopy];
         ((NSMutableDictionary *)context)[@"DSLQUERY"] = dslQuery;

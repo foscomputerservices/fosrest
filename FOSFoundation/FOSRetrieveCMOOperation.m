@@ -23,6 +23,7 @@
     BOOL _finishedValidation;
     BOOL _finishedCleanup;
     BOOL _createdFaults;
+    BOOL _fastTracked;
     NSMutableDictionary *_bindings;
     FOSURLBinding *_urlBinding;
     FOSItemMatcher *_relationshipsToPull;
@@ -543,6 +544,7 @@
                     // Can we FAST-TRACK to an existing object and skip pulling down this instance?
                     if (blockSelf->_allowFastTrack) {
                         result = blockSelf->_managedObjectID;
+                        blockSelf->_fastTracked = YES;
 
                         if (result == nil) {
                             FOSCachedManagedObject *cmo = [[self class] cmoForEntity:blockSelf->_entity
@@ -646,7 +648,10 @@
                 _jsonId = jsonId;
             }
 
-            [self _resolveReferences];
+            // If we fast-tracked, there's no reason to resolve the references
+            if (!_fastTracked) {
+                [self _resolveReferences];
+            }
 
             // Queue subops, if we're already queued
             if (self.isQueued) {
@@ -687,7 +692,7 @@
 
     // In graph resolution cycles, we might get called more than once, so cut off more than
     // the 1st attempt.
-    if (!_finishedBinding && !self.isCancelled) {
+    if (!_fastTracked && !_finishedBinding && !self.isCancelled) {
 
         // Set at the beginning to skip cycles that might be triggered below
         _finishedBinding = YES;
