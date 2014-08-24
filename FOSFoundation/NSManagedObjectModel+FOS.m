@@ -64,7 +64,7 @@
         [logStr appendFormat:@"New Entity: %@ (%@) - ", newEntity.name,
          newEntity.superentity.name];
 
-        FOSLogDebug(@"%@", logStr);
+        FOSLogPedantic(@"%@", logStr);
     }
 
     // Clear the placeholder
@@ -78,12 +78,8 @@
 + (NSArray *)_orderedAndFilteredEntities:(NSArray *)models {
     NSArray *mergedEntities = [self _mergedEntities:models];
 
-    // Sort before filtering to get a true depth
-    NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"depth" ascending:NO];
-    NSArray *sortedEntities = [mergedEntities sortedArrayUsingDescriptors:@[ sortDesc ]];
-
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"isPlaceholder == NO"];
-    NSArray *filteredEntities = [sortedEntities filteredArrayUsingPredicate:pred];
+    NSArray *filteredEntities = [mergedEntities filteredArrayUsingPredicate:pred];
 
     return filteredEntities;
 }
@@ -114,8 +110,15 @@
 + (NSArray *)_mergedEntities:(NSArray *)models {
     NSMutableArray *result = [NSMutableArray array];
 
-    for (NSManagedObjectModel *model in models) {
-        for (NSEntityDescription *entity in model.entities) {
+    // Sort before filtering to get a true depth
+    NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"depth" ascending:NO];
+
+    // The order acheieved here is exactly upside down.  That is we need or process from the
+    // deepest level of the tree to the top.
+    for (NSManagedObjectModel *model in [[models reverseObjectEnumerator] allObjects]) {
+        NSArray *sortedEntities = [model.entities sortedArrayUsingDescriptors:@[ sortDesc ]];
+
+        for (NSEntityDescription *entity in sortedEntities) {
             [result addObject:entity];
         }
     }
@@ -156,7 +159,7 @@ static NSString *_placeholder;
 }
 
 - (NSUInteger)depth {
-    NSUInteger result = 0;
+    NSUInteger result = self.isPlaceholder ? 10 : 1;
     NSEntityDescription *parent = self.superentity;
 
     while (parent != nil) {
