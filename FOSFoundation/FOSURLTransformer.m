@@ -17,7 +17,7 @@
     return YES;
 }
 
-// Transform from WebService value to local value
+// Transform from local value to WebService value
 - (id)transformedValue:(NSURL *)localValue {
     NSData *result = nil;
 
@@ -28,7 +28,7 @@
     return result;
 }
 
-// Transform from local value to WebService value
+// Transform from WebService value to local value
 - (id)reverseTransformedValue:(id)webServiceValue {
     NSURL *result = nil;
 
