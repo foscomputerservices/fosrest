@@ -12,6 +12,16 @@
 
 @interface FOSCacheManager (CoreData)
 
+/*!
+ * @method shouldSkipServerDeletionOfId:
+ *
+ * Reports as to whether the CMO with the given FOSJsonId is marked as being
+ * skipped for deletion on the next sync pass.
+ */
+- (BOOL)shouldSkipServerDeletionOfId:(FOSJsonId)jsonId;
+
+- (void)skipServerDeletetionForId:(FOSJsonId)jsonId;
+
 - (void)processOutstandingDeleteRequests;
 - (void)registerMOC:(FOSManagedObjectContext *)moc;
 - (void)unregisterMOC:(FOSManagedObjectContext *)moc;

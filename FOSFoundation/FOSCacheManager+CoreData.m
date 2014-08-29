@@ -28,6 +28,24 @@
                     object:moc];
 }
 
+- (BOOL)shouldSkipServerDeletionOfId:(FOSJsonId)jsonId {
+    BOOL result = NO;
+
+    if (_skipServerDeletionIds != nil) {
+        result = [_skipServerDeletionIds containsObject:jsonId];
+    }
+
+    return result;
+}
+
+- (void)skipServerDeletetionForId:(FOSJsonId)jsonId {
+    if (_skipServerDeletionIds == nil) {
+        _skipServerDeletionIds = [NSMutableSet set];
+    }
+
+    [_skipServerDeletionIds addObject:jsonId];
+}
+
 - (void)processOutstandingDeleteRequests {
     NSArray *outstandingDeletions = [_restConfig.databaseManager fetchEntitiesNamed:@"FOSDeletedObject"];
 
@@ -198,14 +216,17 @@
         for (id nextDelete in deletedObjects) {
             if ([nextDelete isKindOfClass:[FOSCachedManagedObject class]]) {
                 FOSCachedManagedObject *deletedCMO = (FOSCachedManagedObject *)nextDelete;
+                FOSJsonId delJsonId = deletedCMO.jsonIdValue;
 
-                if (deletedCMO.hasBeenUploadedToServer && !deletedCMO.skipServerDeleteTree) {
+                if (deletedCMO.hasBeenUploadedToServer && !deletedCMO.skipServerDelete) {
                     // We do *not* want to create objects in the main thread moc as the user
                     // has full control to save/rollback/modify/etc the main thread moc.  So,
                     // we store up the requests in an array and create a background operation
                     // that will create them in a separate moc.
                     [queuedDeletedObjects addObject:nextDelete];
                 }
+
+                [_skipServerDeletionIds removeObject:delJsonId];
             }
         }
 

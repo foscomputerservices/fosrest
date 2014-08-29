@@ -92,14 +92,6 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  */
 @property (nonatomic, readonly) FOSCachedManagedObject *owner;
 
-/*!
- * @property skipServerDeleteTree
- *
- * Checks the entire parent tree of the receiver to determine if
- * the receiver should be skipped.  See skipServerDelete.
- */
-@property (nonatomic, readonly) BOOL skipServerDeleteTree;
-
 #pragma mark - Class methods
 
 + (BOOL)idIsInDatabase:(FOSJsonId)jsonId;

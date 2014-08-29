@@ -8,6 +8,7 @@
 
 #import "FOSCachedManagedObject.h"
 #import "FOSCachedManagedObject+FOS_Internal.h"
+#import "FOSCacheManager+CoreData.h"
 #import "FOSModifiedProperty.h"
 #import "FOSRESTConfig.h"
 #import "FOSOperationQueue.h"
@@ -41,7 +42,6 @@ static NSMutableDictionary *_processingFaults = nil;
 @dynamic isLocalOnly;
 @dynamic isSendOnly;
 @dynamic originalJsonData;
-@dynamic skipServerDelete;
 
 @synthesize isDirty;
 
@@ -132,15 +132,40 @@ static NSMutableDictionary *_processingFaults = nil;
     return nil;
 }
 
-- (BOOL)skipServerDeleteTree {
-    __block BOOL result = self.skipServerDelete;
+- (BOOL)skipServerDelete {
+    FOSRESTConfig *restConfig = [FOSRESTConfig sharedInstance];
+    FOSCacheManager *cacheMgr = restConfig.cacheManager;
 
-    // Check parent hierarchy
-    if (!result) {
-        result = self.owner.skipServerDelete;
+    return [cacheMgr shouldSkipServerDeletionOfId:self.jsonIdValue];
+}
+
+- (void)setSkipServerDelete:(BOOL)skipServerDelete {
+    FOSRESTConfig *restConfig = [FOSRESTConfig sharedInstance];
+    FOSCacheManager *cacheMgr = restConfig.cacheManager;
+
+    // Changes made to an NSManagedObject that is scheduled for
+    // deletion are not saved and so we need a side-band mechanism.
+    [cacheMgr skipServerDeletetionForId:self.jsonIdValue];
+    [self _setSkipServerDeleteTree];
+}
+
+- (void)_setSkipServerDeleteTree {
+    for (NSRelationshipDescription *relDesc in self.entity.cmoRelationships) {
+        // Do we own this/these child/children?
+        if (relDesc.isOwnershipRelationship) {
+            if (!relDesc.isToMany) {
+                FOSCachedManagedObject *childCMO = [self primitiveValueForKey:relDesc.name];
+                childCMO.skipServerDelete = YES;
+            }
+            else {
+                id<NSFastEnumeration> children = [self primitiveValueForKey:relDesc.name];
+
+                for (FOSCachedManagedObject *childCMO in children) {
+                    childCMO.skipServerDelete = YES;
+                }
+            }
+        }
     }
-
-    return result;
 }
 
 - (FOSCachedManagedObject *)owner {
