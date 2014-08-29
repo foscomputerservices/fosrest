@@ -103,8 +103,7 @@
 
 + (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
                               withJsonId:(FOSJsonId)jsonId
-                            fromBindings:(NSDictionary *)bindings
-               respectingPreviousLookups:(BOOL)respectPrevious {
+                            fromBindings:(NSMutableDictionary *)bindings {
     NSParameterAssert(entity != nil);
     NSParameterAssert(jsonId != nil);
     NSParameterAssert(bindings != nil);
@@ -114,16 +113,16 @@
 
     id bindingVal = [self _bindingValueForKey:jsonId entity:entity inBindings:bindings];
 
-    if ([bindingVal isKindOfClass:[NSNull class]]) {
-        bindingVal = nil;
-    }
-
     if ([bindingVal isKindOfClass:[NSManagedObjectID class]]) {
         result = (FOSCachedManagedObject *)[moc objectWithID:(NSManagedObjectID *)bindingVal];
     }
-    else if (bindingVal == nil && !respectPrevious) {
+    else if (bindingVal == nil) {
         Class class = NSClassFromString(entity.managedObjectClassName);
         result = [class fetchWithId:jsonId];
+
+        if (result != nil) {
+            bindings[jsonId] = result.objectID;
+        }
     }
 
     // This is expensive, so don't let it out into any other build types
@@ -146,8 +145,7 @@
 
 - (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
                                 withJson:(id<NSObject>)json
-                            fromBindings:(NSDictionary *)bindings
-               respectingPreviousLookups:(BOOL)respectPrevious {
+                            fromBindings:(NSMutableDictionary *)bindings {
 
     NSParameterAssert(entity != nil);
     NSParameterAssert(json != nil);
@@ -163,8 +161,7 @@
     if (localError == nil) {
         result = [[self class] cmoForEntity:entity
                                  withJsonId:jsonId
-                               fromBindings:bindings
-                  respectingPreviousLookups:respectPrevious];
+                               fromBindings:bindings];
 
         // We didn't find using the jsonId, is there a local object that has all of the
         // same values for all other fields other than the id?  This can happen if
@@ -442,8 +439,7 @@
                     // this entry.
                     FOSCachedManagedObject *cmo = [self cmoForEntity:_entity
                                                             withJson:json
-                                                        fromBindings:_bindings
-                                           respectingPreviousLookups:NO];
+                                                        fromBindings:_bindings];
                     _managedObjectID = cmo.objectID;
                     if (_managedObjectID != nil) {
 
@@ -549,8 +545,7 @@
                         if (result == nil) {
                             FOSCachedManagedObject *cmo = [[self class] cmoForEntity:blockSelf->_entity
                                                                           withJsonId:jsonId
-                                                                        fromBindings:blockSelf->_bindings
-                                                           respectingPreviousLookups:NO];
+                                                                        fromBindings:blockSelf->_bindings];
 
                             if (cmo != nil) {
                                 result = cmo.objectID;
@@ -1093,8 +1088,7 @@
                 if (localJsonId == nil) {
                     cmo = [[self class] cmoForEntity:entity
                                           withJsonId:jsonId
-                                        fromBindings:bindings
-                           respectingPreviousLookups:NO];
+                                        fromBindings:bindings];
                 }
                 else {
                     NSAssert([localJsonId isEqual:jsonId], @"Why are these different???");
@@ -1104,8 +1098,7 @@
                     // "data equality".
                     cmo = [self cmoForEntity:entity
                                     withJson:json
-                                fromBindings:bindings
-                   respectingPreviousLookups:NO];
+                                fromBindings:bindings];
                 }
             }
         }
@@ -1115,6 +1108,8 @@
             if (cmo == nil) {
                 cmo = [[managedClass alloc] initSkippingReadOnlyCheck];
                 [cmo setJsonIdValue:jsonId];
+
+                bindings[jsonId] = cmo.objectID;
             }
 
             // Store the json

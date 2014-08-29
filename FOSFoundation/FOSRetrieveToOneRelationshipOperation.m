@@ -127,8 +127,7 @@
                 if (localError == nil && childId != nil) {
                     childObj = [FOSRetrieveCMOOperation cmoForEntity:childEntity
                                                           withJsonId:childId
-                                                        fromBindings:_bindings
-                                           respectingPreviousLookups:NO];
+                                                        fromBindings:_bindings];
                 }
                 else {
                     _error = localError;

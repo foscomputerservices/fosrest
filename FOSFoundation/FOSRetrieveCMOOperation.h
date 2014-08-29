@@ -42,13 +42,11 @@
 
 + (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
                               withJsonId:(FOSJsonId)jsonId
-                            fromBindings:(NSDictionary *)bindings
-               respectingPreviousLookups:(BOOL)respectPrevious;
+                            fromBindings:(NSMutableDictionary *)bindings;
 
 - (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
                                 withJson:(id<NSObject>)json
-                            fromBindings:(NSDictionary *)bindings
-               respectingPreviousLookups:(BOOL)respectPrevious;
+                            fromBindings:(NSMutableDictionary *)bindings;
 
 #pragma mark - Initialization Methods
 
