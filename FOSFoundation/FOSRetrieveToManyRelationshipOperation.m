@@ -176,7 +176,7 @@
                     // It's possible that there were lower-level binding issues, so we need to check
                     if (nextCMO != nil) {
 
-#ifndef CONFIGURATION_Debug
+#if !defined(CONFIGURATION_Debug) && !defined(NS_BLOCK_ASSERTIONS)
                         Class destClass = NSClassFromString(_relationship.destinationEntity.managedObjectClassName);
 
                         NSAssert([nextCMO isKindOfClass:destClass], @"Received type %@, expected %@.",
