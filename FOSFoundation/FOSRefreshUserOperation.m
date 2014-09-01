@@ -9,9 +9,7 @@
 #import "FOSRefreshUserOperation.h"
 #import "FOSCacheManager.h"
 
-@implementation FOSRefreshUserOperation {
-    NSError *_error;
-}
+@implementation FOSRefreshUserOperation
 
 + (instancetype)refreshUserOperation {
     return [[self alloc] init];

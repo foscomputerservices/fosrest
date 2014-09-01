@@ -16,7 +16,6 @@
     FOSRetrieveCMOOperation *__fetchUserRequest;
 
     __block FOSUser *_loggedInUser;
-    __block NSError *_error;
 }
 
 #pragma mark - Class methods

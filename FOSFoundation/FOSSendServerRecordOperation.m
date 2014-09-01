@@ -16,7 +16,6 @@
     BOOL _isLoginUserRecord;
     __block FOSURLBinding *_urlBinding;
     __block FOSWebServiceRequest *_webServiceRequest;
-    __block NSError *_error;
 }
 
 #pragma mark - Property Overrides
@@ -30,16 +29,6 @@
 
     NSAssert(result != nil, @"No cmo???");
     NSAssert([result isKindOfClass:[FOSCachedManagedObject class]], @"Wrong class??");
-
-    return result;
-}
-
-- (NSError *)error {
-    NSError *result = _error;
-
-    if (result == nil) {
-        result = [super error];
-    }
 
     return result;
 }

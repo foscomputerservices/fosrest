@@ -10,7 +10,6 @@
 
 @implementation FOSAtomicCreateServerRecordOperation {
     FOSWebServiceRequest *_webRequest;
-    NSError *_error;
 }
 
 #pragma mark - Properties
@@ -80,16 +79,6 @@
 }
 
 #pragma mark - Method Overrides
-
-- (NSError *)error {
-    NSError *result = _error;
-
-    if (result == nil) {
-        result = [super error];
-    }
-
-    return result;
-}
 
 - (void)main {
     [super main];

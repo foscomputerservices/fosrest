@@ -22,6 +22,7 @@
     BOOL _registeredFinishedDependentOperations;
     BOOL _registeredIsFinished;
     BOOL _cancelled;
+    NSError *_dependentError;
 }
 
 - (FOSBeginOperation *)beginOperation {
@@ -64,13 +65,10 @@
     return result;
 }
 
+#define new
+#ifdef old
 - (NSError *)error {
-    NSError *result =
-#ifdef CONFIGURATION_Debug
-    _testError;
-#else
-    nil;
-#endif
+    NSError *result = _error;
 
     if (result == nil) {
         @autoreleasepool {
@@ -93,6 +91,51 @@
 
     return result;
 }
+#endif
+
+#ifdef new
+- (NSError *)error {
+    NSError *result = _error;
+
+    if (result == nil && !_ignoreDependentErrors) {
+        // Have any of our depdencies recorded errors?
+        result = _dependentError;
+
+        // Once we're finished, make one more pass up the tree and record
+        // the error status.  Remembering the finished pass allows us
+        // to quickly return nil once we've verified that our dependencies
+        // had no errors.
+        BOOL localFinished = self.isFinished;
+        if (result == nil && (!localFinished || !_finishedErrorPass)) {
+            @autoreleasepool {
+
+                // Determine if any of our dependencies (or their deps) have errors
+                for (NSOperation *depOp in self.dependencies) {
+                    if ([depOp isKindOfClass:[FOSOperation class]]) {
+                        _dependentError = ((FOSOperation *)depOp).error;
+                    }
+
+                    // Stop when we reach the top of our tree
+                    if ([depOp isKindOfClass:[FOSBeginOperation class]]) {
+                        break;
+                    }
+
+                    if (_dependentError != nil) {
+                        break;
+                    }
+                }
+
+                // Remember this is our final pass, if we're finished
+                _finishedErrorPass = localFinished;
+
+                result = _dependentError;
+            }
+        }
+    }
+    
+    return result;
+}
+#endif
 
 - (BOOL)isCancelled {
     BOOL result = _cancelled;

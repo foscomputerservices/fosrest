@@ -370,16 +370,6 @@
 
 #pragma mark - FOSOperation Overrides
 
-- (NSError *)error {
-    NSError *error = _error;
-
-    if (error == nil) {
-        error = super.error;
-    }
-
-    return error;
-}
-
 - (BOOL)isPullOperation {
     return (self.requestMethod == FOSRequestMethodGET);
 }

@@ -8,9 +8,7 @@
 
 #import "FOSStaticTableSearchOperation.h"
 
-@implementation FOSStaticTableSearchOperation {
-    NSError *_error;
-}
+@implementation FOSStaticTableSearchOperation
 
 #pragma mark - Overrides
 
@@ -18,16 +16,6 @@
     NSAssert(_staticTableClass != NULL, @"staticTableClass must be assigned!");
 
     return _staticTableClass;
-}
-
-- (NSError *)error {
-    NSError *result = _error;
-
-    if (result == nil) {
-        result = [super error];
-    }
-
-    return result;
 }
 
 - (NSSet *)dependentSearchOperations {

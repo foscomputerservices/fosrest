@@ -15,9 +15,10 @@
 @protected
     BOOL _mainCalled;
 
-#ifdef CONFIGURATION_Debug
-    NSError *_testError;
-#endif
+    // TODO: These variables should be formalized!
+    __block BOOL _ignoreDependentErrors;
+    __block BOOL _finishedErrorPass;
+    __block NSError *_error;
 }
 
 /*!

@@ -12,8 +12,6 @@
 #import "NSRelationshipDescription+FOS_Internal.h"
 
 @implementation FOSRetrieveToOneRelationshipOperation {
-    __block NSError *_error;
-    BOOL _ignoreDependentErrors;
     FOSRetrieveCMOOperation *_fetchRelatedEntityOp;
     BOOL *_relAlreadyProcessing;
     NSMutableDictionary *_bindings;
@@ -33,16 +31,6 @@
                                   jsonFragment:jsonFragment
                                   withBindings:bindings
                            andParentCMOBinding:parentCMOBinding];
-}
-
-- (NSError *)error {
-    NSError *result = _error;
-
-    if (result == nil && !_ignoreDependentErrors) {
-        result = [super error];
-    }
-
-    return result;
 }
 
 - (id)initToOneRelationship:(NSRelationshipDescription *)relDesc

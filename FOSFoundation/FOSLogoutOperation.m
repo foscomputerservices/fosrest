@@ -11,9 +11,7 @@
 #import "FOSLoginManager_Internal.h"
 #import "FOSFlushCachesOperation.h"
 
-@implementation FOSLogoutOperation {
-    NSError *_error;
-}
+@implementation FOSLogoutOperation
 
 #pragma mark - Class methods
 
@@ -30,16 +28,6 @@
 }
 
 #pragma mark - Overrides
-
-- (NSError *)error {
-    NSError *result = _error;
-
-    if (result == nil) {
-        result = [super error];
-    }
-
-    return result;
-}
 
 - (void)main {
 

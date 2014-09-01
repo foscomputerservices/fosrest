@@ -12,8 +12,6 @@
 
 @implementation FOSRetrieveToManyRelationshipOperation {
     NSMutableSet *_childRetrieveCMOOps;
-    BOOL _ignoreDependentErrors;
-    NSError *_error;
     FOSCMOBinding *_parentCMOBinding;
     BOOL _mergeResults;
 }
@@ -178,7 +176,7 @@
                     // It's possible that there were lower-level binding issues, so we need to check
                     if (nextCMO != nil) {
 
-#ifndef NS_BLOCK_ASSERTIONS
+#ifndef CONFIGURATION_Debug
                         Class destClass = NSClassFromString(_relationship.destinationEntity.managedObjectClassName);
 
                         NSAssert([nextCMO isKindOfClass:destClass], @"Received type %@, expected %@.",
@@ -285,16 +283,6 @@
 }
 
 #pragma mark - Overrides
-
-- (NSError *)error {
-    NSError *result = _error;
-
-    if (!_ignoreDependentErrors && result == nil) {
-        result = [super error];
-    }
-
-    return result;
-}
 
 - (BOOL)isCancelled {
 

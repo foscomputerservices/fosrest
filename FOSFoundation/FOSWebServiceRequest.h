@@ -31,7 +31,6 @@ typedef NS_ENUM(NSUInteger, FOSWSRequestState) {
 
 @interface FOSWebServiceRequest : FOSOperation {
     @protected
-        NSError *_error;
         id<NSObject> _jsonResult;
         id<NSObject> _originalJsonResult;
         FOSWSRequestState _requestState;

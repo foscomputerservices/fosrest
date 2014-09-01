@@ -16,7 +16,6 @@
     BOOL _ready;
     NSArray *_toOneOps;
     NSArray *_toManyOps;
-    NSError *_error;
     NSError *_validationError;
     BOOL _finishedBinding;
     BOOL _finishedOrdering;
@@ -469,14 +468,11 @@
 #pragma mark - Property Overrides
 
 - (NSError *)error {
-    NSError *result = _error;
-    if (result == nil) {
-        result = [super error];
-    }
+    NSError *result = [super error];
 
     // FOSFetchEntityOperation_ItemDeletedLocally is a cancellation, not an error. Don't
     // let it escape.
-    else if ([result.domain isEqualToString:@"FOSFetchEntityOperation_ItemDeletedLocally"]) {
+    if (result != nil && [result.domain isEqualToString:@"FOSFetchEntityOperation_ItemDeletedLocally"]) {
         result = nil;
     }
 
@@ -685,6 +681,8 @@
 - (void)finishBinding {
     NSAssert(_managedObjectID != nil, @"Haven't finished loading the object yet???");
 
+    _finishedErrorPass = NO;
+
     // In graph resolution cycles, we might get called more than once, so cut off more than
     // the 1st attempt.
     if (!_fastTracked && !_finishedBinding && !self.isCancelled) {
@@ -748,6 +746,8 @@
 }
 
 - (void)finishOrdering {
+
+    _finishedErrorPass = NO;
 
     if (!_finishedOrdering && !self.isCancelled) {
         _finishedOrdering = YES;
@@ -819,6 +819,8 @@
 - (NSError *)finishValidation {
     NSError *localError = nil;
 
+    _finishedErrorPass = NO;
+
     // Our subtree should now be valid
     if (!_finishedValidation && !self.isCancelled) {
         _finishedValidation = YES;
@@ -851,6 +853,8 @@
 }
 
 - (void)finishCleanup:(BOOL)forceDestroy {
+    _finishedErrorPass = NO;
+
     if (!_finishedCleanup) {
         _finishedCleanup = YES;
 

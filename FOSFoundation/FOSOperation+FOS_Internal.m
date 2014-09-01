@@ -94,7 +94,7 @@
 @implementation FOSOperation (Testing)
 
 - (void)setError:(NSError *)error {
-    _testError = error;
+    _error = error;
 }
 
 @end

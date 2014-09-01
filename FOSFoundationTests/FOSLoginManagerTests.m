@@ -252,7 +252,7 @@
     FOSLoginManager *lm = [FOSRESTConfig sharedInstance].loginManager;
     [lm loginUser:user loginStyle:nil handler:^(BOOL succeeded, NSError *error) {
         XCTAssertTrue([NSThread isMainThread], @"Wrong thread!");
-        XCTAssertTrue(succeeded, @"Failed succeeded???");
+        XCTAssertTrue(succeeded, @"We should still have logged in, even though we didn't get all of our data.");
 
         END_TEST
     }];

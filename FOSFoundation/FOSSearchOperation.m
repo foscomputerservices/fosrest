@@ -15,7 +15,6 @@
 
 @implementation FOSSearchOperation {
     FOSCacheSearchHandler _searchHandler;
-    NSError *_error;
     BOOL _pullObjectsToForeground;
 }
 

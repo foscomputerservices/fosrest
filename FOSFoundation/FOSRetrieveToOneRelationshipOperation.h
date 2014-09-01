@@ -10,7 +10,6 @@
 
 @property (nonatomic, readonly) NSRelationshipDescription *relationship;
 @property (nonatomic, readonly) id<NSObject>jsonFragment;
-@property (nonatomic, readonly) NSError *error;
 
 + (instancetype)fetchToOneRelationship:(NSRelationshipDescription *)relDesc
                           jsonFragment:(id<NSObject>)jsonFragment

@@ -10,7 +10,6 @@
 #import "FOSWebServiceRequest+FOS_Internal.h"
 
 @implementation FOSRetrieveCMODataOperation {
-    NSError *_error;
     FOSJsonId _jsonId;
 }
 
@@ -101,16 +100,6 @@
     [super setOriginalJsonResult:jsonResult postProcessor:postProcessor];
 
     [self didChangeValueForKey:@"jsonId"];
-}
-
-- (NSError *)error {
-    NSError *result = _error;
-
-    if (result == nil) {
-        result = [super error];
-    }
-
-    return result;
 }
 
 @end
