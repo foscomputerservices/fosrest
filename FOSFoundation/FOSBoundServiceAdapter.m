@@ -209,6 +209,7 @@
     if (error != nil) { *error = nil; }
 
     id result = cmoValue;
+    NSError *localError = nil;
 
     if (cmoValue == nil || [cmoValue isKindOfClass:[NSNull class]]) {
         result = [NSNull null];
@@ -219,27 +220,41 @@
             NSValueTransformer *transformer =
                 [NSValueTransformer valueTransformerForName:attrDesc.valueTransformerName];
 
-            Class xFormClass = [[transformer class] transformedValueClass];
+            if (transformer == nil) {
+                NSString *msgFmt = NSLocalizedString(@"Unable to locate an NSValueTransformer of type '%@' as specified by the NSAttributeDescription '%@' of Entity '%@'.", "");
+                NSString *msg = [NSString stringWithFormat:msgFmt, attrDesc.valueTransformerName,
+                                 attrDesc.name, attrDesc.entity.name];
 
-            if (![xFormClass isSubclassOfClass:[NSData class]] &&
-                ![xFormClass isSubclassOfClass:[NSString class]]) {
-                NSString *msg = NSLocalizedString(@"The NSValueTransformer '%@' must transform to/from an NSData or NSString instance (found %@) on attribute '%@' of entity '%@'.", @"FOSBad_Transformer");
-
-                [NSException raise:@"FOSBad_Transformer" format:msg,
-                 NSStringFromClass([transformer class]),
-                 NSStringFromClass([[transformer class] transformedValueClass]),
-                 attrDesc.name, attrDesc.entity.name];
+                localError = [NSError errorWithMessage:msg];
             }
 
-            if ([xFormClass isSubclassOfClass:[NSData class]]) {
-                NSData *data = [transformer transformedValue:cmoValue];
+            if (localError == nil) {
+                Class xFormClass = [[transformer class] transformedValueClass];
 
-                NSString *base64ByteString = [data base64EncodedString];
+                if (![xFormClass isSubclassOfClass:[NSData class]] &&
+                    ![xFormClass isSubclassOfClass:[NSString class]]) {
+                    NSString *msgFmt = NSLocalizedString(@"The NSValueTransformer '%@' must transform to/from an NSData or NSString instance (found %@) on attribute '%@' of entity '%@'.", @"FOSBad_Transformer");
 
-                result = base64ByteString;
-            }
-            else {
-                result = [transformer transformedValue:cmoValue];
+                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                     NSStringFromClass([transformer class]),
+                                     NSStringFromClass([[transformer class] transformedValueClass]),
+                                     attrDesc.name, attrDesc.entity.name];
+
+                    localError = [NSError errorWithMessage:msg];
+                }
+
+                if (localError == nil) {
+                    if ([xFormClass isSubclassOfClass:[NSData class]]) {
+                        NSData *data = [transformer transformedValue:cmoValue];
+
+                        NSString *base64ByteString = [data base64EncodedString];
+
+                        result = base64ByteString;
+                    }
+                    else {
+                        result = [transformer transformedValue:cmoValue];
+                    }
+                }
             }
         }
         else if ([result isKindOfClass:[NSDate class]]) {
@@ -250,6 +265,14 @@
         else {
             result = [FOSCachedManagedObject jsonValueForObject:cmoValue forAttribute:attrDesc];
         }
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+
+        result = nil;
     }
     
     return result;
