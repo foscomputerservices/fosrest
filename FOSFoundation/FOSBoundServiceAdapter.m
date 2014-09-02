@@ -13,7 +13,7 @@
     FOSAdapterBinding *_bindings;
     FOSNetworkStatusMonitor *_networkStatusMonitor;
     NSURL *_baseURL;
-    NSDateFormatter *__serverDateFormatter;
+    NSArray *__serverDateFormatters;
 }
 
 #pragma mark - Class Methods
@@ -32,7 +32,7 @@
     return [[self alloc] initFromBindingFile:url error:error];
 }
 
-+ (NSString *)serverDateFormat {
++ (NSArray *)serverDateFormats {
     NSString *msg = [NSString stringWithFormat:@"Concrete subclasses of FOSBoundServiceAdapter must override and implement %@.", NSStringFromSelector(_cmd)];
 
     @throw [NSException exceptionWithName:@"FOSFoundation_MustOverride"
@@ -245,7 +245,7 @@
         else if ([result isKindOfClass:[NSDate class]]) {
             NSDate *date = (NSDate *)cmoValue;
 
-            result = [self _jsonDateForDate:date];
+            result = [self _jsonDateForDate:date forAttribute:attrDesc error:error];
         }
         else {
             result = [FOSCachedManagedObject jsonValueForObject:cmoValue forAttribute:attrDesc];
@@ -275,7 +275,7 @@
             result = [transformer reverseTransformedValue:jsonValue];
         }
         else if (attrDesc.attributeType == NSDateAttributeType) {
-            NSDate *date = [self _dateForJsonDate:jsonValue];
+            NSDate *date = [self _dateForJsonDate:jsonValue forAttribute:attrDesc error:error];
 
             result = date;
         }
@@ -376,48 +376,131 @@
     return result;
 }
 
-- (id<NSObject>)_jsonDateForDate:(NSDate *)date {
-    NSDateFormatter *formatter = [self _serverDateFormatter];
+- (NSInteger)_formatIndexForAttribute:(NSAttributeDescription *)attrDesc error:(NSError **)error {
+    NSInteger result = -1;
+    NSError *localError = nil;
+    if (error != nil) { *error = nil; }
 
-    NSString *result = [formatter stringFromDate:date];
+    // We only need a dateFormatIndex if more than one format is available
+    if ([[self class] serverDateFormats].count > 1) {
+        NSString *indexStr = attrDesc.userInfo[@"dateFormatIndex"];
+        if (indexStr == nil) {
+            NSString *msgFmt = @"Attribute '%@' of Entity '%@' requires 'dateFormatIndex' to be specified in the userInfo to indicate which date formatter to use.";
+
+            NSString *msg = [NSString stringWithFormat:msgFmt, attrDesc.name, attrDesc.entity.name];
+
+            NSDictionary *userInfo = @{ @"serverDateFormats" : [[self class] serverDateFormats] };
+            localError = [NSError errorWithDomain:@"FOSBoundServicAdapter"
+                                          message:msg andUserInfo:userInfo];
+        }
+        else {
+            NSInteger indexNum = indexStr.integerValue;
+            NSInteger formatCount = (NSInteger)[[self class] serverDateFormats].count;
+
+            if (indexNum >= 0 && indexNum < formatCount) {
+                result = indexNum;
+            }
+            else {
+                NSString *msgFmt = @"Attribute '%@' of Entity '%@' specified an invalid index of %@.  Only indicies between 0 and %ul are allowed.";
+                NSString *msg = [NSString stringWithFormat:msgFmt, attrDesc.name, attrDesc.entity.name,
+                                 indexStr, formatCount - 1];
+
+                NSDictionary *userInfo = @{ @"serverDateFormats" : [[self class] serverDateFormats] };
+                localError = [NSError errorWithDomain:@"FOSBoundServicAdapter"
+                                              message:msg andUserInfo:userInfo];
+            }
+        }
+    }
+    else {
+        result = 0;
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+
+        result = -1;
+    }
 
     return result;
 }
 
-- (NSDate *)_dateForJsonDate:(id<NSObject>)jsonDate {
+- (NSDateFormatter *)_dateFormatterForAttribute:(NSAttributeDescription *)attrDesc error:(NSError **)error {
+    NSDateFormatter *result = nil;
+
+    NSInteger formatterIndex = [self _formatIndexForAttribute:attrDesc error:error];
+    if (formatterIndex >= 0) {
+        result = [self _serverDateFormatters][(NSUInteger)formatterIndex];
+    }
+
+    return result;
+}
+
+- (id<NSObject>)_jsonDateForDate:(NSDate *)date forAttribute:(NSAttributeDescription *)attrDesc error:(NSError **)error {
+    NSString *result = nil;
+    NSDateFormatter *formatter = [self _dateFormatterForAttribute:attrDesc error:error];
+
+    if (formatter != nil) {
+       result = [formatter stringFromDate:date];
+    }
+
+    return result;
+}
+
+- (NSDate *)_dateForJsonDate:(id<NSObject>)jsonDate forAttribute:(NSAttributeDescription *)attrDesc error:(NSError **)error {
     NSDate *result = nil;
+    NSError *localError = nil;
 
     if (jsonDate != nil) {
         if ([jsonDate isKindOfClass:[NSString class]]) {
-            NSDateFormatter *formatter = [self _serverDateFormatter];
 
-            NSString *jsonDateStr = (NSString *)jsonDate;
-
-            result = [formatter dateFromString:jsonDateStr];
+            NSDateFormatter *formatter = [self _dateFormatterForAttribute:attrDesc error:error];
+            if (formatter != nil) {
+                result = [formatter dateFromString:(NSString *)jsonDate];
+            }
         }
         else {
-            NSString *msgFmt = @"Error : Adapter received a jsonDate of type %@, expected NSString.";
+            NSString *msgFmt = @"Adapter received a jsonDate of type %@, expected NSString.";
             NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromClass([jsonDate class])];
 
-            NSException *e = [NSException exceptionWithName:@"FOSBadJSONDateType" reason:msg userInfo:nil];
-
-            @throw e;
+            localError = [NSError errorWithMessage:msg];
         }
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+
+        result = nil;
     }
 
     return result;
 }
 
-- (NSDateFormatter *)_serverDateFormatter {
+- (NSArray *)_serverDateFormatters {
+
     // Cache the instance according to Apple's documentation.
     // (see https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/DataFormatting/Articles/dfDateFormatting10_4.html)
-    if (__serverDateFormatter == nil) {
-        __serverDateFormatter = [[NSDateFormatter alloc] init];
-        __serverDateFormatter.dateFormat = [[self class] serverDateFormat];
-        __serverDateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+    if (__serverDateFormatters == nil) {
+
+        NSArray *formatStrings = [[self class] serverDateFormats];
+        NSMutableArray *formatters = [NSMutableArray arrayWithCapacity:formatStrings.count];
+
+        for (NSString *formatString in formatStrings) {
+
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = formatString;
+            dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+
+            [formatters addObject:dateFormatter];
+        }
+
+        __serverDateFormatters = formatters;
     }
 
-    return __serverDateFormatter;
+    return __serverDateFormatters;
 }
 
 @end
