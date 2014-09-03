@@ -235,6 +235,10 @@
 		6389977D18F8AA6B00E9DD90 /* FOSTwoWayRecordBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389977B18F8AA6B00E9DD90 /* FOSTwoWayRecordBinding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		638DDCF3193E741E00A77821 /* FOSRetrieveRelationshipUpdatesOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 638DDCF1193E741E00A77821 /* FOSRetrieveRelationshipUpdatesOperation.h */; };
 		638DDCF4193E741E00A77821 /* FOSRetrieveRelationshipUpdatesOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 638DDCF2193E741E00A77821 /* FOSRetrieveRelationshipUpdatesOperation.m */; };
+		638F13D719B78E6600AE7584 /* NSPropertyDescription+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 638F13D519B78E6600AE7584 /* NSPropertyDescription+FOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		638F13D819B78E6600AE7584 /* NSPropertyDescription+FOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 638F13D519B78E6600AE7584 /* NSPropertyDescription+FOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		638F13D919B78E6600AE7584 /* NSPropertyDescription+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 638F13D619B78E6600AE7584 /* NSPropertyDescription+FOS.m */; };
+		638F13DA19B78E6600AE7584 /* NSPropertyDescription+FOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 638F13D619B78E6600AE7584 /* NSPropertyDescription+FOS.m */; };
 		639077461693EC44006DC589 /* FOSRefreshUserOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 639077441693EC44006DC589 /* FOSRefreshUserOperation.h */; };
 		639077471693EC44006DC589 /* FOSRefreshUserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 639077451693EC44006DC589 /* FOSRefreshUserOperation.m */; };
 		6390776E169474F3006DC589 /* NSObject+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6390776D169474F3006DC589 /* NSObject+Tests.m */; };
@@ -718,6 +722,8 @@
 		6389977B18F8AA6B00E9DD90 /* FOSTwoWayRecordBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSTwoWayRecordBinding.h; sourceTree = "<group>"; };
 		638DDCF1193E741E00A77821 /* FOSRetrieveRelationshipUpdatesOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSRetrieveRelationshipUpdatesOperation.h; sourceTree = "<group>"; };
 		638DDCF2193E741E00A77821 /* FOSRetrieveRelationshipUpdatesOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSRetrieveRelationshipUpdatesOperation.m; sourceTree = "<group>"; };
+		638F13D519B78E6600AE7584 /* NSPropertyDescription+FOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPropertyDescription+FOS.h"; sourceTree = "<group>"; };
+		638F13D619B78E6600AE7584 /* NSPropertyDescription+FOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPropertyDescription+FOS.m"; sourceTree = "<group>"; };
 		639077441693EC44006DC589 /* FOSRefreshUserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSRefreshUserOperation.h; sourceTree = "<group>"; };
 		639077451693EC44006DC589 /* FOSRefreshUserOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSRefreshUserOperation.m; sourceTree = "<group>"; };
 		6390776C169474F3006DC589 /* NSObject+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Tests.h"; sourceTree = "<group>"; };
@@ -1410,10 +1416,10 @@
 				63247F28169B36EF00A729A2 /* NSData+Base64.m */,
 				63BFA3E31482815400FE1C0C /* NSDate+FOS.h */,
 				63BFA3E41482815400FE1C0C /* NSDate+FOS.m */,
-				63CCC1E6156D681900C45259 /* NSError+FOS.h */,
-				63CCC1E7156D681900C45259 /* NSError+FOS.m */,
 				6399F3C61938E04C001D48DD /* NSError+FOS_Internal.h */,
 				6399F3C71938E04C001D48DD /* NSError+FOS_Internal.m */,
+				63CCC1E6156D681900C45259 /* NSError+FOS.h */,
+				63CCC1E7156D681900C45259 /* NSError+FOS.m */,
 				63AA54571686B8F500F8F835 /* NSMutableDictionary+FOS.h */,
 				63AA54581686B8F500F8F835 /* NSMutableDictionary+FOS.m */,
 				637B861914AA546600776F5E /* NSMutableString+FOS.h */,
@@ -1512,20 +1518,22 @@
 		63E4B1BB1688FC0300253B1F /* Entity Model Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				63AA54511686B8F300F8F835 /* NSAttributeDescription+FOS.h */,
-				63AA54521686B8F300F8F835 /* NSAttributeDescription+FOS.m */,
 				633713701709E7F70081F1C8 /* NSAttributeDescription+FOS_Internal.h */,
 				633713711709E7F70081F1C8 /* NSAttributeDescription+FOS_Internal.m */,
-				63AA54551686B8F400F8F835 /* NSEntityDescription+FOS.h */,
-				63AA54561686B8F500F8F835 /* NSEntityDescription+FOS.m */,
+				63AA54511686B8F300F8F835 /* NSAttributeDescription+FOS.h */,
+				63AA54521686B8F300F8F835 /* NSAttributeDescription+FOS.m */,
 				632B53EF168DE1F2003AD474 /* NSEntityDescription+FOS_Internal.h */,
 				632B53F0168DE1F2003AD474 /* NSEntityDescription+FOS_Internal.m */,
-				63AA54591686B8F500F8F835 /* NSRelationshipDescription+FOS.h */,
-				63AA545A1686B8F500F8F835 /* NSRelationshipDescription+FOS.m */,
-				632B5425168E454B003AD474 /* NSRelationshipDescription+FOS_Internal.h */,
-				632B5426168E454B003AD474 /* NSRelationshipDescription+FOS_Internal.m */,
+				63AA54551686B8F400F8F835 /* NSEntityDescription+FOS.h */,
+				63AA54561686B8F500F8F835 /* NSEntityDescription+FOS.m */,
 				63157249190432420044CC90 /* NSManagedObjectModel+FOS.h */,
 				6315724A190432420044CC90 /* NSManagedObjectModel+FOS.m */,
+				638F13D519B78E6600AE7584 /* NSPropertyDescription+FOS.h */,
+				638F13D619B78E6600AE7584 /* NSPropertyDescription+FOS.m */,
+				632B5425168E454B003AD474 /* NSRelationshipDescription+FOS_Internal.h */,
+				632B5426168E454B003AD474 /* NSRelationshipDescription+FOS_Internal.m */,
+				63AA54591686B8F500F8F835 /* NSRelationshipDescription+FOS.h */,
+				63AA545A1686B8F500F8F835 /* NSRelationshipDescription+FOS.m */,
 			);
 			name = "Entity Model Extensions";
 			sourceTree = "<group>";
@@ -1670,6 +1678,7 @@
 				6384F7CF18F79E550038AEB7 /* FOSSendRelationshipOperation.h in Headers */,
 				63432DC217FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.h in Headers */,
 				63A313E916E5B59000DDE117 /* NSRelationshipDescription+FOS_Internal.h in Headers */,
+				638F13D819B78E6600AE7584 /* NSPropertyDescription+FOS.h in Headers */,
 				63A313EB16E5B59000DDE117 /* FOSLoginManager_Internal.h in Headers */,
 				6337555C18F79AAC006559B0 /* FOSSendToOneRelationshipOperation.h in Headers */,
 				63A313EF16E5B59000DDE117 /* FOSParseUser+FOS_Internal.h in Headers */,
@@ -1705,6 +1714,7 @@
 				633CECC618F87FCD00D12E4A /* FOSRelationshipBinding.h in Headers */,
 				632D497E194CED5D002E5049 /* FOSCacheManager+CoreData.h in Headers */,
 				63986F4718DEA64300D89CFD /* FOSSharedBindingReference.h in Headers */,
+				638F13D719B78E6600AE7584 /* NSPropertyDescription+FOS.h in Headers */,
 				637F42FC15507D5100E023FE /* FOSFoundation.h in Headers */,
 				63FD73DD18D39F3600DCD982 /* FOSParseServiceAdapter.h in Headers */,
 				6300F38D169621AA003D9E26 /* FOSParseUser.h in Headers */,
@@ -2073,6 +2083,7 @@
 				63A3137716E5B43D00DDE117 /* NSEntityDescription+FOS_Internal.m in Sources */,
 				6399F3D21938EEE8001D48DD /* FOSLog.m in Sources */,
 				63A3137916E5B43D00DDE117 /* NSRelationshipDescription+FOS.m in Sources */,
+				638F13DA19B78E6600AE7584 /* NSPropertyDescription+FOS.m in Sources */,
 				632D4981194CED5D002E5049 /* FOSCacheManager+CoreData.m in Sources */,
 				633CECC918F87FCD00D12E4A /* FOSRelationshipBinding.m in Sources */,
 				63A3137B16E5B43D00DDE117 /* NSRelationshipDescription+FOS_Internal.m in Sources */,
@@ -2219,6 +2230,7 @@
 				63C343D41686BBDB003D10B5 /* FOSLoginManager.m in Sources */,
 				6399F3CA1938E04C001D48DD /* NSError+FOS_Internal.m in Sources */,
 				63432DC317FE6B88009BE81C /* FOSAtomicCreateServerRecordOperation.m in Sources */,
+				638F13D919B78E6600AE7584 /* NSPropertyDescription+FOS.m in Sources */,
 				6384F7CA18F79E1C0038AEB7 /* FOSSendToManyRelationshipOperation.m in Sources */,
 				63C343D61686BBDB003D10B5 /* FOSOperation.m in Sources */,
 				63C343D81686BBDB003D10B5 /* FOSOperationQueue.m in Sources */,

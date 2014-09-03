@@ -204,4 +204,16 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
 
 @property (nonatomic, readonly) BOOL hasUserDefinedProperties;
 
+/*!
+ * @methodgroup Localization Properties
+ */
+
+/*!
+ * @property localizedName
+ *
+ * Returns the localized name for the receiver in the
+ * localizationDictionary associated with the recever's NSManagedObjectModel.
+ */
+@property (nonatomic, readonly) NSString *localizedName;
+
 @end

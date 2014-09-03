@@ -201,6 +201,24 @@
     return result;
 }
 
+#pragma mark - Localization Properties
+
+- (NSString *)localizedName {
+    NSString *result = nil;
+
+    NSManagedObjectModel *mom = self.managedObjectModel;
+    NSDictionary *locDict = mom.localizationDictionary;
+    NSString *dictKey = [NSString stringWithFormat:@"Entity/%@", self.name];
+
+    result = locDict[dictKey];
+
+    if (result == nil) {
+        FOSLogPedantic(@"Missing translation for entity: %@", self.name);
+    }
+
+    return result;
+}
+
 #pragma mark - Private methods
 
 - (NSString *)_bindPropertyForSelector:(SEL)aSel
