@@ -95,6 +95,11 @@
 #import <FOSFoundation/FOSRESTConfig.h>
 #import <FOSFoundation/FOSNetworkStatusMonitor.h>
 
+#pragma mark - Stock Transformers
+#import <FOSFoundation/FOSValueTransformer.h>
+#import <FOSFoundation/FOSJSONTransformer.h>
+#import <FOSFoundation/FOSURLTransformer.h>
+
 #pragma mark - Parse.com Support
 #import <FOSFoundation/FOSParseCachedManagedObject.h>
 #import <FOSFoundation/FOSParseUser.h>

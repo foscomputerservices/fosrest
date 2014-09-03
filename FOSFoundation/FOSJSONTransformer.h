@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FOSJSONTransformer : NSValueTransformer
+@interface FOSJSONTransformer : NSValueTransformer<FOSValueTransformer>
 
 @end

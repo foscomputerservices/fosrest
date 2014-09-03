@@ -8,6 +8,7 @@
 
 #import "FOSBoundServiceAdapter.h"
 #import "FOSAdapterBinding.h"
+#import "FOSValueTransformer.h"
 
 @implementation FOSBoundServiceAdapter {
     FOSAdapterBinding *_bindings;
@@ -228,33 +229,20 @@
                 localError = [NSError errorWithMessage:msg];
             }
 
-            if (localError == nil) {
-                Class xFormClass = [[transformer class] transformedValueClass];
+            if ([[transformer class] conformsToProtocol:@protocol(FOSValueTransformer)]) {
+                id<FOSValueTransformer> fosTransformer = (id<FOSValueTransformer>)transformer;
 
-                if (![xFormClass isSubclassOfClass:[NSData class]] &&
-                    ![xFormClass isSubclassOfClass:[NSString class]]) {
-                    NSString *msgFmt = NSLocalizedString(@"The NSValueTransformer '%@' must transform to/from an NSData or NSString instance (found %@) on attribute '%@' of entity '%@'.", @"FOSBad_Transformer");
+                result = [fosTransformer webServiceValueFromLocalValue:cmoValue
+                                                                 error:&localError];
+            }
+            else {
+                NSString *msgFmt = NSLocalizedString(@"The NSValueTransformer '%@' on attribute '%@' of entity '%@' must implement the FOSValueTransformer protocol.", @"FOSBad_Transformer");
 
-                    NSString *msg = [NSString stringWithFormat:msgFmt,
-                                     NSStringFromClass([transformer class]),
-                                     NSStringFromClass([[transformer class] transformedValueClass]),
-                                     attrDesc.name, attrDesc.entity.name];
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 NSStringFromClass([transformer class]),
+                                 attrDesc.name, attrDesc.entity.name];
 
-                    localError = [NSError errorWithMessage:msg];
-                }
-
-                if (localError == nil) {
-                    if ([xFormClass isSubclassOfClass:[NSData class]]) {
-                        NSData *data = [transformer transformedValue:cmoValue];
-
-                        NSString *base64ByteString = [data base64EncodedString];
-
-                        result = base64ByteString;
-                    }
-                    else {
-                        result = [transformer transformedValue:cmoValue];
-                    }
-                }
+                localError = [NSError errorWithMessage:msg];
             }
         }
         else if ([result isKindOfClass:[NSDate class]]) {
@@ -286,6 +274,7 @@
     if (error != nil) { *error = nil; }
 
     id result = jsonValue;
+    NSError *localError = nil;
 
     if ([jsonValue isKindOfClass:[NSNull class]]) {
         result = nil;
@@ -295,10 +284,24 @@
             NSValueTransformer *transformer =
                 [NSValueTransformer valueTransformerForName:attrDesc.valueTransformerName];
 
-            result = [transformer reverseTransformedValue:jsonValue];
+            if ([[transformer class] conformsToProtocol:@protocol(FOSValueTransformer)]) {
+                id<FOSValueTransformer> fosTransformer = (id<FOSValueTransformer>)transformer;
+
+                result = [fosTransformer localValueFromWebServiceValue:(NSString *)jsonValue
+                                                                 error:&localError];
+            }
+            else {
+                NSString *msgFmt = NSLocalizedString(@"The NSValueTransformer '%@' on attribute '%@' of entity '%@' must implement the FOSValueTransformer protocol.", @"FOSBad_Transformer");
+
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 NSStringFromClass([transformer class]),
+                                 attrDesc.name, attrDesc.entity.name];
+
+                localError = [NSError errorWithMessage:msg];
+            }
         }
         else if (attrDesc.attributeType == NSDateAttributeType) {
-            NSDate *date = [self _dateForJsonDate:jsonValue forAttribute:attrDesc error:error];
+            NSDate *date = [self _dateForJsonDate:jsonValue forAttribute:attrDesc error:&localError];
 
             result = date;
         }
@@ -307,6 +310,14 @@
 
             result = [data base64EncodedString];
         }
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+
+        result = nil;
     }
     
     return result;

@@ -200,12 +200,12 @@
 		6376C65A18D7BC100075FAE1 /* FOSVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 6376C65718D7BC100075FAE1 /* FOSVariableExpression.m */; };
 		6376C65B18D7BC100075FAE1 /* FOSVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 6376C65718D7BC100075FAE1 /* FOSVariableExpression.m */; };
 		6377914E192A69C800E42C89 /* FOSFoundation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6377914C192A69C800E42C89 /* FOSFoundation.xcdatamodeld */; };
-		637830C3197D7AF90025E587 /* FOSJSONTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 637830C1197D7AF90025E587 /* FOSJSONTransformer.h */; };
-		637830C4197D7AF90025E587 /* FOSJSONTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 637830C1197D7AF90025E587 /* FOSJSONTransformer.h */; };
+		637830C3197D7AF90025E587 /* FOSJSONTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 637830C1197D7AF90025E587 /* FOSJSONTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		637830C4197D7AF90025E587 /* FOSJSONTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 637830C1197D7AF90025E587 /* FOSJSONTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		637830C5197D7AF90025E587 /* FOSJSONTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 637830C2197D7AF90025E587 /* FOSJSONTransformer.m */; };
 		637830C6197D7AF90025E587 /* FOSJSONTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 637830C2197D7AF90025E587 /* FOSJSONTransformer.m */; };
-		637830C9197D7C8B0025E587 /* FOSURLTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 637830C7197D7C8B0025E587 /* FOSURLTransformer.h */; };
-		637830CA197D7C8B0025E587 /* FOSURLTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 637830C7197D7C8B0025E587 /* FOSURLTransformer.h */; };
+		637830C9197D7C8B0025E587 /* FOSURLTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 637830C7197D7C8B0025E587 /* FOSURLTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		637830CA197D7C8B0025E587 /* FOSURLTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 637830C7197D7C8B0025E587 /* FOSURLTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		637830CB197D7C8B0025E587 /* FOSURLTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 637830C8197D7C8B0025E587 /* FOSURLTransformer.m */; };
 		637830CC197D7C8B0025E587 /* FOSURLTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 637830C8197D7C8B0025E587 /* FOSURLTransformer.m */; };
 		637B7AE316C1B728007EBA92 /* Widget.m in Sources */ = {isa = PBXBuildFile; fileRef = 637B7AE216C1B728007EBA92 /* Widget.m */; };
@@ -454,6 +454,8 @@
 		63DE17101692539900F082CA /* FOSRetrieveToManyRelationshipOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63DE170E1692539900F082CA /* FOSRetrieveToManyRelationshipOperation.m */; };
 		63DE171716931B4D00F082CA /* FOSLoginOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 63DE171516931B4D00F082CA /* FOSLoginOperation.h */; };
 		63DE171816931B4D00F082CA /* FOSLoginOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63DE171616931B4D00F082CA /* FOSLoginOperation.m */; };
+		63DF756019B686C100E4E98C /* FOSValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 63DF755F19B67EF900E4E98C /* FOSValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63DF756119B686C300E4E98C /* FOSValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 63DF755F19B67EF900E4E98C /* FOSValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63E4651C168FAA9800E96C07 /* FOSParseCachedManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 63E46518168FAA9800E96C07 /* FOSParseCachedManagedObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63E4651D168FAA9800E96C07 /* FOSParseCachedManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E46519168FAA9800E96C07 /* FOSParseCachedManagedObject.m */; };
 		63E74E3F1708A99B00BD61FC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E74E3E1708A99B00BD61FC /* SystemConfiguration.framework */; };
@@ -825,6 +827,7 @@
 		63DE170E1692539900F082CA /* FOSRetrieveToManyRelationshipOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSRetrieveToManyRelationshipOperation.m; sourceTree = "<group>"; };
 		63DE171516931B4D00F082CA /* FOSLoginOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSLoginOperation.h; sourceTree = "<group>"; };
 		63DE171616931B4D00F082CA /* FOSLoginOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSLoginOperation.m; sourceTree = "<group>"; };
+		63DF755F19B67EF900E4E98C /* FOSValueTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FOSValueTransformer.h; sourceTree = "<group>"; };
 		63E46504168F930C00E96C07 /* FOSCachedManagedObject+FOS_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FOSCachedManagedObject+FOS_Internal.h"; sourceTree = "<group>"; };
 		63E46518168FAA9800E96C07 /* FOSParseCachedManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSParseCachedManagedObject.h; sourceTree = "<group>"; };
 		63E46519168FAA9800E96C07 /* FOSParseCachedManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSParseCachedManagedObject.m; sourceTree = "<group>"; };
@@ -1252,6 +1255,7 @@
 				637830C2197D7AF90025E587 /* FOSJSONTransformer.m */,
 				637830C7197D7C8B0025E587 /* FOSURLTransformer.h */,
 				637830C8197D7C8B0025E587 /* FOSURLTransformer.m */,
+				63DF755F19B67EF900E4E98C /* FOSValueTransformer.h */,
 			);
 			name = Transformers;
 			sourceTree = "<group>";
@@ -1594,6 +1598,7 @@
 				63A3141016E5B5CE00DDE117 /* FOSRetrieveToOneRelationshipOperation.h in Headers */,
 				63A3141416E5B5CE00DDE117 /* FOSWebServiceRequest.h in Headers */,
 				637C440B18D78D6A009C64BC /* FOSURLBinding.h in Headers */,
+				63DF756119B686C300E4E98C /* FOSValueTransformer.h in Headers */,
 				63A313F616E5B5B200DDE117 /* FOSDatabaseManager.h in Headers */,
 				63A313F716E5B5B200DDE117 /* FOSFlushCachesOperation.h in Headers */,
 				6389977D18F8AA6B00E9DD90 /* FOSTwoWayRecordBinding.h in Headers */,
@@ -1750,6 +1755,7 @@
 				63E74E421708A9D300BD61FC /* FOSNetworkStatusMonitor.h in Headers */,
 				63C343E81686BBDB003D10B5 /* FOSWebServiceRequest.h in Headers */,
 				63EF391D1800AD76007D6226 /* FOSDeletedObject+FOS_Internal.h in Headers */,
+				63DF756019B686C100E4E98C /* FOSValueTransformer.h in Headers */,
 				63A08FD318D40A1C003F14E0 /* FOSAdapterBindingParser.h in Headers */,
 				633467D71686C06700ACD4EA /* FOSModifiedProperty.h in Headers */,
 				633467E01686C12000ACD4EA /* FOSDatabaseManager.h in Headers */,
