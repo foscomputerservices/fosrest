@@ -1225,7 +1225,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     NSMutableDictionary *context = [@{ @"ENTITY" : entity} mutableCopy];
 
-    for (NSAttributeDescription *attrDesc in entity.cmoAttibutes) {
+    for (NSAttributeDescription *attrDesc in entity.cmoAttributes) {
         context[@"ATTRDESC"] = attrDesc;
 
         for (FOSAttributeBinding *attrBinding in attrBindings) {
@@ -1255,7 +1255,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
 - (void)_awake {
     if (self.isFaultObject) {
-        for (NSAttributeDescription *attrDesc in self.entity.cmoAttibutes) {
+        for (NSAttributeDescription *attrDesc in self.entity.cmoAttributes) {
             [self addObserver:self forKeyPath:attrDesc.name options:0 context:nil];
         }
 
@@ -1266,7 +1266,7 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 - (void)_removeObservers {
-    for (NSAttributeDescription *attrDesc in self.entity.cmoAttibutes) {
+    for (NSAttributeDescription *attrDesc in self.entity.cmoAttributes) {
         [self removeObserver:self forKeyPath:attrDesc.name];
     }
 
@@ -1410,7 +1410,7 @@ static NSMutableDictionary *_processingFaults = nil;
             // with this FK relationships on toMany relationships
             else {
                 // Find the attribute corresponding to the json property
-                for (NSAttributeDescription *attrDesc in self.entity.cmoAttibutes) {
+                for (NSAttributeDescription *attrDesc in self.entity.cmoAttributes) {
                     if ([idRelationshipKeyPath isEqualToString:attrDesc.name]) {
                         NSString *objProp = attrDesc.name;
                         id newValue = changedVals[nextProp];

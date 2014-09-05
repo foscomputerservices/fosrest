@@ -77,7 +77,7 @@
 
 #pragma mark - Computed Attribute & Relationship Properties
 
-- (NSSet *)cmoAttibutes {
+- (NSSet *)cmoAttributes {
     NSArray *props = self.properties;
     NSMutableSet *result = [NSMutableSet setWithCapacity:props.count];
 

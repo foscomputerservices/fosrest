@@ -148,12 +148,12 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  */
 
 /*!
- * @property cmoAttibutes
+ * @property cmoAttributes
  *
  * The set of properties that are of type NSAttributeDescription and
  * !relDesc.isFOSProperty.
  */
-@property (nonatomic, readonly) NSSet *cmoAttibutes;
+@property (nonatomic, readonly) NSSet *cmoAttributes;
 
 /*!
  * @property cmoRelationships

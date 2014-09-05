@@ -185,7 +185,7 @@
 
                 NSAssert([jsonDict isKindOfClass:[NSDictionary class]], @"It's not a dictionary???");
 
-                for (NSAttributeDescription *attrDesc in entity.cmoAttibutes) {
+                for (NSAttributeDescription *attrDesc in entity.cmoAttributes) {
 
                     // Only match records that locally have no server identities attached
                     if ([attrDesc.name isEqualToString:idProp]) {
