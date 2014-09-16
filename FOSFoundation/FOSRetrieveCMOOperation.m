@@ -938,15 +938,23 @@
         }
 
         // Update the existing object with the new data from the server
-        else if (_json != nil) {
+        else if (_json != nil && !_fastTracked) {
 
             id<FOSTwoWayRecordBinding> binder = _urlBinding.cmoBinding;
 
             NSError *error = nil;
-            [binder updateCMO:self.managedObject
-                     fromJSON:(NSDictionary *)_json
-            forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                        error:&error];
+            // Store the json
+            self.managedObject.originalJsonData = [NSJSONSerialization dataWithJSONObject:_json
+                                                                                  options:0
+                                                                                    error:&error];
+
+            if (error == nil) {
+                [binder updateCMO:self.managedObject
+                         fromJSON:(NSDictionary *)_json
+                forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                            error:&error];
+            }
+
             _error = error;
 
             // updateWithJSONDictionary will mark the object clean (and thus remove
@@ -1116,14 +1124,13 @@
                 bindings[jsonId] = cmo.objectID;
             }
 
-            // Store the json
-            if ([NSJSONSerialization isValidJSONObject:json]) {
+
+            if (localError == nil) {
+                // Store the json
                 cmo.originalJsonData = [NSJSONSerialization dataWithJSONObject:json
                                                                        options:0
                                                                          error:&localError];
-            }
 
-            if (localError == nil) {
                 // Bind the local vars to the json
                 if ([twoWayBinder updateCMO:cmo
                                    fromJSON:json
