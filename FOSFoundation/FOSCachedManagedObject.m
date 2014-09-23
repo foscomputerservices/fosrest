@@ -343,6 +343,16 @@ static NSMutableDictionary *_processingFaults = nil;
     return fetchOp;
 }
 
++ (FOSSearchOperation *)retrieveCMOsWithDSLQuery:(NSString *)dslQuery {
+    FOSSearchOperation *result = [[FOSSearchOperation alloc] init];
+
+    NSString *managedClassName = [self entityDescription].managedObjectClassName;
+    result.managedClass = NSClassFromString(managedClassName);
+    result.dslQuery = dslQuery;
+
+    return result;
+}
+
 + (FOSRetrieveCMOOperation *)createAndRetrieveServerRecordWithJSON:(id<NSObject>)json {
     NSParameterAssert(json != nil);
 

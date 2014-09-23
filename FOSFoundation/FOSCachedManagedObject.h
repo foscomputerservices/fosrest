@@ -14,6 +14,7 @@
 @class FOSRetrieveCMOOperation;
 @class FOSSendServerRecordOperation;
 @class FOSRESTConfig;
+@class FOSSearchOperation;
 
 typedef id<NSObject,NSCopying> FOSJsonId;
 
@@ -168,6 +169,14 @@ typedef id<NSObject,NSCopying> FOSJsonId;
  * @link FOSLifecyclePhase @/link.
  */
 + (FOSRetrieveCMOOperation *)retrieveCMOForJsonId:(FOSJsonId)jsonId;
+
+/*!
+ * @method retrieveCMOsWithDSLQuery:
+ *
+ * This method corresponds to the FOSLifecyclePhaseRetrieveServerRecords
+ * @link FOSLifecyclePhase @/link.
+ */
++ (FOSSearchOperation *)retrieveCMOsWithDSLQuery:(NSString *)dslQuery;
 
 /*!
  * @method sendServerRecordWithLifecycleStyle:

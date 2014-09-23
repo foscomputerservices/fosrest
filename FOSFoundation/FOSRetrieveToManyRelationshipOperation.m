@@ -184,12 +184,22 @@
                                  _relationship.destinationEntity.managedObjectClassName);
 #endif
                         // Set the forward relationship
-                        [newEntries addObject:nextOp.managedObject];
+                        [newEntries addObject:nextCMO];
 
                         // Set Inverse relationship
                         NSRelationshipDescription *inverse = _relationship.inverseRelationship;
                         if (!inverse.isToMany) {
-                            [nextCMO setValue:owner forKey:inverse.name];
+
+                            // It is possible that they 'force resolved' the owner by setting
+                            // the owner's relationship 'jsonRelationshipForcePull == Always'.
+                            // This might be done if the query for these objects is broader than
+                            // just the simple owner as reolved by this protocol.
+                            if (!inverse.jsonRelationshipForcePull) {
+                                [nextCMO setValue:owner forKey:inverse.name];
+                            }
+                            else {
+                                [newEntries removeObject:nextCMO];
+                            }
                         }
                         else {
                             NSAssert(NO, @"Many-to-many not yet implemented!");

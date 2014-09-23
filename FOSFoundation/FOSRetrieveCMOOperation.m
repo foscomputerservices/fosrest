@@ -1079,7 +1079,7 @@
         *error = nil;
     }
 
-    @synchronized(self) {
+    @synchronized(self.restConfig) { // A complete mutex lock across all threads for this REST Config
         Class managedClass = NSClassFromString(entity.managedObjectClassName);
 
         // Let's see if we already know this managed object
