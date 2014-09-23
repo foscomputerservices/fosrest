@@ -189,12 +189,18 @@
 
                 NSAssert(owner != nil, @"Unable to locate owner object???");
 
+                // Check FOSForcePullType_Always. Some clients use this to force the owner
+                // to be different than what would normally be found when a parent pulls their
+                // children.  That is, the parent object may pull children from its siblings
+                // too, so those owners are not the parent object that performed the pull.
                 NSAssert([owner primitiveValueForKey:_relationship.name] == nil ||
-                         [owner primitiveValueForKey:_relationship.name] == childObj,
+                         [owner primitiveValueForKey:_relationship.name] == childObj ||
+                         _relationship.jsonRelationshipForcePull == FOSForcePullType_Always,
                          @"Relationship already bound???");
 
                 // Set the forward relationship
-                if ([owner primitiveValueForKey:_relationship.name] == nil) {
+                if ([owner primitiveValueForKey:_relationship.name] == nil ||
+                    _relationship.jsonRelationshipForcePull == FOSForcePullType_Always) {
                     [owner setValue:childObj forKey:_relationship.name];
                 }
 

@@ -590,7 +590,7 @@
         id lhsResult = nil;
 
         if (localError == nil) {
-            id<FOSExpression> lhsExpr = paramTuple[0];
+            id<FOSExpression,FOSCompiledAtomInfo> lhsExpr = paramTuple[0];
             lhsResult = [lhsExpr evaluateWithContext:context error:&localError];
             if (localError == nil) {
                 if (![lhsResult isKindOfClass:[NSString class]]) {
@@ -599,7 +599,7 @@
                                      (unsigned long)entryNum,
                                      NSStringFromClass([lhsResult class])];
 
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    localError = [NSError errorWithMessage:msg forAtom:lhsExpr];
                 }
             }
         }
@@ -607,7 +607,7 @@
         // Evaluate the RHS expression
         id rhsResult = nil;
         if (localError == nil) {
-            id<FOSExpression> rhsExpr = paramTuple[1];
+            id<FOSExpression,FOSCompiledAtomInfo> rhsExpr = paramTuple[1];
             rhsResult = [rhsExpr evaluateWithContext:context error:&localError];
 
             if (localError == nil) {
@@ -617,7 +617,7 @@
                                      (unsigned long)entryNum,
                                      NSStringFromClass([rhsResult class])];
 
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    localError = [NSError errorWithMessage:msg forAtom:rhsExpr];
                 }
             }
         }
