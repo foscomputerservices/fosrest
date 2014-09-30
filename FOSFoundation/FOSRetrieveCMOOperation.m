@@ -303,24 +303,6 @@
 
         NSError *localError = nil;
 
-        if ([fetchDataOp respondsToSelector:@selector(relationshipsToPull)]) {
-            // It's only possible to update 'owned' relationships
-
-            _relationshipsToPull = fetchDataOp.relationshipsToPull;
-            NSSet *filteredRels = [self _filterRelationships:self.entity.cmoToManyRelationships];
-
-            for (NSRelationshipDescription *relDesc in filteredRels) {
-                if (!relDesc.isOwnershipRelationship) {
-                    NSString *msgFmt = @"Invalid request to refresh relationship '%@' on entity '%@'.  Only owned relationships can be refreshed.";
-                    NSString *msg = [NSString stringWithFormat:msgFmt,
-                                     relDesc.name, fetchDataOp.entity.name];
-
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
-                    break;
-                }
-            }
-        }
-
         FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
             if (fetchDataOp.error == nil) {
                 NSError *localError = nil;
