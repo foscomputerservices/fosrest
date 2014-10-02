@@ -9,7 +9,7 @@
 #import "FOSLogoutOperation.h"
 #import "FOSCacheManager.h"
 #import "FOSLoginManager_Internal.h"
-#import "FOSFlushCachesOperation.h"
+#import "FOSPushCacheChangesOperation.h"
 
 @implementation FOSLogoutOperation {
     NSError *_error;
@@ -55,9 +55,13 @@
     FOSWebServiceRequest *logoutRequest = nil;
     NSError *localError = nil;
 
+    // Make sure to flush caches before logging out
+    FOSPushCacheChangesOperation *pushChanges = [FOSPushCacheChangesOperation pushCacheChangesOperation];
+
+    // Retrieve the optional server logout URL
     id<FOSRESTServiceAdapter> adapter = self.restAdapter;
     FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogout
-                                                      forLifecycleStyle:nil
+                                                   forLifecycleStyle:nil
                                                      forRelationship:nil
                                                            forEntity:entity];
 
@@ -97,7 +101,11 @@
 
     if (localError == nil) {
         if (logoutRequest != nil) {
+            [logoutRequest addDependency:pushChanges];
             [result addDependency:logoutRequest];
+        }
+        else {
+            [result addDependency:pushChanges];
         }
     }
     else {

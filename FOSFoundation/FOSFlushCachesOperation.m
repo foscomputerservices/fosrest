@@ -8,7 +8,7 @@
 
 #import "FOSFlushCachesOperation.h"
 #import "FOSCacheManager.h"
-#import "FOSPushAllCacheChangesOperation.h"
+#import "FOSPushCacheChangesOperation.h"
 
 @implementation FOSFlushCachesOperation
 
@@ -44,8 +44,7 @@
     flushCompleteOp.queuePriority = NSOperationQueuePriorityVeryLow;
 
     // Push out any changes in the cache
-    FOSPushAllCacheChangesOperation *pushAllChangesOp =
-        [FOSPushAllCacheChangesOperation pushAllChangesOperation];
+    FOSPushCacheChangesOperation *pushAllChangesOp = [FOSPushCacheChangesOperation pushCacheChangesOperation];
 
     [flushCompleteOp addDependency:pushAllChangesOp];
 

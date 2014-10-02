@@ -11,7 +11,7 @@
 #import "FOSOperationQueue.h"
 #import "FOSRESTConfig.h"
 #import "FOSManagedObjectContext.h"
-#import "FOSPushAllCacheChangesOperation.h"
+#import "FOSPushCacheChangesOperation.h"
 
 @implementation FOSDatabaseManager {
     __weak FOSRESTConfig *_restConfig;
@@ -193,7 +193,7 @@
     _restConfig.cacheManager.pauseAutoSync = YES;
 
     if ([self saveChanges:&localError]) {
-        FOSOperation *op = [FOSPushAllCacheChangesOperation pushAllChangesOperation];
+        FOSOperation *op = [FOSPushCacheChangesOperation pushCacheChangesOperation];
         FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
             FOSLogDebug(@"*** Database *** finished pushing changes to server.");
 

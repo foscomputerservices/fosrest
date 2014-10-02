@@ -23,7 +23,6 @@
 #import "FOSLogoutOperation.h"
 #import "FOSRefreshUserOperation.h"
 #import "FOSFlushCachesOperation.h"
-#import "FOSPushAllCacheChangesOperation.h"
 #import "FOSMergePolicy.h"
 #import "FOSOperation+FOS_Internal.h"
 #import "FOSCacheManager+CoreData.h"
