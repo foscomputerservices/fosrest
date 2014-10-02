@@ -110,6 +110,18 @@ __strong FOSRESTConfig *__sharedInstance = nil;
                          userSubType:(Class)userSubType
                     storeCoordinator:(NSPersistentStoreCoordinator *)storeCoordinator
                   restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter {
+
+    // Enusre that NSAssert is turned off on GoldMaster & Release builds
+#if defined(CONFIGURATION_GoldMaster) || defined(CONFIGURATION_Release)
+    NSAssert(NO, @"**** Asserts have NOT been disabled in the '%@' build!!! ****",
+#ifdef CONFIGURATION_GoldMaster
+             @"GoldMaster"
+#else
+             @"Release"
+#endif
+             );
+#endif
+
     NSParameterAssert(appVersion != nil);
     NSParameterAssert(userSubType != nil);
     NSParameterAssert(storeCoordinator != nil);
