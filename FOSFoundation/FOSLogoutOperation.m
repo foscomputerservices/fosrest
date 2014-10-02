@@ -84,12 +84,17 @@
         }
     }
 
+    __block FOSLogoutOperation *blockSelf = self;
     FOSBackgroundOperation *result = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
 
         if (!isCancelled && error == nil) {
-            self.restConfig.loginManager.loggedInUserId = nil;
+            blockSelf.restConfig.loginManager.loggedInUserId = nil;
             
             FOSLogInfo(@"Logged out user: %@", loggedInUserId);
+
+            if (blockSelf.restConfig.deleteDatabaseOnLogout) {
+                [blockSelf.restConfig.databaseManager resetDatabase];
+            }
         }
         else if (error != nil) {
             FOSLogError(@"Unable to complete logout due to error: %@", error.description);

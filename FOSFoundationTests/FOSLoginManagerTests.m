@@ -12,6 +12,7 @@
 #import "User.h"
 #import "Widget.h"
 #import "FOSLoginManager_Internal.h"
+#import "FOSTestHarnessAdapter.h"
 #import <stdlib.h>
 
 #define START_CONFIG_OP \
@@ -46,7 +47,7 @@
 }
 
 + (void)setupStandardWebServiceConfig {
-    [self setupStandardWebServiceConfigWithOptions:FOSRESTConfigAllowStaticTableModifications];
+    [self setupStandardWebServiceConfigWithOptions:FOSRESTConfigAllowStaticTableModifications | FOSRESTConfigDeleteDBOnLogout];
 }
 
 + (void)setupStandardWebServiceConfigWithOptions:(FOSRESTConfigOptions)configOptions {
@@ -60,16 +61,13 @@
         // Force to forget that we were logged in via a previous session
         [FOSLoginManager clearLoggedInUserId];
 
-        NSPersistentStoreCoordinator *storeCoord = [self _setupDB];
-
-        FOSParseServiceAdapter *adapter =
-            [FOSParseServiceAdapter adapterWithApplicationId:@"uMDqEYDMrjEFRo4vtlhx4qaFVwrvw68cPPMsVHqp"
-                                               andRESTAPIKey:@"XXRQQ3349yU4AV3wsVxetNAwOpnkYVCVloPCVppu"];
+        FOSTestHarnessAdapter *adapter =
+            [FOSTestHarnessAdapter adapterWithApplicationId:@"uMDqEYDMrjEFRo4vtlhx4qaFVwrvw68cPPMsVHqp"
+                                              andRESTAPIKey:@"XXRQQ3349yU4AV3wsVxetNAwOpnkYVCVloPCVppu"];
 
         [FOSRESTConfig configWithApplicationVersion:@"1.0"
                                             options:configOptions
                                         userSubType:[User class]
-                                   storeCoordinator:storeCoord
                                   restServiceAdapter:adapter];
 
         // Block waiting for network status
@@ -407,67 +405,6 @@
 }
 
 #pragma mark - Private Methods
-+ (NSPersistentStoreCoordinator *)_setupDB {
-    NSURL *appLibDirURL =
-        [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
-                                                inDomains:NSUserDomainMask] lastObject];
-
-    NSURL *storeURL = [appLibDirURL URLByAppendingPathComponent:@"testDB.sqlite"];
-
-    // Delete the DB between tests
-    [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
-
-    NSError *error = nil;
-
-    NSManagedObjectModel *mom = [self _mergeModels];
-    NSPersistentStoreCoordinator *persistentStoreCoordinator = nil;
-
-    @try {
-        persistentStoreCoordinator =
-            [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
-
-        if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-                                                      configuration:nil
-                                                                URL:storeURL
-                                                            options:nil
-                                                              error:&error]) {
-
-            FOSLogCritical(@"Unable to add persistent store after deleting the old file...abort: %@",
-                  error.description);
-            abort();
-        }
-    }
-    @catch (NSException *exception) {
-        FOSLogCritical(@"Exception thrown creating store: %@", exception.description);
-        abort();
-    }
-
-    return persistentStoreCoordinator;
-}
-
-+ (NSManagedObjectModel *)_mergeModels {
-    NSMutableArray *models = [NSMutableArray arrayWithCapacity:2];
-
-    // FOSFoundation
-    NSManagedObjectModel *model = [NSBundle fosManagedObjectModel];
-    [models addObject:model];
-
-    // RESTTests
-    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
-    NSURL *modelURL = [testBundle URLForResource:@"RESTTests" withExtension:@"momd"];
-    model = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    [models addObject:model];
-
-    NSManagedObjectModel *mergedModel =
-        [NSManagedObjectModel modelByMergingModels:models ignoringPlaceholder:@"isPlaceholder"];
-
-    if (mergedModel == nil) {
-        FOSLogCritical(@"Unable to merge models...abort...");
-        abort();
-    }
-
-    return mergedModel;
-}
 
 + (User *)_testLoginUser {
     User *user = [User createLoginUser];

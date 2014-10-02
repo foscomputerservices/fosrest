@@ -63,15 +63,13 @@
 
 - (id)initWithCacheConfig:(FOSRESTConfig *)restConfig {
     NSParameterAssert(restConfig != nil);
-    NSParameterAssert(restConfig.storeCoordinator != nil);
 
     if ((self = [super init]) != nil) {
 
         _restConfig = restConfig;
 
         // Configure the queues
-        _beginOpQueue = [[FOSOperationQueue alloc] init];
-        _beginOpQueue.restConfig = _restConfig;
+        _beginOpQueue = [FOSOperationQueue queueWithRestConfig:_restConfig];
         _beginOpQueue.maxConcurrentOperationCount = 1;
         _beginOpQueue.name = @"FOSBeginOperation Queue";
 
@@ -188,8 +186,7 @@ withCompletionOperation:(FOSOperation *)finalOp
             beginOp = [[FOSBeginOperation alloc] init];
             beginOp.groupName = groupName;
 
-            groupOpQueue = [[FOSOperationQueue alloc] init];
-            groupOpQueue.restConfig = _restConfig;
+            groupOpQueue = [FOSOperationQueue queueWithRestConfig:_restConfig];
             groupOpQueue.maxConcurrentOperationCount = 1;
             groupOpQueue.name = [NSString stringWithFormat:@"Inner Queue: %@", groupName];
 

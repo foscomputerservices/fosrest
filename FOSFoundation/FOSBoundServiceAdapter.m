@@ -116,6 +116,15 @@
     return _baseURL;
 }
 
+- (NSPersistentStoreCoordinator *)setupDatabaseForcingRemoval:(BOOL)forceDBRemoval error:(NSError **)error {
+    NSString *msgFmt = @"The %@ method must be overridden by subclasses of FOSBoundServicesAdapter.  Do not call FOSBoundServicesAdapter's implementation.";
+    NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromSelector(_cmd)];
+
+    NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+    @throw e;
+
+}
+
 - (FOSURLBinding *)urlBindingForLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                              forLifecycleStyle:(NSString *)lifecycleStyle
                                forRelationship:(NSRelationshipDescription *)relDesc

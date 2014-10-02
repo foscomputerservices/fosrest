@@ -25,11 +25,10 @@
 
     NSManagedObjectContext *context = [FOSRESTConfig sharedInstance].databaseManager.currentMOC;
     if (context != nil) {
-        result = [NSEntityDescription entityForName:entityName
-                             inManagedObjectContext:context];
+        result = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
     }
     else {
-        NSManagedObjectModel *model = [FOSRESTConfig sharedInstance].storeCoordinator.managedObjectModel;
+        NSManagedObjectModel *model = [FOSRESTConfig sharedInstance].databaseManager.storeCoordinator.managedObjectModel;
 
         result  = [model entitiesByName][entityName];
 

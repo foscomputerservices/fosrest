@@ -27,7 +27,7 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
     if ((self = [super init]) != nil) {
         _restConfig = restConfig;
         _queuedRequests = [NSMutableArray arrayWithCapacity:300];
-        _timerQueue = [[FOSOperationQueue alloc] init];
+        _timerQueue = [FOSOperationQueue queueWithRestConfig:restConfig];
         _timerQueue.maxConcurrentOperationCount = 1;
         _timerQueue.name = @"Web Service Batch Queue";
     }

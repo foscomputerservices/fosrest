@@ -77,7 +77,7 @@
 - (void)_pushNonOwnedEntityChanges:(FOSOperation *)completePushOp {
     NSParameterAssert(completePushOp != nil);
 
-    NSArray *allEntities = self.restConfig.storeCoordinator.managedObjectModel.entities;
+    NSArray *allEntities = self.restConfig.databaseManager.storeCoordinator.managedObjectModel.entities;
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"(jsonIgnoreAsStaticTableEntity == YES) || (%@ == YES && isStaticTableEntity == YES)",
                          self.restConfig.allowStaticTableModifications ? @YES : @NO];
     NSArray *nonOwnedEntities = [allEntities filteredArrayUsingPredicate:pred];

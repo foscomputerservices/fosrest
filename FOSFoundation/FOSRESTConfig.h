@@ -48,7 +48,6 @@ typedef enum : NSUInteger {
  */
 #pragma mark - Required Configuration Properties
 
-@property (nonatomic, readonly) NSPersistentStoreCoordinator *storeCoordinator;
 @property (nonatomic, readonly) id<FOSRESTServiceAdapter> restServiceAdapter;
 
 /*!
@@ -102,9 +101,17 @@ typedef enum : NSUInteger {
  * @property allowStaticTableModifications
  *
  * Returns YES if FOSRESTConfigAllowStaticTableModifications was specified as an option
- * during configuration
+ * during configuration.
  */
 @property (nonatomic, readonly) BOOL allowStaticTableModifications;
+
+/*!
+ * @property deleteDatabaseOnLogout
+ *
+ * Returns YRES if FOSRESTConfigDeleteDBOnLogout was specified as an option
+ * during configuration.
+ */
+@property (nonatomic, readonly) BOOL deleteDatabaseOnLogout;
 
 /*!
  * @property networkStatus
@@ -183,7 +190,6 @@ typedef enum : NSUInteger {
 + (void)configWithApplicationVersion:(NSString *)appVersion
                              options:(FOSRESTConfigOptions)options
                          userSubType:(Class)userSubType
-                    storeCoordinator:(NSPersistentStoreCoordinator *)storeCoordinator
                   restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter;
 
 /*!
