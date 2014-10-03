@@ -9,7 +9,7 @@
 #import "FOSLogoutOperation.h"
 #import "FOSCacheManager.h"
 #import "FOSLoginManager_Internal.h"
-#import "FOSFlushCachesOperation.h"
+#import "FOSPushCacheChangesOperation.h"
 
 @implementation FOSLogoutOperation
 
@@ -43,9 +43,13 @@
     FOSWebServiceRequest *logoutRequest = nil;
     NSError *localError = nil;
 
+    // Make sure to flush caches before logging out
+    FOSPushCacheChangesOperation *pushChanges = [FOSPushCacheChangesOperation pushCacheChangesOperation];
+
+    // Retrieve the optional server logout URL
     id<FOSRESTServiceAdapter> adapter = self.restAdapter;
     FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogout
-                                                      forLifecycleStyle:nil
+                                                   forLifecycleStyle:nil
                                                      forRelationship:nil
                                                            forEntity:entity];
 
@@ -68,12 +72,17 @@
         }
     }
 
+    __block FOSLogoutOperation *blockSelf = self;
     FOSBackgroundOperation *result = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
 
         if (!isCancelled && error == nil) {
-            self.restConfig.loginManager.loggedInUserId = nil;
+            blockSelf.restConfig.loginManager.loggedInUserId = nil;
             
             FOSLogInfo(@"Logged out user: %@", loggedInUserId);
+
+            if (blockSelf.restConfig.deleteDatabaseOnLogout) {
+                [blockSelf.restConfig.databaseManager resetDatabase];
+            }
         }
         else if (error != nil) {
             FOSLogError(@"Unable to complete logout due to error: %@", error.description);
@@ -85,7 +94,11 @@
 
     if (localError == nil) {
         if (logoutRequest != nil) {
+            [logoutRequest addDependency:pushChanges];
             [result addDependency:logoutRequest];
+        }
+        else {
+            [result addDependency:pushChanges];
         }
     }
     else {

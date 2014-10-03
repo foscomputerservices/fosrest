@@ -21,6 +21,8 @@
  *
  * @constant FOSRESTConfigCaseSensitiveUserNames Forces user names to be case sensitive.  By default they are all forced to be lower case before authentication. 
  *
+ * @constant FOSRESTConfigDeleteDBOnLogout Deletes the database file once a user's logout process has been completed (a full synchronize of the user is done before logout completes).
+ *
  * @discussion
  *
  * These configuration options turn on optional behaviors of the FOSREST service.
@@ -31,7 +33,8 @@ typedef enum : NSUInteger {
     FOSRESTConfigAllowFaulting = (1 << 1),
     FOSRESTConfigCaseSensitiveUserNames = (1 << 2),
     FOSRESTConfigAllowStaticTableModifications = (1 << 3),
-    FOSRESTConfigUseOfflineFiles = (1 << 4)
+    FOSRESTConfigUseOfflineFiles = (1 << 4),
+    FOSRESTConfigDeleteDBOnLogout = (1 << 5),
 } FOSRESTConfigOptions;
 
 @class FOSLoginManager;
@@ -45,7 +48,6 @@ typedef enum : NSUInteger {
  */
 #pragma mark - Required Configuration Properties
 
-@property (nonatomic, readonly) NSPersistentStoreCoordinator *storeCoordinator;
 @property (nonatomic, readonly) id<FOSRESTServiceAdapter> restServiceAdapter;
 
 /*!
@@ -99,9 +101,17 @@ typedef enum : NSUInteger {
  * @property allowStaticTableModifications
  *
  * Returns YES if FOSRESTConfigAllowStaticTableModifications was specified as an option
- * during configuration
+ * during configuration.
  */
 @property (nonatomic, readonly) BOOL allowStaticTableModifications;
+
+/*!
+ * @property deleteDatabaseOnLogout
+ *
+ * Returns YRES if FOSRESTConfigDeleteDBOnLogout was specified as an option
+ * during configuration.
+ */
+@property (nonatomic, readonly) BOOL deleteDatabaseOnLogout;
 
 /*!
  * @property networkStatus
@@ -180,7 +190,6 @@ typedef enum : NSUInteger {
 + (void)configWithApplicationVersion:(NSString *)appVersion
                              options:(FOSRESTConfigOptions)options
                          userSubType:(Class)userSubType
-                    storeCoordinator:(NSPersistentStoreCoordinator *)storeCoordinator
                   restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter;
 
 /*!

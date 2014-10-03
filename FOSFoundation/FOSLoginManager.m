@@ -43,7 +43,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     dispatch_once(&onceToken, ^{
         _loginUserContext =
             [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
-        _loginUserContext.persistentStoreCoordinator = [FOSRESTConfig sharedInstance].storeCoordinator;
+        _loginUserContext.persistentStoreCoordinator = [FOSRESTConfig sharedInstance].databaseManager.storeCoordinator;
     });
 
     return _loginUserContext;
@@ -521,7 +521,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
         if (uriStr.length > 0) {
             NSURL *uri = [NSURL URLWithString:uriStr];
 
-            NSPersistentStoreCoordinator *coord = _restConfig.storeCoordinator;
+            NSPersistentStoreCoordinator *coord = _restConfig.databaseManager.storeCoordinator;
             __loggedInUserMOID = [coord managedObjectIDForURIRepresentation:uri];
 
             BOOL isIdInvalid = NO;

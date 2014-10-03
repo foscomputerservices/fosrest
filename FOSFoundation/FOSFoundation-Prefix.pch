@@ -35,6 +35,7 @@
 #import "FOSRESTConfig_FOS_Internal.h"
 #import "FOSRelationshipFault+FOS_Internal.h"
 #import "FOSCacheManager.h"
+#import "FOSDatabaseManager+FOS_Internal.h"
 
 // Data model
 #import "FOSDeletedObject+FOS_Internal.h"

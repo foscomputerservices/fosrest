@@ -11,7 +11,7 @@
 #import "FOSOperationQueue.h"
 #import "FOSRESTConfig.h"
 #import "FOSManagedObjectContext.h"
-#import "FOSPushAllCacheChangesOperation.h"
+#import "FOSPushCacheChangesOperation.h"
 
 @implementation FOSDatabaseManager {
     __weak FOSRESTConfig *_restConfig;
@@ -28,7 +28,7 @@
             _mainThreadMOC =
                 [[FOSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
            ((FOSManagedObjectContext *)_mainThreadMOC).cacheManager = _restConfig.cacheManager;
-            _mainThreadMOC.persistentStoreCoordinator = _restConfig.storeCoordinator;
+            _mainThreadMOC.persistentStoreCoordinator = self.storeCoordinator;
             _mainThreadMOC.mergePolicy =
                 [[FOSMergePolicy alloc] initWithMergeType:NSMergeByPropertyStoreTrumpMergePolicyType];
             _mainThreadMOC.undoManager = [[NSUndoManager alloc] init];
@@ -52,10 +52,22 @@
 
 - (id)initWithCacheConfig:(FOSRESTConfig *)restConfig {
     NSParameterAssert(restConfig != nil);
-    NSParameterAssert(restConfig.storeCoordinator != nil);
 
     if ((self = [super init]) != nil) {
         _restConfig = restConfig;
+
+        NSError *localError = nil;
+        _storeCoordinator = [[self class] _attachToDatabase:restConfig
+                                               forceRemoval:NO
+                                                      error:&localError];
+
+        if (localError != nil) {
+            NSString *msgFmt = @"Unable to create CoreData database: %@";
+            NSString *msg = [NSString stringWithFormat:msgFmt, localError.localizedDescription];
+
+            NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+            @throw e;
+        }
     }
 
     return self;
@@ -194,7 +206,7 @@
     _restConfig.cacheManager.pauseAutoSync = YES;
 
     if ([self saveChanges:&localError]) {
-        FOSOperation *op = [FOSPushAllCacheChangesOperation pushAllChangesOperation];
+        FOSOperation *op = [FOSPushCacheChangesOperation pushCacheChangesOperation];
         FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
             FOSLogDebug(@"*** Database *** finished pushing changes to server.");
 
@@ -235,6 +247,52 @@
 #endif
     } while (result && moc.hasChanges);
         
+    return result;
+}
+
+#pragma mark - Internal Methods
+
+// NOTE: The implementation of this method is *NOT* thread safe.  It is expected that it
+//       will only be called at exacting points in the process where it is safe to
+//       reset the database (e.g. after sync and logout).
+//
+//       If the reset fails, an exception is raised.
+- (void)resetDatabase {
+    NSError *localError = nil;
+
+    _mainThreadMOC = nil;
+    _storeCoordinator = [[self class] _attachToDatabase:_restConfig forceRemoval:YES error:&localError];
+
+    if (localError != nil) {
+        NSString *msgFmt = @"Unable to RE-create CoreData database: %@";
+        NSString *msg = [NSString stringWithFormat:msgFmt, localError.localizedDescription];
+
+        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        @throw e;
+    }
+}
+
+#pragma mark - Private Methods
+
++ (NSPersistentStoreCoordinator *)_attachToDatabase:(FOSRESTConfig *)restConfig
+                                       forceRemoval:(BOOL)forceRemoval
+                                              error:(NSError **)error {
+    if (error != nil) { *error = nil; }
+
+    id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
+
+    NSError *localError = nil;
+    NSPersistentStoreCoordinator *result = [adapter setupDatabaseForcingRemoval:forceRemoval
+                                                                          error:&localError];
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+
+        result = nil;
+    }
+
     return result;
 }
 

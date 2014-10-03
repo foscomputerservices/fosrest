@@ -907,7 +907,7 @@ TEARDOWN_LOGIN
 
         // Now pull the widget back down from the server (before syncing our local changes)
         WidgetSearchOperation *searchOp = [[WidgetSearchOperation alloc] init];
-        searchOp.name = widgetName1;
+        searchOp.widgetName = widgetName1;
 
         [searchOp performSearchAndInform:^(NSSet *results, NSError *error) {
 

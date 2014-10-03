@@ -73,6 +73,10 @@ __strong FOSRESTConfig *__sharedInstance = nil;
     return ((_configOptions & FOSRESTConfigAllowStaticTableModifications) == FOSRESTConfigAllowStaticTableModifications);
 }
 
+- (BOOL)deleteDatabaseOnLogout {
+    return ((_configOptions & FOSRESTConfigDeleteDBOnLogout) == FOSRESTConfigDeleteDBOnLogout);
+}
+
 - (FOSNetworkStatus)networkStatus {
     return _networkStatus;
 }
@@ -108,11 +112,21 @@ __strong FOSRESTConfig *__sharedInstance = nil;
 + (void)configWithApplicationVersion:(NSString *)appVersion
                              options:(FOSRESTConfigOptions)options
                          userSubType:(Class)userSubType
-                    storeCoordinator:(NSPersistentStoreCoordinator *)storeCoordinator
                   restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter {
+
+    // Enusre that NSAssert is turned off on GoldMaster & Release builds
+#if defined(CONFIGURATION_GoldMaster) || defined(CONFIGURATION_Release)
+    NSAssert(NO, @"**** Asserts have NOT been disabled in the '%@' build!!! ****",
+#ifdef CONFIGURATION_GoldMaster
+             @"GoldMaster"
+#else
+             @"Release"
+#endif
+             );
+#endif
+
     NSParameterAssert(appVersion != nil);
     NSParameterAssert(userSubType != nil);
-    NSParameterAssert(storeCoordinator != nil);
     NSParameterAssert(restServiceAdapter != nil);
 
     if (![userSubType isSubclassOfClass:[FOSUser class]]) {
@@ -131,7 +145,6 @@ __strong FOSRESTConfig *__sharedInstance = nil;
 
         __sharedInstance = [[FOSRESTConfig alloc] _initWithOptions:(FOSRESTConfigOptions)options
                                                        userSubType:userSubType
-                                                  storeCoordinator:storeCoordinator
                                                 restServiceAdapter:restServiceAdapter];
     }
     
@@ -198,18 +211,15 @@ __strong FOSRESTConfig *__sharedInstance = nil;
 
 - (id)_initWithOptions:(FOSRESTConfigOptions)options
            userSubType:(Class)userSubType
-      storeCoordinator:(NSPersistentStoreCoordinator *)storeCoordinator
     restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter {
 
     NSParameterAssert(userSubType != nil);
-    NSParameterAssert(storeCoordinator != nil);
     NSParameterAssert(restServiceAdapter != nil);
 
     if ((self = [super init]) != nil) {
         // Store provided arguments
         _configOptions = options;
         _userSubType = userSubType;
-        _storeCoordinator = storeCoordinator;
         _restServiceAdapter = restServiceAdapter;
         _statusMonitor = restServiceAdapter.networkStatusMonitor;
 

@@ -16,7 +16,7 @@
 }
 
 - (NSString *)dslQuery {
-    NSParameterAssert(self.name != nil ||
+    NSParameterAssert(self.widgetName != nil ||
                       self.uid != nil);
 
     // DSLQUERY = {"user" : {"__type" : "Pointer", "className" : "_User", "objectId" : "EcpQ2bE3fx"}}
@@ -27,7 +27,7 @@
     else {
         [result appendFormat:@"%@\"name\" : \"%@\"",
          self.uid == nil ? @"" : @", ",
-         self.name];
+         self.widgetName];
     }
 
     [result appendString:@"}"];

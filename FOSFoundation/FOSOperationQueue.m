@@ -14,14 +14,31 @@
 @implementation FOSOperationQueue {
     BOOL _allOpsCanceled;
     NSMutableSet *_cancelledOps;
+    FOSManagedObjectContext *_moc;
 }
+
+#pragma mark - Class Methods
+
++ (instancetype)queueWithRestConfig:(FOSRESTConfig *)restConfig {
+    return [[self alloc] initWithRestConfig:restConfig];
+}
+
+#pragma mark - Public Properties
 
 - (NSManagedObjectContext *)managedObjectContext {
     @synchronized(self) {
+        // Let's make sure that the storeCoord hasn't changed
+        if (_moc != nil && _moc.persistentStoreCoordinator != self.restConfig.databaseManager.storeCoordinator) {
+            NSAssert(!_moc.hasChanges, @"The StoreCoordinator has changed, but there are changes in our MOC???");
+            [self resetMOC];
+        }
+
         if (_moc == nil) {
+            NSAssert(self.restConfig != nil, @"No restConfig???");
+
             _moc = [[FOSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
             _moc.cacheManager = self.restConfig.cacheManager;
-            _moc.persistentStoreCoordinator = [FOSRESTConfig sharedInstance].storeCoordinator;
+            _moc.persistentStoreCoordinator = self.restConfig.databaseManager.storeCoordinator;
             _moc.mergePolicy =
                 [[FOSMergePolicy alloc] initWithMergeType:NSMergeByPropertyStoreTrumpMergePolicyType];
             _moc.undoManager = nil;
@@ -59,6 +76,24 @@
     return result;
 }
 
+#pragma mark - Initiailization Methods
+
+- (id)init {
+    NSAssert(_restConfig != nil, @"Must call initWithRestConfig:");
+
+    return [super init];
+}
+
+- (id)initWithRestConfig:(FOSRESTConfig *)restConfig {
+    NSParameterAssert(restConfig != nil);
+
+    _restConfig = restConfig;
+
+    return [self init];
+}
+
+#pragma mark - Public Methods
+
 - (void)markOperationAsCancelled:(FOSOperation *)cancelledOperation {
     if (_cancelledOps == nil) {
         _cancelledOps = [NSMutableSet set];
@@ -70,6 +105,8 @@
 - (void)clearCancelledOperations {
     _cancelledOps = nil;
 }
+
+#pragma mark - Overridden Methods
 
 - (void)addOperation:(NSOperation *)op {
     NSParameterAssert(op != nil);
@@ -104,6 +141,12 @@
         _allOpsCanceled = YES;
         [super cancelAllOperations];
     }
+}
+
+// FOS_Internal Methods
+
+- (void)resetMOC {
+    _moc = nil;
 }
 
 @end

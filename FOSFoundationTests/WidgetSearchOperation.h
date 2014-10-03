@@ -8,7 +8,7 @@
 
 @interface WidgetSearchOperation : FOSSearchOperation
 
-@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *widgetName;
 @property (nonatomic, strong) FOSJsonId uid;
 
 @end

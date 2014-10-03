@@ -7,21 +7,17 @@
 //
 
 #import "FOSPushCacheChangesOperation.h"
-#import "FOSPushAllCacheChangesOperation.h"
 #import "FOSOperation+FOS_Internal.h"
 
 @implementation FOSPushCacheChangesOperation
 
-+ (FOSPushCacheChangesOperation *)pushCacheChangesOperationWithParentOperation:(FOSPushAllCacheChangesOperation *)parentOperation {
-    return [[self alloc] initWithParentOperation:parentOperation];
++ (FOSPushCacheChangesOperation *)pushCacheChangesOperation {
+    return [[self alloc] init];
 }
 
-- (id)initWithParentOperation:(FOSPushAllCacheChangesOperation *)parentOperation {
-    NSParameterAssert(parentOperation != nil);
+- (id)init {
 
     if ((self = [super init]) != nil) {
-        _parentOperation = parentOperation;
-
         @synchronized(self.restConfig) {
             if (self.restConfig.pendingPushOperation == nil) {
                 self.restConfig.pendingPushOperation = [self _pushChangesOp];
@@ -44,7 +40,7 @@
     [super main];
 
     // *LOOP* until all changes are done.
-    if (!self.isCancelled && self.error == nil && self.parentOperation != nil) {
+    if (!self.isCancelled && self.error == nil) {
         @synchronized(self.restConfig) {
             self.restConfig.pendingPushOperation = nil;
         }
@@ -81,7 +77,7 @@
 - (void)_pushNonOwnedEntityChanges:(FOSOperation *)completePushOp {
     NSParameterAssert(completePushOp != nil);
 
-    NSArray *allEntities = self.restConfig.storeCoordinator.managedObjectModel.entities;
+    NSArray *allEntities = self.restConfig.databaseManager.storeCoordinator.managedObjectModel.entities;
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"(jsonIgnoreAsStaticTableEntity == YES) || (%@ == YES && isStaticTableEntity == YES)",
                          self.restConfig.allowStaticTableModifications ? @YES : @NO];
     NSArray *nonOwnedEntities = [allEntities filteredArrayUsingPredicate:pred];
@@ -111,8 +107,6 @@
         FOSUser *user = self.restConfig.loginManager.loggedInUser;
 
         FOSOperation *pushOp = [user sendServerRecordWithLifecycleStyle:nil];
-        NSAssert(![pushOp.flattenedDependencies containsObject:self.parentOperation],
-                 @"Cycle in push dependencies???");
 
         [completePushOp addDependency:pushOp];
     }

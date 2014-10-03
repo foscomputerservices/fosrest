@@ -36,6 +36,18 @@
 - (NSURL *)defaultBaseURL;
 
 /*!
+ * @method setupCoreDatabaseForcingRemoval:error:
+ *
+ * Open a connection to the CoreData database.
+ *
+ * @param forceDBRemoval Indicates that the exsiting database file should be deleted and a new
+ *                       one created.
+ *
+ * @param error Returns the error status for the operation. A nil value may be provided.
+ */
+- (NSPersistentStoreCoordinator *)setupDatabaseForcingRemoval:(BOOL)forceDBRemoval error:(NSError **)error;
+
+/*!
  * @method urlBindingForLifecyclePhase:forRelationship:forEntity:
  *
  * Returns the matching relationship for the given parameters.

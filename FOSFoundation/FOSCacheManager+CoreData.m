@@ -7,7 +7,7 @@
 //
 
 #import "FOSCacheManager+CoreData.h"
-#import "FOSPushAllCacheChangesOperation.h"
+#import "FOSPushCacheChangesOperation.h"
 
 @implementation FOSCacheManager (CoreData)
 
@@ -188,7 +188,7 @@
         if (_restConfig.isAutomaticallySynchronizing &&
             _restConfig.networkStatus != FOSNetworkStatusNotReachable) {
 
-            FOSOperation *op = [FOSPushAllCacheChangesOperation pushAllChangesOperation];
+            FOSOperation *op = [FOSPushCacheChangesOperation pushCacheChangesOperation];
             FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
                 FOSLogDebug(@"*** Database *** finished pushing changes to server.");
             }];

@@ -12,9 +12,17 @@
 
 @interface FOSDatabaseManager : NSObject
 
+/*!
+ * @methodgroup Properties
+ */
 #pragma mark - Properties
+
+@property (nonatomic, readonly) NSPersistentStoreCoordinator *storeCoordinator;
 @property (nonatomic, readonly) NSManagedObjectContext *currentMOC;
 
+/*!
+ * @methodgroup Public Methods
+ */
 #pragma mark - Public Methods
 
 - (id)initWithCacheConfig:(FOSRESTConfig *)restConfig;

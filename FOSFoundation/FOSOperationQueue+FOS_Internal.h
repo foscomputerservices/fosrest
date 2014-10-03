@@ -8,8 +8,6 @@
 
 @interface FOSOperationQueue (FOS_Internal)
 
-#pragma mark - Testing Support Methods
-
 - (void)resetMOC;
 
 @end

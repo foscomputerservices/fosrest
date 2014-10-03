@@ -10,8 +10,6 @@
 
 @interface FOSPushCacheChangesOperation : FOSOperation
 
-@property (nonatomic, readonly) FOSPushAllCacheChangesOperation *parentOperation;
-
-+ (FOSPushCacheChangesOperation *)pushCacheChangesOperationWithParentOperation:(FOSPushAllCacheChangesOperation *)parentOperation;
++ (FOSPushCacheChangesOperation *)pushCacheChangesOperation;
 
 @end
