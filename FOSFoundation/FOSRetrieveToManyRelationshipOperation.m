@@ -98,7 +98,7 @@
                                        bindings:bindings
                                        requests:requests];
         }
-        else {
+        else if (localError == nil) {
             NSString *msgFmt = @"Unable to locate a URL_BINDING for lifecycle RETRIEVE_RELATIONSHIP of entity %@ (across to-many relationship %@ of entity %@)";
             NSString *msg = [NSString stringWithFormat:msgFmt,
                              relDesc.destinationEntity.name, relDesc.name,
