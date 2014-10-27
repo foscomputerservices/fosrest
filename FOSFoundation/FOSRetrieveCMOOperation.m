@@ -1301,9 +1301,9 @@
     if (originalJson != nil) {
         NSDictionary *context = @{ @"ENTITY" : self.entity };
 
-        id<NSObject> unwrappedJson = [_urlBinding unwrapJSON:originalJson
-                                                     context:context
-                                                       error:&localError];
+        id<NSObject> unwrappedJson = [_urlBinding unwrapBulkJSON:originalJson
+                                                         context:context
+                                                           error:&localError];
 
         // We expect an array of possibilities here. We'll look into
         // the array and attempt to match jsonId.

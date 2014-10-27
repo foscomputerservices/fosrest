@@ -317,6 +317,39 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
 @property (nonatomic, strong) id<FOSExpression> jsonWrapperKey;
 
 /*!
+ * @property bulkWrapperKey
+ *
+ * The key under which to look in the top-level expression's originalJson to
+ * find JSON packets for data that matches the URLBinding.
+ *
+ * @discussion
+ *
+ * As an optimization, the server can package up data components related to
+ * data in a top-level query.  For example, consider pulling a user record
+ * from the server.  Almost certainly that record will have relationships to
+ * other data that will need to be pulled.  Such additional relationships will
+ * require subsequent GET calls from the server to obtain the JSON for those
+ * related entities (i.e. the user's clients).
+ *
+ * However, this mechanism allows the server to send those related JSON packages
+ * along with the top-level user request under keys that siblings to the user
+ * data.  These sibling keys should be specified in the bulkWrapperKey on the
+ * URLBinding for the related entity (e.g. client's URL Binding).
+ *
+ * An example JSON result as described here might look as follows:
+ *
+ * {
+ *   "user" : { "name" : "Fred", ... },
+ *   "clients" : [ { "clientName" : "Barney", ... } , { "clientName" : "Client2", ...} ... ]
+ * }
+ *
+ * In this case, "clients" should be specified as the bulkWrapperKey.
+ *
+ * Setting this property is optional.
+ */
+@property (nonatomic, strong) id<FOSExpression> bulkWrapperKey;
+
+/*!
  * @property cmoBinding
  *
  * A binding that provides for two-way binding between the web services's JSON packets and
@@ -453,6 +486,17 @@ typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
  * If the receiver's jsonWrapperKey is nil, then json is returned unaltered.
  */
 - (id<NSObject>)unwrapJSON:(id<NSObject>)json context:(NSDictionary *)context error:(NSError **)error;
+
+/*!
+ * @method unwrapBulkJSON:context:error:
+ *
+ * If the receiver's bulkWrapperKey is specified, it will be evaluated against the
+ * provided context and the resulting string will be used against (NSDictionary *)json
+ * to return the inner wrapped json.
+ *
+ * If the receiver's jsonWrapperKey is nil, then json is returned unaltered.
+ */
+- (id<NSObject>)unwrapBulkJSON:(id<NSObject>)json context:(NSDictionary *)context error:(NSError **)error;
 
 /*!
  * @methodgroup Debug Information

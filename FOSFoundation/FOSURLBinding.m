@@ -289,41 +289,19 @@
 - (id<NSObject>)unwrapJSON:(id<NSObject>)json
                    context:(NSDictionary *)context
                      error:(NSError **)error {
+    return [self _unwrapJSON:json
+               keyExpression:self.jsonWrapperKey
+                     context:context
+                       error:error];
+}
 
-    if (error != nil) { *error = nil; }
-    id<NSObject> result = json;
-
-    NSError *localError = nil;
-
-    if (self.jsonWrapperKey != nil && json != nil) {
-        NSString *jsonKey = [self.jsonWrapperKey evaluateWithContext:context error:&localError];
-
-        if (jsonKey != nil && localError == nil) {
-            if (![json isKindOfClass:[NSDictionary class]]) {
-                NSString *msgFmt = @"The json provided to JSON_WRAPPER_KEY was of type %@, an NSDictionary was expected for ULR_BINDING %@.";
-                NSString *msg = [NSString stringWithFormat:msgFmt,
-                                 NSStringFromClass([json class]),
-                                 self.entityMatcher.description];
-
-                localError = [NSError errorWithMessage:msg forAtom:self];
-            }
-            else {
-                NSDictionary *jsonDict = (NSDictionary *)json;
-
-                result = jsonDict[jsonKey];
-            }
-        }
-    }
-
-    if (localError != nil) {
-        if (error != nil) {
-            *error = localError;
-        }
-
-        result = nil;
-    }
-
-    return result;
+- (id<NSObject>)unwrapBulkJSON:(id<NSObject>)json
+                       context:(NSDictionary *)context
+                         error:(NSError *__autoreleasing *)error {
+    return [self _unwrapJSON:json
+               keyExpression:self.bulkWrapperKey
+                     context:context
+                       error:error];
 }
 
 #pragma mark - Debug Information
@@ -999,6 +977,48 @@
         result = nil;
     }
 
+    return result;
+}
+
+- (id<NSObject>)_unwrapJSON:(id<NSObject>)json
+              keyExpression:(id<FOSExpression>)keyExpr
+                    context:(NSDictionary *)context
+                      error:(NSError **)error {
+
+    if (error != nil) { *error = nil; }
+    id<NSObject> result = json;
+
+    NSError *localError = nil;
+
+    if (keyExpr != nil && json != nil) {
+        NSString *jsonKey = [keyExpr evaluateWithContext:context error:&localError];
+
+        if (jsonKey != nil && localError == nil) {
+            if (![json isKindOfClass:[NSDictionary class]]) {
+                NSString *msgFmt = @"The json provided to xxx_WRAPPER_KEY %@ was of type %@, an NSDictionary was expected for ULR_BINDING %@.";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 jsonKey,
+                                 NSStringFromClass([json class]),
+                                 self.entityMatcher.description];
+
+                localError = [NSError errorWithMessage:msg forAtom:self];
+            }
+            else {
+                NSDictionary *jsonDict = (NSDictionary *)json;
+
+                result = jsonDict[jsonKey];
+            }
+        }
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+        
+        result = nil;
+    }
+    
     return result;
 }
 
