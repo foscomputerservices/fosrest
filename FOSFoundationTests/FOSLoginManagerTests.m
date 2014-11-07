@@ -115,7 +115,7 @@
 + (void)setupStandardWebServiceConfigAndLogInWithOptions:(FOSRESTConfigOptions)configOptions andCallback:(TestCallBack)handler {
     NSParameterAssert(handler != nil);
 
-    FOSSetLogLevel(FOSLogLevelError);
+    FOSSetLogLevel(FOSLogLevelPedantic);
 
     [self setupStandardWebServiceConfigWithOptions:configOptions];
 

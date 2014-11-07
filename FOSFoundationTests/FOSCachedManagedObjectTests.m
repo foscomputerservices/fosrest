@@ -392,6 +392,7 @@ TEARDOWN_LOGIN
 
 #pragma mark - Relationship Tests
 
+// Currently broken, see: http://fosmain.foscomputerservices.com:8080/browse/FF-21
 - (void)testSetUserToOneRelationship {
     START_TEST
 
