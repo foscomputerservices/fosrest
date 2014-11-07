@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6220.8" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B17" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Fos_Unused_Keeps_Warnings_Away" parentEntity="FOSParseCachedManagedObject" syncable="YES"/>
     <entity name="FOSCachedManagedObject" representedClassName="FOSCachedManagedObject" isAbstract="YES" parentEntity="FOSManagedObject" syncable="YES">
         <attribute name="hasModifiedProperties" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="hasRelationshipFaults" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -47,5 +48,6 @@
         <element name="FOSParseUser" positionX="-216" positionY="-118" width="128" height="118"/>
         <element name="FOSRelationshipFault" positionX="-263" positionY="-378" width="164" height="88"/>
         <element name="FOSUser" positionX="-218" positionY="-184" width="128" height="45"/>
+        <element name="Fos_Unused_Keeps_Warnings_Away" positionX="34" positionY="-61" width="128" height="43"/>
     </elements>
 </model>

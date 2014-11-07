@@ -76,6 +76,10 @@
         _fetchResolutionTimerQueue = [[NSOperationQueue alloc] init];
         _fetchResolutionTimerQueue.maxConcurrentOperationCount = 1;
         _fetchResolutionTimerQueue.name = @"Fetch Resolution Queue";
+
+        // This is here to remove the compiler warning as this variable is used in
+        // the CoreData category.
+        _skipServerDeletionIds = [NSMutableSet set];
     }
     
     return self;
