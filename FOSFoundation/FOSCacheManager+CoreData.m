@@ -147,10 +147,12 @@
 
                     NSManagedObjectContext *moc = blockSelf->_restConfig.databaseManager.currentMOC;
 
-                    FOSDeletedObject *delObj = (FOSDeletedObject *)[moc objectWithID:nextDeleteID];
+                    FOSDeletedObject *delObj = (FOSDeletedObject *)[moc existingObjectWithID:nextDeleteID error:nil];
 
                     // We've completed this deletion on the server, so get rid of the record
-                    [moc deleteObject:delObj];
+                    if (delObj != nil) {
+                        [moc deleteObject:delObj];
+                    }
                 }
                 
                 return result;

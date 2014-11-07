@@ -166,6 +166,12 @@ __strong FOSRESTConfig *__sharedInstance = nil;
     }
 }
 
++ (BOOL)sharedInstanceInitialized {
+    @synchronized(self) {
+        return __sharedInstance != nil;
+    }
+}
+
 + (void)resetSharedInstance {
     @synchronized(self) {
         __sharedInstance = nil;

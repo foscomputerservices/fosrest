@@ -32,7 +32,7 @@ typedef FOSRecoveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSE
     // TODO : Restore to __weak when Swift fixes bug
     /* __weak */ __unsafe_unretained FOSRESTConfig *_restConfig;
     BOOL _updatingMainThreadMOC;
-    NSMutableSet *_skipServerDeletionIds;
+    NSMutableSet *_skipServerDeletionIds; // Used in (CoreData) category
 }
 
 #pragma mark - Class methods

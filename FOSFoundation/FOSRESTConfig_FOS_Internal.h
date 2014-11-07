@@ -8,6 +8,7 @@
 
 @interface FOSRESTConfig ()
 
++ (BOOL)sharedInstanceInitialized;
 + (void)resetSharedInstance;
 
 + (void)configWithApplicationVersion:(NSString *)appVersion options:(FOSRESTConfigOptions)options userSubType:(Class)userSubType  restServiceAdapter:(id <FOSRESTServiceAdapter>)restServiceAdapter;

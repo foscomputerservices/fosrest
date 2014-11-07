@@ -57,15 +57,10 @@
     NSString *modelCacheKey = self.name;
     NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
 
-    BOOL retrievedFromCache = NO;
     NSString *selName = NSStringFromSelector(_cmd);
     result = entityCache[selName];
 
-    if (result != nil) {
-        retrievedFromCache = YES;
-    }
-
-    else {
+    if (result == nil) {
         if (self.subentities.count == 0) {
             result = [NSSet setWithObject:self];
         }
@@ -91,15 +86,10 @@
     NSString *modelCacheKey = self.name;
     NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
 
-    BOOL retrievedFromCache = NO;
     NSString *selName = NSStringFromSelector(_cmd);
     result = entityCache[selName];
 
-    if (result != nil) {
-        retrievedFromCache = YES;
-    }
-
-    else {
+    if (result == nil) {
         result = [NSMutableSet set];
 
         NSEntityDescription *nextEntity = self;
@@ -121,12 +111,10 @@
     NSString *modelCacheKey = self.name;
     NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
 
-    BOOL retrievedFromCache = NO;
     NSString *selName = NSStringFromSelector(_cmd);
     NSNumber *numResult = entityCache[selName];
 
     if (numResult != nil) {
-        retrievedFromCache = YES;
         result = numResult.boolValue;
     }
 
@@ -155,15 +143,10 @@
     NSString *modelCacheKey = self.name;
     NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
 
-    BOOL retrievedFromCache = NO;
     NSString *selName = NSStringFromSelector(_cmd);
     result = entityCache[selName];
 
-    if (result != nil) {
-        retrievedFromCache = YES;
-    }
-
-    else {
+    if (result == nil) {
         result = [NSMutableSet setWithCapacity:3];
 
         for (NSRelationshipDescription *nextRel in self.flattenedRelationships) {
@@ -184,15 +167,10 @@
     NSString *modelCacheKey = self.name;
     NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
 
-    BOOL retrievedFromCache = NO;
     NSString *selName = NSStringFromSelector(_cmd);
     result = entityCache[selName];
 
-    if (result != nil) {
-        retrievedFromCache = YES;
-    }
-
-    else {
+    if (result == nil) {
         result = [NSMutableSet set];
 
         for (NSRelationshipDescription *ownerRel in self.ownerRelationships) {
@@ -216,13 +194,11 @@
     NSString *modelCacheKey = self.name;
     NSMutableDictionary *entityCache = [restConfig modelCacheForModelKey:modelCacheKey];
 
-    BOOL retrievedFromCache = NO;
     NSString *selName = NSStringFromSelector(_cmd);
     NSNumber *numResult = entityCache[selName];
 
     if (numResult != nil) {
         result = numResult.boolValue;
-        retrievedFromCache = YES;
     }
 
     else {

@@ -12,6 +12,7 @@
 #import "User.h"
 #import "Widget.h"
 #import "FOSLoginManager_Internal.h"
+#import "FOSCachedManagedObject+FOS_Internal.h"
 #import "FOSTestHarnessAdapter.h"
 #import <stdlib.h>
 
@@ -51,9 +52,7 @@
 }
 
 + (void)setupStandardWebServiceConfigWithOptions:(FOSRESTConfigOptions)configOptions {
-    static BOOL configDone = NO;
-
-    if (!configDone) {
+    if (!FOSRESTConfig.sharedInstanceInitialized) {
 
         // We want all output during testing
         FOSSetLogLevel(FOSLogLevelDebug);
@@ -73,8 +72,6 @@
         // Block waiting for network status
         NSAssert([FOSRESTConfig sharedInstance].networkStatus != FOSNetworkStatusNotReachable,
                  @"Network unreachable.  Cannot execute tests.");
-
-        configDone = YES;
     }
 }
 
