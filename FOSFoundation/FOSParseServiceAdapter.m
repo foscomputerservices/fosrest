@@ -327,14 +327,14 @@ extern NSString *FOSWebServiceServerErrorMessage;
 
 - (id)decodeJSONValueToCMOValue:(id<NSObject>)jsonValue
                          ofType:(NSAttributeDescription *)attrDesc
-                          error:(NSError * *)error {
+                          error:(NSError **)error {
     NSParameterAssert(attrDesc != nil);
     if (error != nil) { *error = nil; }
 
     NSError *localError = nil;
 
     id jsonVal = [jsonValue isKindOfClass:[NSNull class]] ? nil : jsonValue;
-    id result = jsonVal;
+    id result = nil;
 
     if (jsonVal != nil && attrDesc.attributeType == NSTransformableAttributeType) {
 
@@ -384,7 +384,13 @@ extern NSString *FOSWebServiceServerErrorMessage;
         result = [formatter dateFromString:formattedDate];
     }
     else {
-        result = [super decodeJSONValueToCMOValue:jsonValue ofType:attrDesc error:error];
+        result = [super decodeJSONValueToCMOValue:jsonValue ofType:attrDesc error:&localError];
+    }
+
+    if (localError != nil) {
+        if (error != nil) { *error = localError; }
+
+        result = nil;
     }
     
     return result;
@@ -540,7 +546,6 @@ extern NSString *FOSWebServiceServerErrorMessage;
                     jsonResult:(id<NSObject> *)jsonResult
                          error:(NSError **)error {
     NSParameterAssert(jsonResult != nil);
-    NSParameterAssert(error != nil);
 
     BOOL result = YES;
 
@@ -558,15 +563,19 @@ extern NSString *FOSWebServiceServerErrorMessage;
     return result;
 }
 
-- (void)_extractParseError:(NSHTTPURLResponse *)httpResponse
+- (BOOL)_extractParseError:(NSHTTPURLResponse *)httpResponse
                      error:(NSError **)error
                   jsonData:(id)jsonData {
+
+    BOOL result = true;
+    NSError *localError = nil;
+
     if ([jsonData isKindOfClass:[NSDictionary class]]) {
         NSString *errorStr = ((NSDictionary *)jsonData)[@"error"];
 
-        *error = [NSError errorWithDomain:@"FOSParseError"
-                                errorCode:httpResponse.statusCode
-                               andMessage:errorStr];
+        localError = [NSError errorWithDomain:@"FOSParseError"
+                                    errorCode:httpResponse.statusCode
+                                   andMessage:errorStr];
     }
     else {
         NSString *msg = @"Unknown error received from server";
@@ -577,10 +586,17 @@ extern NSString *FOSWebServiceServerErrorMessage;
             msg = headerStatus;
         }
 
-        *error = [NSError errorWithDomain:@"FOSParseError"
-                                errorCode:httpResponse.statusCode
-                               andMessage:msg];
+        localError = [NSError errorWithDomain:@"FOSParseError"
+                                    errorCode:httpResponse.statusCode
+                                   andMessage:msg];
     }
+
+    if (localError != nil) {
+        if (error != nil) { *error = localError; }
+        result = false;
+    }
+
+    return result;
 }
 
 - (id<NSObject>)_jsonBatchFragmentFromRequest:(FOSWebServiceRequest *)request {

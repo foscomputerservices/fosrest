@@ -19,7 +19,7 @@
 
 + (id)objectForAttribute:(NSAttributeDescription *)attrDesc forJsonValue:(id)jsonValue {
     id jsonVal = [jsonValue isKindOfClass:[NSNull class]] ? nil : jsonValue;
-    id result = jsonVal;
+    id result = nil;
 
     if (jsonVal != nil && attrDesc.attributeType == NSTransformableAttributeType) {
 
