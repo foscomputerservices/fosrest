@@ -106,9 +106,11 @@
     if (self.restConfig.loginManager.isLoggedIn) {
         FOSUser *user = self.restConfig.loginManager.loggedInUser;
 
-        FOSOperation *pushOp = [user sendServerRecordWithLifecycleStyle:nil];
+        if (!user.isLocalOnly) {
+            FOSOperation *pushOp = [user sendServerRecordWithLifecycleStyle:nil];
 
-        [completePushOp addDependency:pushOp];
+            [completePushOp addDependency:pushOp];
+        }
     }
 }
 
