@@ -904,7 +904,7 @@
                                                       withBindings:_bindings
                                                       twoWayBinder:recordBinder
                                                              error:&localError];
-            if (localError == nil) {
+            if (localError == nil && newCMO != nil) {
                 newCMO.hasRelationshipFaults = _createdFaults;
 
                 if ([moc obtainPermanentIDsForObjects:@[ newCMO ] error:&localError]) {
@@ -919,6 +919,21 @@
                 else {
                     _error = localError;
                 }
+            }
+
+            // NOTE: It's a bit unclear how this is possible. Nonetheless we get crash logs
+            //       where @[ newCMO ] above crashes with newCMO == nil.  I've reviewed
+            //       _objectFromJSON:... and it's not obvious how such a thing is possible.
+            //       Maybe from the logs we'll learn more.
+            else if (newCMO == nil) {
+                NSString *msgFmt = @"Unknown error. Unable to create/retrieve object for id '%@'";
+                NSString *msg = [NSString stringWithFormat:msgFmt, [_jsonId description]];
+                NSDictionary *userInfo = @{
+                   @"JSON_ID" : _jsonId,
+                   @"JSON" : _json
+                };
+
+                _error = [NSError errorWithDomain:@"FOSFoundation" message:msg andUserInfo:userInfo];
             }
             else {
                 _error = localError;
