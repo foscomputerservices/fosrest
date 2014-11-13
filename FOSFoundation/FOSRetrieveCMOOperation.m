@@ -895,7 +895,7 @@
 
         // There are cases where the _managedObjecgtID is no longer available.
         // I'm not sure how it happens, but it does.
-        if (![moc existingObjectWithID:_managedObjectID error:nil]) {
+        if (_managedObjectID != nil && ![moc existingObjectWithID:_managedObjectID error:nil]) {
             _managedObjectID = nil;
         }
 
