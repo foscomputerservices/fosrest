@@ -24,7 +24,9 @@
     NSError *localError = nil;
 
     // Delete the DB between tests
-    [fileMgr removeItemAtURL:storeURL error:&localError];
+    if ([fileMgr fileExistsAtPath:storeURL.path]) {
+        [fileMgr removeItemAtURL:storeURL error:&localError];
+    }
 
     if (localError == nil) {
 

@@ -58,13 +58,25 @@
             FOSCachedManagedObject *cmo = [self _retrieveCMO:&localError context:context];
 
             result = cmo.jsonIdValue;
+
+            if (result == nil) {
+                NSEntityDescription *cmoEntity = cmo.entity;
+                if (cmoEntity == nil) {
+                    cmoEntity = context[@"ENTITY"];
+                }
+
+                NSString *msgFmt = @"Unable to determine CMOID for entity %@ with CoreData id %@.";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 cmoEntity.name, cmo.objectID.description];
+                localError = [NSError errorWithMessage:msg forAtom:self];
+            }
         }
         matched = YES;
     }
     else if ([ident isEqualToString:@"OWNERID"]) {
         result = [self _evaluateWithContext:context
                                  identifier:ident
-                              expectingType:[NSString class]
+                              expectingType:[NSObject class]
                                       error:&localError];
 
         if (result == nil && localError == nil) {
@@ -130,8 +142,7 @@
     id contextResult = context[ident];
 
     if ([contextResult isKindOfClass:type]) {
-        // Cast really isn't necessary, but it demonstrates what we're expecting
-        result = (NSRelationshipDescription *)contextResult;
+        result = contextResult;
     }
     else if (contextResult != nil) {
         NSString *msg = [NSString stringWithFormat:@"Expected instance of type %@, got %@ for identifier %@.", NSStringFromClass(type), NSStringFromClass([contextResult class]), ident];

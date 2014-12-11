@@ -94,6 +94,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "63BFA3761481A85700FE1C0C"
+            BuildableName = "libFOSFoundation.a"
+            BlueprintName = "FOSFoundation"
+            ReferencedContainer = "container:FOSFoundation.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
