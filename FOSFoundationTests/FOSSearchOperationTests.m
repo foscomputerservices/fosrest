@@ -27,7 +27,7 @@ SETUP_TEARDOWN_LOGIN(FOSRESTConfigOptionsNone | FOSRESTConfigAutomaticallySynchr
 - (void)testSearch {
 
     WidgetSearchOperation *searchOp = [[WidgetSearchOperation alloc] init];
-    searchOp.name = @"TestWidget - Don't Delete";
+    searchOp.widgetName = @"TestWidget - Don't Delete";
 
     START_TEST
 
@@ -45,7 +45,7 @@ SETUP_TEARDOWN_LOGIN(FOSRESTConfigOptionsNone | FOSRESTConfigAutomaticallySynchr
         id result = results.anyObject;
 
         XCTAssertTrue([result isKindOfClass:[Widget class]], @"Wrong type!");
-        XCTAssertTrue([((Widget *)result).name isEqualToString:searchOp.name], @"Wrong name");
+        XCTAssertTrue([((Widget *)result).name isEqualToString:searchOp.widgetName], @"Wrong name");
 
         END_TEST
     }];
