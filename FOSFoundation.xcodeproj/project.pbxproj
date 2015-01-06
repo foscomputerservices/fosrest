@@ -2496,42 +2496,6 @@
 			};
 			name = Release;
 		};
-		635020B519259A0000A78EED /* GoldMaster */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FOSFoundationResources/FOSFoundationResources-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "FOSFoundationResources/FOSFoundationResources-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = FOSFoundation;
-				SDKROOT = iphoneos;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = GoldMaster;
-		};
 		635020B619259A0000A78EED /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2567,179 +2531,6 @@
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = AdHoc;
-		};
-		638FD306185248C8007B97BA /* GoldMaster */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"CONFIGURATION_$(CONFIGURATION)",
-					"NS_BLOCK_ASSERTIONS=1",
-				);
-				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INSTALL_GROUP = "";
-				INSTALL_MODE_FLAG = "";
-				INSTALL_OWNER = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = "non-global";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = GoldMaster;
-		};
-		638FD307185248C8007B97BA /* GoldMaster */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALTERNATE_PERMISSIONS_FILES = iphonesimulator;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = NO;
-				DSTROOT = /tmp/FOSFoundation.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FOSFoundation/FOSFoundation-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"CONFIGURATION_$(CONFIGURATION)",
-					"NS_BLOCK_ASSERTIONS=1",
-				);
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
-				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
-				GCC_WARN_SHADOW = NO;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-				);
-				INSTALL_PATH = ../Distribution;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
-				SHARED_PRECOMPS_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = "non-global";
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
-			};
-			name = GoldMaster;
-		};
-		638FD308185248C8007B97BA /* GoldMaster */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FOSFoundation/FOSFoundation-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = NS_BLOCK_ASSERTIONS;
-				GCC_THUMB_SUPPORT = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)",
-				);
-				INFOPLIST_FILE = "FOSFoundationTests/FOSFoundationTests-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
-			};
-			name = GoldMaster;
-		};
-		638FD309185248C8007B97BA /* GoldMaster */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRIP_STYLE = "non-global";
-				VALID_ARCHS = "arm64 armv7 armv7s";
-			};
-			name = GoldMaster;
-		};
-		638FD30A185248C8007B97BA /* GoldMaster */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
-				);
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FOSFoundation/FOSFoundation-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "FOSFoundationOSX/FOSFoundationOSX-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				PRODUCT_NAME = FOSFoundation;
-				SDKROOT = macosx;
-				WRAPPER_EXTENSION = framework;
-			};
-			name = GoldMaster;
-		};
-		638FD30B185248C8007B97BA /* GoldMaster */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\\\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\\\"",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FOSFoundation/FOSFoundation-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "FOSFoundationOSXTests/FOSFoundationOSXTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				WRAPPER_EXTENSION = octest;
-			};
-			name = GoldMaster;
 		};
 		63A26A50168B3B5500771EB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2956,6 +2747,217 @@
 				WRAPPER_EXTENSION = octest;
 			};
 			name = AdHoc;
+		};
+		63B971001A5C5C5400C9F5B8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"CONFIGURATION_$(CONFIGURATION)",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_GROUP = "";
+				INSTALL_MODE_FLAG = "";
+				INSTALL_OWNER = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
+			};
+			name = Test;
+		};
+		63B971011A5C5C5400C9F5B8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALTERNATE_PERMISSIONS_FILES = iphonesimulator;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				DSTROOT = /tmp/FOSFoundation.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundation/FOSFoundation-Prefix.pch";
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_MULTIPLE_DEFINITION_TYPES_FOR_SELECTOR = YES;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INSTALL_PATH = ../Distribution;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)Headers";
+				SHARED_PRECOMPS_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Test;
+		};
+		63B971021A5C5C5400C9F5B8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundation/FOSFoundation-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)",
+				);
+				INFOPLIST_FILE = "FOSFoundationTests/FOSFoundationTests-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+			};
+			name = Test;
+		};
+		63B971031A5C5C5400C9F5B8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_STYLE = "non-global";
+				VALID_ARCHS = "arm64 armv7 armv7s";
+			};
+			name = Test;
+		};
+		63B971041A5C5C5400C9F5B8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundation/FOSFoundation-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "FOSFoundationOSX/FOSFoundationOSX-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = FOSFoundation;
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Test;
+		};
+		63B971051A5C5C5400C9F5B8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\\\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\\\"",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundation/FOSFoundation-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "FOSFoundationOSXTests/FOSFoundationOSXTests-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Test;
+		};
+		63B971061A5C5C5400C9F5B8 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FOSFoundationResources/FOSFoundationResources-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FOSFoundationResources/FOSFoundationResources-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = FOSFoundation;
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Test;
 		};
 		63BFA3991481A85700FE1C0C /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3261,8 +3263,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				635020B319259A0000A78EED /* Debug */,
+				63B971061A5C5C5400C9F5B8 /* Test */,
 				635020B419259A0000A78EED /* Release */,
-				635020B519259A0000A78EED /* GoldMaster */,
 				635020B619259A0000A78EED /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3272,8 +3274,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63A26A50168B3B5500771EB3 /* Debug */,
+				63B971031A5C5C5400C9F5B8 /* Test */,
 				63A26A51168B3B5500771EB3 /* Release */,
-				638FD309185248C8007B97BA /* GoldMaster */,
 				63A26A52168B3B5500771EB3 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3283,8 +3285,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63A3135716E5B3FC00DDE117 /* Debug */,
+				63B971041A5C5C5400C9F5B8 /* Test */,
 				63A3135816E5B3FC00DDE117 /* Release */,
-				638FD30A185248C8007B97BA /* GoldMaster */,
 				63A3135916E5B3FC00DDE117 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3294,8 +3296,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63A3135A16E5B3FC00DDE117 /* Debug */,
+				63B971051A5C5C5400C9F5B8 /* Test */,
 				63A3135B16E5B3FC00DDE117 /* Release */,
-				638FD30B185248C8007B97BA /* GoldMaster */,
 				63A3135C16E5B3FC00DDE117 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3305,8 +3307,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63BFA3991481A85700FE1C0C /* Debug */,
+				63B971001A5C5C5400C9F5B8 /* Test */,
 				63BFA39A1481A85700FE1C0C /* Release */,
-				638FD306185248C8007B97BA /* GoldMaster */,
 				63E3C42514ABE74200E83F95 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3316,8 +3318,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63BFA39C1481A85700FE1C0C /* Debug */,
+				63B971011A5C5C5400C9F5B8 /* Test */,
 				63BFA39D1481A85700FE1C0C /* Release */,
-				638FD307185248C8007B97BA /* GoldMaster */,
 				63E3C42614ABE74200E83F95 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3327,8 +3329,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63BFA39F1481A85700FE1C0C /* Debug */,
+				63B971021A5C5C5400C9F5B8 /* Test */,
 				63BFA3A01481A85700FE1C0C /* Release */,
-				638FD308185248C8007B97BA /* GoldMaster */,
 				63E3C42714ABE74200E83F95 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
