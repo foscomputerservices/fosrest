@@ -421,7 +421,7 @@ static NSMutableDictionary *_processingFaults = nil;
         //         we generally call updateWithJSONDictionary:, which clears
         //         this flag too.  And is it possible that 'markClean' is
         //         called just to keep instance from being uploaded?
-        if (self.jsonIdValue != nil) {
+        if (self.jsonIdValue != nil && self.isFaultObject) {
             self.isFaultObject = NO;
         }
 
