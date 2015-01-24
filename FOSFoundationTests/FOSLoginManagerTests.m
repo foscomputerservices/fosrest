@@ -12,6 +12,7 @@
 #import "User.h"
 #import "Widget.h"
 #import "FOSLoginManager_Internal.h"
+#import "FOSNetworkStatusMonitor_FOS_Internal.h"
 #import "FOSTestHarnessAdapter.h"
 #import <stdlib.h>
 
@@ -56,7 +57,7 @@
     if (!configDone) {
 
         // We want all output during testing
-        FOSSetLogLevel(FOSLogLevelDebug);
+        FOSSetLogLevel(FOSLogLevelPedantic);
 
         // Force to forget that we were logged in via a previous session
         [FOSLoginManager clearLoggedInUserId];
