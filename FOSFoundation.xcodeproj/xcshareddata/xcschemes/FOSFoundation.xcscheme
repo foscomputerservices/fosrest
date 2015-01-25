@@ -54,6 +54,9 @@
                   Identifier = "FOSCachedManagedObjectTests/testDeleteFromServerToClient_ToMany_SingleItemOfMultiple">
                </Test>
                <Test
+                  Identifier = "FOSCachedManagedObjectTests/testDeleteFromServerToClient_ToOne">
+               </Test>
+               <Test
                   Identifier = "FOSPullStaticTablesOperationTests/testPullPartialStaticTables">
                </Test>
                <Test
