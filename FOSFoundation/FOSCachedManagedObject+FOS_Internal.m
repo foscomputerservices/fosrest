@@ -16,6 +16,12 @@
 + (NSString *)entityName {
     NSString *entityName = NSStringFromClass([self class]);
 
+    // Handle Swift classes
+    NSRange dotRange = [entityName rangeOfString:@"."];
+    if (dotRange.location != NSNotFound) {
+        entityName = [entityName substringFromIndex:dotRange.location + 1];
+    }
+
     return entityName;
 }
 
