@@ -17,6 +17,10 @@
  * this property to YES, it will cause the receiver to report back
  * FOSNetworkStatusNotReachable from the networkStatus property.  It will also
  * trigger the appropriate change in status notifications.
+ *
+ * @discussion
+ *
+ * Setting this property will reset forceOnline to NO.
  */
 @property (nonatomic, assign, getter=isForcedOffline) BOOL forceOffline;
 

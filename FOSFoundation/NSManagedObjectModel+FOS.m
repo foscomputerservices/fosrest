@@ -58,15 +58,6 @@
 
     [result setEntities:newEntities.allValues];
 
-    for (NSEntityDescription *newEntity in newEntities.allValues) {
-        NSMutableString *logStr = [NSMutableString string];
-
-        [logStr appendFormat:@"New Entity: %@ (%@) - ", newEntity.name,
-         newEntity.superentity.name];
-
-        FOSLogPedantic(@"%@", logStr);
-    }
-
     // Clear the placeholder
     [NSEntityDescription setPlaceholder:nil];
 

@@ -878,10 +878,12 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 - (BOOL)hasBeenUploadedToServer {
+    FOSJsonId jsonIdValue = self.jsonIdValue;
+
     BOOL uploaded =
-        (self.jsonIdValue != nil) &&
-        (![self.jsonIdValue isKindOfClass:[NSNumber class]] ||
-         ((NSNumber *)self.jsonIdValue).integerValue != 0) &&
+        (jsonIdValue != nil) &&
+        (![jsonIdValue isKindOfClass:[NSNumber class]] ||
+         ((NSNumber *)jsonIdValue).integerValue != 0) &&
         ((self.updatedWithServerAt != nil) ||
          self.markedClean);
 

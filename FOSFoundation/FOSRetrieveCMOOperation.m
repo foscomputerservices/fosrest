@@ -901,6 +901,13 @@
 
         // Did we short-circuit to an existing object?  If not, create it now.
         BOOL markClean = YES;
+
+        // There are cases where the _managedObjecgtID is no longer available.
+        // I'm not sure how it happens, but it does.
+        if (_managedObjectID != nil && ![moc existingObjectWithID:_managedObjectID error:nil]) {
+            _managedObjectID = nil;
+        }
+
         if (_managedObjectID == nil) {
             NSError *localError = nil;
 
@@ -913,7 +920,7 @@
                                                       withBindings:_bindings
                                                       twoWayBinder:recordBinder
                                                              error:&localError];
-            if (localError == nil) {
+            if (localError == nil && newCMO != nil) {
                 newCMO.hasRelationshipFaults = _createdFaults;
 
                 if ([moc obtainPermanentIDsForObjects:@[ newCMO ] error:&localError]) {
@@ -931,6 +938,21 @@
                 else {
                     _error = localError;
                 }
+            }
+
+            // NOTE: It's a bit unclear how this is possible. Nonetheless we get crash logs
+            //       where @[ newCMO ] above crashes with newCMO == nil.  I've reviewed
+            //       _objectFromJSON:... and it's not obvious how such a thing is possible.
+            //       Maybe from the logs we'll learn more.
+            else if (newCMO == nil) {
+                NSString *msgFmt = @"Unknown error. Unable to create/retrieve object for id '%@'";
+                NSString *msg = [NSString stringWithFormat:msgFmt, [_jsonId description]];
+                NSDictionary *userInfo = @{
+                   @"JSON_ID" : _jsonId,
+                   @"JSON" : _json
+                };
+
+                _error = [NSError errorWithDomain:@"FOSFoundation" message:msg andUserInfo:userInfo];
             }
             else {
                 _error = localError;
@@ -1356,9 +1378,9 @@
     if (originalJson != nil) {
         NSDictionary *context = @{ @"ENTITY" : self.entity };
 
-        id<NSObject> unwrappedJson = [_urlBinding unwrapJSON:originalJson
-                                                     context:context
-                                                       error:&localError];
+        id<NSObject> unwrappedJson = [_urlBinding unwrapBulkJSON:originalJson
+                                                         context:context
+                                                           error:&localError];
 
         // We expect an array of possibilities here. We'll look into
         // the array and attempt to match jsonId.

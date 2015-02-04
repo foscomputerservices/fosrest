@@ -340,6 +340,15 @@
     return result;
 }
 
+- (id<NSObject>)unwrapBulkJSON:(id<NSObject>)json
+                       context:(NSDictionary *)context
+                         error:(NSError *__autoreleasing *)error {
+    return [self _unwrapJSON:json
+               keyExpression:self.bulkWrapperKey
+                     context:context
+                       error:error];
+}
+
 #pragma mark - Debug Information
 
 + (NSString *)stringForLifecycle:(FOSLifecyclePhase)lifecyclePhase {
@@ -489,24 +498,28 @@
 
     NSURL *result = self._baseURL;
     NSError *localError = nil;
+    NSMutableDictionary *localContext = context == nil
+        ? [NSMutableDictionary dictionary]
+        : [context mutableCopy];
 
-    if (context == nil) {
-        context = @{ @"CMO" : cmo, @"ENTITY" : cmo.entity };
+    if (cmo != nil) {
+        localContext[@"CMO"] = cmo;
+        localContext[@"ENTITY"] = cmo.entity;
+
         if (cmo.jsonIdValue != nil) {
-            context = [context mutableCopy];
-            ((NSMutableDictionary *)context)[@"CMOID"] = cmo.jsonIdValue;
+            localContext[@"CMOID"] = cmo.jsonIdValue;
         }
     }
 
     // Retrieve the base END_POINT
-    NSString *endPoint = [self _endPointStrForCMO:cmo withContext:context error:&localError];
+    NSString *endPoint = [self _endPointStrForCMO:cmo withContext:localContext error:&localError];
     if (localError == nil) {
         result = [result URLByAppendingPathComponent:endPoint];
     }
 
     // Retrieve the query portion
     NSString *endPointQuery = [self _endPointQueryForCMO:cmo
-                                             withContext:context
+                                             withContext:localContext
                                                    error:&localError];
     if (endPointQuery.length > 0) {
         NSString *baseURLStr = result.absoluteString;
@@ -667,26 +680,31 @@
 - (NSString *)_endPointStrForCMO:(FOSCachedManagedObject *)cmo
                             withContext:(NSDictionary *)context
                                   error:(NSError **)error {
-    NSParameterAssert(error != nil);
+    if (error != nil) { *error = nil; }
 
     NSError *localError = nil;
     NSString *result = nil;
 
     id exprValue = [self.endPointURLExpression evaluateWithContext:context error:&localError];
-    if (error == nil && ![exprValue isKindOfClass:[NSString class]]) {
-        NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING %@";
-        NSString *msg = [NSString stringWithFormat:msgFmt,
-                         NSStringFromClass([exprValue class]),
-                         self.entityMatcher.description];
+    if (localError == nil) {
+        if (![exprValue isKindOfClass:[NSString class]]) {
+            NSString *msgFmt = @"END_POINT expression yielded a value of type %@, expected an NSString for URL_BINDING %@";
+            NSString *msg = [NSString stringWithFormat:msgFmt,
+                             NSStringFromClass([exprValue class]),
+                             self.entityMatcher.description];
 
-        localError = [NSError errorWithMessage:msg forAtom:self];
-    }
-    else {
-        result = (NSString *)exprValue;
+            localError = [NSError errorWithMessage:msg forAtom:self];
+        }
+        else {
+            result = (NSString *)exprValue;
+        }
     }
 
     if (localError != nil) {
-        *error = localError;
+        if (error != nil) {
+            *error = localError;
+        }
+
         result = nil;
     }
     
@@ -1035,6 +1053,48 @@
         result = nil;
     }
 
+    return result;
+}
+
+- (id<NSObject>)_unwrapJSON:(id<NSObject>)json
+              keyExpression:(id<FOSExpression>)keyExpr
+                    context:(NSDictionary *)context
+                      error:(NSError **)error {
+
+    if (error != nil) { *error = nil; }
+    id<NSObject> result = json;
+
+    NSError *localError = nil;
+
+    if (keyExpr != nil && json != nil) {
+        NSString *jsonKey = [keyExpr evaluateWithContext:context error:&localError];
+
+        if (jsonKey != nil && localError == nil) {
+            if (![json isKindOfClass:[NSDictionary class]]) {
+                NSString *msgFmt = @"The json provided to xxx_WRAPPER_KEY %@ was of type %@, an NSDictionary was expected for ULR_BINDING %@.";
+                NSString *msg = [NSString stringWithFormat:msgFmt,
+                                 jsonKey,
+                                 NSStringFromClass([json class]),
+                                 self.entityMatcher.description];
+
+                localError = [NSError errorWithMessage:msg forAtom:self];
+            }
+            else {
+                NSDictionary *jsonDict = (NSDictionary *)json;
+
+                result = jsonDict[jsonKey];
+            }
+        }
+    }
+
+    if (localError != nil) {
+        if (error != nil) {
+            *error = localError;
+        }
+        
+        result = nil;
+    }
+    
     return result;
 }
 

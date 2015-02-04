@@ -71,17 +71,17 @@
         context[@"ATTRDESC"] = propsByName[identNames.anyObject];
 
 
-        json = [self _unwrappedJSON:json context:context error:&localError];
-        if (json && localError == nil) {
-            result = [identityBinding jsonIdFromJSON:json
+        id<NSObject> unwrappedJson = [self _unwrappedJSON:json context:context error:&localError];
+        if (unwrappedJson && localError == nil) {
+            result = [identityBinding jsonIdFromJSON:unwrappedJson
                                          withContext:context
                                                error:&localError];
 
             if ([result isKindOfClass:[NSDictionary class]] ||
                 [result isKindOfClass:[NSArray class]]) {
-                NSString *msgFmt = @"Unexpected type '%@' received while binding ID_ATTRIBUTE. Expected a value type from JSON: %@";
+                NSString *msgFmt = @"Unexpected type '%@' received while binding ID_ATTRIBUTE for entity of type '%@'. Expected a value type from unwrapped JSON: %@ {wrapped JSON: %@}";
                 NSString *msg = [NSString stringWithFormat:msgFmt,
-                                 NSStringFromClass([result class]), json];
+                                 NSStringFromClass([result class]), entity.name, unwrappedJson, json];
 
                 localError = [NSError errorWithMessage:msg
                                                forAtom:identityBinding];

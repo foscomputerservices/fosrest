@@ -265,10 +265,12 @@
     NSAssert(![((FOSOperation *)op).flattenedDependencies containsObject:self], msg);
 #endif
 
-    [super addDependency:op];
+    if (op != nil) {
+        [super addDependency:op];
 
-    if (_registeredFinishedDependentOperations) {
-        [op addObserver:self forKeyPath:@"finishedDependentOperations" options:0 context:nil];
+        if (_registeredFinishedDependentOperations) {
+            [op addObserver:self forKeyPath:@"finishedDependentOperations" options:0 context:nil];
+        }
     }
 }
 

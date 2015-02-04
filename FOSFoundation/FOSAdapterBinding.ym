@@ -84,7 +84,7 @@
 %token JSON WEBFORM NO_DATA
 %token GET POST PUT DELETE
 %token JSON_WRAPPER_KEY JSON_RECEIVE_WRAPPER_KEY JSON_SEND_WRAPPER_KEY
-%token ATTRIBUTE_BINDINGS ID_ATTRIBUTE RECEIVE_ONLY_ATTRIBUTE SEND_ONLY_ATTRIBUTE
+%token BULK_WRAPPER_KEY ATTRIBUTE_BINDINGS ID_ATTRIBUTE RECEIVE_ONLY_ATTRIBUTE SEND_ONLY_ATTRIBUTE
 %token RELATIONSHIP_BINDINGS RELATIONSHIP_BINDING
 %token JSON_BINDING JSON_ID_BINDING RELATIONSHIPS
 
@@ -101,7 +101,7 @@
 %type<object> end_point_parameters end_point_url
 %type<object> cmo_binding
 %type<object> json_wrapper_key json_receive_wrapper_key json_send_wrapper_key
-%type<object> attribute_bindings attribute_binding
+%type<object> bulk_wrapper_key attribute_bindings attribute_binding
 %type<object> attribute_binding_spec attribute_binding_list
 
 %type<object> relationship_bindings relationship_binding relationship_binding_list
@@ -150,6 +150,7 @@ binding
     | json_wrapper_key { $$ = $1; }
     | json_receive_wrapper_key { $$ = $1; }
     | json_send_wrapper_key { $$ = $1; }
+    | bulk_wrapper_key { $$ = $1; }
     | attribute_bindings { $$ = $1; }
     | relationship_bindings { $$ = $1; }
     | cmo_binding { $$ = $1; }
@@ -222,13 +223,14 @@ url_binding
         /* 11 */ end_point_url              /* required */
         /* 12 */ end_point_parameters       /* optional */
         /* 13 */ json_wrapper_key           /* optional */
-        /* 14 */ optional_json_binding      /* optional */
-        /* 15 */ cmo_binding                /* optional */
-        /* 16 */ optional_relationships     /* optional */
+        /* 14 */ bulk_wrapper_key           /* optional */
+        /* 15 */ optional_json_binding      /* optional */
+        /* 16 */ cmo_binding                /* optional */
+        /* 17 */ optional_relationships     /* optional */
 
 // TODO FF-7 : Review why entityMatcher can be optional.  How would we match to the binding if
 //        we don't have an entity matcher??
-        /* 17 */ optional_matching_entities /* optional */ {
+        /* 18 */ optional_matching_entities /* optional */ {
 
         FOSLifecyclePhase lifecyclePhase = ($3);
         FOSItemMatcher *lifecycleStyle = (__bridge FOSItemMatcher *)($4);
@@ -241,16 +243,17 @@ url_binding
         id<FOSExpression> endPoint = (__bridge id<FOSExpression>)($11);
         NSArray *endPointParameters = (__bridge NSArray *)($12);
         id<FOSExpression> jsonWrapperKey = (__bridge id<FOSExpression>)($13);
-        NSArray *jsonBindingExpressions = (__bridge NSArray *)($14);
-        id binder = (__bridge id)($15);
+        id<FOSExpression> bulkWrapperKey = (__bridge id<FOSExpression>)($14);
+        NSArray *jsonBindingExpressions = (__bridge NSArray *)($15);
+        id binder = (__bridge id)($16);
         FOSCMOBinding *cmoBinder = [binder isKindOfClass:[FOSCMOBinding class]]
             ? (FOSCMOBinding *)binder
             : nil;
         FOSSharedBindingReference *bindingReference = [binder isKindOfClass:[FOSSharedBindingReference class]]
             ? (FOSSharedBindingReference *)binder
             : nil;
-        FOSItemMatcher *relationshipMatcher = (__bridge FOSItemMatcher *)($16);
-        FOSItemMatcher *entityMatcher = (__bridge FOSItemMatcher *)($17);
+        FOSItemMatcher *relationshipMatcher = (__bridge FOSItemMatcher *)($17);
+        FOSItemMatcher *entityMatcher = (__bridge FOSItemMatcher *)($18);
 
         FOSURLBinding *binding = nil;
         if (cmoBinder != nil) {
@@ -327,6 +330,7 @@ url_binding
         binding.baseURLExpr = baseURLExpr;
         binding.endPointParameters = endPointParameters;
         binding.jsonWrapperKey = jsonWrapperKey;
+        binding.bulkWrapperKey = bulkWrapperKey;
 
         // TODO : Figure out why without this we get a release of binding on exit of this function
         CFBridgingRetain(binding);
@@ -499,6 +503,11 @@ json_receive_wrapper_key
 json_send_wrapper_key
     : /* empty */ { $$ = nil; }
     | JSON_SEND_WRAPPER_KEY SEP expression SEMI { $$ = $3; }
+    ;
+
+bulk_wrapper_key
+    : /* empty */ { $$ = nil; }
+    | BULK_WRAPPER_KEY SEP expression SEMI { $$ = $3; }
     ;
 
 attribute_bindings
