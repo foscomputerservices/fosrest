@@ -6,7 +6,9 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
-@class FOSPushAllCacheChangesOperation;
+#import <FOSFoundation/FOSOperation.h>
+
+@class FOSPushCacheChangesOperation;
 
 @interface FOSPushCacheChangesOperation : FOSOperation
 

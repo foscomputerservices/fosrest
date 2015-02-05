@@ -7,7 +7,7 @@
 //
 
 #import "FOSWebServiceRequest+FOS_Internal.h"
-#import "FOSRetrieveLoginDataOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSRetrieveLoginDataOperation {
     NSError *_error;

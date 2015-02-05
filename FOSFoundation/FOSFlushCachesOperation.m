@@ -7,8 +7,7 @@
 //
 
 #import "FOSFlushCachesOperation.h"
-#import "FOSCacheManager.h"
-#import "FOSPushCacheChangesOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSFlushCachesOperation
 

@@ -6,9 +6,12 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
 #import <XCTest/XCTest.h>
 #import "FOSFoundationTests.h"
 #import "FOSOperation+FOS_Internal.h"
+#import "FOSFoundation_Internal.h"
+#import "FOSWebServiceRequest+FOS_Internal.h"
 
 typedef void (^FOSOpKVOHandler)(NSString *keyPath, id object, NSDictionary *change, void *context);
 

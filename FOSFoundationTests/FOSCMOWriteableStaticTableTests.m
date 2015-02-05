@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
 #import <XCTest/XCTest.h>
 #import "FOSCachedManagedObjectTests.h"
 #import "FOSFoundationTests.h"

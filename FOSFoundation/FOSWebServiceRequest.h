@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-#import "FOSOperation.h"
+#import <FOSFoundation/FOSOperation.h>
 
 @class FOSCachedManagedObject;
 @class FOSWebService;

@@ -36,6 +36,9 @@
 #import "FOSRelationshipFault+FOS_Internal.h"
 #import "FOSCacheManager.h"
 #import "FOSDatabaseManager+FOS_Internal.h"
+#import "FOSWebServiceRequest+FOS_Internal.h"
+#import "FOSLoginManager_Internal.h"
+#import "FOSNetworkStatusMonitor_FOS_Internal.h"
 
 // Data model
 #import "FOSDeletedObject+FOS_Internal.h"
@@ -44,6 +47,9 @@
 #import "FOSModifiedProperty.h"
 #import "FOSRelationshipFault.h"
 #import "FOSRetrieveRelationshipUpdatesOperation.h"
+#import "FOSRetrieveCMOOperation+FOS_Internal.h"
+#import "FOSCacheManager+CoreData.h"
+#import "FOSMergePolicy.h"
 
 // Logging
 #import "FOSAnalytics.h"
@@ -53,6 +59,7 @@
 
 // Queue Management
 #import "FOSOperation.h"
+#import "FOSOperationQueue+FOS_Internal.h"
 #import "FOSOperationQueue.h"
 #import "FOSBackgroundOperation.h"
 #import "FOSBeginOperation.h"

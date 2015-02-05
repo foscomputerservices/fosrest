@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+#import "FOSParseUser.h"
+
 @interface FOSParseUser (FOS_Internal)
 
 @end

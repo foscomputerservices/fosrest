@@ -2,9 +2,18 @@
 //  FOSFoundation.h
 //  FOSFoundation
 //
-//  Created by David Hunt on 12/22/12.
-//  Copyright (c) 2011 FOS Computer Services. All rights reserved.
+//  Created by David Hunt on 2/4/15.
+//  Copyright (c) 2015 FOS Computer Services. All rights reserved.
 //
+
+@import UIKit;
+@import CoreData;
+
+//! Project version number for FOSFoundation.
+FOUNDATION_EXPORT double FOSFoundationVersionNumber;
+
+//! Project version string for FOSFoundation.
+FOUNDATION_EXPORT const unsigned char FOSFoundationVersionString[];
 
 #import <Foundation/Foundation.h>
 
@@ -38,6 +47,7 @@
 #import <FOSFoundation/FOSCompiledAtom.h>
 #import <FOSFoundation/FOSTwoWayRecordBinding.h>
 #import <FOSFoundation/FOSTwoWayPropertyBinding.h>
+#import <FOSFoundation/FOSTwoWayRecordBinding.h>
 #import <FOSFoundation/FOSExpression.h>
 #import <FOSFoundation/FOSAdapterBinding.h>
 #import <FOSFoundation/FOSAdapterBindingParser.h>
@@ -69,10 +79,20 @@
 #import <FOSFoundation/FOSSendServerRecordOperation.h>
 #import <FOSFoundation/FOSAtomicCreateServerRecordOperation.h>
 #import <FOSFoundation/FOSCreateServerRecordOperation.h>
+#import <FOSFoundation/FOSLoginOperation.h>
+#import <FOSFoundation/FOSLogoutOperation.h>
+#import <FOSFoundation/FOSRetrieveLoginDataOperation.h>
+#import <FOSFoundation/FOSPushCacheChangesOperation.h>
+#import <FOSFoundation/FOSRefreshUserOperation.h>
 #import <FOSFoundation/FOSRetrieveCMOOperation.h>
+#import <FOSFoundation/FOSRetrieveToOneRelationshipOperation.h>
+#import <FOSFoundation/FOSRetrieveToManyRelationshipOperation.h>
+#import <FOSFoundation/FOSPullStaticTablesOperation.h>
+#import <FOSFoundation/FOSSendToOneRelationshipOperation.h>
+#import <FOSFoundation/FOSSendToManyRelationshipOperation.h>
+#import <FOSFoundation/FOSStaticTableSearchOperation.h>
 #import <FOSFoundation/FOSUpdateServerRecordOperation.h>
 
-#import <FOSFoundation/FOSOperationQueue.h>
 #import <FOSFoundation/FOSSaveOperation.h>
 #import <FOSFoundation/FOSSleepOperation.h>
 #import <FOSFoundation/FOSThreadSleep.h>
@@ -84,6 +104,7 @@
 #pragma mark - Cache Management
 #import <FOSFoundation/FOSCacheManager.h>
 #import <FOSFoundation/FOSDatabaseManager.h>
+#import <FOSFoundation/FOSManagedObjectContext.h>
 
 #pragma mark - REST Adapters
 #import <FOSFoundation/FOSBoundServiceAdapter.h>

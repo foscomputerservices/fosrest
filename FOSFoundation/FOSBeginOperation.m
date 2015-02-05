@@ -7,9 +7,7 @@
 //
 
 #import "FOSBeginOperation.h"
-#import "FOSOperationQueue+FOS_Internal.h"
-#import "FOSMergePolicy.h"
-#import "FOSSaveOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSBeginOperation {
     NSString *_groupName;

@@ -7,10 +7,7 @@
 //
 
 #import "FOSRetrieveCMOOperation+FOS_Internal.h"
-#import "FOSRetrieveCMODataOperation.h"
-#import "FOSCachedManagedObject+FOS_Internal.h"
-#import "FOSRetrieveToOneRelationshipOperation.h"
-#import "FOSRetrieveToManyRelationshipOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSRetrieveCMOOperation {
     BOOL _ready;

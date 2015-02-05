@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
 #import <XCTest/XCTest.h>
 #import "FOSFoundationTests.h"
 #import "TestCreate.h"
+#import "FOSCachedManagedObject+FOS_Internal.h"
 
 @interface FOSVariableExpressionTests : XCTestCase
 

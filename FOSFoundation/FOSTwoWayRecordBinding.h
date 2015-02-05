@@ -6,7 +6,10 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+@import CoreData;
+#import <FOSFoundation/FOSCachedManagedObject.h>
+#import <FOSFoundation/FOSURLBinding.h>
 
 @protocol FOSTwoWayRecordBinding <NSObject>
 

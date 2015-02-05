@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
+@import Foundation;
+
 @interface NSError (FOS)
 
 + (NSError *)errorWithDomain:(NSString *)domain

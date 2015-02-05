@@ -6,6 +6,11 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
+#import <FOSFoundation/FOSOperation.h>
+#import <FOSFoundation/FOSCachedManagedObject.h>
+
+@class FOSCMOBinding;
+
 @interface FOSRetrieveToManyRelationshipOperation : FOSOperation
 
 @property (nonatomic, readonly) NSRelationshipDescription *relationship;

@@ -7,7 +7,7 @@
 //
 
 #import "FOSParseServiceAdapter.h"
-#import "FOSWebServiceRequest+FOS_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 // TODO : Standardize
 extern NSString *FOSWebServiceErrorStatusCode;

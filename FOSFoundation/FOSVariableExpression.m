@@ -7,6 +7,7 @@
 //
 
 #import "FOSVariableExpression.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSVariableExpression
 

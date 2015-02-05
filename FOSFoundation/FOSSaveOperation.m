@@ -7,8 +7,7 @@
 //
 
 #import "FOSSaveOperation.h"
-#import "FOSOperationQueue.h"
-#import "FOSRESTConfig.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSSaveOperation {
     NSError *_saveError;

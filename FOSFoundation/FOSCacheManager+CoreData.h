@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import "FOSCacheManager.h"
+@import CoreData;
+#import <FOSFoundation/FOSCachedManagedObject.h>
 
 @class FOSManagedObjectContext;
 

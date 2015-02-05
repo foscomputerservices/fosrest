@@ -7,6 +7,7 @@
 //
 
 #import "FOSStaticTableSearchOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSStaticTableSearchOperation
 

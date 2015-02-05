@@ -7,9 +7,7 @@
 //
 
 #import "NSEntityDescription+FOS_Internal.h"
-#import "FOSRetrieveCMODataOperation.h"
-#import "FOSRetrieveCMOOperation.h"
-#import "FOSUser.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation NSEntityDescription (FOS_Internal)
 

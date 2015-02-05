@@ -7,6 +7,7 @@
 //
 
 #import "FOSWebServiceRequest+FOS_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSWebServiceRequest (FOS_Internal)
 

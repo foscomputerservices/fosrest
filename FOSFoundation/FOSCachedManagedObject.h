@@ -6,15 +6,14 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-#import "FOSManagedObject.h"
-#import "FOSCacheManager.h"
-#import "FOSRelationshipFault.h"
-#import "FOSWebServiceRequest.h"
+#import <FOSFoundation/FOSManagedObject.h>
+#import <FOSFoundation/FOSCacheManager.h>
 
 @class FOSRetrieveCMOOperation;
 @class FOSSendServerRecordOperation;
 @class FOSRESTConfig;
 @class FOSSearchOperation;
+@class FOSOperation;
 
 typedef id<NSObject,NSCopying> FOSJsonId;
 

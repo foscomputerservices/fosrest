@@ -7,6 +7,7 @@
 //
 
 #import "FOSSendToOneRelationshipOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSSendToOneRelationshipOperation
 

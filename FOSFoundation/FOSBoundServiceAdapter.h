@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <FOSFoundation/FOSRESTServiceAdapter.h>
 
 @protocol FOSRESTServiceAdapter;
 @class FOSAdapterBinding;

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
 #import "NSObject+Tests.h"
 
 @implementation NSObject (Tests)

@@ -7,6 +7,7 @@
 //
 
 #import "FOSKeyPathExpression.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSKeyPathExpression
 

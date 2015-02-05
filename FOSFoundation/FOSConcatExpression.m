@@ -8,6 +8,7 @@
 
 #import "FOSConcatExpression.h"
 #import "FOSVariableExpression.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSConcatExpression
 

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+#import <FOSFoundation/FOSOperation.h>
+
 @interface FOSRefreshUserOperation : FOSOperation
 
 + (instancetype)refreshUserOperation;

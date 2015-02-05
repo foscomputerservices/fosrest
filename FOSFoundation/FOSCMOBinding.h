@@ -6,10 +6,14 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <FOSFoundation/FOSCompiledAtom.h>
+#import <FOSFoundation/FOSTwoWayRecordBinding.h>
+
+@protocol FOSExpression;
 
 @class FOSURLBinding;
 @class FOSItemMatcher;
+@class FOSAttributeBinding;
 
 /*!
  * @class FOSRESTBinding

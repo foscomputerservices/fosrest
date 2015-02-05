@@ -1,4 +1,5 @@
 %{
+    #import "FOSFoundation_Internal.h"
     #import "y.tab.h"
     #include <stdio.h>
 

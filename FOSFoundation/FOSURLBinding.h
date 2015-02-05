@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FOSCompiledAtom.h"
-#import "FOSCachedManagedObject.h"
-#import "FOSWebServiceRequest.h"
+#import <FOSFoundation/FOSCompiledAtom.h>
+#import <FOSFoundation/FOSWebServiceRequest.h>
+#import <FOSFoundation/FOSCachedManagedObject.h>
 
 @class FOSConcatExpression;
 @class FOSCMOBinding;

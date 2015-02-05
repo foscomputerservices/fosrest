@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-@class FOSRESTConfig;
-@class FOSUser;
+@import Foundation;
+#import <FOSFoundation/FOSCachedManagedObject.h>
 
 typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
 

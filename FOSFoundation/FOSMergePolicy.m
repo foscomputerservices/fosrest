@@ -7,6 +7,7 @@
 //
 
 #import "FOSMergePolicy.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSMergePolicy
 

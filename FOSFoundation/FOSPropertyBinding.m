@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import "FOSPropertyBinding.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSPropertyBinding
 

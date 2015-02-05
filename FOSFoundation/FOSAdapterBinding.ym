@@ -3,6 +3,7 @@
     #include <stdlib.h>
 
     #import "FOSAdapterBinding.h"
+    #import "FOSFoundation_Internal.h"
 
     extern void yyerror(char* s, ...);
     extern int yylex();

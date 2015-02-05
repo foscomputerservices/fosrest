@@ -7,8 +7,7 @@
 //
 
 #import "FOSRetrieveToManyRelationshipOperation.h"
-#import "FOSRetrieveCMOOperation+FOS_Internal.h"
-#import "FOSRelationshipFault.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSRetrieveToManyRelationshipOperation {
     NSMutableSet *_childRetrieveCMOOps;

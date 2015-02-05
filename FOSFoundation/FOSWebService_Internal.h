@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FOSWebServiceRequest.h"
+#import "FOSFoundation_Internal.h"
 
 @class FOSRESTConfig;
 @protocol FOSProcessServiceRequest;

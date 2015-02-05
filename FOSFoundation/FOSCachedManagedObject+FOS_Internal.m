@@ -8,6 +8,7 @@
 
 #import "FOSCachedManagedObject+FOS_Internal.h"
 #import "FOSRESTConfig.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSCachedManagedObject(FOS_Internal)
 

@@ -7,11 +7,7 @@
 //
 
 #import "FOSDatabaseManager.h"
-#import "FOSMergePolicy.h"
-#import "FOSOperationQueue.h"
-#import "FOSRESTConfig.h"
-#import "FOSManagedObjectContext.h"
-#import "FOSPushCacheChangesOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSDatabaseManager {
     __weak FOSRESTConfig *_restConfig;

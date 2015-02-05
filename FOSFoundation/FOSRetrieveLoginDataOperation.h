@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
+#import <FOSFoundation/FOSRetrieveCMODataOperation.h>
+
+@class FOSUser;
+
 @interface FOSRetrieveLoginDataOperation : FOSRetrieveCMODataOperation
 
 @property (nonatomic, strong) FOSUser *loginUser;

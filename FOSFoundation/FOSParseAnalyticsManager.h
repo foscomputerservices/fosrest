@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <FOSFoundation/FOSAnalytics.h>
 
 @interface FOSParseAnalyticsManager : NSObject <
     FOSAnalytics

@@ -7,6 +7,7 @@
 //
 
 #import "FOSDeletedObject.h"
+#import "FOSCachedManagedObject.h"
 
 @interface FOSDeletedObject (FOS_Internal)
 

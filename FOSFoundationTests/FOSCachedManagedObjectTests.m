@@ -12,6 +12,7 @@
 #import "FOSLoginManagerTests.h"
 #import "FOSPullStaticTablesOperation.h"
 #import "FOSRefreshUserOperation.h"
+#import "FOSCachedManagedObject+FOS_Internal.h"
 #import "FOSRelationshipFault+FOS_Internal.h"
 #import "FOSNetworkStatusMonitor_FOS_Internal.h"
 #import "NSObject+Tests.h"

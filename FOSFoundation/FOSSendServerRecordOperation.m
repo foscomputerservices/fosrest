@@ -7,9 +7,7 @@
 //
 
 #import "FOSSendServerRecordOperation.h"
-#import "FOSSendToOneRelationshipOperation.h"
-#import "FOSSendToManyRelationshipOperation.h"
-#import "FOSLoginManager_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSSendServerRecordOperation {
     NSManagedObjectID *_cmoID;

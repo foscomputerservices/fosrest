@@ -7,9 +7,7 @@
 //
 
 #import "FOSLogoutOperation.h"
-#import "FOSCacheManager.h"
-#import "FOSLoginManager_Internal.h"
-#import "FOSPushCacheChangesOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSLogoutOperation
 

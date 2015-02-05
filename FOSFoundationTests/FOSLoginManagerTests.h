@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
 #import <XCTest/XCTest.h>
 #import "User.h"
 

@@ -7,7 +7,7 @@
 //
 
 #import "FOSAdapterBinding.h"
-#import "FOSAdapterBindingParser.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSAdapterBinding
 

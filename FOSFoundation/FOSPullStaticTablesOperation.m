@@ -7,8 +7,7 @@
 //
 
 #import "FOSPullStaticTablesOperation.h"
-#import "FOSStaticTableSearchOperation.h"
-#import "FOSPullStaticTablesOperation+FOS_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 static BOOL _staticTableListInitialized = NO;
 static NSMutableArray *_uncheckedStaticTables = nil;

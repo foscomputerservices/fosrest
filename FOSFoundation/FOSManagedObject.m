@@ -9,6 +9,7 @@
 #import "FOSRESTConfig.h"
 #import "NSDate+FOS.h"
 #import "FOSDatabaseManager.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSManagedObject {
     BOOL _insideWillSave;

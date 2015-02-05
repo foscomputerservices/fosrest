@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+#import <FOSFoundation/FOSOperation.h>
+#import <FOSFoundation/FOSCachedManagedObject.h>
+
 @class FOSUser;
 
 @interface FOSLoginOperation : FOSOperation

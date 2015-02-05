@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import "FOSSendRelationshipOperation.h"
+#import <FOSFoundation/FOSSendRelationshipOperation.h>
 
 /*!
  * @class FOSSendToOneRelationshipOperation

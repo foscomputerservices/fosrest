@@ -6,10 +6,11 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import CoreData;
 
 @class FOSRESTConfig;
 @class FOSManagedObjectContext;
+@class FOSOperation;
 
 @interface FOSOperationQueue : NSOperationQueue
 

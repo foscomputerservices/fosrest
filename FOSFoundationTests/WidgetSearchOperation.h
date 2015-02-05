@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
+
 @interface WidgetSearchOperation : FOSSearchOperation
 
 @property (nonatomic, strong) NSString *widgetName;

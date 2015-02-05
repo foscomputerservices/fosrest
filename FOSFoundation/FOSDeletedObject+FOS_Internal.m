@@ -7,6 +7,7 @@
 //
 
 #import "FOSDeletedObject+FOS_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSDeletedObject (FOS_Internal)
 

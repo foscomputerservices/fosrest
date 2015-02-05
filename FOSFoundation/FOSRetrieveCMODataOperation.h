@@ -6,6 +6,13 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+@import Foundation;
+@import CoreData;
+
+#import <FOSFoundation/FOSCachedManagedObject.h>
+
+@class FOSItemMatcher;
+
 @protocol FOSRetrieveCMODataOperationProtocol <NSObject>
 
 @required
@@ -22,6 +29,8 @@
 @property (nonatomic, readonly) FOSItemMatcher *relationshipsToPull;
 
 @end
+
+#import <FOSFoundation/FOSWebServiceRequest.h>
 
 @interface FOSRetrieveCMODataOperation : FOSWebServiceRequest<FOSRetrieveCMODataOperationProtocol>
 

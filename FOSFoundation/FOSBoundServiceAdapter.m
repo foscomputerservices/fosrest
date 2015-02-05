@@ -7,8 +7,7 @@
 //
 
 #import "FOSBoundServiceAdapter.h"
-#import "FOSAdapterBinding.h"
-#import "FOSValueTransformer.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSBoundServiceAdapter {
     FOSAdapterBinding *_bindings;

@@ -6,9 +6,11 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-#import "FOSBackgroundOperation.h"
+#import <FOSFoundation/FOSOperation.h>
+#import <FOSFoundation/FOSCachedManagedObject.h>
+#import <FOSFoundation/FOSURLBinding.h>
 
-@class FOSRetrieveCMODataOperation;
+@protocol FOSRetrieveCMODataOperationProtocol;
 
 @interface FOSRetrieveCMOOperation : FOSOperation
 

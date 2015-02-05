@@ -6,7 +6,10 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+#import <FOSFoundation/FOSSendServerRecordOperation.h>
+
+@class FOSCachedManagedObject;
 
 /*!
  * @class FOSUpdateServerRecordOperation

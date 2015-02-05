@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 @interface FOSMergePolicy : NSMergePolicy
 

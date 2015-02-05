@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FOSNetworkStatusMonitor.h"
 #import "FOSRESTServiceAdapter.h"
+#import "FOSAnalytics.h"
 
 /*!
  * @enum FOSRESTConfigOptions
@@ -38,6 +39,7 @@ typedef enum : NSUInteger {
 } FOSRESTConfigOptions;
 
 @class FOSLoginManager;
+@class FOSDatabaseManager;
 
 @interface FOSRESTConfig : NSObject<
     FOSAnalytics

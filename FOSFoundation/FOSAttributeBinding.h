@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <FOSFoundation/FOSPropertyBinding.h>
+#import <FOSFoundation/FOSTwoWayPropertyBinding.h>
 
 @protocol FOSExpression;
 @class FOSItemMatcher;

@@ -7,7 +7,7 @@
 //
 
 #import "FOSUser.h"
-#import "FOSLoginManager_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSUser
 

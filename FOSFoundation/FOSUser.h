@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
+#import <FOSFoundation/FOSCachedManagedObject.h>
+
 @interface FOSUser : FOSCachedManagedObject
 
 #pragma mark - Class Methods

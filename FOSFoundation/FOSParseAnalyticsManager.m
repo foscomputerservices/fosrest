@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+#import "FOSFoundation_Internal.h"
+
 static NSString *FOSParseEventEndPoint = @"1/events";
 
 #import "FOSParseAnalyticsManager.h"

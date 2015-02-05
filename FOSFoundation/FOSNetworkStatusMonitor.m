@@ -11,7 +11,7 @@
 //    http://developer.apple.com/library/ios/#samplecode/Reachability/Introduction/Intro.html
 
 #import "FOSNetworkStatusMonitor.h"
-#import "FOSNetworkStatusMonitor_FOS_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 #import <sys/socket.h>
 #import <netinet/in.h>

@@ -7,6 +7,7 @@
 //
 
 #import "FOSAtomicCreateServerRecordOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSAtomicCreateServerRecordOperation {
     FOSWebServiceRequest *_webRequest;

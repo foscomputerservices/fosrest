@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import CoreData;
 
 @class FOSCachedManagedObject;
 @class FOSWebServiceRequest;

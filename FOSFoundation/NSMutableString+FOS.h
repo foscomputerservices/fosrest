@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 FOS Computer Services. All rights reserved.
 //
 
+@import Foundation;
+
 @interface NSMutableString(HtmlEscape)
 
 - (NSMutableString *)escapeHtml;

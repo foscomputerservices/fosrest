@@ -7,7 +7,7 @@
 //
 
 #import "FOSRetrieveCMODataOperation.h"
-#import "FOSWebServiceRequest+FOS_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSRetrieveCMODataOperation {
     FOSJsonId _jsonId;

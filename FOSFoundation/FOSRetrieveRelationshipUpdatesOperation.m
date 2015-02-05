@@ -7,6 +7,7 @@
 //
 
 #import "FOSRetrieveRelationshipUpdatesOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @interface _FOSCMODataOpPackage : FOSOperation<FOSRetrieveCMODataOperationProtocol>
 

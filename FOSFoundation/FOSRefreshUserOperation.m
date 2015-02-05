@@ -7,7 +7,7 @@
 //
 
 #import "FOSRefreshUserOperation.h"
-#import "FOSCacheManager.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSRefreshUserOperation
 

@@ -7,6 +7,7 @@
 //
 
 #import "FOSAttributeBinding.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSAttributeBinding
 

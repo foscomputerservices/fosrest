@@ -7,10 +7,7 @@
 //
 
 #import "FOSLoginOperation.h"
-#import "FOSRetrieveCMOOperation.h"
-#import "FOSCacheManager.h"
-#import "FOSLoginManager_Internal.h"
-#import "FOSRetrieveLoginDataOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSLoginOperation {
     FOSRetrieveCMOOperation *__fetchUserRequest;

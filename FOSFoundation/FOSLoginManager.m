@@ -7,18 +7,7 @@
 //
 
 #import "FOSLoginManager.h"
-#import "FOSCacheManager.h"
-#import "FOSRESTConfig.h"
-#import "FOSCacheManager.h"
-#import "FOSUser.h"
-#import "FOSCachedManagedObject.h"
-#import "FOSLoginOperation.h"
-#import "FOSLogoutOperation.h"
-#import "FOSRefreshUserOperation.h"
-#import "FOSRetrieveCMOOperation.h"
-#import "FOSBackgroundOperation.h"
-#import "FOSPullStaticTablesOperation.h"
-#import "FOSLoginManager_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 // Note: This key changed, which will for re-login for the sake of
 //       upgrading to NSManagedObjectID vs. NSString, which caused

@@ -7,6 +7,7 @@
 //
 
 #import "FOSRetrieveCMOOperation.h"
+#import "FOSRetrieveCMODataOperation.h"
 
 @interface FOSRetrieveCMOOperation (FOS_Internal)
 

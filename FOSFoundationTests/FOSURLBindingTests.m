@@ -10,6 +10,7 @@
 #import "FOSFoundationTests.h"
 #import "TestCreate.h"
 #import "Widget.h"
+#import "FOSCachedManagedObject+FOS_Internal.h"
 
 @interface FOSURLBindingTests : XCTestCase
 

@@ -7,15 +7,7 @@
 //
 
 #import "FOSCachedManagedObject.h"
-#import "FOSCachedManagedObject+FOS_Internal.h"
-#import "FOSCacheManager+CoreData.h"
-#import "FOSModifiedProperty.h"
-#import "FOSRESTConfig.h"
-#import "FOSOperationQueue.h"
-#import "NSEntityDescription+FOS.h"
-#import "FOSRetrieveCMOOperation.h"
-#import "FOSRetrieveToManyRelationshipOperation.h"
-#import "FOSRetrieveToOneRelationshipOperation.h"
+#import "FOSFoundation_Internal.h"
 
 typedef void (^FOSReferenceResolutionHandler)(NSDictionary *resolutions, NSError *error);
 

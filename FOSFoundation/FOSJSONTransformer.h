@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import CoreData;
+#import <Fosfoundation/FOSValueTransformer.h>
 
 @interface FOSJSONTransformer : NSValueTransformer<FOSValueTransformer>
 

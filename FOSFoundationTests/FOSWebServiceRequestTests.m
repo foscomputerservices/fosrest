@@ -6,9 +6,11 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
 #import "FOSWebServiceRequestTests.h"
 #import "FOSFoundationTests.h"
 #import "FOSNetworkStatusMonitor_FOS_Internal.h"
+#import "FOSCachedManagedObject+FOS_Internal.h"
 
 @implementation FOSWebServiceRequestTests
 

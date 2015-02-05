@@ -7,6 +7,7 @@
 //
 
 #import "NSRelationshipDescription+FOS.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation NSRelationshipDescription (FOS)
 

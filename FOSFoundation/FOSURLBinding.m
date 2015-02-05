@@ -7,8 +7,7 @@
 //
 
 #import "FOSURLBinding.h"
-#import "FOSConcatExpression.h"
-#import "FOSRESTServiceAdapter.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSURLBinding
 

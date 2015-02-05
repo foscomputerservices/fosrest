@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <FOSFoundation/FOSCompiledAtom.h>
+
+@protocol FOSExpression;
 
 /*!
  * @typedef FOSItemMatch

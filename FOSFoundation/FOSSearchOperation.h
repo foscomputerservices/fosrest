@@ -6,7 +6,8 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
-#import "FOSSearchOperation.h"
+#import <FOSFoundation/FOSOperation.h>
+#import <FOSFoundation/FOSCacheManager.h>
 
 @interface FOSSearchOperation : FOSOperation
 

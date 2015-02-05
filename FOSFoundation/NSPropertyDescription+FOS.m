@@ -7,6 +7,7 @@
 //
 
 #import "NSPropertyDescription+FOS.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation NSPropertyDescription (FOS)
 

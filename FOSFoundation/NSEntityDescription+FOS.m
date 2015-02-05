@@ -7,6 +7,7 @@
 //
 
 #import "NSEntityDescription+FOS.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation NSEntityDescription (FOS)
 

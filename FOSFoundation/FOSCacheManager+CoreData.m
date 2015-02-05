@@ -7,7 +7,7 @@
 //
 
 #import "FOSCacheManager+CoreData.h"
-#import "FOSPushCacheChangesOperation.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSCacheManager (CoreData)
 

@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+#import "FOSRelationshipFault.h"
+#import "FOSCachedManagedObject.h"
+
 @interface FOSRelationshipFault (FOS_Internal)
 
 + (NSPredicate *)predicateForEntity:(NSEntityDescription *)entity

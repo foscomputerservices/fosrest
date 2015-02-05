@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
 #import "FOSTestHarnessAdapter.h"
+#import "NSError+FOS_Internal.h"
 
 @implementation FOSTestHarnessAdapter {
     NSManagedObjectModel *_mergedObjectModel;

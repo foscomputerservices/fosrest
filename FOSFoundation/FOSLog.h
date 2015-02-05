@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "asl.h"
 
 typedef NS_ENUM(NSUInteger, FOSLogLevel) {
     FOSLogLevelCritical,

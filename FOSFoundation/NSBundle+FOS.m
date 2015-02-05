@@ -7,19 +7,13 @@
 //
 
 #import "NSBundle+FOS.h"
+#import "FOSRESTConfig_FOS_Internal.h"
 
 @implementation NSBundle (FOS)
 
 // Load the framework bundle.
 + (NSBundle *)fosFrameworkBundle {
-    static NSBundle* __fosFrameworkBundle = nil;
-    static dispatch_once_t __fosDispatchOnceBundle;
-    dispatch_once(&__fosDispatchOnceBundle, ^{
-        NSString* mainBundlePath = [[NSBundle bundleForClass:[FOSRESTConfig class]] resourcePath];
-        NSString* frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:@"FOSFoundation.bundle"];
-        __fosFrameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
-    });
-    return __fosFrameworkBundle;
+    return [NSBundle bundleForClass:[FOSRESTConfig class]];
 }
 
 + (NSManagedObjectModel *)fosManagedObjectModel {

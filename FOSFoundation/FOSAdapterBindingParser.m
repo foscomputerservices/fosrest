@@ -8,6 +8,7 @@
 
 #import "FOSAdapterBindingParser.h"
 #import "Bison.h"
+#import "FOSFoundation_Internal.h"
 
 // externed from FOSBinding.ym
 FOSAdapterBinding *parsedAdapterBinding;

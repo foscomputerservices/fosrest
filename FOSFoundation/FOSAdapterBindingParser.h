@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
+@protocol FOSRESTServiceAdapter;
 @class FOSAdapterBinding;
 
 @interface FOSAdapterBindingParser : NSObject

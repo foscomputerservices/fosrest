@@ -7,6 +7,7 @@
 //
 
 #import "FOSLog.h"
+#import "asl.h"
 
 static FOSLogLevel __fosLogLevelFilter = FOSLogLevelInfo;
 static void _FOSLogStderr() {

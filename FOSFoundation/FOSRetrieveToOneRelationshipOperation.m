@@ -7,9 +7,7 @@
 //
 
 #import "FOSRetrieveToOneRelationshipOperation.h"
-#import "FOSRetrieveCMOOperation+FOS_Internal.h"
-#import "FOSCachedManagedObject+FOS_Internal.h"
-#import "NSRelationshipDescription+FOS_Internal.h"
+#import "FOSFoundation_Internal.h"
 
 @implementation FOSRetrieveToOneRelationshipOperation {
     FOSRetrieveCMOOperation *_fetchRelatedEntityOp;

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 FOS Computer Services. All rights reserved.
 //
 
+#import <FOSFoundation/FOSSearchOperation.h>
+
 @interface FOSStaticTableSearchOperation : FOSSearchOperation
 
 @property (nonatomic, strong) Class staticTableClass;

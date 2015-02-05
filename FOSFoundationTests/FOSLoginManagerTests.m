@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 FOS Computer Services. All rights reserved.
 //
 
+@import FOSFoundation;
+#import "FOSRESTConfig_FOS_Internal.h"
 #import "FOSLoginManagerTests.h"
 #import "FOSFoundationTests.h"
 #import "FOSFoundation.h"
