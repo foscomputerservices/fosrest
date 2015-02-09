@@ -266,16 +266,18 @@
             //
             // TODO : Investigate why we don't use $PASSWORD from the context instead
             //        of retrieving the property straight from the CMO.
-            NSString *attrName = @"password";
-            for (FOSAttributeBinding *nextBinding in self.attributeBindings) {
-                if ([[nextBinding attributeMatcher] itemIsIncluded:attrName context:nil]) {
 
-                    id<FOSExpression> keyExpr = nextBinding.jsonKeyExpression;
+            // Does this type have this attribute?
+            // [cmo isKindOfClass:[FOSUser class]] doesn't seem to work all of the time, we'll
+            // test for a set of selectors.
+            if ([cmo respondsToSelector:@selector(password)] && [cmo respondsToSelector:@selector(isLoginUser)]) {
+                for (FOSAttributeBinding *nextBinding in self.attributeBindings) {
+                    if ([[nextBinding attributeMatcher] itemIsIncluded:@"password" context:nil]) {
 
-                    attrName = [keyExpr evaluateWithContext:nil error:&localError];
+                        id<FOSExpression> keyExpr = nextBinding.jsonKeyExpression;
 
-                    // Does this type have this attribute?
-                    if ([cmo respondsToSelector:@selector(password)]) {
+                        NSString *attrName = [keyExpr evaluateWithContext:@{ @"ATTRDESC" : nextBinding } error:&localError];
+
                         if (localError == nil) {
                             id passwordVal = [cmo valueForKey:@"password"];
 
