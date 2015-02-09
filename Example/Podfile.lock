@@ -1,0 +1,14 @@
+PODS:
+  - FOSFoundation (0.1.0)
+
+DEPENDENCIES:
+  - FOSFoundation (from `../`)
+
+EXTERNAL SOURCES:
+  FOSFoundation:
+    :path: ../
+
+SPEC CHECKSUMS:
+  FOSFoundation: 2cd7add6b22778b489b3c2ddac9d9c7b7d697f35
+
+COCOAPODS: 0.36.0.beta.2
