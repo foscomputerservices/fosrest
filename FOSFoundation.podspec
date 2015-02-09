@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "FOSFoundation"
   s.module_name      = "FOSFoundation"
-  s.version          = "0.1.0"
+  s.version          = "1.0.5"
   s.summary          = "A group of classes for connecting CoreData to REST services."
   s.homepage         = "http://fosmain.foscomputerservices.com:7990/projects/FF"
   s.license          = 'Private'
