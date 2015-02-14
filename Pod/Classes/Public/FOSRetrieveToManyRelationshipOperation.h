@@ -14,7 +14,6 @@
 @interface FOSRetrieveToManyRelationshipOperation : FOSOperation
 
 @property (nonatomic, readonly) NSRelationshipDescription *relationship;
-@property (nonatomic, readonly) NSError *error;
 
 + (instancetype)fetchToManyRelationship:(NSRelationshipDescription *)relDesc
                               ownerJson:(id<NSObject>)ownerJson
