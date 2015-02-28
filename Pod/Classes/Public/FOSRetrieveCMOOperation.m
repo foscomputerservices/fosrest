@@ -577,13 +577,16 @@
 
                         FOSLogDebug(@"FOSFETCHENTITY - BEGIN (FASTRACK): %@ (%@)", blockSelf->_entity.name, blockSelf->_jsonId);
 
-                        [self _updateReady];
+                        [blockSelf _updateReady];
                     }
                     else if (jsonDataRequest.jsonResult == nil) {
-                        NSString *msg = NSLocalizedString(@"Received no data in response to the query '%@' for entity '%@'.", @"");
+                        NSString *msgFmt = NSLocalizedString(@"Received no data in response to the query '%@' for entity '%@'.", @"");
 
-                        [NSException raise:@"FOSBadQuery" format:msg,
-                         jsonDataRequest.endPoint, blockSelf->_entity.name];
+                        NSString *msg = [NSString stringWithFormat:msgFmt,
+                                         jsonDataRequest.endPoint, blockSelf->_entity.name];
+                        blockSelf->_error = [NSError errorWithMessage:msg];
+
+                        [blockSelf _updateReady];
                     }
                     else {
                         // This will call _updateReady
@@ -591,7 +594,7 @@
                     }
                 }
                 else {
-                    [self _updateReady];
+                    [blockSelf _updateReady];
                 }
             }];
 
