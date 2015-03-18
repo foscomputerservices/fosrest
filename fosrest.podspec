@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/foscomputerservices/fosrest"
   s.license          = 'Private'
   s.author           = { "David Hunt" => "fosrest@foscomputerservices.com" }
-  s.source           = { :git => "https://github.com/foscomputerservices/fosrest", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/foscomputerservices/fosrest.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/foscompsvcs'
 
   s.platform     = :ios, '8.0'
