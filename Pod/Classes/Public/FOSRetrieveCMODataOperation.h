@@ -30,8 +30,8 @@
 @import Foundation;
 @import CoreData;
 
-#import <fosrest/FOSWebServiceRequest.h>
-#import <fosrest/FOSRetrieveCMODataOperationProtocol.h>
+#import <FOSRest/FOSWebServiceRequest.h>
+#import <FOSRest/FOSRetrieveCMODataOperationProtocol.h>
 
 @class FOSItemMatcher;
 @class FOSURLBinding;

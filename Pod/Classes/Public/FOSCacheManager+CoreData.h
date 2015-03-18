@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <fosrest/FOSCachedManagedObject.h>
+#import <FOSRest/FOSCachedManagedObject.h>
 
 @class FOSManagedObjectContext;
 

@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSJsonId.h>
+#import <FOSRest/FOSJsonId.h>
 
 @class FOSItemMatcher;
 

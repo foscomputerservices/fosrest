@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <fosrest/FOSParseCachedManagedObject.h>
+#import <FOSRest/FOSParseCachedManagedObject.h>
 
 @class User, WidgetInfo;
 

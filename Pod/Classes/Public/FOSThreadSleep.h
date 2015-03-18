@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <fosrest/FOSCacheManager.h>
+#import <FOSRest/FOSCacheManager.h>
 
 @interface FOSThreadSleep : NSThread
 

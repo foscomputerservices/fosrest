@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import fosrest
+import FOSRest
 
 @UIApplicationMain
 class FOSAppDelegate : UIResponder, UIApplicationDelegate {

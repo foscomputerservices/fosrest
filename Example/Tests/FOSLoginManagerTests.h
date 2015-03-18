@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import "fosrest.h"
+#import "FOSRest.h"
 #import <XCTest/XCTest.h>
 #import "User.h"
 

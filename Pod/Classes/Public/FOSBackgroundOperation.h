@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSOperation.h>
-#import <fosrest/FOSCacheManager.h>
+#import <FOSRest/FOSOperation.h>
+#import <FOSRest/FOSCacheManager.h>
 
 @interface FOSBackgroundOperation : FOSOperation
 

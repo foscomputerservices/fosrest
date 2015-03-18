@@ -28,7 +28,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <fosrest/FOSRESTServiceAdapter.h>
+#import <FOSRest/FOSRESTServiceAdapter.h>
 
 @protocol FOSRESTServiceAdapter;
 @class FOSAdapterBinding;

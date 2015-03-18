@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSSearchOperation.h>
+#import <FOSRest/FOSSearchOperation.h>
 
 @interface FOSStaticTableSearchOperation : FOSSearchOperation
 

@@ -28,9 +28,9 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <fosrest/FOSVariableExpression.h>
-#import <fosrest/FOSDatabaseManager.h>
-#import <fosrest/NSEntityDescription+FOS.h>
+#import <FOSRest/FOSVariableExpression.h>
+#import <FOSRest/FOSDatabaseManager.h>
+#import <FOSRest/NSEntityDescription+FOS.h>
 #import "FOSRESTTests.h"
 #import "TestCreate.h"
 

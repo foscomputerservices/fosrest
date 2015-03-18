@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <fosrest/FOSParseCachedManagedObject.h>
+#import <FOSRest/FOSParseCachedManagedObject.h>
 
 @class Note, User;
 

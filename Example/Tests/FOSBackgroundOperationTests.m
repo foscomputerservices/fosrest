@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <fosrest/FOSBackgroundOperation.h>
+#import <FOSRest/FOSBackgroundOperation.h>
 #import "FOSRESTTests.h"
 
 @interface FOSBackgroundOperationTests : XCTestCase

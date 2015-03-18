@@ -28,8 +28,8 @@
 //
 
 @import Foundation;
-#import <fosrest/FOSCompiledAtom.h>
-#import <fosrest/FOSExpression.h>
+#import <FOSRest/FOSCompiledAtom.h>
+#import <FOSRest/FOSExpression.h>
 
 /*!
  * @class FOSKeyPathExpression

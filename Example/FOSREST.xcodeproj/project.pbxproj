@@ -173,7 +173,7 @@
 		636848501A8504FB00B36CD9 /* Widget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Widget.m; sourceTree = "<group>"; };
 		636848511A8504FB00B36CD9 /* WidgetInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetInfo.h; sourceTree = "<group>"; };
 		636848521A8504FB00B36CD9 /* WidgetInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetInfo.m; sourceTree = "<group>"; };
-		6368485E1A850D2200B36CD9 /* fosrest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fosrest.h; sourceTree = "<group>"; };
+		6368485E1A850D2200B36CD9 /* FOSRest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FOSRest.h; sourceTree = "<group>"; };
 		63836EDC1A85B9FC00209BB2 /* FOSREST.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FOSREST.xcdatamodel; sourceTree = "<group>"; };
 		639120391AB9F82100CA5E29 /* FOSRESTApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FOSRESTApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOSAppDelegate.swift; sourceTree = "<group>"; };
@@ -302,7 +302,7 @@
 				636847F01A8504BA00B36CD9 /* FOSConcatExpressionTest.m */,
 				636847F11A8504BA00B36CD9 /* FOSCreateServerRecordOperationTests.m */,
 				636847F21A8504BA00B36CD9 /* FOSFOSRESTBindingParserTests.m */,
-				6368485E1A850D2200B36CD9 /* fosrest.h */,
+				6368485E1A850D2200B36CD9 /* FOSRest.h */,
 				636847F31A8504BA00B36CD9 /* FOSRESTTests-Info.plist */,
 				636847F41A8504BA00B36CD9 /* FOSRESTTests.h */,
 				636847F51A8504BA00B36CD9 /* FOSRESTTests.m */,

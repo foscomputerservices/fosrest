@@ -30,7 +30,7 @@
 #import <Foundation/Foundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
-#import <fosrest/FOSNetworkStatus.h>
+#import <FOSRest/FOSNetworkStatus.h>
 
 @interface FOSNetworkStatusMonitor: NSObject
 

@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSRetrieveCMODataOperation.h>
+#import <FOSRest/FOSRetrieveCMODataOperation.h>
 
 @class FOSUser;
 

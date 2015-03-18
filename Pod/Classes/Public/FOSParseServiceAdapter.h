@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSBoundServiceAdapter.h>
+#import <FOSRest/FOSBoundServiceAdapter.h>
 
 @interface FOSParseServiceAdapter : FOSBoundServiceAdapter
 

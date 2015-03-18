@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSOperation.h>
-#import <fosrest/FOSRetrieveCMODataOperationProtocol.h>
+#import <FOSRest/FOSOperation.h>
+#import <FOSRest/FOSRetrieveCMODataOperationProtocol.h>
 
 @interface FOSAtomicCreateServerRecordOperation : FOSOperation<FOSRetrieveCMODataOperationProtocol>
 

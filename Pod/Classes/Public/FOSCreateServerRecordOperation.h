@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSSendServerRecordOperation.h>
+#import <FOSRest/FOSSendServerRecordOperation.h>
 
 /*!
  * @class FOSCreateServerRecordOperation
