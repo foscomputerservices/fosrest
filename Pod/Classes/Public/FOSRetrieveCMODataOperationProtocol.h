@@ -30,6 +30,7 @@
 #import <FOSRest/FOSJsonId.h>
 
 @class FOSItemMatcher;
+@class NSEntityDescription;
 
 @protocol FOSRetrieveCMODataOperationProtocol <NSObject>
 
