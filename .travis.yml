@@ -4,5 +4,5 @@ env:
     SDK:iphonesimulator
     SDK:iphoneos
 
-script: xcodebuild build -workspace Example/FOSREST.xcworkspace -scheme FOSREST-Example -destination 'platform=iOS Simulator,name=iPhone 6,OS=8.2'
+script: xcodebuild build -workspace Example/FOSREST.xcworkspace -scheme FOSREST-Example -destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1'
 
