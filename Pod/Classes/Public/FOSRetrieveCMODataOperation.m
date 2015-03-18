@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveCMODataOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/1/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSRetrieveCMODataOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSRetrieveCMODataOperation {
     FOSJsonId _jsonId;

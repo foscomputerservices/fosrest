@@ -1,6 +1,6 @@
 //
 //  Role.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 2/5/13.
 //
@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <FOSFoundation/FOSParseCachedManagedObject.h>
+#import <FOSREST/FOSParseCachedManagedObject.h>
 
 @class User;
 

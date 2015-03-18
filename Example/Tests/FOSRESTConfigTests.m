@@ -1,6 +1,6 @@
 //
 //  FOSRESTConfigTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 8/20/14.
 //
@@ -30,7 +30,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import "FOSFoundationTests.h"
+#import "FOSRESTTests.h"
 #import "FOSLoginManagerTests.h"
 
 @interface FOSRESTConfigTests : XCTestCase

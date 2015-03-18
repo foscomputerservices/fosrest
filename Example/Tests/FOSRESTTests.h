@@ -1,6 +1,6 @@
 //
-//  FOSFoundationTests.h
-//  FOSFoundationTests
+//  FOSRESTTests.h
+//  FOSRESTTests
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -29,7 +29,7 @@
 
 @import UIKit;
 #import <XCTest/XCTest.h>
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 #import "FOSLoginManagerTests.h"
 
 #define TEST_LOG_LEVEL (FOSLogLevelPedantic)
@@ -109,6 +109,6 @@
     TEARDOWN_LOGIN
 
 
-@interface FOSFoundationTests : XCTestCase
+@interface FOSRESTTests : XCTestCase
 
 @end

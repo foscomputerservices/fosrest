@@ -1,6 +1,6 @@
 //
 //  FOSSearchOperation+Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 10/7/13.
 //

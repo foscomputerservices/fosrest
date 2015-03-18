@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveLoginDataOperation.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/28/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSRetrieveCMODataOperation.h>
+#import <FOSREST/FOSRetrieveCMODataOperation.h>
 
 @class FOSUser;
 

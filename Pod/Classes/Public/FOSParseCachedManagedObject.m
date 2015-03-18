@@ -1,6 +1,6 @@
 //
 //  FOSParseCachedManagedObject.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/29/12.
 //

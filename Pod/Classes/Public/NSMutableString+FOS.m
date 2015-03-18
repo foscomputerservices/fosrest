@@ -1,6 +1,6 @@
 //
 //  NSMutableString+FOS.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/27/11.
 //

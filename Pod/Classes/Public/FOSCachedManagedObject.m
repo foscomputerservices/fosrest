@@ -1,6 +1,6 @@
 //
 //  FOSCachedManagedObject.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSCachedManagedObject.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 typedef void (^FOSReferenceResolutionHandler)(NSDictionary *resolutions, NSError *error);
 
@@ -1130,7 +1130,7 @@ static NSMutableDictionary *_processingFaults = nil;
         NSString *msgFmt = @"Missing URL_BINDING for the RETRIEVE_SERVER_RECORD lifecycle of entity '%@' managed by %@.";
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          entity.name, NSStringFromClass([adapter class])];
-        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
 
         @throw e;
     }
@@ -1141,7 +1141,7 @@ static NSMutableDictionary *_processingFaults = nil;
         NSString *msgFmt = @"Missing CMO_BINDING for entity '%@' managed by %@.";
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          entity.name, NSStringFromClass([adapter class])];
-        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
 
         @throw e;
     }
@@ -1152,7 +1152,7 @@ static NSMutableDictionary *_processingFaults = nil;
         NSString *msgFmt = @"Missing ID_ATTRIBUTE in the ATTRIBUTE_BINDINGS for entity '%@' managed by %@.";
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          entity.name, NSStringFromClass([adapter class])];
-        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
 
         @throw e;
     }
@@ -1173,7 +1173,7 @@ static NSMutableDictionary *_processingFaults = nil;
             NSString *msgFmt = @"Error evaluating the ID_ATTRIBUTE's CMO expression for entity '%@' managed by the %@ adapter: %@";
             NSString *msg = [NSString stringWithFormat:msgFmt,
                              entity.name, NSStringFromClass([adapter class]), localError.description];
-            NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+            NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
 
             @throw e;
         }
@@ -1220,7 +1220,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
                     // Incorrect binding description
                     if (localError != nil) {
-                        NSException *e = [NSException exceptionWithName:@"FOSFoundation"
+                        NSException *e = [NSException exceptionWithName:@"FOSREST"
                                                                  reason:localError.description
                                                                userInfo:localError.userInfo];
                         @throw e;
@@ -1271,7 +1271,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
         NSString *msg = [NSString stringWithFormat:@"%@ is a static table instance and cannot be created/modified as FOSRESTConfig.allowStaticTableModifications == NO.",
                          NSStringFromClass([self class])];
-        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
 
         @throw e;
     }

@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveRelationshipUpdatesOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 6/3/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSRetrieveRelationshipUpdatesOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @interface _FOSCMODataOpPackage : FOSOperation<FOSRetrieveCMODataOperationProtocol>
 

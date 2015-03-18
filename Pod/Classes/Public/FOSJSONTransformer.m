@@ -1,6 +1,6 @@
 //
 //  FOSJSONTransformer.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 7/21/14.
 //
@@ -71,7 +71,7 @@
             NSString *msg = [NSString stringWithFormat:msgFmt,
                              NSStringFromClass([coreDataValue class])];
 
-            NSException *e = [NSException exceptionWithName:@"FOSFoundation"
+            NSException *e = [NSException exceptionWithName:@"FOSREST"
                                                      reason:msg
                                                    userInfo:nil];
             @throw e;

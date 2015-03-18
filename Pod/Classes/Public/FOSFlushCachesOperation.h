@@ -1,6 +1,6 @@
 //
 //  FOSFlushCachesOperation.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/3/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSOperation.h>
+#import <FOSREST/FOSOperation.h>
 
 @class FOSCacheManager;
 

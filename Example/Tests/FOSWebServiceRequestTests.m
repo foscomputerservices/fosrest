@@ -1,6 +1,6 @@
 //
 //  FOSWebServiceRequestTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/5/13.
 //
@@ -28,8 +28,8 @@
 //
 
 #import "FOSWebServiceRequestTests.h"
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 
 @implementation FOSWebServiceRequestTests
 

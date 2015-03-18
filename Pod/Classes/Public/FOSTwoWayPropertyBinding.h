@@ -1,6 +1,6 @@
 //
 //  FOSTwoWayPropertyBinding.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/12/14.
 //
@@ -28,8 +28,8 @@
 //
 
 @import Foundation;
-#import <FOSFoundation/FOSCachedManagedObject.h>
-#import <FOSFoundation/FOSURLBinding.h>
+#import <FOSREST/FOSCachedManagedObject.h>
+#import <FOSREST/FOSURLBinding.h>
 
 @protocol FOSTwoWayPropertyBinding <NSObject>
 

@@ -1,9 +1,9 @@
-# FOSFoundation
+# fosrest
 
-[![CI Status](http://img.shields.io/travis/David Hunt/FOSFoundation.svg?style=flat)](https://travis-ci.org/David Hunt/FOSFoundation)
-[![Version](https://img.shields.io/cocoapods/v/FOSFoundation.svg?style=flat)](http://cocoadocs.org/docsets/FOSFoundation)
-[![License](https://img.shields.io/cocoapods/l/FOSFoundation.svg?style=flat)](http://cocoadocs.org/docsets/FOSFoundation)
-[![Platform](https://img.shields.io/cocoapods/p/FOSFoundation.svg?style=flat)](http://cocoadocs.org/docsets/FOSFoundation)
+[![CI Status](http://img.shields.io/travis/David Hunt/fosrest.svg?style=flat)](https://travis-ci.org/David Hunt/fosrest)
+[![Version](https://img.shields.io/cocoapods/v/fosrest.svg?style=flat)](http://cocoadocs.org/docsets/fosrest)
+[![License](https://img.shields.io/cocoapods/l/fosrest.svg?style=flat)](http://cocoadocs.org/docsets/fosrest)
+[![Platform](https://img.shields.io/cocoapods/p/fosrest.svg?style=flat)](http://cocoadocs.org/docsets/fosrest)
 
 ## Usage
 
@@ -13,10 +13,10 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-FOSFoundation is available through [CocoaPods](http://cocoapods.org). To install
+fosrest is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
-    pod "FOSFoundation"
+    pod "fosrest"
 
 ## Author
 
@@ -24,5 +24,5 @@ David Hunt, david@foscomputerservices.com
 
 ## License
 
-FOSFoundation is available under the MIT license. See the LICENSE file for more info.
+fosrest is available under the MIT license. See the LICENSE file for more info.
 

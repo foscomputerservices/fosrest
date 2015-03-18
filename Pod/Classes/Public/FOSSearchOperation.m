@@ -1,6 +1,6 @@
 //
 //  FOSSearchOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSSearchOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSSearchOperation {
     FOSCacheSearchHandler _searchHandler;
@@ -198,7 +198,7 @@
                          [FOSURLBinding stringForLifecycle:FOSLifecyclePhaseRetrieveServerRecords],
                          entity.name];
 
-        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        localError = [NSError errorWithDomain:@"FOSREST" andMessage:msg];
     }
 
     if (localError == nil) {

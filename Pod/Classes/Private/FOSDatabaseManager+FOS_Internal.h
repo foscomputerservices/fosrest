@@ -1,6 +1,6 @@
 //
 //  FOSDatabaseManager+FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 10/2/14.
 //

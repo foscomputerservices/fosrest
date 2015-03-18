@@ -1,6 +1,6 @@
 //
 //  FOSParseAnalyticsManagerTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by Administrator on 9/15/13.
 //
@@ -28,8 +28,8 @@
 //
 
 #import "FOSParseAnalyticsManagerTests.h"
-#import <FOSFoundation/FOSRESTConfig.h>
-#import "FOSFoundationTests.h"
+#import <FOSREST/FOSRESTConfig.h>
+#import "FOSRESTTests.h"
 #import "FOSLoginManagerTests.h"
 
 @implementation FOSParseAnalyticsManagerTests

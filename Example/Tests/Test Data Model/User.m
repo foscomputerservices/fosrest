@@ -1,6 +1,6 @@
 //
 //  User.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/2/13.
 //

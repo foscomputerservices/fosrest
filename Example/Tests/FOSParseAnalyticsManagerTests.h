@@ -1,6 +1,6 @@
 //
 //  FOSParseAnalyticsManagerTests.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by Administrator on 9/15/13.
 //

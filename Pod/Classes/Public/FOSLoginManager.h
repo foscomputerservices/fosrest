@@ -1,6 +1,6 @@
 //
 //  FOSLoginManager.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSFoundation/FOSCachedManagedObject.h>
+#import <FOSREST/FOSCachedManagedObject.h>
 
 typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
 

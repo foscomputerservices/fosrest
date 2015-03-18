@@ -1,6 +1,6 @@
 //
-//  NSAttributeDescription+FOSFoundation.h
-//  FOSFoundation
+//  NSAttributeDescription+FOSREST.h
+//  FOSREST
 //
 //  Created by David Hunt on 12/22/12.
 //

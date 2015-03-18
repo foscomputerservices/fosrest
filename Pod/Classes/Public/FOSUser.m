@@ -1,6 +1,6 @@
 //
 //  FOSUser.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/23/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSUser.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSUser
 
@@ -57,7 +57,7 @@
     NSString *msgFmt = @"The %@ property must be overridden by subclasses of FOSUser.";
     NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromSelector(_cmd)];
 
-    NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+    NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
     @throw e;
 }
 
@@ -65,7 +65,7 @@
     NSString *msgFmt = @"The %@ property must be overridden by subclasses of FOSUser.";
     NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromSelector(_cmd)];
 
-    NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+    NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
     @throw e;
 }
 

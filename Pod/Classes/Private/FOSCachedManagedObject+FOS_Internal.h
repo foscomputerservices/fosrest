@@ -1,6 +1,6 @@
 //
 //  FOSCachedManagedObject+FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/29/12.
 //

@@ -1,6 +1,6 @@
 //
 //  FOSModifiedProperty.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 8/29/12.
 //

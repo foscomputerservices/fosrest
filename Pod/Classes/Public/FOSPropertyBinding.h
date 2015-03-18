@@ -1,6 +1,6 @@
 //
 //  FOSPropertyBinding.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/12/14.
 //
@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <FOSFoundation/FOSCompiledAtom.h>
+#import <FOSREST/FOSCompiledAtom.h>
 
 @class FOSCachedManagedObject;
 

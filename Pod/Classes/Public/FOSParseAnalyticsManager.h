@@ -1,6 +1,6 @@
 //
 //  FOSParseAnalyticsManager.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by Administrator on 9/15/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSAnalytics.h>
+#import <FOSREST/FOSAnalytics.h>
 
 @interface FOSParseAnalyticsManager : NSObject <
     FOSAnalytics

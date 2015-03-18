@@ -1,6 +1,6 @@
 //
 //  FOSNetworkStatusMonitor.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/11/13.
 //
@@ -32,7 +32,7 @@
 //    http://developer.apple.com/library/ios/#samplecode/Reachability/Introduction/Intro.html
 
 #import <FOSNetworkStatusMonitor.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 #import <sys/socket.h>
 #import <netinet/in.h>

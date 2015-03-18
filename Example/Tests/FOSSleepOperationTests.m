@@ -1,6 +1,6 @@
 //
 //  FOSSleepOperationTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/8/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSFoundationTests.h"
+#import "FOSRESTTests.h"
 
 @interface FOSSleepOperationTests : XCTestCase
 

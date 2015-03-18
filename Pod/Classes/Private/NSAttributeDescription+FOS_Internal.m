@@ -1,6 +1,6 @@
 //
 //  NSAttributeDescription+FOS_Internal.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/1/13.
 //

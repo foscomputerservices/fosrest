@@ -1,6 +1,6 @@
 //
 //  FOSOperationTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 11/11/13.
 //
@@ -28,8 +28,8 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 
 typedef void (^FOSOpKVOHandler)(NSString *keyPath, id object, NSDictionary *change, void *context);
 

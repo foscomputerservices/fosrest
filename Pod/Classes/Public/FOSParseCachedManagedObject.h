@@ -1,6 +1,6 @@
 //
 //  FOSParseCachedManagedObject.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/29/12.
 //
@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <FOSFoundation/FOSCachedManagedObject.h>
+#import <FOSREST/FOSCachedManagedObject.h>
 
 
 @interface FOSParseCachedManagedObject : FOSCachedManagedObject

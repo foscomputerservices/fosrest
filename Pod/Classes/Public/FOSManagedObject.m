@@ -6,7 +6,7 @@
 //
 
 #import <FOSManagedObject.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSManagedObject {
     BOOL _insideWillSave;

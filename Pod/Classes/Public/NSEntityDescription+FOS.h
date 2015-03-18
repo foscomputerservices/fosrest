@@ -1,6 +1,6 @@
 //
 //  NSEntityDescription+FOS.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -56,7 +56,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  *
  * Each of the samples below is based on the User entity
  * in the sample data model provided in
- * FOSFoundationTests/Test Data Model/RESTTests.xcdatamodeld.
+ * "FOSREST_Internal.h"Tests/Test Data Model/RESTTests.xcdatamodeld.
  */
 @interface NSEntityDescription (FOS)
 

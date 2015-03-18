@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveToManyRelationshipOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/31/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSRetrieveToManyRelationshipOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSRetrieveToManyRelationshipOperation {
     NSMutableSet *_childRetrieveCMOOps;

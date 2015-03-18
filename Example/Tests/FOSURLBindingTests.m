@@ -1,6 +1,6 @@
 //
 //  FOSURLBindingTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/17/14.
 //
@@ -28,8 +28,8 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 #import "TestCreate.h"
 #import "Widget.h"
 

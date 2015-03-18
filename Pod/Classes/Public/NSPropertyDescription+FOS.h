@@ -1,6 +1,6 @@
 //
 //  NSPropertyDescription+FOS.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 9/3/14.
 //

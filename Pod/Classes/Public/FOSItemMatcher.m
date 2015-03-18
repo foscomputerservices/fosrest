@@ -1,6 +1,6 @@
 //
 //  FOSItemMatcher.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/19/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSItemMatcher.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSItemMatcher
 

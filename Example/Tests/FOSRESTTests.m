@@ -1,6 +1,6 @@
 //
-//  FOSFoundationTests.m
-//  FOSFoundationTests
+//  FOSRESTTests.m
+//  FOSRESTTests
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -27,11 +27,11 @@
 //  SOFTWARE.
 //
 
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 #import "User.h"
 
-@implementation FOSFoundationTests
+@implementation FOSRESTTests
 
 - (void)setUp {
     [super setUp];

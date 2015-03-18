@@ -1,6 +1,6 @@
 //
 //  NSEntityDescription+Parse.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/27/14.
 //

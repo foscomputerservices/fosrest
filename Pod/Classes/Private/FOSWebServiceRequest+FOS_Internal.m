@@ -1,6 +1,6 @@
 //
 //  FOSWebServiceRequest+FOS_Internal.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/30/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import "FOSWebServiceRequest+FOS_Internal.h"
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSWebServiceRequest (FOS_Internal)
 

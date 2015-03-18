@@ -1,6 +1,6 @@
 //
 //  FOSParseAnalyticsManager.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by Administrator on 9/15/13.
 //
@@ -30,7 +30,7 @@
 static NSString *FOSParseEventEndPoint = @"1/events";
 
 #import <FOSParseAnalyticsManager.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSParseAnalyticsManager {
     BOOL _kvoRegistered;

@@ -1,6 +1,6 @@
 //
 //  FOSParseCachedManagedObjectTests.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/7/13.
 //

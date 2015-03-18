@@ -1,6 +1,6 @@
 //
 //  FOSStaticTableSearchOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/21/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSStaticTableSearchOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSStaticTableSearchOperation
 

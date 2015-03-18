@@ -1,6 +1,6 @@
 //
 //  FOSBackgroundOperationTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/8/13.
 //
@@ -28,8 +28,8 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <FOSFoundation/FOSBackgroundOperation.h>
-#import "FOSFoundationTests.h"
+#import <FOSREST/FOSBackgroundOperation.h>
+#import "FOSRESTTests.h"
 
 @interface FOSBackgroundOperationTests : XCTestCase
 

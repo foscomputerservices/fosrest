@@ -1,6 +1,6 @@
 //
 //  TestToManySearchOperation.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/2/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 
 @class User;
 

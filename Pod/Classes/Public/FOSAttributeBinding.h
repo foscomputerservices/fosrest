@@ -1,6 +1,6 @@
 //
 //  FOSAttributeBinding.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/15/14.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSPropertyBinding.h>
-#import <FOSFoundation/FOSTwoWayPropertyBinding.h>
+#import <FOSREST/FOSPropertyBinding.h>
+#import <FOSREST/FOSTwoWayPropertyBinding.h>
 
 @protocol FOSExpression;
 @class FOSItemMatcher;

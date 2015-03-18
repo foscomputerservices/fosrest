@@ -1,6 +1,6 @@
 //
 //  FOSCacheManager+CoreData.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 6/14/14.
 //
@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <FOSFoundation/FOSCachedManagedObject.h>
+#import <FOSREST/FOSCachedManagedObject.h>
 
 @class FOSManagedObjectContext;
 

@@ -1,6 +1,6 @@
 //
 //  FOSSendToOneRelationshipOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/10/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSSendToOneRelationshipOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSSendToOneRelationshipOperation
 

@@ -1,6 +1,6 @@
 //
 //  FOSLoginManagerTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/28/12.
 //
@@ -28,8 +28,8 @@
 //
 
 #import "FOSLoginManagerTests.h"
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 #import "User.h"
 #import "Widget.h"
 #import "FOSTestHarnessAdapter.h"
@@ -60,6 +60,19 @@
 
 
 @implementation FOSLoginManagerTests
+
+#pragma mark - Private Test Configuration
+
++ (NSString *)_parseAppId {
+    // TODO: Determine a way to store the Parse AppID w/o making it public
+    return @""; // TEST_APP_ID;
+}
+
++ (NSString *)_parseRESTToken {
+    // TODO: Determine a way to store the Parse REST Token w/o making it public
+    return @""; // TEST_TOKEN;
+}
+
 #pragma mark - Class methods
 
 + (FOSNetworkStatusMonitor *)networkStatusMonitor {
@@ -80,8 +93,8 @@
         [FOSLoginManager clearLoggedInUserId];
 
         FOSTestHarnessAdapter *adapter =
-            [FOSTestHarnessAdapter adapterWithApplicationId:@"uMDqEYDMrjEFRo4vtlhx4qaFVwrvw68cPPMsVHqp"
-                                              andRESTAPIKey:@"XXRQQ3349yU4AV3wsVxetNAwOpnkYVCVloPCVppu"];
+            [FOSTestHarnessAdapter adapterWithApplicationId:[self _parseAppId]
+                                              andRESTAPIKey:[self _parseRESTToken]];
 
         [FOSRESTConfig configWithApplicationVersion:@"1.0"
                                             options:configOptions

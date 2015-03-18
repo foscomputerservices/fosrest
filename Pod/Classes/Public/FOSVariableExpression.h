@@ -1,6 +1,6 @@
 //
 //  FOSVariableExpression.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/17/14.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSCompiledAtom.h>
-#import <FOSFoundation/FOSExpression.h>
+#import <FOSREST/FOSCompiledAtom.h>
+#import <FOSREST/FOSExpression.h>
 
 /*!
  * @class FOSVariableBinding

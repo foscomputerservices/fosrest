@@ -1,6 +1,6 @@
 //
 //  FOSTestHarnessAdapter.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 10/2/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 
 @interface FOSTestHarnessAdapter : FOSParseServiceAdapter
 

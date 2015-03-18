@@ -1,6 +1,6 @@
 //
 //  FOSAdapterBindingParser.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/14/14.
 //
@@ -29,7 +29,7 @@
 
 #import <FOSAdapterBindingParser.h>
 #import "Bison.h"
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 // externed from FOSBinding.ym
 extern id<FOSRESTServiceAdapter> parsedServiceAdapter;

@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveLoginDataOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/28/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import "FOSWebServiceRequest+FOS_Internal.h"
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSRetrieveLoginDataOperation {
     NSError *_error;

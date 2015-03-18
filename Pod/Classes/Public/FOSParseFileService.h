@@ -1,6 +1,6 @@
 //
 //  FOSFileService.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 2/11/14.
 //
@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSFoundation/FOSProcessServiceRequest.h>
+#import <FOSREST/FOSProcessServiceRequest.h>
 
 @interface FOSParseFileService : NSObject<FOSProcessServiceRequest>
 

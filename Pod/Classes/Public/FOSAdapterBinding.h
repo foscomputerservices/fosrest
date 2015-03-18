@@ -1,6 +1,6 @@
 //
 //  FOSAdapterBinding.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/19/14.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSCompiledAtom.h>
-#import <FOSFoundation/FOSURLBinding.h>
+#import <FOSREST/FOSCompiledAtom.h>
+#import <FOSREST/FOSURLBinding.h>
 
 @protocol FOSTwoWayPropertyBinding;
 @class FOSAttributeBinding;

@@ -1,6 +1,6 @@
 //
 //  FOSThreadSleep.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/8/13.
 //

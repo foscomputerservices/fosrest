@@ -1,6 +1,6 @@
 //
 //  FOSRefreshUserOperation.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/1/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSOperation.h>
+#import <FOSREST/FOSOperation.h>
 
 @interface FOSRefreshUserOperation : FOSOperation
 

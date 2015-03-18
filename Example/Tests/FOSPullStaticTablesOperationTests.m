@@ -1,6 +1,6 @@
 //
 //  FOSPullStaticTablesOperationTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 10/7/13.
 //
@@ -29,8 +29,8 @@
 
 #import <XCTest/XCTest.h>
 #import "FOSCachedManagedObjectTests.h"
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 #import "NSObject+Tests.h"
 #import "Note.h"
 #import "TestCreate.h"

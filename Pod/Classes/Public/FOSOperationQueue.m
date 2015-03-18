@@ -1,6 +1,6 @@
 //
 //  FOSOperationQueue.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSOperationQueue.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSOperationQueue {
     BOOL _allOpsCanceled;

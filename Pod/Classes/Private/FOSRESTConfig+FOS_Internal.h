@@ -1,6 +1,6 @@
 //
 //  FOSRESTConfig_FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/5/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 #import <FOSRESTConfig.h>
 
 @interface FOSRESTConfig ()

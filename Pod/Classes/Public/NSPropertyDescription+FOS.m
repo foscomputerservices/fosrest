@@ -1,6 +1,6 @@
 //
 //  NSPropertyDescription+FOS.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 9/3/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <NSPropertyDescription+FOS.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation NSPropertyDescription (FOS)
 

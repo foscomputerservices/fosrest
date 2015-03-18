@@ -1,6 +1,6 @@
 //
 //  FOSRESTConfig.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/25/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSRESTConfig.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 __strong FOSRESTConfig *__sharedInstance = nil;
 

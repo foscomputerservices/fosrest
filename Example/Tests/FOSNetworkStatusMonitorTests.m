@@ -1,6 +1,6 @@
 //
 //  FOSNetworkStatusMonitorTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 11/11/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 
 @interface FOSNetworkStatusMonitorTests : XCTestCase
 

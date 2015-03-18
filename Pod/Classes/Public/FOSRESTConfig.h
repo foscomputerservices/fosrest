@@ -1,6 +1,6 @@
 //
 //  FOSRESTConfig.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/25/12.
 //
@@ -28,9 +28,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <FOSFoundation/FOSNetworkStatusMonitor.h>
-#import <FOSFoundation/FOSRESTServiceAdapter.h>
-#import <FOSFoundation/FOSAnalytics.h>
+#import <FOSREST/FOSNetworkStatusMonitor.h>
+#import <FOSREST/FOSRESTServiceAdapter.h>
+#import <FOSREST/FOSAnalytics.h>
 
 /*!
  * @enum FOSRESTConfigOptions

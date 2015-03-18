@@ -1,6 +1,6 @@
 //
 //  FOSCMOWriteableStaticTableTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 11/6/13.
 //
@@ -29,8 +29,8 @@
 
 #import <XCTest/XCTest.h>
 #import "FOSCachedManagedObjectTests.h"
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 #import "FOSLoginManagerTests.h"
 #import "FOSPullStaticTablesOperation.h"
 #import "FOSRefreshUserOperation.h"
@@ -50,7 +50,7 @@
 SETUP_TEARDOWN_LOGIN(FOSRESTConfigAllowStaticTableModifications)
 
 - (void)testCreateStaticObject {
-    XCTAssertNoThrowSpecificNamed([[Role alloc] init], NSException, @"FOSFoundation",
+    XCTAssertNoThrowSpecificNamed([[Role alloc] init], NSException, @"FOSREST",
                                   @"Should not be able to create static object instances!");
 }
 
@@ -60,7 +60,7 @@ SETUP_TEARDOWN_LOGIN(FOSRESTConfigAllowStaticTableModifications)
 
     Role *aRole = roles.lastObject;
 
-    XCTAssertNoThrowSpecificNamed([aRole copy], NSException, @"FOSFoundation",
+    XCTAssertNoThrowSpecificNamed([aRole copy], NSException, @"FOSREST",
                                   @"Should not be able to copy static object instances!");
 }
 

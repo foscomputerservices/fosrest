@@ -1,6 +1,6 @@
 //
 //  NSManagedObjectModel+FOS.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/20/14.
 //

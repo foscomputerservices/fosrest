@@ -1,6 +1,6 @@
 //
 //  FOSMergePolicy.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 7/23/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSMergePolicy.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSMergePolicy
 

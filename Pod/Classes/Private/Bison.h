@@ -1,6 +1,6 @@
 //
 //  Bison.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/21/14.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#ifndef FOSFoundation_Bison_h
-#define FOSFoundation_Bison_h
+#ifndef FOSREST_Bison_h
+#define FOSREST_Bison_h
 
 typedef void* YY_BUFFER_STATE;
 typedef void* yyscan_t;

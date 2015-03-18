@@ -1,6 +1,6 @@
 //
 //  TestCreate.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/21/14.
 //
@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSFoundation/FOSParseCachedManagedObject.h>
+#import <FOSREST/FOSParseCachedManagedObject.h>
 
 @class Note, User;
 

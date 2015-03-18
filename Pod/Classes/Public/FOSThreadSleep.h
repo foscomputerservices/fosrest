@@ -1,6 +1,6 @@
 //
 //  FOSThreadSleep.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/8/13.
 //
@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSFoundation/FOSCacheManager.h>
+#import <FOSREST/FOSCacheManager.h>
 
 @interface FOSThreadSleep : NSThread
 

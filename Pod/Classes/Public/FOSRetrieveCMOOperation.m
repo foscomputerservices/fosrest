@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveCMOOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/31/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import "FOSRetrieveCMOOperation+FOS_Internal.h"
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSRetrieveCMOOperation {
     BOOL _ready;
@@ -330,7 +330,7 @@
                     NSString *msg = [NSString stringWithFormat:msgFmt,
                                      relDesc.name, fetchDataOp.entity.name];
 
-                    localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+                    localError = [NSError errorWithDomain:@"FOSREST" andMessage:msg];
                     break;
                 }
             }
@@ -973,7 +973,7 @@
                    @"JSON" : _json
                 };
 
-                _error = [NSError errorWithDomain:@"FOSFoundation" message:msg andUserInfo:userInfo];
+                _error = [NSError errorWithDomain:@"FOSREST" message:msg andUserInfo:userInfo];
             }
             else {
                 _error = localError;

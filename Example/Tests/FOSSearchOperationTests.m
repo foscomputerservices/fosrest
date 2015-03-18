@@ -1,6 +1,6 @@
 //
 //  FOSSearchOperationTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/28/12.
 //
@@ -28,8 +28,8 @@
 //
 
 #import "FOSSearchOperationTests.h"
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 #import "FOSLoginManagerTests.h"
 #import "User.h"
 #import "Widget.h"

@@ -1,6 +1,6 @@
 //
 //  FOSPullStaticTablesOperation+FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/27/13.
 //

@@ -1,6 +1,6 @@
 //
 //  FOSSharedBindingReference.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/22/14.
 //
@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSFoundation/FOSCompiledAtom.h>
+#import <FOSREST/FOSCompiledAtom.h>
 
 /*!
  * @class FOSSharedBindingReference

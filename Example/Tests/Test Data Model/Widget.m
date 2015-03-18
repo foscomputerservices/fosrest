@@ -1,6 +1,6 @@
 //
 //  Widget.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 2/5/13.
 //

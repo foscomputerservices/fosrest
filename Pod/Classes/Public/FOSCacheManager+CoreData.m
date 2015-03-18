@@ -1,6 +1,6 @@
 //
 //  FOSCacheManager+CoreData.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 6/14/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSCacheManager+CoreData.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSCacheManager (CoreData)
 
@@ -123,7 +123,7 @@
 
             if (localError != nil) {
                 // This is an error in the specification, throw
-                NSException *e = [NSException exceptionWithName:@"FOSFoundation"
+                NSException *e = [NSException exceptionWithName:@"FOSREST"
                                                          reason:localError.description
                                                        userInfo:localError.userInfo];
 

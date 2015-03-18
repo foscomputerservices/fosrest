@@ -1,6 +1,6 @@
 //
 //  FOSURLBinding.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/17/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSURLBinding.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSURLBinding
 

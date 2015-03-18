@@ -1,6 +1,6 @@
 //
 //  FOSBoundServiceAdapter.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/21/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSBoundServiceAdapter.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSBoundServiceAdapter {
     FOSAdapterBinding *_bindings;
@@ -56,7 +56,7 @@
 + (NSArray *)serverDateFormats {
     NSString *msg = [NSString stringWithFormat:@"Concrete subclasses of FOSBoundServiceAdapter must override and implement %@.", NSStringFromSelector(_cmd)];
 
-    @throw [NSException exceptionWithName:@"FOSFoundation_MustOverride"
+    @throw [NSException exceptionWithName:@"FOSREST_MustOverride"
                                    reason:msg userInfo:nil];
 }
 
@@ -149,7 +149,7 @@
     NSString *msgFmt = @"The %@ method must be overridden by subclasses of FOSBoundServicesAdapter.  Do not call FOSBoundServicesAdapter's implementation.";
     NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromSelector(_cmd)];
 
-    NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+    NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
     @throw e;
 
 }
@@ -205,7 +205,7 @@
                                                             error:&localError];
         }
 
-        localError = [NSError errorWithDomain:@"FOSFoundation"
+        localError = [NSError errorWithDomain:@"FOSREST"
                                     errorCode:httpResponse.statusCode
                                    andMessage:msg];
     }
@@ -382,7 +382,7 @@
                    error:(NSError **)error {
     NSString *msg = [NSString stringWithFormat:@"Concrete subclasses of FOSBoundServiceAdapter must override and implement %@.", NSStringFromSelector(_cmd)];
 
-    @throw [NSException exceptionWithName:@"FOSFoundation_MustOverride"
+    @throw [NSException exceptionWithName:@"FOSREST_MustOverride"
                                    reason:msg userInfo:nil];
 }
 
@@ -432,7 +432,7 @@
         NSString *msg = [NSString stringWithFormat:msgFmt,
                          0, 0, localError.description];
 
-        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
         @throw e;
     }
     

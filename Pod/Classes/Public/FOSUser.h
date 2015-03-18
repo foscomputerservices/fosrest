@@ -1,6 +1,6 @@
 //
 //  FOSUser.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/23/12.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSCachedManagedObject.h>
+#import <FOSREST/FOSCachedManagedObject.h>
 
 @interface FOSUser : FOSCachedManagedObject
 

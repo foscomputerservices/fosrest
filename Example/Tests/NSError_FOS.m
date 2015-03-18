@@ -1,6 +1,6 @@
 //
 //  NSError_FOS.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 11/5/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 
 @interface NSError_FOS : XCTestCase
 

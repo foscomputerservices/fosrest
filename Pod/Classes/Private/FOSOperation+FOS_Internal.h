@@ -1,6 +1,6 @@
 //
 //  FOSOperation+FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/28/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @interface FOSOperation (FOS_Internal)
 

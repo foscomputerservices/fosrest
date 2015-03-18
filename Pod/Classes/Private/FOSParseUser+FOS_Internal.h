@@ -1,6 +1,6 @@
 //
 //  FOSParseUser+FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/2/13.
 //

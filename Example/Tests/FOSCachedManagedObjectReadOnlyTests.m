@@ -1,6 +1,6 @@
 //
 //  FOSCachedManagedObjectReadOnlyTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/18/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSFoundationTests.h"
+#import "FOSRESTTests.h"
 #import "Widget.h"
 #import "WidgetInfo.h"
 #import "User.h"

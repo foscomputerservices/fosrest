@@ -1,6 +1,6 @@
 //
 //  FOSNetworkStatusMonitor.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/11/13.
 //

@@ -1,6 +1,6 @@
 //
 //  FOSParseRESTAdapter.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/14/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSParseServiceAdapter.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 // TODO : Standardize
 extern NSString *FOSWebServiceErrorStatusCode;
@@ -501,7 +501,7 @@ extern NSString *FOSWebServiceServerErrorMessage;
             NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromClass([jsonData class])];
             NSDictionary *userInfo = @{ @"URL" : httpResponse.URL  };
             
-            *error = [NSError errorWithDomain:@"FOSFoundation"
+            *error = [NSError errorWithDomain:@"FOSREST"
                                     errorCode:0
                                       message:msg
                                   andUserInfo:userInfo];
@@ -514,7 +514,7 @@ extern NSString *FOSWebServiceServerErrorMessage;
                 NSString *msg = [NSString stringWithFormat:msgFmt, NSStringFromClass([*jsonResult class])];
                 NSDictionary *userInfo = @{ @"URL" : httpResponse.URL  };
                 
-                *error = [NSError errorWithDomain:@"FOSFoundation"
+                *error = [NSError errorWithDomain:@"FOSREST"
                                         errorCode:0
                                           message:msg
                                       andUserInfo:userInfo];

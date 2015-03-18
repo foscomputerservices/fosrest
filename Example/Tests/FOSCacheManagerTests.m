@@ -1,6 +1,6 @@
 //
 //  FOSCacheManagerTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/3/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import "FOSCacheManagerTests.h"
-#import "FOSFoundationTests.h"
+#import "FOSRESTTests.h"
 #import "FOSLoginManagerTests.h"
 
 @implementation FOSCacheManagerTests

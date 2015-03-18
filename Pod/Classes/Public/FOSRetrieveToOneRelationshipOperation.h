@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveToOneRelationshipOperation.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/31/12.
 //
@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <FOSFoundation/FOSOperation.h>
+#import <FOSREST/FOSOperation.h>
 
 @class NSRelationshipDescription;
 @class FOSCMOBinding;

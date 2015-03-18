@@ -1,6 +1,6 @@
 //
 //  FOSLoginOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/1/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSLoginOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSLoginOperation {
     FOSRetrieveCMOOperation *__fetchUserRequest;
@@ -131,7 +131,7 @@
                          self.loginStyle ? self.loginStyle : @"<none>",
                          _user.entity.name];
 
-        localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+        localError = [NSError errorWithDomain:@"FOSREST" andMessage:msg];
     }
 
     NSURLRequest *urlRequest = nil;

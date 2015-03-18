@@ -1,6 +1,6 @@
 //
 //  FOSJSONTransformer.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 7/21/14.
 //
@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <Fosfoundation/FOSValueTransformer.h>
+#import <FOSREST/FOSValueTransformer.h>
 
 @interface FOSJSONTransformer : NSValueTransformer<FOSValueTransformer>
 

@@ -1,6 +1,6 @@
 //
 //  User.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/2/13.
 //
@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <FOSFoundation/FOSParseUser.h>
+#import <FOSREST/FOSParseUser.h>
 
 @class Role, TestCreate, TestToMany, Widget;
 

@@ -1,6 +1,6 @@
 //
 //  FOSDeletedObject+FOS_Internal.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 9/17/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import "FOSDeletedObject+FOS_Internal.h"
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSDeletedObject (FOS_Internal)
 

@@ -1,6 +1,6 @@
 //
 //  FOSCachedManagedObjectTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/28/12.
 //
@@ -28,9 +28,9 @@
 //
 
 #import "FOSCachedManagedObjectTests.h"
-#import "FOSFoundationTests.h"
+#import "FOSRESTTests.h"
 #import "FOSLoginManagerTests.h"
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 #import "NSObject+Tests.h"
 #import "Note.h"
 #import "TestCreate.h"

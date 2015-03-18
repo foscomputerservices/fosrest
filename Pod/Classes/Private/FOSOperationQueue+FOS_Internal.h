@@ -1,6 +1,6 @@
 //
 //  FOSOperationQueue+FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/19/13.
 //

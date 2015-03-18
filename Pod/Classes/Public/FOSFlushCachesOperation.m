@@ -1,6 +1,6 @@
 //
 //  FOSFlushCachesOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/3/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSFlushCachesOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSFlushCachesOperation
 

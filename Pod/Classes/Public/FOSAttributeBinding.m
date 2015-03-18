@@ -1,6 +1,6 @@
 //
 //  FOSAttributeBinding.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/15/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSAttributeBinding.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSAttributeBinding
 

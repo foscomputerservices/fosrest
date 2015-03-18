@@ -1,6 +1,6 @@
 //
 //  FOSVariableExpressionTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/18/14.
 //
@@ -28,10 +28,10 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <FOSFoundation/FOSVariableExpression.h>
-#import <FOSFoundation/FOSDatabaseManager.h>
-#import <FOSFoundation/NSEntityDescription+FOS.h>
-#import "FOSFoundationTests.h"
+#import <FOSREST/FOSVariableExpression.h>
+#import <FOSREST/FOSDatabaseManager.h>
+#import <FOSREST/NSEntityDescription+FOS.h>
+#import "FOSRESTTests.h"
 #import "TestCreate.h"
 
 @interface FOSVariableExpressionTests : XCTestCase

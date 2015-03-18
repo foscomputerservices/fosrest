@@ -1,6 +1,6 @@
 //
 //  FOSCMOBindingTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/18/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSFoundationTests.h"
+#import "FOSRESTTests.h"
 #import "TestCreate.h"
 
 @interface FOSCMOBindingTests : XCTestCase

@@ -1,6 +1,6 @@
 //
 //  NSMutableDictionary+FOS.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/22/12.
 //

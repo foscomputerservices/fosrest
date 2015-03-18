@@ -1,6 +1,6 @@
 //
 //  FOSCompiledAtom.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/30/14.
 //

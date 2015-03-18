@@ -1,6 +1,6 @@
 //
 //  FOSAdapterBinding.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/19/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSAdapterBinding.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSAdapterBinding
 
@@ -210,7 +210,7 @@
                 NSString *msg = [NSString stringWithFormat:msgFmt,
                                  urlBinding.sharedBindingReference.identifier];
 
-                NSException *e = [NSException exceptionWithName:@"FOSFoundation"
+                NSException *e = [NSException exceptionWithName:@"FOSREST"
                                                          reason:msg
                                                        userInfo:nil];
 

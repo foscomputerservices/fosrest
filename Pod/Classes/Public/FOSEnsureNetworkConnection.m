@@ -1,6 +1,6 @@
 //
 //  FOSEnsureNetworkConnection.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 6/16/14.
 //

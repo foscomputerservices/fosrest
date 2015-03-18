@@ -1,6 +1,6 @@
 //
 //  FOSParseFileService.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 2/11/14.
 //

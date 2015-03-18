@@ -1,6 +1,6 @@
 //
 //  FOSBoundServiceAdapter.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/21/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <FOSFoundation/FOSRESTServiceAdapter.h>
+#import <FOSREST/FOSRESTServiceAdapter.h>
 
 @protocol FOSRESTServiceAdapter;
 @class FOSAdapterBinding;
@@ -44,7 +44,7 @@
  *
  *  o @link FOSRESTServiceAdapter/extractJSONError:jsonResult:responseData:userInfo:error: @/link
  *
- * The default implementation of these methods will throw the FOSFoundation_MustOverride exception.
+ * The default implementation of these methods will throw the "FOSREST_Internal.h"_MustOverride exception.
  */
 @interface FOSBoundServiceAdapter : NSObject<FOSRESTServiceAdapter>
 

@@ -1,6 +1,6 @@
 //
 //  FOSBindingParser.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/14/14.
 //

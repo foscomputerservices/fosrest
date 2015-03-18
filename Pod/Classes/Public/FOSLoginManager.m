@@ -1,6 +1,6 @@
 //
 //  FOSLoginManager.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSLoginManager.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 // Note: This key changed, which will for re-login for the sake of
 //       upgrading to NSManagedObjectID vs. NSString, which caused

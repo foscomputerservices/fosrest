@@ -1,6 +1,6 @@
 //
 //  FOSSharedBindingReference.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/22/14.
 //

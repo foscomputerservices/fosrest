@@ -1,6 +1,6 @@
 //
 //  FOSPropertyBinding.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/12/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSPropertyBinding.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSPropertyBinding
 

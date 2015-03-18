@@ -1,6 +1,6 @@
 //
 //  NSBundle+FOS.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/15/14.
 //
@@ -38,12 +38,12 @@
 }
 
 + (NSManagedObjectModel *)fosManagedObjectModel {
-    // FOSFoundation
+    // FOSREST
     NSBundle *fosBundle = [NSBundle fosFrameworkBundle];
-    NSURL *modelURL = [fosBundle URLForResource:@"FOSFoundation" withExtension:@"momd"];
+    NSURL *modelURL = [fosBundle URLForResource:@"FOSREST" withExtension:@"momd"];
 
     if (modelURL == nil) {
-        NSException *e = [NSException exceptionWithName:@"FOSMissingModel" reason:@"Unable to locate the compiled Core Data model: FOSFoundation.momd" userInfo:nil];
+        NSException *e = [NSException exceptionWithName:@"FOSMissingModel" reason:@"Unable to locate the compiled Core Data model: FOSREST.momd" userInfo:nil];
 
         @throw e;
     }

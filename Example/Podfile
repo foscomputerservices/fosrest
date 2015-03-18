@@ -1,9 +1,11 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'FOSFoundationApp', :exclusive => true do
-  pod "FOSFoundation", :path => "../"
+use_frameworks!
+
+target 'FOSRESTApp', :exclusive => true do
+  pod "fosrest", :path => "../"
 end
 
 target 'Tests', :exclusive => true do
-  pod "FOSFoundation", :path => "../"
+  pod "fosrest", :path => "../"
 end

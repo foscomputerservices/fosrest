@@ -1,6 +1,6 @@
 //
 //  FOSDeletedObject+FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 9/17/13.
 //

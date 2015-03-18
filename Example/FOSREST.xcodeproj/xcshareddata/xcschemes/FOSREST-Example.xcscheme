@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6003F589195388D20070C39A"
-               BuildableName = "FOSFoundationApp.app"
-               BlueprintName = "FOSFoundationApp"
-               ReferencedContainer = "container:FOSFoundation.xcodeproj">
+               BuildableName = "FOSRESTApp.app"
+               BlueprintName = "FOSRESTApp"
+               ReferencedContainer = "container:FOSREST.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "6003F5AD195388D20070C39A"
                BuildableName = "Tests.xctest"
                BlueprintName = "Tests"
-               ReferencedContainer = "container:FOSFoundation.xcodeproj">
+               ReferencedContainer = "container:FOSREST.xcodeproj">
             </BuildableReference>
             <SkippedTests>
                <Test
@@ -66,9 +66,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "FOSFoundationApp.app"
-            BlueprintName = "FOSFoundationApp"
-            ReferencedContainer = "container:FOSFoundation.xcodeproj">
+            BuildableName = "FOSRESTApp.app"
+            BlueprintName = "FOSRESTApp"
+            ReferencedContainer = "container:FOSREST.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -86,9 +86,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "FOSFoundationApp.app"
-            BlueprintName = "FOSFoundationApp"
-            ReferencedContainer = "container:FOSFoundation.xcodeproj">
+            BuildableName = "FOSRESTApp.app"
+            BlueprintName = "FOSRESTApp"
+            ReferencedContainer = "container:FOSREST.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -105,9 +105,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "FOSFoundationApp.app"
-            BlueprintName = "FOSFoundationApp"
-            ReferencedContainer = "container:FOSFoundation.xcodeproj">
+            BuildableName = "FOSRESTApp.app"
+            BlueprintName = "FOSRESTApp"
+            ReferencedContainer = "container:FOSREST.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

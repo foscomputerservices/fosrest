@@ -1,6 +1,6 @@
 //
 //  FOSDatabaseManager.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/23/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSDatabaseManager.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSDatabaseManager {
     __weak FOSRESTConfig *_restConfig;
@@ -82,7 +82,7 @@
             NSString *msgFmt = @"Unable to create CoreData database: %@";
             NSString *msg = [NSString stringWithFormat:msgFmt, localError.localizedDescription];
 
-            NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+            NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
             @throw e;
         }
     }
@@ -284,7 +284,7 @@
         NSString *msgFmt = @"Unable to RE-create CoreData database: %@";
         NSString *msg = [NSString stringWithFormat:msgFmt, localError.localizedDescription];
 
-        NSException *e = [NSException exceptionWithName:@"FOSFoundation" reason:msg userInfo:nil];
+        NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
         @throw e;
     }
 }

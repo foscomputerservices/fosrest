@@ -1,6 +1,6 @@
 //
 //  FOSConstantExpression.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/18/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSConstantExpression.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSConstantExpression
 

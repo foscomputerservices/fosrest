@@ -1,6 +1,6 @@
 //
 //  NSEntityDescription+FOS_Internal.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/28/12.
 //
@@ -28,7 +28,7 @@
 //
 
 #import "NSEntityDescription+FOS_Internal.h"
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation NSEntityDescription (FOS_Internal)
 

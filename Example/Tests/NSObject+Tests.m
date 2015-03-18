@@ -1,6 +1,6 @@
 //
 //  NSObject+Tests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/2/13.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSRESTConfig.h>
-#import <FOSFoundation/FOSLoginManager.h>
+#import <FOSREST/FOSRESTConfig.h>
+#import <FOSREST/FOSLoginManager.h>
 
 #import "NSObject+Tests.h"
 

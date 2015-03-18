@@ -1,6 +1,6 @@
 //
 //  FOSManagedObject+FOS_Internal.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 1/5/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import "FOSManagedObject+FOS_Internal.h"
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSManagedObject (FOS_Internal)
 

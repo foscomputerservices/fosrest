@@ -1,6 +1,6 @@
 //
 //  FOSManagedObjectContext.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 6/14/14.
 //

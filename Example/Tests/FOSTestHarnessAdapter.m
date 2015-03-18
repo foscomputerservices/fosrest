@@ -1,6 +1,6 @@
 //
 //  FOSTestHarnessAdapter.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 10/2/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 #import "FOSTestHarnessAdapter.h"
 
 @implementation FOSTestHarnessAdapter {
@@ -70,7 +70,7 @@
             NSString *msg = [NSString stringWithFormat:@"Exception thrown creating store: %@",
                              exception.description];
 
-            localError = [NSError errorWithDomain:@"FOSFoundation" andMessage:msg];
+            localError = [NSError errorWithDomain:@"FOSREST" andMessage:msg];
         }
     }
 
@@ -88,7 +88,7 @@
 + (NSManagedObjectModel *)_mergeModels {
     NSMutableArray *models = [NSMutableArray arrayWithCapacity:2];
 
-    // FOSFoundation
+    // FOSREST
     NSManagedObjectModel *model = [NSBundle fosManagedObjectModel];
     [models addObject:model];
 

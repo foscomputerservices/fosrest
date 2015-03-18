@@ -1,6 +1,6 @@
 //
 //  FOSCreateServerRecordOperation.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/10/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSSendServerRecordOperation.h>
+#import <FOSREST/FOSSendServerRecordOperation.h>
 
 /*!
  * @class FOSCreateServerRecordOperation

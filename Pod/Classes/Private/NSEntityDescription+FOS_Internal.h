@@ -1,6 +1,6 @@
 //
 //  NSEntityDescription+FOS_Internal.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/28/12.
 //

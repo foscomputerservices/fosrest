@@ -1,6 +1,6 @@
 //
 //  NSError+FOS.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/23/12.
 //

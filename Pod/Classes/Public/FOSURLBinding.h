@@ -1,6 +1,6 @@
 //
 //  FOSURLBinding.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/17/14.
 //
@@ -28,9 +28,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <FOSFoundation/FOSCompiledAtom.h>
-#import <FOSFoundation/FOSWebServiceRequest.h>
-#import <FOSFoundation/FOSCachedManagedObject.h>
+#import <FOSREST/FOSCompiledAtom.h>
+#import <FOSREST/FOSWebServiceRequest.h>
+#import <FOSREST/FOSCachedManagedObject.h>
 
 @class FOSConcatExpression;
 @class FOSCMOBinding;

@@ -1,6 +1,6 @@
 //
 //  FOSAtomicCreateServerRecordOperation.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 10/3/13.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <FOSAtomicCreateServerRecordOperation.h>
-#import "FOSFoundation_Internal.h"
+#import "FOSREST_Internal.h"
 
 @implementation FOSAtomicCreateServerRecordOperation {
     FOSWebServiceRequest *_webRequest;

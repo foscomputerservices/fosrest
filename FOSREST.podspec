@@ -1,15 +1,15 @@
 Pod::Spec.new do |s|
-  s.name             = "FOSFoundation"
-  s.module_name      = "FOSFoundation"
-  s.version          = "1.0.5"
+  s.name             = "fosrest"
+  s.module_name      = "fosrest"
+  s.version          = "0.1.0"
   s.summary          = "A group of classes for connecting CoreData to REST services."
-  s.homepage         = "http://fosmain.foscomputerservices.com:7990/projects/FF"
+  s.homepage         = "https://github.com/foscomputerservices/fosrest"
   s.license          = 'Private'
-  s.author           = { "David Hunt" => "david@foscomputerservices.com" }
-  s.source           = { :git => "ssh://git@fosmain.foscomputerservices.com:7999/ff/fosfoundation.git", :tag => s.version.to_s }
+  s.author           = { "David Hunt" => "fosrest@foscomputerservices.com" }
+  s.source           = { :git => "https://github.com/foscomputerservices/fosrest", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/foscompsvcs'
 
-  s.platform     = :ios, '8.1'
+  s.platform     = :ios, '8.0'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*.{h,m,lm,ym}'

@@ -1,6 +1,6 @@
 //
 //  FOSTimeFilter.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/26/12.
 //

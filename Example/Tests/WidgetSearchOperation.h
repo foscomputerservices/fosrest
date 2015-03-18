@@ -1,6 +1,6 @@
 //
 //  WidgetSearchOperation.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 12/28/12.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 
 @interface WidgetSearchOperation : FOSSearchOperation
 

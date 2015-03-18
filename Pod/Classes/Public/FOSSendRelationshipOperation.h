@@ -1,6 +1,6 @@
 //
 //  FOSSendRelationshipOperation.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/10/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSOperation.h>
+#import <FOSREST/FOSOperation.h>
 
 @class FOSCachedManagedObject;
 

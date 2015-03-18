@@ -1,6 +1,6 @@
 //
 //  NSError+FOS_Internal.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 5/30/14.
 //
@@ -33,7 +33,7 @@
 @implementation NSError (FOS_Internal)
 
 + (NSError *)errorWithMessage:(NSString *)message {
-    return [self errorWithDomain:@"FOSFoundation" andMessage:message];
+    return [self errorWithDomain:@"FOSREST" andMessage:message];
 }
 
 + (NSError *)errorWithMessage:(NSString *)message forAtom:(id<FOSCompiledAtomInfo>)atom {

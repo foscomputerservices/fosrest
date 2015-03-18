@@ -1,6 +1,6 @@
 //
 //  FOSCMOReadOnlyStaticTableTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 11/6/13.
 //
@@ -29,8 +29,8 @@
 
 #import <XCTest/XCTest.h>
 #import "FOSCachedManagedObjectTests.h"
-#import "FOSFoundationTests.h"
-#import "FOSFoundation.h"
+#import "FOSRESTTests.h"
+#import "FOSREST.h"
 #import "NSObject+Tests.h"
 #import "Note.h"
 #import "TestCreate.h"
@@ -49,7 +49,7 @@ SETUP_TEARDOWN_LOGIN(FOSRESTConfigOptionsNone)
 // NOTE: Sadly, if there are any breakpoints set in the debugger the debugger will
 //       top on each exception and you'll have to manually click continue...
 - (void)testCreateStaticObjectFails {
-    XCTAssertThrowsSpecificNamed([[Role alloc] init], NSException, @"FOSFoundation",
+    XCTAssertThrowsSpecificNamed([[Role alloc] init], NSException, @"FOSREST",
                                  @"Should not be able to create static object instances!");
 }
 
@@ -59,7 +59,7 @@ SETUP_TEARDOWN_LOGIN(FOSRESTConfigOptionsNone)
 
     Role *aRole = roles.lastObject;
 
-    XCTAssertThrowsSpecificNamed([aRole copy], NSException, @"FOSFoundation",
+    XCTAssertThrowsSpecificNamed([aRole copy], NSException, @"FOSREST",
                                  @"Should not be able to copy static object instances!");
 }
 

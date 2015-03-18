@@ -1,6 +1,6 @@
 //
 //  FOSTwoWayRecordBinding.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 4/11/14.
 //
@@ -29,8 +29,8 @@
 
 @import Foundation;
 @import CoreData;
-#import <FOSFoundation/FOSCachedManagedObject.h>
-#import <FOSFoundation/FOSURLBinding.h>
+#import <FOSREST/FOSCachedManagedObject.h>
+#import <FOSREST/FOSURLBinding.h>
 
 @protocol FOSTwoWayRecordBinding <NSObject>
 

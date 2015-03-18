@@ -1,6 +1,6 @@
 //
 //  FOSConstantExpression.h
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/18/14.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSFoundation/FOSCompiledAtom.h>
-#import <FOSFoundation/FOSExpression.h>
+#import <FOSREST/FOSCompiledAtom.h>
+#import <FOSREST/FOSExpression.h>
 
 /*!
  * @class FOSConstantExpression

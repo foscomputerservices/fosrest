@@ -1,6 +1,6 @@
 //
 //  FOSFOSRESTBindingParserTests.m
-//  FOSFoundation
+//  FOSREST
 //
 //  Created by David Hunt on 3/14/14.
 //
@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSFoundation.h"
+#import "FOSREST.h"
 #import "FOSAdapterBindingParser.h"
 
 @interface FOSFOSRESTBindingParserTests : XCTestCase
