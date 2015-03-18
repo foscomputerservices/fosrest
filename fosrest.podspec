@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "fosrest"
   s.module_name      = "FOSRest"
-  s.version          = "0.2.0"
+  s.version          = "0.2.1"
   s.summary          = "A group of classes for connecting CoreData to REST services."
   s.homepage         = "https://github.com/foscomputerservices/fosrest"
   s.license          = 'Private'
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/foscomputerservices/fosrest.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/foscompsvcs'
 
-  s.platform     = :ios, '8.0'
+  s.platform     = :ios, '7.1'
   s.requires_arc = true
 
 # TODO: Restore lm,ym to this list when CocoaPods issue
