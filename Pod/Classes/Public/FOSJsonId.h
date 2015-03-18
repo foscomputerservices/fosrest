@@ -1,8 +1,8 @@
 //
-//  FOSRetrieveCMODataOperation.h
-//  FOSREST
+//  FOSJsonId.h
+//  Pods
 //
-//  Created by David Hunt on 1/1/13.
+//  Created by David Hunt on 3/18/15.
 //
 //  The MIT License (MIT)
 //
@@ -27,33 +27,9 @@
 //  SOFTWARE.
 //
 
-@import Foundation;
-@import CoreData;
+#ifndef FOSJsonId_h
+#define FOSJsonId_h
 
-#import <fosrest/FOSWebServiceRequest.h>
-#import <fosrest/FOSRetrieveCMODataOperationProtocol.h>
+typedef id<NSObject,NSCopying> FOSJsonId;
 
-@class FOSItemMatcher;
-@class FOSURLBinding;
-
-@interface FOSRetrieveCMODataOperation : FOSWebServiceRequest<FOSRetrieveCMODataOperationProtocol>
-
-/*!
- * @methodgroup Class Methods
- */
-#pragma mark - Class Methods
-
-+ (instancetype)retrieveDataOperationForEntity:(NSEntityDescription *)entity
-                                   withRequest:(NSURLRequest *)request
-                                 andURLBinding:(FOSURLBinding *)urlBinding;
-
-/*!
- * @methodgroup Initialization Methods
- */
-#pragma mark - Initialization Methods
-
-- (id)initWithEntity:(NSEntityDescription *)entity
-         withRequest:(NSURLRequest *)request
-       andURLBinding:(FOSURLBinding *)urlBinding;
-
-@end
+#endif

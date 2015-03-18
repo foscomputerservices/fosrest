@@ -1,8 +1,8 @@
 //
-//  FOSRetrieveCMODataOperation.h
-//  FOSREST
+//  FOSRetrieveCMODataOperationProtocol.h
+//  Pods
 //
-//  Created by David Hunt on 1/1/13.
+//  Created by David Hunt on 3/18/15.
 //
 //  The MIT License (MIT)
 //
@@ -27,33 +27,23 @@
 //  SOFTWARE.
 //
 
-@import Foundation;
-@import CoreData;
-
-#import <fosrest/FOSWebServiceRequest.h>
-#import <fosrest/FOSRetrieveCMODataOperationProtocol.h>
+#import <fosrest/FOSJsonId.h>
 
 @class FOSItemMatcher;
-@class FOSURLBinding;
 
-@interface FOSRetrieveCMODataOperation : FOSWebServiceRequest<FOSRetrieveCMODataOperationProtocol>
+@protocol FOSRetrieveCMODataOperationProtocol <NSObject>
 
-/*!
- * @methodgroup Class Methods
- */
-#pragma mark - Class Methods
+@required
 
-+ (instancetype)retrieveDataOperationForEntity:(NSEntityDescription *)entity
-                                   withRequest:(NSURLRequest *)request
-                                 andURLBinding:(FOSURLBinding *)urlBinding;
+@property (nonatomic, readonly) NSEntityDescription *entity;
+@property (nonatomic, readonly) FOSJsonId jsonId;
+@property (nonatomic, readonly) id<NSObject> jsonResult;
+@property (nonatomic, readonly) BOOL mergeResults;
+@property (nonatomic, readonly) id<NSObject> originalJsonResult;
+@property (nonatomic, readonly) NSString *dslQuery;
 
-/*!
- * @methodgroup Initialization Methods
- */
-#pragma mark - Initialization Methods
+@optional
 
-- (id)initWithEntity:(NSEntityDescription *)entity
-         withRequest:(NSURLRequest *)request
-       andURLBinding:(FOSURLBinding *)urlBinding;
+@property (nonatomic, readonly) FOSItemMatcher *relationshipsToPull;
 
 @end

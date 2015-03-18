@@ -27,13 +27,15 @@
 //  SOFTWARE.
 //
 
-#pragma mark - Protocols
-#import <fosrest/FOSProcessServiceRequest.h>
-#import <fosrest/FOSRESTServiceAdapter.h>
-
 #pragma mark - Types
+#import <fosrest/FOSJsonId.h>
 #import <fosrest/FOSRESTConfigOptions.h>
 #import <fosrest/FOSNetworkStatus.h>
+
+#pragma mark - Protocols
+#import <fosrest/FOSProcessServiceRequest.h>
+#import <fosrest/FOSRetrieveCMODataOperationProtocol.h>
+#import <fosrest/FOSRESTServiceAdapter.h>
 
 #pragma mark - Log Service
 #import <fosrest/FOSLog.h>
