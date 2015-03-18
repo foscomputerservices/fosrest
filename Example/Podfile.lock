@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  fosrest: 2ad543643d980355ab6ee5f01dceb025788cb997
+  fosrest: a59eb27668aa7c784bd89abc8714d7bea5c64f3e
 
 COCOAPODS: 0.36.0

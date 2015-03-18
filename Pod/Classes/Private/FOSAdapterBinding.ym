@@ -22,6 +22,18 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 //
+
+// NOTE: ***
+//
+// At this time there's a bug in CocoaPods (https://github.com/CocoaPods/CocoaPods/issues/3127)
+// where it will pass CFLAGS to flex/bison, which causes compilation to fail.  Thus, the .[ch]
+// files are also checked in, which are used to build the actual lexer and compiler.
+//
+// Any modification made to this file will necessitate the manual re-generation of the .[ch]
+// files from these sources.
+//
+// NOTE: ***
+
     #include <stdio.h>
     #include <stdlib.h>
 

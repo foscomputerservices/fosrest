@@ -12,7 +12,10 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes/**/*.{h,m,lm,ym}'
+# TODO: Restore lm,ym to this list when CocoaPods issue
+#      (https://github.com/CocoaPods/CocoaPods/issues/3127) is resolved.
+#  s.source_files = 'Pod/Classes/**/*.{h,m,lm,ym}'
+  s.source_files = 'Pod/Classes/**/*.{h,m}'
 
   s.public_header_files = 'Pod/Classes/Public/**/*.h'
   s.private_header_files = 'Pod/Classes/Private/**/*.h'
