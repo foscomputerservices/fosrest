@@ -18,5 +18,5 @@ script:
     - pod lib lint
     - cd Example
     - pod update
-    - xcodebuild build -workspace Example/FOSREST.xcworkspace -scheme FOSREST-Example -destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1'
+    - xcodebuild build -workspace FOSREST.xcworkspace -scheme FOSREST-Example -destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1'
 
