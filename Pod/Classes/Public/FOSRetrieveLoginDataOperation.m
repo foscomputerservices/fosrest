@@ -76,7 +76,7 @@
 
         NSError *localError = nil;
 
-        id<fosrestServiceAdapter> adapter = blockSelf.restAdapter;
+        id<FOSRESTServiceAdapter> adapter = blockSelf.restAdapter;
         FOSURLBinding *urlBindig =
             [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogin
                                   forLifecycleStyle:nil

@@ -46,7 +46,7 @@
  *
  * The default implementation of these methods will throw the "FOSREST_Internal.h"_MustOverride exception.
  */
-@interface FOSBoundServiceAdapter : NSObject<fosrestServiceAdapter>
+@interface FOSBoundServiceAdapter : NSObject<FOSRESTServiceAdapter>
 
 /*!
  * @methodgroup Class Methods

@@ -84,13 +84,15 @@
 }
 
 + (void)setupStandardWebServiceConfigWithOptions:(FOSRESTConfigOptions)configOptions {
-    if (!FOSRESTConfig.sharedInstanceInitialized) {
+    // TODO : Restore when determine how to access private headers
+    if (YES) { // !FOSRESTConfig.sharedInstanceInitialized) {
 
         // We want all output during testing
         FOSSetLogLevel(FOSLogLevelPedantic);
 
         // Force to forget that we were logged in via a previous session
-        [FOSLoginManager clearLoggedInUserId];
+        // TODO : Restore when determine how to access private headers
+//        [FOSLoginManager clearLoggedInUserId];
 
         FOSTestHarnessAdapter *adapter =
             [FOSTestHarnessAdapter adapterWithApplicationId:[self _parseAppId]

@@ -53,7 +53,7 @@
  */
 + (id)encodeCMOValueToJSON:(id)cmoValue
                     ofType:(NSAttributeDescription *)attrDesc
-        withServiceAdapter:(id<fosrestServiceAdapter>)serviceAdapter
+        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                      error:(NSError **)error;
 
 /*!
@@ -61,7 +61,7 @@
  */
 + (id)decodeJSONValueToCMO:(id)jsonValue
                     ofType:(NSAttributeDescription *)attrDesc
-        withServiceAdapter:(id<fosrestServiceAdapter>)serviceAdapter
+        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                      error:(NSError **)error;
 
 /*!

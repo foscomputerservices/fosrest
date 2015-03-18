@@ -28,14 +28,16 @@
 //
 
 #import "FOSREST_Internal.h"
-#import <fosrestConfig.h>
+#import <FOSRESTConfigOptions.h>
+
+@protocol FOSRESTServiceAdapter;
 
 @interface FOSRESTConfig ()
 
 + (BOOL)sharedInstanceInitialized;
 + (void)resetSharedInstance;
 
-+ (void)configWithApplicationVersion:(NSString *)appVersion options:(FOSRESTConfigOptions)options userSubType:(Class)userSubType  restServiceAdapter:(id <fosrestServiceAdapter>)restServiceAdapter;
++ (void)configWithApplicationVersion:(NSString *)appVersion options:(FOSRESTConfigOptions)options userSubType:(Class)userSubType  restServiceAdapter:(id <FOSRESTServiceAdapter>)restServiceAdapter;
 
 @property (atomic, strong) FOSOperation *pendingPushOperation;
 @property (nonatomic, readonly) Class serviceRequestProcessorType;

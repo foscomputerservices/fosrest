@@ -30,19 +30,7 @@
 #import <Foundation/Foundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
-/*!
- * @typedef FOSNetworkStatus
- */
-typedef NS_ENUM(NSUInteger, FOSNetworkStatus) {
-    FOSNetworkStatusUnknown,
-    FOSNetworkStatusNotReachable,
-    FOSNetworkStatusReachableViaWiFi,
-#if	TARGET_OS_IPHONE
-    FOSNetworkStatusReachableViaWWAN,
-#endif
-};
-
-#define kFOSNetworkStatusChangedNotification @"kFOSNetworkStatusChangedNotification"
+#import <fosrest/FOSNetworkStatus.h>
 
 @interface FOSNetworkStatusMonitor: NSObject
 

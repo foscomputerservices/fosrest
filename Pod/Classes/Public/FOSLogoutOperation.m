@@ -66,7 +66,7 @@
     FOSPushCacheChangesOperation *pushChanges = [FOSPushCacheChangesOperation pushCacheChangesOperation];
 
     // Retrieve the optional server logout URL
-    id<fosrestServiceAdapter> adapter = self.restAdapter;
+    id<FOSRESTServiceAdapter> adapter = self.restAdapter;
     FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogout
                                                    forLifecycleStyle:nil
                                                      forRelationship:nil

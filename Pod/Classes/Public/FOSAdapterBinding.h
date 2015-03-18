@@ -53,7 +53,7 @@
  * Parses the given binding description string.
  */
 + (instancetype)parseAdapterBindingDescription:(NSString *)bindings
-                                    forAdapter:(id<fosrestServiceAdapter>)serviceAdapter
+                                    forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                                          error:(NSError **)error;
 
 /*!
@@ -63,7 +63,7 @@
  * is expected to be formatted in ASCII format.
  */
 + (instancetype)parseAdapterBindings:(NSURL *)url
-                          forAdapter:(id<fosrestServiceAdapter>)serviceAdapter
+                          forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
                                error:(NSError **)error;
 
 /*!

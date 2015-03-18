@@ -265,7 +265,7 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
     // We made an HTTP request, we expect an NSHTTPURLResponse
     if (response != nil && [response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        id<fosrestServiceAdapter> adapter = _restConfig.restServiceAdapter;
+        id<FOSRESTServiceAdapter> adapter = _restConfig.restServiceAdapter;
 
         // Allow the client to watch this
         if ([adapter respondsToSelector:@selector(request:receivedResponse:andError:)]) {

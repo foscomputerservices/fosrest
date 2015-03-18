@@ -92,7 +92,7 @@
                 [NSEntityDescription entityForName:deleteEntityName
                             inManagedObjectContext:moc];
 
-            id<fosrestServiceAdapter> adapter = _restConfig.restServiceAdapter;
+            id<FOSRESTServiceAdapter> adapter = _restConfig.restServiceAdapter;
             FOSURLBinding *urlBinding =
                 [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseDestroyServerRecord
                                    forLifecycleStyle:nil

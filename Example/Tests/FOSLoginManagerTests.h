@@ -27,10 +27,11 @@
 //  SOFTWARE.
 //
 
-#import <FOSLoginManager.h>
-#import <fosrestConfig.h>
+#import "fosrest.h"
 #import <XCTest/XCTest.h>
 #import "User.h"
+
+@class FOSNetworkStatusMonitor;
 
 typedef void (^TestCallBack)();
 

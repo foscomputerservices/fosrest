@@ -262,7 +262,7 @@
 
     // Referenced/managed by FOSAdapterBindingParser
     FOSAdapterBinding *parserAdapterBinding = nil;
-    id<fosrestServiceAdapter> parsedServiceAdapter;
+    id<FOSRESTServiceAdapter> parsedServiceAdapter;
     id parsedBinding;
 
     #undef YYMAXDEPTH

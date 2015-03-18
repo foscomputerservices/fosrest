@@ -273,7 +273,7 @@
 
         NSError *localError = nil;
 
-        id<fosrestServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+        id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
         _urlBinding = [adapter urlBindingForLifecyclePhase:lifecyclePhase
                                          forLifecycleStyle:lifecycleStyle
                                            forRelationship:relDesc

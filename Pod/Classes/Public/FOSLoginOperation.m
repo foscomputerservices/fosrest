@@ -118,7 +118,7 @@
     FOSBackgroundOperation *result = nil;
     NSError *localError = nil;
 
-    id<fosrestServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
     FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseLogin
                                                       forLifecycleStyle:self.loginStyle
                                                      forRelationship:nil

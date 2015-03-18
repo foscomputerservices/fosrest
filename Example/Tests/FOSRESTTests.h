@@ -29,7 +29,7 @@
 
 @import UIKit;
 #import <XCTest/XCTest.h>
-#import "FOSREST.h"
+#import "fosrest.h"
 #import "FOSLoginManagerTests.h"
 
 #define TEST_LOG_LEVEL (FOSLogLevelPedantic)

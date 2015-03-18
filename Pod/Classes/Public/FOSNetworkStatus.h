@@ -1,8 +1,8 @@
 //
-//  FOSBindingParser.h
-//  FOSREST
+//  FOSNetworkStatus.h
+//  Pods
 //
-//  Created by David Hunt on 3/14/14.
+//  Created by David Hunt on 3/18/15.
 //
 //  The MIT License (MIT)
 //
@@ -27,20 +27,21 @@
 //  SOFTWARE.
 //
 
-@import Foundation;
+#ifndef FOSNetworkStatus_h
+#define FOSNetworkStatus_h
 
-@protocol FOSRESTServiceAdapter;
-@class FOSAdapterBinding;
-
-@interface FOSAdapterBindingParser : NSObject
-
-+ (FOSAdapterBinding *)parseAdapterBinding:(NSString *)binding
-                                forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
-                                     error:(NSError **)error;
-
-#ifdef DEBUG
-// TODO : This is historical only, need to replace.
-- (id)parseBinding:(NSString *)str error:(NSError **)error;
+/*!
+ * @typedef FOSNetworkStatus
+ */
+typedef NS_ENUM(NSUInteger, FOSNetworkStatus) {
+    FOSNetworkStatusUnknown,
+    FOSNetworkStatusNotReachable,
+    FOSNetworkStatusReachableViaWiFi,
+#if	TARGET_OS_IPHONE
+    FOSNetworkStatusReachableViaWWAN,
 #endif
+};
 
-@end
+#define kFOSNetworkStatusChangedNotification @"kFOSNetworkStatusChangedNotification"
+
+#endif
