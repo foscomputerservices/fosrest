@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.version          = "0.2.1"
   s.summary          = "A group of classes for connecting CoreData to REST services."
   s.homepage         = "https://github.com/foscomputerservices/fosrest"
-  s.license          = 'Private'
+  s.license          = 'MIT'
   s.author           = { "David Hunt" => "fosrest@foscomputerservices.com" }
   s.source           = { :git => "https://github.com/foscomputerservices/fosrest.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/foscompsvcs'
