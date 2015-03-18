@@ -28,7 +28,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <fosrest/FOSURLBinding.h> /* FOSLifecyclePhase */
+#import <FOSRest/FOSURLBinding.h> /* FOSLifecyclePhase */
 
 @class FOSNetworkStatusMonitor;
 @protocol FOSAnalytics;

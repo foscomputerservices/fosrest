@@ -27,16 +27,15 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSManagedObject.h>
-#import <fosrest/FOSCacheManager.h>
+#import <FOSRest/FOSManagedObject.h>
+#import <FOSRest/FOSCacheManager.h>
+#import <FOSRest/FOSJsonId.h>
 
 @class FOSRetrieveCMOOperation;
 @class FOSSendServerRecordOperation;
 @class FOSRESTConfig;
 @class FOSSearchOperation;
 @class FOSOperation;
-
-typedef id<NSObject,NSCopying> FOSJsonId;
 
 @interface FOSCachedManagedObject : FOSManagedObject {
 @protected

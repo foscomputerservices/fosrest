@@ -28,9 +28,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <fosrest/FOSNetworkStatus.h>
-#import <fosrest/FOSRESTConfigOptions.h>
-#import <fosrest/FOSAnalytics.h>
+#import <FOSRest/FOSNetworkStatus.h>
+#import <FOSRest/FOSRESTConfigOptions.h>
+#import <FOSRest/FOSAnalytics.h>
 
 @protocol FOSRESTServiceAdapter;
 

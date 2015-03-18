@@ -30,28 +30,11 @@
 @import Foundation;
 @import CoreData;
 
-#import <fosrest/FOSCachedManagedObject.h>
+#import <FOSRest/FOSWebServiceRequest.h>
+#import <FOSRest/FOSRetrieveCMODataOperationProtocol.h>
 
 @class FOSItemMatcher;
-
-@protocol FOSRetrieveCMODataOperationProtocol <NSObject>
-
-@required
-
-@property (nonatomic, readonly) NSEntityDescription *entity;
-@property (nonatomic, readonly) FOSJsonId jsonId;
-@property (nonatomic, readonly) id<NSObject> jsonResult;
-@property (nonatomic, readonly) BOOL mergeResults;
-@property (nonatomic, readonly) id<NSObject> originalJsonResult;
-@property (nonatomic, readonly) NSString *dslQuery;
-
-@optional
-
-@property (nonatomic, readonly) FOSItemMatcher *relationshipsToPull;
-
-@end
-
-#import <fosrest/FOSWebServiceRequest.h>
+@class FOSURLBinding;
 
 @interface FOSRetrieveCMODataOperation : FOSWebServiceRequest<FOSRetrieveCMODataOperationProtocol>
 

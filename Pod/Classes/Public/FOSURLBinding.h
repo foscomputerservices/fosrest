@@ -28,9 +28,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <fosrest/FOSCompiledAtom.h>
-#import <fosrest/FOSWebServiceRequest.h>
-#import <fosrest/FOSCachedManagedObject.h>
+#import <FOSRest/FOSCompiledAtom.h>
+#import <FOSRest/FOSWebServiceRequest.h>
+#import <FOSRest/FOSCachedManagedObject.h>
 
 @class FOSConcatExpression;
 @class FOSCMOBinding;

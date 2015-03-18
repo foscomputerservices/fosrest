@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <fosrest/FOSParseUser.h>
+#import <FOSRest/FOSParseUser.h>
 
 @class Role, TestCreate, TestToMany, Widget;
 

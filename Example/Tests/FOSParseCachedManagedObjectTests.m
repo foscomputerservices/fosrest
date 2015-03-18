@@ -28,7 +28,7 @@
 //
 
 #import "FOSParseCachedManagedObjectTests.h"
-#import <fosrest/FOSDatabaseManager.h>
+#import <FOSRest/FOSDatabaseManager.h>
 #import "FOSRESTTests.h"
 #import "NSObject+Tests.h"
 #import "TestCreate.h"

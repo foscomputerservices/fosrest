@@ -11,11 +11,7 @@
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F598195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F596195388D20070C39A /* InfoPlist.strings */; };
-		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
-		6003F59E195388D20070C39A /* FOSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* FOSAppDelegate.m */; };
-		6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6003F59F195388D20070C39A /* Main_iPhone.storyboard */; };
-		6003F5A4195388D20070C39A /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A2195388D20070C39A /* Main_iPad.storyboard */; };
-		6003F5A7195388D20070C39A /* FOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* FOSViewController.m */; };
+		6003F5A1195388D20070C39A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6003F59F195388D20070C39A /* Main.storyboard */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
@@ -68,6 +64,8 @@
 		6368485B1A8504FB00B36CD9 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368484E1A8504FB00B36CD9 /* User.m */; };
 		6368485C1A8504FB00B36CD9 /* Widget.m in Sources */ = {isa = PBXBuildFile; fileRef = 636848501A8504FB00B36CD9 /* Widget.m */; };
 		6368485D1A8504FB00B36CD9 /* WidgetInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 636848521A8504FB00B36CD9 /* WidgetInfo.m */; };
+		6391203B1AB9F82100CA5E29 /* FOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */; };
+		6391203F1AB9FAF800CA5E29 /* FOSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391203E1AB9FAF800CA5E29 /* FOSViewController.swift */; };
 		63B8BEA51A87C164002BD72F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B8BEA41A87C164002BD72F /* CoreData.framework */; };
 		AA38F5E2957894AC93DEB8BC /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E0C9DDA77DECE28779523F2 /* Pods_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		BB0CCB32E694B625D1F0654F /* Pods_FOSRESTApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30FC2FC44F3CDF78CBFC4B25 /* Pods_FOSRESTApp.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -96,14 +94,8 @@
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6003F595195388D20070C39A /* FOSREST-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FOSREST-Info.plist"; sourceTree = "<group>"; };
 		6003F597195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F599195388D20070C39A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6003F59B195388D20070C39A /* FOSREST-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FOSREST-Prefix.pch"; sourceTree = "<group>"; };
-		6003F59C195388D20070C39A /* FOSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FOSAppDelegate.h; sourceTree = "<group>"; };
-		6003F59D195388D20070C39A /* FOSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FOSAppDelegate.m; sourceTree = "<group>"; };
-		6003F5A0195388D20070C39A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		6003F5A3195388D20070C39A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		6003F5A5195388D20070C39A /* FOSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FOSViewController.h; sourceTree = "<group>"; };
-		6003F5A6195388D20070C39A /* FOSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FOSViewController.m; sourceTree = "<group>"; };
+		6003F5A0195388D20070C39A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6003F5AE195388D20070C39A /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -181,8 +173,11 @@
 		636848501A8504FB00B36CD9 /* Widget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Widget.m; sourceTree = "<group>"; };
 		636848511A8504FB00B36CD9 /* WidgetInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetInfo.h; sourceTree = "<group>"; };
 		636848521A8504FB00B36CD9 /* WidgetInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetInfo.m; sourceTree = "<group>"; };
-		6368485E1A850D2200B36CD9 /* fosrest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fosrest.h; sourceTree = "<group>"; };
+		6368485E1A850D2200B36CD9 /* FOSRest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FOSRest.h; sourceTree = "<group>"; };
 		63836EDC1A85B9FC00209BB2 /* FOSREST.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FOSREST.xcdatamodel; sourceTree = "<group>"; };
+		639120391AB9F82100CA5E29 /* FOSRESTApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FOSRESTApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOSAppDelegate.swift; sourceTree = "<group>"; };
+		6391203E1AB9FAF800CA5E29 /* FOSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOSViewController.swift; sourceTree = "<group>"; };
 		63B8BEA41A87C164002BD72F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		958DBB21DE87931753430D3F /* libPods-FOSREST.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FOSREST.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA4EFC414121C42B064F5028 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -271,14 +266,11 @@
 			isa = PBXGroup;
 			children = (
 				63836EDB1A85B9FC00209BB2 /* FOSREST.xcdatamodeld */,
-				6003F59C195388D20070C39A /* FOSAppDelegate.h */,
-				6003F59D195388D20070C39A /* FOSAppDelegate.m */,
-				6003F59F195388D20070C39A /* Main_iPhone.storyboard */,
-				6003F5A2195388D20070C39A /* Main_iPad.storyboard */,
-				6003F5A5195388D20070C39A /* FOSViewController.h */,
-				6003F5A6195388D20070C39A /* FOSViewController.m */,
+				6003F59F195388D20070C39A /* Main.storyboard */,
+				6391203E1AB9FAF800CA5E29 /* FOSViewController.swift */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
+				639120391AB9F82100CA5E29 /* FOSRESTApp-Bridging-Header.h */,
 			);
 			path = FOSREST;
 			sourceTree = "<group>";
@@ -286,10 +278,10 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */,
 				6003F595195388D20070C39A /* FOSREST-Info.plist */,
-				6003F596195388D20070C39A /* InfoPlist.strings */,
-				6003F599195388D20070C39A /* main.m */,
 				6003F59B195388D20070C39A /* FOSREST-Prefix.pch */,
+				6003F596195388D20070C39A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -310,7 +302,7 @@
 				636847F01A8504BA00B36CD9 /* FOSConcatExpressionTest.m */,
 				636847F11A8504BA00B36CD9 /* FOSCreateServerRecordOperationTests.m */,
 				636847F21A8504BA00B36CD9 /* FOSFOSRESTBindingParserTests.m */,
-				6368485E1A850D2200B36CD9 /* fosrest.h */,
+				6368485E1A850D2200B36CD9 /* FOSRest.h */,
 				636847F31A8504BA00B36CD9 /* FOSRESTTests-Info.plist */,
 				636847F41A8504BA00B36CD9 /* FOSRESTTests.h */,
 				636847F51A8504BA00B36CD9 /* FOSRESTTests.m */,
@@ -485,9 +477,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5A4195388D20070C39A /* Main_iPad.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
-				6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */,
+				6003F5A1195388D20070C39A /* Main.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -601,9 +592,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F59E195388D20070C39A /* FOSAppDelegate.m in Sources */,
-				6003F5A7195388D20070C39A /* FOSViewController.m in Sources */,
-				6003F59A195388D20070C39A /* main.m in Sources */,
+				6391203B1AB9F82100CA5E29 /* FOSAppDelegate.swift in Sources */,
+				6391203F1AB9FAF800CA5E29 /* FOSViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,20 +669,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		6003F59F195388D20070C39A /* Main_iPhone.storyboard */ = {
+		6003F59F195388D20070C39A /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				6003F5A0195388D20070C39A /* Base */,
 			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		6003F5A2195388D20070C39A /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6003F5A3195388D20070C39A /* Base */,
-			);
-			name = Main_iPad.storyboard;
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		6003F5B8195388D20070C39A /* InfoPlist.strings */ = {
@@ -724,6 +706,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -763,6 +746,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -784,6 +768,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FOSREST/FOSREST-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -792,7 +778,10 @@
 					"COCOAPODS=1",
 				);
 				INFOPLIST_FILE = "FOSREST/FOSREST-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FOSREST/FOSRESTApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -803,6 +792,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FOSREST/FOSREST-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -811,7 +802,9 @@
 					"COCOAPODS=1",
 				);
 				INFOPLIST_FILE = "FOSREST/FOSREST-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FOSREST/FOSRESTApp-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

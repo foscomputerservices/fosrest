@@ -29,8 +29,8 @@
 
 @import Foundation;
 @import CoreData;
-#import <fosrest/FOSCachedManagedObject.h>
-#import <fosrest/FOSURLBinding.h>
+#import <FOSRest/FOSCachedManagedObject.h>
+#import <FOSRest/FOSURLBinding.h>
 
 @protocol FOSTwoWayRecordBinding <NSObject>
 

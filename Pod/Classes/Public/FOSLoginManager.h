@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <fosrest/FOSCachedManagedObject.h>
+#import <FOSRest/FOSCachedManagedObject.h>
 
 typedef void (^FOSLoginHandler)(BOOL succeeded, NSError *error);
 

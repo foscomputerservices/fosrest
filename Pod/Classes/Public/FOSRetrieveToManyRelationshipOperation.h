@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSOperation.h>
-#import <fosrest/FOSCachedManagedObject.h>
+#import <FOSRest/FOSOperation.h>
+#import <FOSRest/FOSCachedManagedObject.h>
 
 @class FOSCMOBinding;
 

@@ -46,7 +46,6 @@ SETUP_TEARDOWN_LOGIN(FOSRESTConfigOptionsNone | FOSRESTConfigAutomaticallySynchr
 #pragma mark - Tests
 
 - (void)testRecoverFromForcingOffline {
-    FOSNetworkStatusMonitor *status = [FOSLoginManagerTests networkStatusMonitor];
     FOSRESTConfig *restConfig = [FOSRESTConfig sharedInstance];
 
     XCTAssertTrue(restConfig.networkStatus != FOSNetworkStatusNotReachable);

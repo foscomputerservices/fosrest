@@ -27,9 +27,9 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSOperation.h>
-#import <fosrest/FOSCachedManagedObject.h>
-#import <fosrest/FOSURLBinding.h>
+#import <FOSRest/FOSOperation.h>
+#import <FOSRest/FOSCachedManagedObject.h>
+#import <FOSRest/FOSURLBinding.h>
 
 @protocol FOSRetrieveCMODataOperationProtocol;
 

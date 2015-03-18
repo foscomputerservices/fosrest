@@ -1,8 +1,8 @@
 //
-//  FOSUpdateServerRecordOperation.h
-//  FOSREST
+//  FOSRetrieveCMODataOperationProtocol.h
+//  Pods
 //
-//  Created by David Hunt on 4/8/14.
+//  Created by David Hunt on 3/18/15.
 //
 //  The MIT License (MIT)
 //
@@ -27,32 +27,23 @@
 //  SOFTWARE.
 //
 
-@import Foundation;
-#import <FOSRest/FOSSendServerRecordOperation.h>
+#import <FOSRest/FOSJsonId.h>
 
-@class FOSCachedManagedObject;
+@class FOSItemMatcher;
 
-/*!
- * @class FOSUpdateServerRecordOperation
- *
- * An FOSUpdateServerRecordOperation that corresponds to the
- * FOSLifecyclePhaseUpdateServerRecord of the
- * @link FOSLifecyclePhase @/link.
- *
- * It updates an existing record on the server that corresponds to
- * the receiver's CMO.
- */
-@interface FOSUpdateServerRecordOperation : FOSSendServerRecordOperation
+@protocol FOSRetrieveCMODataOperationProtocol <NSObject>
 
-/*!
- * @methodgroup Class Methods
- */
-#pragma mark - Class Methods
+@required
 
-/*!
- * @method updateOperationForCMO:withLifecycleStyle:
- */
-+ (instancetype)updateOperationForCMO:(FOSCachedManagedObject *)cmo
-                   withLifecycleStyle:(NSString *)lifecycleStyle;
+@property (nonatomic, readonly) NSEntityDescription *entity;
+@property (nonatomic, readonly) FOSJsonId jsonId;
+@property (nonatomic, readonly) id<NSObject> jsonResult;
+@property (nonatomic, readonly) BOOL mergeResults;
+@property (nonatomic, readonly) id<NSObject> originalJsonResult;
+@property (nonatomic, readonly) NSString *dslQuery;
+
+@optional
+
+@property (nonatomic, readonly) FOSItemMatcher *relationshipsToPull;
 
 @end

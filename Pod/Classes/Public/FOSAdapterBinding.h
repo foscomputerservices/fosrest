@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <fosrest/FOSCompiledAtom.h>
-#import <fosrest/FOSURLBinding.h>
+#import <FOSRest/FOSCompiledAtom.h>
+#import <FOSRest/FOSURLBinding.h>
 
 @protocol FOSTwoWayPropertyBinding;
 @class FOSAttributeBinding;

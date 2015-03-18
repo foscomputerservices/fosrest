@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <fosrest/FOSManagedObject.h>
+#import <FOSRest/FOSManagedObject.h>
 
 
 @interface FOSRelationshipFault : FOSManagedObject
