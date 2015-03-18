@@ -1,0 +1,194 @@
+%{
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 FOS Services, LLC
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//
+
+// NOTE: ***
+//
+// At this time there's a bug in CocoaPods (https://github.com/CocoaPods/CocoaPods/issues/3127)
+// where it will pass CFLAGS to flex/bison, which causes compilation to fail.  Thus, the .[ch]
+// files are also checked in, which are used to build the actual lexer and compiler.
+//
+// Any modification made to this file will necessitate the manual re-generation of the .[ch]
+// files from these sources.
+//
+// NOTE: ***
+
+    #import "FOSREST_Internal.h"
+    #import "y.tab.h"
+    #include <stdio.h>
+
+    #undef YYSIZE_T
+    #define YYSIZE_T yytype_int16
+
+extern void yyerror(char* s, ...);
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wconversion"
+#pragma clang diagnostic ignored "-Wunused-function"
+#pragma clang diagnostic ignored "-Wunneeded-internal-declaration"
+
+int yycolumn = 1;
+
+NSMutableString *currentLine = nil;
+
+static void update_loc() {
+    static int curr_line = 1;
+    static int curr_col  = 1;
+
+    yylloc.first_line   = curr_line;
+    yylloc.first_column = curr_col;
+
+    {
+        char * s;
+        for (s = yytext; *s != '\0'; s++){
+            if (*s == '\n'){
+                curr_line++;
+                curr_col = 1;
+
+                currentLine = [NSMutableString string];
+            }
+            else {
+                curr_col++;
+            }
+        }
+    }
+
+    yylloc.last_line   = curr_line;
+    yylloc.last_column = curr_col-1;
+
+    NSString *curText = [NSString stringWithCString:yytext encoding:NSASCIIStringEncoding];
+
+    if (currentLine == nil) {
+        currentLine = [NSMutableString string];
+    }
+
+    [currentLine appendString:curText];
+}
+
+#define YY_USER_ACTION update_loc();
+
+%}
+
+%%
+
+#.*\n                          { /* skip comments */ }
+[ \t\n]                        { /* skip spaces */ }
+
+\$\$([a-zA-Z_][a-zA-Z0-9_]*)   { yylval.string = yytext; return SHARED_BINDING_IDENTIFIER; }
+\$([a-zA-Z_][a-zA-Z0-9_]*)     { yylval.string = yytext; return IDENTIFIER; }
+\'([^\']*)\'                   { yylval.string = yytext; return STRING_LITERAL; }
+\"([^\"]*)\"                   { yylval.string = yytext; return STRING_LITERAL; }
+[0-9]*                         { yylval.string = yytext; return INTEGER_LITERAL; }
+[a-z_][a-zA-Z0-9_]*            { yylval.string = yytext; return STRING_CONSTANT; }
+
+::                             { return SEP; }
+;                              { return SEMI; }
+:                              { return COLON; }
+,                              { return COMMA; }
+\(                             { return LPAREN; }
+\)                             { return RPAREN; }
+\{                             { return LBRACE; }
+\}                             { return RBRACE; }
+\.                             { return DOT; }
+\+                             { return PLUS; }
+`                              { return TIC; }
+\|                             { return PIPE; }
+
+ADAPTER                        { return ADAPTER; }
+URL_BINDINGS                   { return URL_BINDINGS; }
+SHARED_BINDINGS                { return SHARED_BINDINGS; }
+
+URL_BINDING                    { return URL_BINDING; }
+BASE_URL                       { return BASE_URL; }
+HEADER_FIELDS                  { return HEADER_FIELDS; }
+TIMEOUT_INTERVAL               { return TIMEOUT_INTERVAL; }
+
+LIFECYCLE                      { return LIFECYCLE; }
+LIFECYCLE_STYLE                { return LIFECYCLE_STYLE; }
+REQUEST_METHOD                 { return REQUEST_METHOD; }
+REQUEST_FORMAT                 { return REQUEST_FORMAT; }
+END_POINT                      { return END_POINT; }
+END_POINT_PARAMETERS           { return END_POINT_PARAMETERS; }
+CMO_BINDING                    { return CMO_BINDING; }
+
+ENTITIES                       { return ENTITIES; }
+ATTRIBUTES                     { return ATTRIBUTES; }
+ALL                            { return ALL; }
+ALL_EXCEPT                     { return ALL_EXCEPT; }
+
+LOGIN                          { return LOGIN; }
+LOGOUT                         { return LOGOUT; }
+PASSWORD_RESET                 { return PASSWORD_RESET; }
+CREATE                         { return CREATE; }
+UPDATE                         { return UPDATE; }
+DESTROY                        { return DESTROY; }
+RETRIEVE_SERVER_RECORD         { return RETRIEVE_SERVER_RECORD; }
+RETRIEVE_SERVER_RECORDS        { return RETRIEVE_SERVER_RECORDS; }
+RETRIEVE_SERVER_RECORD_COUNT   { return RETRIEVE_SERVER_RECORD_COUNT; }
+RETRIEVE_RELATIONSHIP          { return RETRIEVE_RELATIONSHIP; }
+
+BINDING_OPTIONS                { return BINDING_OPTIONS; }
+ONE_TO_ONE                     { return ONE_TO_ONE; }
+ONE_TO_MANY                    { return ONE_TO_MANY; }
+UNORDERED                      { return UNORDERED; }
+ORDERED                        { return ORDERED; }
+
+JSON                           { return JSON; }
+WEBFORM                        { return WEBFORM; }
+NO_DATA                        { return NO_DATA; }
+
+GET                            { return GET; }
+POST                           { return POST; }
+PUT                            { return PUT; }
+DELETE                         { return DELETE; }
+
+JSON_WRAPPER_KEY               { return JSON_WRAPPER_KEY; }
+JSON_RECEIVE_WRAPPER_KEY       { return JSON_RECEIVE_WRAPPER_KEY; }
+JSON_SEND_WRAPPER_KEY          { return JSON_SEND_WRAPPER_KEY; }
+BULK_WRAPPER_KEY               { return BULK_WRAPPER_KEY; }
+ATTRIBUTE_BINDINGS             { return ATTRIBUTE_BINDINGS; }
+ID_ATTRIBUTE                   { return ID_ATTRIBUTE; }
+RECEIVE_ONLY_ATTRIBUTE         { return RECEIVE_ONLY_ATTRIBUTE; }
+SEND_ONLY_ATTRIBUTE            { return SEND_ONLY_ATTRIBUTE; }
+
+RELATIONSHIP_BINDINGS          { return RELATIONSHIP_BINDINGS; }
+RELATIONSHIP_BINDING           { return RELATIONSHIP_BINDING; }
+
+JSON_BINDING                   { return JSON_BINDING; }
+JSON_ID_BINDING                { return JSON_ID_BINDING; }
+RELATIONSHIPS                  { return RELATIONSHIPS; }
+
+.                              { yyerror("Unknown token: %s", yytext); yyterminate(); }
+
+%%
+
+int yywrap() {
+    return -1;
+}
+
+void yyreset_state() {
+    BEGIN(INITIAL);
+}
+
+#pragma clang diagnostic pop

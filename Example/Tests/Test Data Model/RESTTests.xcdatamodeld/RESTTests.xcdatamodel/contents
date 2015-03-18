@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="FOSParseCachedManagedObject" representedClassName="FOSParseCachedManagedObject" isAbstract="YES" syncable="YES">
+        <userInfo>
+            <entry key="isPlaceholder" value="YES"/>
+        </userInfo>
+    </entity>
+    <entity name="FOSParseUser" representedClassName="FOSParseUser" syncable="YES">
+        <userInfo>
+            <entry key="isPlaceholder" value="YES"/>
+        </userInfo>
+    </entity>
+    <entity name="Note" representedClassName="Note" parentEntity="FOSParseCachedManagedObject" syncable="YES">
+        <attribute name="note" attributeType="String" syncable="YES"/>
+        <relationship name="role" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Role" inverseName="notes" inverseEntity="Role" syncable="YES"/>
+        <relationship name="testCreate" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="TestCreate" inverseName="notes" inverseEntity="TestCreate" syncable="YES"/>
+        <relationship name="widget" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Widget" inverseName="notes" inverseEntity="Widget" syncable="YES"/>
+        <userInfo>
+            <entry key="jsonAllowFault" value="YES"/>
+        </userInfo>
+    </entity>
+    <entity name="Role" representedClassName="Role" parentEntity="FOSParseCachedManagedObject" syncable="YES">
+        <attribute name="role" attributeType="String" syncable="YES"/>
+        <relationship name="notes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Note" inverseName="role" inverseEntity="Note" syncable="YES"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="role" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="TestCreate" representedClassName="TestCreate" parentEntity="FOSParseCachedManagedObject" syncable="YES">
+        <attribute name="color" optional="YES" attributeType="Transformable" valueTransformerName="UIColorRGBValueTransformer" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="notes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Note" inverseName="testCreate" inverseEntity="Note" syncable="YES">
+            <userInfo>
+                <entry key="jsonRelationshipForcePull" value="UseCount"/>
+            </userInfo>
+        </relationship>
+        <relationship name="user" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="testCreations" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="TestToMany" representedClassName="TestToMany" parentEntity="FOSParseCachedManagedObject" syncable="YES">
+        <attribute name="testType" attributeType="String" minValueString="1" syncable="YES"/>
+        <relationship name="toManyMax" toMany="YES" maxCount="2" deletionRule="Cascade" destinationEntity="TestToManyDestMax" inverseName="toManyOwner" inverseEntity="TestToManyDestMax" syncable="YES">
+            <userInfo>
+                <entry key="jsonRelationshipForcePull" value="Always"/>
+            </userInfo>
+        </relationship>
+        <relationship name="toManyMin" toMany="YES" minCount="1" deletionRule="Cascade" destinationEntity="TestToManyDestMin" inverseName="toManyOwner" inverseEntity="TestToManyDestMin" syncable="YES">
+            <userInfo>
+                <entry key="jsonRelationshipForcePull" value="Always"/>
+            </userInfo>
+        </relationship>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="toManyTest" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="TestToManyDestMax" representedClassName="TestToManyDestMax" parentEntity="FOSParseCachedManagedObject" syncable="YES">
+        <relationship name="toManyOwner" maxCount="1" deletionRule="Nullify" destinationEntity="TestToMany" inverseName="toManyMax" inverseEntity="TestToMany" syncable="YES"/>
+    </entity>
+    <entity name="TestToManyDestMin" representedClassName="TestToManyDestMin" parentEntity="FOSParseCachedManagedObject" syncable="YES">
+        <relationship name="toManyOwner" maxCount="1" deletionRule="Nullify" destinationEntity="TestToMany" inverseName="toManyMin" inverseEntity="TestToMany" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName="User" parentEntity="FOSParseUser" syncable="YES">
+        <relationship name="role" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Role" inverseName="users" inverseEntity="Role" syncable="YES"/>
+        <relationship name="testCreations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TestCreate" inverseName="user" inverseEntity="TestCreate" syncable="YES">
+            <userInfo>
+                <entry key="jsonRelationshipForcePull" value="UseCount"/>
+            </userInfo>
+        </relationship>
+        <relationship name="toManyTest" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TestToMany" inverseName="user" inverseEntity="TestToMany" syncable="YES"/>
+        <relationship name="widgets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Widget" inverseName="user" inverseEntity="Widget" syncable="YES">
+            <userInfo>
+                <entry key="jsonOrderProp" value="ordinal"/>
+                <entry key="jsonRelationshipForcePull" value="Always"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="Widget" representedClassName="Widget" parentEntity="FOSParseCachedManagedObject" syncable="YES">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="ordinal" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <relationship name="notes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Note" inverseName="widget" inverseEntity="Note" syncable="YES">
+            <userInfo>
+                <entry key="jsonRelationshipForcePull" value="UseCount"/>
+            </userInfo>
+        </relationship>
+        <relationship name="user" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="widgets" inverseEntity="User" syncable="YES"/>
+        <relationship name="widgetInfo" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="WidgetInfo" inverseName="widgets" inverseEntity="WidgetInfo" syncable="YES"/>
+    </entity>
+    <entity name="WidgetInfo" representedClassName="WidgetInfo" parentEntity="FOSParseCachedManagedObject" syncable="YES">
+        <attribute name="color" optional="YES" attributeType="Transformable" valueTransformerName="UIColorRGBValueTransformer" syncable="YES"/>
+        <attribute name="info" attributeType="String" syncable="YES"/>
+        <relationship name="widgets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Widget" inverseName="widgetInfo" inverseEntity="Widget" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="FOSParseCachedManagedObject" positionX="-414" positionY="-537" width="180" height="45"/>
+        <element name="FOSParseUser" positionX="-720" positionY="-241" width="128" height="45"/>
+        <element name="Note" positionX="-288" positionY="-195" width="128" height="105"/>
+        <element name="Role" positionX="-522" positionY="-216" width="128" height="90"/>
+        <element name="TestCreate" positionX="-117" positionY="-324" width="128" height="105"/>
+        <element name="TestToMany" positionX="-434" positionY="-18" width="128" height="105"/>
+        <element name="TestToManyDestMax" positionX="-261" positionY="-15" width="128" height="60"/>
+        <element name="TestToManyDestMin" positionX="-630" positionY="18" width="128" height="60"/>
+        <element name="User" positionX="-720" positionY="-126" width="128" height="103"/>
+        <element name="Widget" positionX="-560" positionY="-360" width="128" height="120"/>
+        <element name="WidgetInfo" positionX="-306" positionY="-405" width="128" height="90"/>
+    </elements>
+</model>
