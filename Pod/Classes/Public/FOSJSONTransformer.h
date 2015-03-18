@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <FOSREST/FOSValueTransformer.h>
+#import <fosrest/FOSValueTransformer.h>
 
 @interface FOSJSONTransformer : NSValueTransformer<FOSValueTransformer>
 

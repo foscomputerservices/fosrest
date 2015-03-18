@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <FOSREST/FOSOperation.h>
+#import <fosrest/FOSOperation.h>
 
 @class NSRelationshipDescription;
 @class FOSCMOBinding;

@@ -32,7 +32,7 @@
 @import AppKit.h;
 #endif
 
-#import <FOSREST/FOSREST.h>
+#import <fosrest/FOSREST.h>
 
 // Extensions
 #import "NSAttributeDescription+FOS.h"

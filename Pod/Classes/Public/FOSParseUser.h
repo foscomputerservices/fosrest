@@ -30,7 +30,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#import <FOSREST/FOSUser.h>
+#import <fosrest/FOSUser.h>
 
 
 @interface FOSParseUser : FOSUser

@@ -37,7 +37,7 @@
 @property (nonatomic, assign) NSInteger atomStartColNum;
 @property (nonatomic, strong) NSString *atomName;
 @property (nonatomic, readonly) NSString *atomDescription;
-@property (nonatomic, weak) id<FOSRESTServiceAdapter> serviceAdapter;
+@property (nonatomic, weak) id<fosrestServiceAdapter> serviceAdapter;
 
 @end
 

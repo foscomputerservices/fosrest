@@ -28,9 +28,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <FOSREST/FOSNetworkStatusMonitor.h>
-#import <FOSREST/FOSRESTServiceAdapter.h>
-#import <FOSREST/FOSAnalytics.h>
+#import <fosrest/FOSNetworkStatusMonitor.h>
+#import <fosrest/FOSRESTServiceAdapter.h>
+#import <fosrest/FOSAnalytics.h>
 
 /*!
  * @enum FOSRESTConfigOptions
@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
  */
 #pragma mark - Required Configuration Properties
 
-@property (nonatomic, readonly) id<FOSRESTServiceAdapter> restServiceAdapter;
+@property (nonatomic, readonly) id<fosrestServiceAdapter> restServiceAdapter;
 
 /*!
  * @property headerFields
@@ -213,7 +213,7 @@ typedef enum : NSUInteger {
 + (void)configWithApplicationVersion:(NSString *)appVersion
                              options:(FOSRESTConfigOptions)options
                          userSubType:(Class)userSubType
-                  restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter;
+                  restServiceAdapter:(id<fosrestServiceAdapter>)restServiceAdapter;
 
 /*!
  * @method sharedInstance

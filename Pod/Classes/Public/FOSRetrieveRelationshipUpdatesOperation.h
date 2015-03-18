@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSOperation.h>
+#import <fosrest/FOSOperation.h>
 
 @class FOSCachedManagedObject;
 @class FOSItemMatcher;

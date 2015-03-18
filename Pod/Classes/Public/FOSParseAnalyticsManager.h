@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSAnalytics.h>
+#import <fosrest/FOSAnalytics.h>
 
 @interface FOSParseAnalyticsManager : NSObject <
     FOSAnalytics

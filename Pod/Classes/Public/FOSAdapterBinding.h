@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSCompiledAtom.h>
-#import <FOSREST/FOSURLBinding.h>
+#import <fosrest/FOSCompiledAtom.h>
+#import <fosrest/FOSURLBinding.h>
 
 @protocol FOSTwoWayPropertyBinding;
 @class FOSAttributeBinding;
@@ -53,7 +53,7 @@
  * Parses the given binding description string.
  */
 + (instancetype)parseAdapterBindingDescription:(NSString *)bindings
-                                    forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                                    forAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                                          error:(NSError **)error;
 
 /*!
@@ -63,7 +63,7 @@
  * is expected to be formatted in ASCII format.
  */
 + (instancetype)parseAdapterBindings:(NSURL *)url
-                          forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                          forAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                                error:(NSError **)error;
 
 /*!

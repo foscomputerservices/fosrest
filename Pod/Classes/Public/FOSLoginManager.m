@@ -461,7 +461,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     if (_restConfig.networkStatus != FOSNetworkStatusNotReachable) {
         NSEntityDescription *userEntity = [_restConfig.userSubType entityDescription];
 
-        id<FOSRESTServiceAdapter> adapter = _restConfig.restServiceAdapter;
+        id<fosrestServiceAdapter> adapter = _restConfig.restServiceAdapter;
         FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhasePasswordReset
                                                           forLifecycleStyle:nil
                                                          forRelationship:nil

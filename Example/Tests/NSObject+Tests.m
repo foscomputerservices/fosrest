@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSRESTConfig.h>
-#import <FOSREST/FOSLoginManager.h>
+#import <fosrest/FOSRESTConfig.h>
+#import <fosrest/FOSLoginManager.h>
 
 #import "NSObject+Tests.h"
 

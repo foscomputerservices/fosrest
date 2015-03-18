@@ -113,7 +113,7 @@
         NSParameterAssert([objectType isSubclassOfClass:[FOSCachedManagedObject class]]);
 #endif
 
-        id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+        id<fosrestServiceAdapter> adapter = self.restConfig.restServiceAdapter;
         FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseCreateServerRecord
                                                           forLifecycleStyle:nil
                                                          forRelationship:nil

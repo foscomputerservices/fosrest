@@ -28,8 +28,8 @@
 //
 
 @import Foundation;
-#import <FOSREST/FOSCachedManagedObject.h>
-#import <FOSREST/FOSURLBinding.h>
+#import <fosrest/FOSCachedManagedObject.h>
+#import <fosrest/FOSURLBinding.h>
 
 @protocol FOSTwoWayPropertyBinding <NSObject>
 

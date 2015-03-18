@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSCompiledAtom.h>
+#import <fosrest/FOSCompiledAtom.h>
 
 @protocol FOSExpression;
 

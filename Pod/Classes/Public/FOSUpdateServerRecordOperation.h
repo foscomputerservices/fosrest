@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSREST/FOSSendServerRecordOperation.h>
+#import <fosrest/FOSSendServerRecordOperation.h>
 
 @class FOSCachedManagedObject;
 

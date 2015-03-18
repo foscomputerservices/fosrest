@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSCompiledAtom.h>
-#import <FOSREST/FOSExpression.h>
+#import <fosrest/FOSCompiledAtom.h>
+#import <fosrest/FOSExpression.h>
 
 /*!
  * @class FOSConcatExpression

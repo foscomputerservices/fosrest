@@ -28,7 +28,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <FOSREST/FOSRESTServiceAdapter.h>
+#import <fosrest/FOSRESTServiceAdapter.h>
 
 @protocol FOSRESTServiceAdapter;
 @class FOSAdapterBinding;
@@ -46,7 +46,7 @@
  *
  * The default implementation of these methods will throw the "FOSREST_Internal.h"_MustOverride exception.
  */
-@interface FOSBoundServiceAdapter : NSObject<FOSRESTServiceAdapter>
+@interface FOSBoundServiceAdapter : NSObject<fosrestServiceAdapter>
 
 /*!
  * @methodgroup Class Methods

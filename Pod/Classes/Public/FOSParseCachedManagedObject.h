@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <FOSREST/FOSCachedManagedObject.h>
+#import <fosrest/FOSCachedManagedObject.h>
 
 
 @interface FOSParseCachedManagedObject : FOSCachedManagedObject

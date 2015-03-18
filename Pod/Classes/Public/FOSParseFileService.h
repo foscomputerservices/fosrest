@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSREST/FOSProcessServiceRequest.h>
+#import <fosrest/FOSProcessServiceRequest.h>
 
 @interface FOSParseFileService : NSObject<FOSProcessServiceRequest>
 

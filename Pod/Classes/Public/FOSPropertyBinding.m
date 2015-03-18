@@ -56,7 +56,7 @@
 
 + (id)encodeCMOValueToJSON:(id)cmoValue
                     ofType:(NSAttributeDescription *)attrDesc
-        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+        withServiceAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                       error:(NSError **)error {
     NSParameterAssert(attrDesc != nil);
     NSParameterAssert([attrDesc isKindOfClass:[NSAttributeDescription class]]);
@@ -72,7 +72,7 @@
 
 + (id)decodeJSONValueToCMO:(id)jsonValue
                      ofType:(NSAttributeDescription *)attrDesc
-        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+        withServiceAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                       error:(NSError **)error {
     NSParameterAssert(attrDesc != nil);
     NSParameterAssert([attrDesc isKindOfClass:[NSAttributeDescription class]]);

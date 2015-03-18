@@ -296,7 +296,7 @@
                                               error:(NSError **)error {
     if (error != nil) { *error = nil; }
 
-    id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = restConfig.restServiceAdapter;
 
     NSError *localError = nil;
     NSPersistentStoreCoordinator *result = [adapter setupDatabaseForcingRemoval:forceRemoval

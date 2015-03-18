@@ -7,113 +7,113 @@
 //
 
 #pragma mark - Protocols
-#import <FOSREST/FOSProcessServiceRequest.h>
-#import <FOSREST/FOSRESTServiceAdapter.h>
+#import <fosrest/FOSProcessServiceRequest.h>
+#import <fosrest/FOSRESTServiceAdapter.h>
 
 #pragma mark - Log Service
-#import <FOSREST/FOSLog.h>
+#import <fosrest/FOSLog.h>
 
 #pragma mark - Extensions
-#import <FOSREST/NSAttributeDescription+FOS.h>
-#import <FOSREST/NSDate+FOS.h>
-#import <FOSREST/NSEntityDescription+FOS.h>
-#import <FOSREST/NSError+FOS.h>
-#import <FOSREST/NSManagedObjectModel+FOS.h>
-#import <FOSREST/NSMutableDictionary+FOS.h>
-#import <FOSREST/NSMutableString+FOS.h>
-#import <FOSREST/NSPropertyDescription+FOS.h>
-#import <FOSREST/NSBundle+FOS.h>
-#import <FOSREST/NSRelationshipDescription+FOS.h>
-#import <FOSREST/NSString+FOS.h>
+#import <fosrest/NSAttributeDescription+FOS.h>
+#import <fosrest/NSDate+FOS.h>
+#import <fosrest/NSEntityDescription+FOS.h>
+#import <fosrest/NSError+FOS.h>
+#import <fosrest/NSManagedObjectModel+FOS.h>
+#import <fosrest/NSMutableDictionary+FOS.h>
+#import <fosrest/NSMutableString+FOS.h>
+#import <fosrest/NSPropertyDescription+FOS.h>
+#import <fosrest/NSBundle+FOS.h>
+#import <fosrest/NSRelationshipDescription+FOS.h>
+#import <fosrest/NSString+FOS.h>
 
 #pragma mark - Data Model
-#import <FOSREST/FOSManagedObject.h>
-#import <FOSREST/FOSCachedManagedObject.h>
-#import <FOSREST/FOSParseCachedManagedObject.h>
+#import <fosrest/FOSManagedObject.h>
+#import <fosrest/FOSCachedManagedObject.h>
+#import <fosrest/FOSParseCachedManagedObject.h>
 
 #pragma mark - Binding Support
-#import <FOSREST/FOSCompiledAtom.h>
-#import <FOSREST/FOSTwoWayRecordBinding.h>
-#import <FOSREST/FOSTwoWayPropertyBinding.h>
-#import <FOSREST/FOSTwoWayRecordBinding.h>
-#import <FOSREST/FOSExpression.h>
-#import <FOSREST/FOSAdapterBinding.h>
-#import <FOSREST/FOSAdapterBindingParser.h>
-#import <FOSREST/FOSCMOBinding.h>
-#import <FOSREST/FOSConcatExpression.h>
-#import <FOSREST/FOSConstantExpression.h>
-#import <FOSREST/FOSItemMatcher.h>
-#import <FOSREST/FOSKeyPathExpression.h>
-#import <FOSREST/FOSPropertyBinding.h>
-#import <FOSREST/FOSAttributeBinding.h>
-#import <FOSREST/FOSRelationshipBinding.h>
-#import <FOSREST/FOSSharedBindingReference.h>
-#import <FOSREST/FOSURLBinding.h>
-#import <FOSREST/FOSVariableExpression.h>
+#import <fosrest/FOSCompiledAtom.h>
+#import <fosrest/FOSTwoWayRecordBinding.h>
+#import <fosrest/FOSTwoWayPropertyBinding.h>
+#import <fosrest/FOSTwoWayRecordBinding.h>
+#import <fosrest/FOSExpression.h>
+#import <fosrest/FOSAdapterBinding.h>
+#import <fosrest/FOSAdapterBindingParser.h>
+#import <fosrest/FOSCMOBinding.h>
+#import <fosrest/FOSConcatExpression.h>
+#import <fosrest/FOSConstantExpression.h>
+#import <fosrest/FOSItemMatcher.h>
+#import <fosrest/FOSKeyPathExpression.h>
+#import <fosrest/FOSPropertyBinding.h>
+#import <fosrest/FOSAttributeBinding.h>
+#import <fosrest/FOSRelationshipBinding.h>
+#import <fosrest/FOSSharedBindingReference.h>
+#import <fosrest/FOSURLBinding.h>
+#import <fosrest/FOSVariableExpression.h>
 
 #pragma mark - Logging
-#import <FOSREST/FOSAnalytics.h>
-#import <FOSREST/FOSParseAnalyticsManager.h>
+#import <fosrest/FOSAnalytics.h>
+#import <fosrest/FOSParseAnalyticsManager.h>
 
 #pragma mark - Authentication
-#import <FOSREST/FOSUser.h>
-#import <FOSREST/FOSLoginManager.h>
+#import <fosrest/FOSUser.h>
+#import <fosrest/FOSLoginManager.h>
 
 #pragma mark - Queue Management
-#import <FOSREST/FOSOperation.h>
-#import <FOSREST/FOSBackgroundOperation.h>
-#import <FOSREST/FOSBeginOperation.h>
-#import <FOSREST/FOSEnsureNetworkConnection.h>
-#import <FOSREST/FOSSendServerRecordOperation.h>
-#import <FOSREST/FOSAtomicCreateServerRecordOperation.h>
-#import <FOSREST/FOSCreateServerRecordOperation.h>
-#import <FOSREST/FOSFlushCachesOperation.h>
-#import <FOSREST/FOSLoginOperation.h>
-#import <FOSREST/FOSLogoutOperation.h>
-#import <FOSREST/FOSRetrieveLoginDataOperation.h>
-#import <FOSREST/FOSPushCacheChangesOperation.h>
-#import <FOSREST/FOSRefreshUserOperation.h>
-#import <FOSREST/FOSRetrieveCMOOperation.h>
-#import <FOSREST/FOSRetrieveToOneRelationshipOperation.h>
-#import <FOSREST/FOSRetrieveToManyRelationshipOperation.h>
-#import <FOSREST/FOSPullStaticTablesOperation.h>
-#import <FOSREST/FOSSendToOneRelationshipOperation.h>
-#import <FOSREST/FOSSendToManyRelationshipOperation.h>
-#import <FOSREST/FOSStaticTableSearchOperation.h>
-#import <FOSREST/FOSUpdateServerRecordOperation.h>
+#import <fosrest/FOSOperation.h>
+#import <fosrest/FOSBackgroundOperation.h>
+#import <fosrest/FOSBeginOperation.h>
+#import <fosrest/FOSEnsureNetworkConnection.h>
+#import <fosrest/FOSSendServerRecordOperation.h>
+#import <fosrest/FOSAtomicCreateServerRecordOperation.h>
+#import <fosrest/FOSCreateServerRecordOperation.h>
+#import <fosrest/FOSFlushCachesOperation.h>
+#import <fosrest/FOSLoginOperation.h>
+#import <fosrest/FOSLogoutOperation.h>
+#import <fosrest/FOSRetrieveLoginDataOperation.h>
+#import <fosrest/FOSPushCacheChangesOperation.h>
+#import <fosrest/FOSRefreshUserOperation.h>
+#import <fosrest/FOSRetrieveCMOOperation.h>
+#import <fosrest/FOSRetrieveToOneRelationshipOperation.h>
+#import <fosrest/FOSRetrieveToManyRelationshipOperation.h>
+#import <fosrest/FOSPullStaticTablesOperation.h>
+#import <fosrest/FOSSendToOneRelationshipOperation.h>
+#import <fosrest/FOSSendToManyRelationshipOperation.h>
+#import <fosrest/FOSStaticTableSearchOperation.h>
+#import <fosrest/FOSUpdateServerRecordOperation.h>
 
-#import <FOSREST/FOSSaveOperation.h>
-#import <FOSREST/FOSSleepOperation.h>
-#import <FOSREST/FOSThreadSleep.h>
+#import <fosrest/FOSSaveOperation.h>
+#import <fosrest/FOSSleepOperation.h>
+#import <fosrest/FOSThreadSleep.h>
 
 #pragma mark - Search Support
-#import <FOSREST/FOSSearchOperation.h>
-#import <FOSREST/FOSTimeFilter.h>
+#import <fosrest/FOSSearchOperation.h>
+#import <fosrest/FOSTimeFilter.h>
 
 #pragma mark - Cache Management
-#import <FOSREST/FOSCacheManager.h>
-#import <FOSREST/FOSDatabaseManager.h>
-#import <FOSREST/FOSManagedObjectContext.h>
+#import <fosrest/FOSCacheManager.h>
+#import <fosrest/FOSDatabaseManager.h>
+#import <fosrest/FOSManagedObjectContext.h>
 
 #pragma mark - REST Adapters
-#import <FOSREST/FOSBoundServiceAdapter.h>
-#import <FOSREST/FOSParseServiceAdapter.h>
+#import <fosrest/FOSBoundServiceAdapter.h>
+#import <fosrest/FOSParseServiceAdapter.h>
 
 #pragma mark - REST Support
-#import <FOSREST/FOSRelationshipFault.h>
-#import <FOSREST/FOSWebServiceRequest.h>
-#import <FOSREST/FOSParseFileService.h>
-#import <FOSREST/FOSRESTConfig.h>
-#import <FOSREST/FOSNetworkStatusMonitor.h>
+#import <fosrest/FOSRelationshipFault.h>
+#import <fosrest/FOSWebServiceRequest.h>
+#import <fosrest/FOSParseFileService.h>
+#import <fosrest/FOSRESTConfig.h>
+#import <fosrest/FOSNetworkStatusMonitor.h>
 
 #pragma mark - Stock Transformers
-#import <FOSREST/FOSValueTransformer.h>
-#import <FOSREST/FOSJSONTransformer.h>
-#import <FOSREST/FOSURLTransformer.h>
+#import <fosrest/FOSValueTransformer.h>
+#import <fosrest/FOSJSONTransformer.h>
+#import <fosrest/FOSURLTransformer.h>
 
 #pragma mark - Parse.com Support
-#import <FOSREST/FOSParseCachedManagedObject.h>
-#import <FOSREST/FOSParseUser.h>
+#import <fosrest/FOSParseCachedManagedObject.h>
+#import <fosrest/FOSParseUser.h>
 
 #pragma mark - Internal Testing Headers
 #import "../Pods/Headers/Private/FOSREST/FOSNetworkStatusMonitor_FOS_Internal.h"

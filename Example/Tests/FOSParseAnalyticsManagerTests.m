@@ -28,7 +28,7 @@
 //
 
 #import "FOSParseAnalyticsManagerTests.h"
-#import <FOSREST/FOSRESTConfig.h>
+#import <fosrest/FOSRESTConfig.h>
 #import "FOSRESTTests.h"
 #import "FOSLoginManagerTests.h"
 

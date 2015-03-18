@@ -193,7 +193,7 @@ SETUP_TEARDOWN_NOLOGIN
     // CMO
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
     NSURL *baseURL = adapter.defaultBaseURL;
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
@@ -230,7 +230,7 @@ SETUP_TEARDOWN_NOLOGIN
     // CMO
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
     NSURL *baseURL = [NSURL URLWithString:@"https://api.example.com"];
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
@@ -269,7 +269,7 @@ SETUP_TEARDOWN_NOLOGIN
     // CMO
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
     NSURL *baseURL = adapter.defaultBaseURL;
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"PUT";
@@ -307,7 +307,7 @@ SETUP_TEARDOWN_NOLOGIN
     // CMO
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
     NSURL *baseURL = adapter.defaultBaseURL;
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
@@ -346,7 +346,7 @@ SETUP_TEARDOWN_NOLOGIN
     // CMO
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
     NSDictionary *headerFields = adapter.headerFields;
     NSString *overrideKey = headerFields.allKeys[0];
     NSURL *baseURL = adapter.defaultBaseURL;
@@ -387,7 +387,7 @@ SETUP_TEARDOWN_NOLOGIN
     // CMO
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
     NSURL *baseURL = adapter.defaultBaseURL;
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
@@ -425,7 +425,7 @@ SETUP_TEARDOWN_NOLOGIN
     // CMO
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
     NSURL *baseURL = adapter.defaultBaseURL;
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";
@@ -463,7 +463,7 @@ SETUP_TEARDOWN_NOLOGIN
     // CMO
     TestCreate *cmo = [[TestCreate alloc] init];
 
-    id<FOSRESTServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = [FOSRESTConfig sharedInstance].restServiceAdapter;
     NSURL *baseURL = adapter.defaultBaseURL;
     NSURL *expectedURL = [baseURL URLByAppendingPathComponent:expectedEndPoint];
     NSString *expectedHTTPMethod = @"GET";

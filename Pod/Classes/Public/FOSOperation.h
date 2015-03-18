@@ -100,7 +100,7 @@
 
 @property (nonatomic, readonly) FOSRESTConfig *restConfig;
 
-@property (nonatomic, readonly) id<FOSRESTServiceAdapter> restAdapter;
+@property (nonatomic, readonly) id<fosrestServiceAdapter> restAdapter;
 
 /*!
  * @property totalDependentOperations

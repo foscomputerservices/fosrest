@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <FOSREST/FOSCacheManager.h>
+#import <fosrest/FOSCacheManager.h>
 
 @class FOSRESTConfig;
 

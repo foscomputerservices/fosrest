@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSCachedManagedObject.h>
+#import <fosrest/FOSCachedManagedObject.h>
 
 @interface FOSUser : FOSCachedManagedObject
 

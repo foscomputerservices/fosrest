@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSSendRelationshipOperation.h>
+#import <fosrest/FOSSendRelationshipOperation.h>
 
 /*!
  * @class FOSSendToOneRelationshipOperation

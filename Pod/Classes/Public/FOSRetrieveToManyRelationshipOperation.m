@@ -412,7 +412,7 @@
     NSParameterAssert(ownerJsonId != nil);
 
     NSMutableSet *result = nil;
-    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = self.restConfig.restServiceAdapter;
     NSError *localError = nil;
 
     for (NSEntityDescription *nextLeafEntity in leafEntities) {
@@ -563,7 +563,7 @@
                 if (isValid && fragCount > 0) {
                     blockSelf->_childRetrieveCMOOps = [NSMutableSet setWithCapacity:jsonFragments.count];
 
-                    id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+                    id<fosrestServiceAdapter> adapter = self.restConfig.restServiceAdapter;
                     FOSURLBinding *urlBinding =
                     [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
                                           forLifecycleStyle:nil

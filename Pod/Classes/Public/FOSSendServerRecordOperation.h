@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSOperation.h>
-#import <FOSREST/FOSURLBinding.h>
+#import <fosrest/FOSOperation.h>
+#import <fosrest/FOSURLBinding.h>
 
 @class FOSCachedManagedObject;
 @class FOSWebServiceRequest;

@@ -28,8 +28,8 @@
 //
 
 @import Foundation;
-#import <FOSREST/FOSPropertyBinding.h>
-#import <FOSREST/FOSTwoWayPropertyBinding.h>
+#import <fosrest/FOSPropertyBinding.h>
+#import <fosrest/FOSTwoWayPropertyBinding.h>
 
 @protocol FOSExpression;
 @class FOSItemMatcher;

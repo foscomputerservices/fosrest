@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSREST/FOSCompiledAtom.h>
+#import <fosrest/FOSCompiledAtom.h>
 
 /*!
  * @class FOSSharedBindingReference

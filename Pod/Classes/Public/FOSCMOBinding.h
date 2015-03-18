@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSCompiledAtom.h>
-#import <FOSREST/FOSTwoWayRecordBinding.h>
+#import <fosrest/FOSCompiledAtom.h>
+#import <fosrest/FOSTwoWayRecordBinding.h>
 
 @protocol FOSExpression;
 

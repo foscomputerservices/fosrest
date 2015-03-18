@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSOperation.h>
+#import <fosrest/FOSOperation.h>
 
 @interface FOSPullStaticTablesOperation : FOSOperation
 

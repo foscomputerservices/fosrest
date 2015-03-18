@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSRESTConfig.h>
+#import <fosrestConfig.h>
 #import "FOSREST_Internal.h"
 
 __strong FOSRESTConfig *__sharedInstance = nil;
@@ -130,7 +130,7 @@ __strong FOSRESTConfig *__sharedInstance = nil;
 + (void)configWithApplicationVersion:(NSString *)appVersion
                              options:(FOSRESTConfigOptions)options
                          userSubType:(Class)userSubType
-                  restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter {
+                  restServiceAdapter:(id<fosrestServiceAdapter>)restServiceAdapter {
 
     // Enusre that NSAssert is turned off on GoldMaster & Release builds
 #if defined(CONFIGURATION_GoldMaster) || defined(CONFIGURATION_Release)
@@ -235,7 +235,7 @@ __strong FOSRESTConfig *__sharedInstance = nil;
 
 - (id)_initWithOptions:(FOSRESTConfigOptions)options
            userSubType:(Class)userSubType
-    restServiceAdapter:(id<FOSRESTServiceAdapter>)restServiceAdapter {
+    restServiceAdapter:(id<fosrestServiceAdapter>)restServiceAdapter {
 
     NSParameterAssert(userSubType != nil);
     NSParameterAssert(restServiceAdapter != nil);

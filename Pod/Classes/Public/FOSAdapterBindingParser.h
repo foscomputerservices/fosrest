@@ -35,7 +35,7 @@
 @interface FOSAdapterBindingParser : NSObject
 
 + (FOSAdapterBinding *)parseAdapterBinding:(NSString *)binding
-                                forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                                forAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                                      error:(NSError **)error;
 
 #ifdef DEBUG

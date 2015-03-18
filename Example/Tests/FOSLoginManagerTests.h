@@ -28,7 +28,7 @@
 //
 
 #import <FOSLoginManager.h>
-#import <FOSRESTConfig.h>
+#import <fosrestConfig.h>
 #import <XCTest/XCTest.h>
 #import "User.h"
 

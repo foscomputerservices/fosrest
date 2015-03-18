@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSREST/FOSManagedObject.h>
-#import <FOSREST/FOSCacheManager.h>
+#import <fosrest/FOSManagedObject.h>
+#import <fosrest/FOSCacheManager.h>
 
 @class FOSRetrieveCMOOperation;
 @class FOSSendServerRecordOperation;

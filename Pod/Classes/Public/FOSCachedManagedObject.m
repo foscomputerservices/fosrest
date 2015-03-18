@@ -594,7 +594,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
                         if (destId == nil) {
 
-                            id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
+                            id<fosrestServiceAdapter> adapter = restConfig.restServiceAdapter;
                             FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                                                              forRelationship:nil
                                                                                forEntity:destEntity];
@@ -1114,7 +1114,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
     NSMutableDictionary *context = [@{ @"ENTITY" : entity } mutableCopy];
 
-    id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = restConfig.restServiceAdapter;
     FOSURLBinding *urlBinding =
         [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                               forLifecycleStyle:nil
@@ -1191,7 +1191,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSEntityDescription *entity = [self entityDescription];
     NSMutableDictionary *context = [@{ @"ENTITY" : entity } mutableCopy];
 
-    id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = restConfig.restServiceAdapter;
     FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                                       forLifecycleStyle:nil
                                                      forRelationship:nil
@@ -1239,7 +1239,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSMutableSet *result = [NSMutableSet set];
     NSEntityDescription *entity = [self entityDescription];
 
-    id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
+    id<fosrestServiceAdapter> adapter = restConfig.restServiceAdapter;
     FOSURLBinding *urlBinding =
         [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                               forLifecycleStyle:nil

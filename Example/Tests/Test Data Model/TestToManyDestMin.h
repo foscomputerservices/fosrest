@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <FOSREST/FOSParseCachedManagedObject.h>
+#import <fosrest/FOSParseCachedManagedObject.h>
 
 @class TestToMany;
 

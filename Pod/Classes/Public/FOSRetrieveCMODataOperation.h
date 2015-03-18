@@ -30,7 +30,7 @@
 @import Foundation;
 @import CoreData;
 
-#import <FOSREST/FOSCachedManagedObject.h>
+#import <fosrest/FOSCachedManagedObject.h>
 
 @class FOSItemMatcher;
 
@@ -51,7 +51,7 @@
 
 @end
 
-#import <FOSREST/FOSWebServiceRequest.h>
+#import <fosrest/FOSWebServiceRequest.h>
 
 @interface FOSRetrieveCMODataOperation : FOSWebServiceRequest<FOSRetrieveCMODataOperationProtocol>
 

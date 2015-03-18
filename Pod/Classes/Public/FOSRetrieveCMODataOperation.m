@@ -67,7 +67,7 @@
 #pragma mark - Property Overrides
 - (FOSJsonId)jsonId {
     if (_jsonId == nil && self.jsonResult != nil) {
-        id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+        id<fosrestServiceAdapter> adapter = self.restConfig.restServiceAdapter;
 
         // http://fosmain.foscomputerservices.com:8080/browse/FF-8
         FOSURLBinding *urlBinding =

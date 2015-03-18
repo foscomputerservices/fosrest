@@ -32,13 +32,13 @@
 #import "FOSREST_Internal.h"
 
 // externed from FOSBinding.ym
-extern id<FOSRESTServiceAdapter> parsedServiceAdapter;
+extern id<fosrestServiceAdapter> parsedServiceAdapter;
 extern id parsedBinding;
 
 @implementation FOSAdapterBindingParser
 
 + (FOSAdapterBinding *)parseAdapterBinding:(NSString *)binding
-                                forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                                forAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                                      error:(NSError **)error {
     NSParameterAssert(binding != nil);
     NSParameterAssert(serviceAdapter != nil);

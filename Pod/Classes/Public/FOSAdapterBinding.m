@@ -49,7 +49,7 @@
 }
 
 + (instancetype)parseAdapterBindingDescription:(NSString *)bindings
-                                    forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                                    forAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                                          error:(NSError **)error {
     NSParameterAssert(bindings != nil);
     if (error != nil) { *error = nil; }
@@ -62,7 +62,7 @@
 }
 
 + (instancetype)parseAdapterBindings:(NSURL *)url
-                          forAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+                          forAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                                error:(NSError **)error {
     NSParameterAssert(url != nil);
     if (error != nil) { *error = nil; }

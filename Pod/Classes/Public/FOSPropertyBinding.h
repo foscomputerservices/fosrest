@@ -28,7 +28,7 @@
 //
 
 @import CoreData;
-#import <FOSREST/FOSCompiledAtom.h>
+#import <fosrest/FOSCompiledAtom.h>
 
 @class FOSCachedManagedObject;
 
@@ -53,7 +53,7 @@
  */
 + (id)encodeCMOValueToJSON:(id)cmoValue
                     ofType:(NSAttributeDescription *)attrDesc
-        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+        withServiceAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                      error:(NSError **)error;
 
 /*!
@@ -61,7 +61,7 @@
  */
 + (id)decodeJSONValueToCMO:(id)jsonValue
                     ofType:(NSAttributeDescription *)attrDesc
-        withServiceAdapter:(id<FOSRESTServiceAdapter>)serviceAdapter
+        withServiceAdapter:(id<fosrestServiceAdapter>)serviceAdapter
                      error:(NSError **)error;
 
 /*!

@@ -188,7 +188,7 @@
     return [FOSRESTConfig sharedInstance];
 }
 
-- (id<FOSRESTServiceAdapter>)restAdapter {
+- (id<fosrestServiceAdapter>)restAdapter {
     return self.restConfig.restServiceAdapter;
 }
 
