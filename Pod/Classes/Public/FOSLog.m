@@ -1,6 +1,6 @@
 //
 //  FOSLog.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/30/14.
 //

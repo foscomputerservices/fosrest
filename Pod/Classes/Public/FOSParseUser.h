@@ -1,6 +1,6 @@
 //
 //  FOSParseUser.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/3/13.
 //
@@ -27,11 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-
-#import <FOSRest/FOSUser.h>
-
+@import Foundation;
+#import "FOSUser.h"
 
 @interface FOSParseUser : FOSUser
 

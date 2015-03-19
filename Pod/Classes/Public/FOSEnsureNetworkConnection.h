@@ -1,6 +1,6 @@
 //
 //  FOSEnsureNetworkConnection.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 6/16/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
+#import "FOSOperation.h"
 
 /*!
  * @class FOSEnsureNetworkConnection

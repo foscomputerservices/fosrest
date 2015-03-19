@@ -1,6 +1,6 @@
 //
 //  FOSFlushCachesOperation.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/3/13.
 //
@@ -32,7 +32,7 @@
 
 @implementation FOSFlushCachesOperation
 
-+ (FOSFlushCachesOperation *)flushCacheOperationForCacheManager:(FOSCacheManager *)cacheManager {
++ (instancetype)flushCacheOperationForCacheManager:(FOSCacheManager *)cacheManager {
     return [[self alloc] initForCacheManager:cacheManager];
 }
 

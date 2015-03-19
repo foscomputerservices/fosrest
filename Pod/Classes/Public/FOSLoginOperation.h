@@ -1,6 +1,6 @@
 //
 //  FOSLoginOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/1/13.
 //
@@ -27,8 +27,11 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
-#import <FOSRest/FOSCachedManagedObject.h>
+@import Foundation;
+@import CoreData;
+#import "FOSOperation.h"
+#import "FOSHandlers.h"
+#import "FOSJsonId.h"
 
 @class FOSUser;
 

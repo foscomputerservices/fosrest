@@ -1,6 +1,6 @@
 //
 //  FOSUpdateServerRecordOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/8/14.
 //
@@ -28,7 +28,7 @@
 //
 
 @import Foundation;
-#import <FOSRest/FOSSendServerRecordOperation.h>
+#import "FOSSendServerRecordOperation.h"
 
 @class FOSCachedManagedObject;
 

@@ -1,6 +1,6 @@
 //
 //  FOSModifiedProperty.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 8/29/12.
 //
@@ -27,9 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-
+@import Foundation;
+@import CoreData;
 
 @interface FOSModifiedProperty : NSManagedObject
 

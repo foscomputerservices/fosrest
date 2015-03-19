@@ -1,6 +1,6 @@
 //
 //  FOSCachedManagedObject.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -27,9 +27,9 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSManagedObject.h>
-#import <FOSRest/FOSCacheManager.h>
-#import <FOSRest/FOSJsonId.h>
+#import "FOSManagedObject.h"
+#import "FOSHandlers.h"
+#import "FOSJsonId.h"
 
 @class FOSRetrieveCMOOperation;
 @class FOSSendServerRecordOperation;

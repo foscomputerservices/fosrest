@@ -1,6 +1,6 @@
 //
 //  FOSCMOBinding.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/15/14.
 //
@@ -27,8 +27,9 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSCompiledAtom.h>
-#import <FOSRest/FOSTwoWayRecordBinding.h>
+@import Foundation;
+#import "FOSCompiledAtom.h"
+#import "FOSTwoWayRecordBinding.h"
 
 @protocol FOSExpression;
 

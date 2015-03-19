@@ -1,6 +1,6 @@
 //
 //  FOSWebService.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //

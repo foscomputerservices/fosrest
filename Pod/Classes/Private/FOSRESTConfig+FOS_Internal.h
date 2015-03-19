@@ -1,6 +1,6 @@
 //
-//  FOSRESTConfig_FOS_Internal.h
-//  FOSREST
+//  FOSRestConfig_FOS_Internal.h
+//  FOSRest
 //
 //  Created by David Hunt on 1/5/13.
 //

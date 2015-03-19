@@ -1,6 +1,6 @@
 //
 //  FOSSleepOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -27,7 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
+@import Foundation;
+#import "FOSOperation.h"
 
 @interface FOSSleepOperation : FOSOperation
 

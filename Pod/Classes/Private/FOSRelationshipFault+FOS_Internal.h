@@ -1,6 +1,6 @@
 //
 //  FOSRelationshipFault+FOS_Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/19/13.
 //

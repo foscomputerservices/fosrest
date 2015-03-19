@@ -1,6 +1,6 @@
 //
 //  Bison.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/21/14.
 //
@@ -27,9 +27,6 @@
 //  SOFTWARE.
 //
 
-#ifndef FOSREST_Bison_h
-#define FOSREST_Bison_h
-
 typedef void* YY_BUFFER_STATE;
 typedef void* yyscan_t;
 extern YY_BUFFER_STATE yy_scan_buffer(char *, size_t);
@@ -52,5 +49,3 @@ extern void yy_init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
 extern void yyparse();
 extern void yyreset_state();
-
-#endif

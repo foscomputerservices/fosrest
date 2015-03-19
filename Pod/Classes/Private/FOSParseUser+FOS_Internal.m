@@ -1,6 +1,6 @@
 //
 //  FOSParseUser+FOS_Internal.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/2/13.
 //

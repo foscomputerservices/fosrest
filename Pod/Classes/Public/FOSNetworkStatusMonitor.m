@@ -1,6 +1,6 @@
 //
 //  FOSNetworkStatusMonitor.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/11/13.
 //
@@ -59,7 +59,7 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
 
 #pragma mark - Class Methods
 
-+ (FOSNetworkStatusMonitor *)statusMonitorWithHostName:(NSString *)hostName {
++ (instancetype)statusMonitorWithHostName:(NSString *)hostName {
     FOSNetworkStatusMonitor* result = nil;
 
     BOOL usingLocalHost = ([hostName.lowercaseString rangeOfString:@"localhost"].location == 0);
@@ -83,13 +83,13 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
     return result;
 }
 
-+ (FOSNetworkStatusMonitor *)statusMonitorForParse {
++ (instancetype)statusMonitorForParse {
     FOSNetworkStatusMonitor *result = [self statusMonitorWithHostName:@"api.parse.com"];
 
     return result;
 }
 
-+ (FOSNetworkStatusMonitor *)statusMonitorForInternetConnection {
++ (instancetype)statusMonitorForInternetConnection {
     struct sockaddr_in zeroAddress;
     bzero(&zeroAddress, sizeof(zeroAddress));
     zeroAddress.sin_len = sizeof(zeroAddress);
@@ -98,7 +98,7 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
     return [self _statusMonitorWithAddress:&zeroAddress];
 }
 
-+ (FOSNetworkStatusMonitor *)statusMonitorForLocalWiFi {
++ (instancetype)statusMonitorForLocalWiFi {
     struct sockaddr_in localWifiAddress;
     bzero(&localWifiAddress, sizeof(localWifiAddress));
     localWifiAddress.sin_len = sizeof(localWifiAddress);

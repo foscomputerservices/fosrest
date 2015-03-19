@@ -1,6 +1,6 @@
 //
 //  NSBundle+FOS.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/15/14.
 //

@@ -1,6 +1,6 @@
 //
 //  FOSNetworkStatusMonitor.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/11/13.
 //
@@ -27,10 +27,10 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <SystemConfiguration/SystemConfiguration.h>
+@import Foundation;
+@import SystemConfiguration;
 
-#import <FOSRest/FOSNetworkStatus.h>
+#import "FOSNetworkStatus.h"
 
 @interface FOSNetworkStatusMonitor: NSObject
 
@@ -41,14 +41,14 @@
  *
  * Use to check the network availabiity of a particular host name.
  */
-+ (FOSNetworkStatusMonitor *)statusMonitorWithHostName:(NSString *)hostName;
++ (instancetype)statusMonitorWithHostName:(NSString *)hostName;
 
 /*!
  * @method statusMonitorForParse
  *
  * Use to check the network availability of parse.com.
  */
-+ (FOSNetworkStatusMonitor *)statusMonitorForParse;
++ (instancetype)statusMonitorForParse;
 
 /*!
  * @method statusMonitorForInternetConnection
@@ -59,14 +59,14 @@
  *
  * This method should be used by applications that do not connect to a particular host
  */
-+ (FOSNetworkStatusMonitor *)statusMonitorForInternetConnection;
++ (instancetype)statusMonitorForInternetConnection;
 
 /*!
  * @method statusMonitorForLocalWiFi
  *
  * Checks whether a local wifi connection is available.
  */
-+ (FOSNetworkStatusMonitor *)statusMonitorForLocalWiFi;
++ (instancetype)statusMonitorForLocalWiFi;
 
 /*!
  * @method currentStatusForHostName:

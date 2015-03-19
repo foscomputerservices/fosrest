@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveLoginDataOperation.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/28/14.
 //

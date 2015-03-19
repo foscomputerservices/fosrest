@@ -1,6 +1,6 @@
 //
 //  FOSWebService_Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "FOSREST_Internal.h"
 
 @class FOSRESTConfig;

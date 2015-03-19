@@ -1,6 +1,6 @@
 //
 //  FOSAtomicCreateServerRecordOperation.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 10/3/13.
 //

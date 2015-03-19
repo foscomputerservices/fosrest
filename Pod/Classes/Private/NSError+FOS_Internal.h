@@ -1,6 +1,6 @@
 //
 //  NSError+FOS_Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/30/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "FOSCompiledAtom.h"
 
 @interface NSError (FOS_Internal)

@@ -1,6 +1,6 @@
 //
 //  FOSFlushCachesOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/3/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
+#import "FOSOperation.h"
 
 @class FOSCacheManager;
 
@@ -35,6 +35,6 @@
 
 @property (nonatomic, readonly) FOSCacheManager *cacheManager;
 
-+ (FOSFlushCachesOperation *)flushCacheOperationForCacheManager:(FOSCacheManager *)cacheManager;
++ (instancetype)flushCacheOperationForCacheManager:(FOSCacheManager *)cacheManager;
 
 @end

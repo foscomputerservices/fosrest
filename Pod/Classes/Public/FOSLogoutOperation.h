@@ -1,6 +1,6 @@
 //
 //  FOSLogoutOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/2/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
+#import "FOSOperation.h"
 
 @interface FOSLogoutOperation : FOSOperation
 

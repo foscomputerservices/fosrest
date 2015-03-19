@@ -1,6 +1,6 @@
 //
 //  FOSParseAnalyticsManager.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by Administrator on 9/15/13.
 //

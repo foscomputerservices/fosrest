@@ -1,6 +1,6 @@
 //
 //  FOSURLTransformer.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 7/21/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @interface FOSURLTransformer : NSValueTransformer
 

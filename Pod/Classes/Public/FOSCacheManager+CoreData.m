@@ -1,6 +1,6 @@
 //
 //  FOSCacheManager+CoreData.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 6/14/14.
 //

@@ -1,6 +1,6 @@
 //
 //  FOSParseRESTAdapter.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/14/14.
 //
@@ -27,7 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSBoundServiceAdapter.h>
+@import Foundation;
+#import "FOSBoundServiceAdapter.h"
 
 @interface FOSParseServiceAdapter : FOSBoundServiceAdapter
 

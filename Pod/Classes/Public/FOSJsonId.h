@@ -27,9 +27,6 @@
 //  SOFTWARE.
 //
 
-#ifndef FOSJsonId_h
-#define FOSJsonId_h
+@import Foundation;
 
 typedef id<NSObject,NSCopying> FOSJsonId;
-
-#endif

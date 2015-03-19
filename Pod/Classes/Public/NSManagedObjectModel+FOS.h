@@ -1,6 +1,6 @@
 //
 //  NSManagedObjectModel+FOS.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/20/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 /*!
  * @category NSManagedObjectModel

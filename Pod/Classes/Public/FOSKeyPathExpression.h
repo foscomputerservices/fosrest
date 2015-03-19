@@ -1,6 +1,6 @@
 //
 //  FOSKeyPathExpression.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/18/14.
 //
@@ -28,8 +28,8 @@
 //
 
 @import Foundation;
-#import <FOSRest/FOSCompiledAtom.h>
-#import <FOSRest/FOSExpression.h>
+#import "FOSCompiledAtom.h"
+#import "FOSExpression.h"
 
 /*!
  * @class FOSKeyPathExpression

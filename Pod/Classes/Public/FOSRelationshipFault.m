@@ -1,6 +1,6 @@
 //
 //  FOSRelationshipFault.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/18/13.
 //

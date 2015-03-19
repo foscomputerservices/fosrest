@@ -1,6 +1,6 @@
 //
 //  FOSExpression.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/18/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @protocol FOSExpression <NSObject>
 

@@ -1,6 +1,6 @@
 //
 //  FOSParseCachedManagedObject.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/29/12.
 //
@@ -27,10 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-#import <FOSRest/FOSCachedManagedObject.h>
-
+@import Foundation;
+#import "FOSCachedManagedObject.h"
 
 @interface FOSParseCachedManagedObject : FOSCachedManagedObject
 

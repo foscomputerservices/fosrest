@@ -1,6 +1,6 @@
 //
 //  FOSThreadSleep.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/8/13.
 //

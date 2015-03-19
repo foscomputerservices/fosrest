@@ -1,6 +1,6 @@
 //
 //  FOSValueTransformer.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 9/2/14.
 //
@@ -26,6 +26,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 //
+
+@import Foundation;
 
 /*!
  * @protocol FOSValueTransformer

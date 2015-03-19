@@ -1,6 +1,6 @@
 //
 //  FOSWebServiceRequest+FOS_Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/30/13.
 //

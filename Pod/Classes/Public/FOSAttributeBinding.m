@@ -1,6 +1,6 @@
 //
 //  FOSAttributeBinding.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/15/14.
 //

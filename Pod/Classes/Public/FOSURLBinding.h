@@ -1,6 +1,6 @@
 //
 //  FOSURLBinding.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/17/14.
 //
@@ -27,115 +27,22 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <FOSRest/FOSCompiledAtom.h>
-#import <FOSRest/FOSWebServiceRequest.h>
-#import <FOSRest/FOSCachedManagedObject.h>
+@import Foundation;
+#import "FOSCompiledAtom.h"
+#import "FOSBindingOptions.h"
+#import "FOSJsonId.h"
+#import "FOSLifecycleDirection.h"
+#import "FOSLifecyclePhase.h"
+#import "FOSRequestFormat.h"
+#import "FOSRequestMethod.h"
+#import "FOSHandlers.h"
 
+@class FOSCachedManagedObject;
 @class FOSConcatExpression;
 @class FOSCMOBinding;
 @class FOSSharedBindingReference;
 @class FOSItemMatcher;
 @protocol FOSExpression;
-
-typedef NS_OPTIONS(NSUInteger, FOSLifecycleDirection) {
-    FOSLifecycleDirectionUpdate   = 0x00008000,
-    FOSLifecycleDirectionRetrieve = 0x80000000,
-};
-
-/*!
- * @enum FOSLifecyclePhase
- *
- * @constant FOSLifecyclePhaseLogin Logs a user in to the REST Service (Adapter binding: LOGIN).
- *
- * @constant FOSLifecyclePhaseLogout Logs a user out of the REST Service (Adapter binding: LOGOUT).
- *
- * @constant FOSLifecyclePhasePasswordReset Resets the password for a user
- *           (Adapter binding: PASSWORD_RESET).
- *
- * @constant FOSLifecyclePhaseCreateServerRecord Create a record on the REST Service
- *           (Adapter binding: CREATE).
- *
- * @constant FOSLifecyclePhaseUpdateServerRecord Update a record on the REST Service
- *           (Adapter binding: UPDATE).
- *
- * @constant FOSLifecyclePhaseDestroyServerRecord Destroy a record on the REST Service
- *           (Adapter binding: DESTROY).
- *
- * @constant FOSLifecyclePhaseRetrieveServerRecord Retrieves information from the
- *           REST Service and creates or updates a CMO  (Adapter binding: RETRIEVE_SERVER_RECORD).
- *
- * @constant FOSLifecyclePhaseRetrieveServerRecords Retrieves information from the
- *           REST Service and creates or updates one or more CMOs
- *           (Adapter binding: RETRIEVE_SERVER_RECORDS).
- *
- * @constant FOSLifecyclePhaseRetrieveServerRecordCount Retrieves the count of
- *           records from the REST Service  (Adapter binding: RETRIEVE_SERVER_RECORD_COUNT).
- *
- * @constant FOSLifecyclePhaseRetrieveServerRecordRelationship Retrieves information from
- *           the REST service and creates or updates a relationship of a CMO
- *           (Adapter binding: RETRIEVE_RELATIONSHIP).
- */
-typedef NS_ENUM(NSUInteger, FOSLifecyclePhase) {
-    FOSLifecyclePhaseLogin                            = 0x01 | FOSLifecycleDirectionRetrieve,
-    FOSLifecyclePhaseLogout                           = 0x02,
-    FOSLifecyclePhasePasswordReset                    = 0x03,
-    FOSLifecyclePhaseCreateServerRecord               = 0x04 | FOSLifecycleDirectionUpdate,
-    FOSLifecyclePhaseUpdateServerRecord               = 0x05 | FOSLifecycleDirectionUpdate,
-    FOSLifecyclePhaseDestroyServerRecord              = 0x06 | FOSLifecycleDirectionUpdate,
-    FOSLifecyclePhaseRetrieveServerRecord             = 0x07 | FOSLifecycleDirectionRetrieve,
-    FOSLifecyclePhaseRetrieveServerRecords            = 0x08 | FOSLifecycleDirectionRetrieve,
-    FOSLifecyclePhaseRetrieveServerRecordCount        = 0x09 | FOSLifecycleDirectionRetrieve,
-    FOSLifecyclePhaseRetrieveServerRecordRelationship = 0x0A | FOSLifecycleDirectionRetrieve
-};
-
-/*!
- * @enum FOSBindingOptions
- *
- * @constant FOSBindingOptionOneToOneRelationship
- * 
- *   Allowed only for FOSLifecyclePhaseRetrieveServerRecordRelationship and indicates that the
- *   relationship is a one-to-one relationship.
- *
- * @constant FOSBindingOptionOneToManyRelationship
- *
- *   Allowed only for FOSLifecyclePhaseRetrieveServerRecordRelationship and indicates that the
- *   relationship is a one-to-many relationship.
- *
- * @constant FOSBindingOptionOrderedRelationship
- *
- *   Allowed only for FOSLifecyclePhaseRetrieveServerRecordRelationship and indicates that the
- *   relationship is an ordered relationship.
- */
-typedef NS_OPTIONS(NSUInteger, FOSBindingOptions) {
-    FOSBindingOptionsNone = 0,
-    FOSBindingOptionsOneToOneRelationship = (1 << 0),
-    FOSBindingOptionsOneToManyRelationship = (1 << 1),
-// TODO :  FOSBindingOptionsManyToManyRelationship = (1 << 2),
-    FOSBindingOptionsUnorderedRelationship = (1 << 3),
-    FOSBindingOptionsOrderedRelationship = (1 << 4)
-};
-
-/*!
- * @enum FOSRESTRequestFormat
- *
- * @constant FOSRequestFormatJSON  (Adapter binding: 'JSON') The data will be transmitted as JSON
- *           in the body of the message with a body type of 'application/json'.  This is the
- *           default for FOSRequestMethodPOST, FOSRequestMethodGET and FOSRequestMethodDELETE.
- *
- * @constant FOSRequestFormatWebform (Adapter binding: 'WEBFORM') The data will be transmitted
- *           as parameters. For FOSRequestMethodGET they are embedded in the URL; for all
- *           other request types, they are embedded in the body with a content type
- *           of 'application/x-www-form-urlencoded'.
- *
- * @constant FOSRequestFormatNoData (Adapter binding: 'NO_DATA') No object data will be
- *           transmitted in the request.
- */
-typedef NS_ENUM(NSUInteger, FOSRequestFormat) {
-    FOSRequestFormatJSON = 0,
-    FOSRequestFormatWebform = 1,
-    FOSRequestFormatNoData = 2
-};
 
 /*!
  * @class FOSURLBinding

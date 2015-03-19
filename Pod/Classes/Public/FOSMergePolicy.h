@@ -1,6 +1,6 @@
 //
 //  FOSMergePolicy.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 7/23/12.
 //

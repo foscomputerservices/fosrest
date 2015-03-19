@@ -1,6 +1,6 @@
 //
 //  FOSPropertyBinding.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/12/14.
 //

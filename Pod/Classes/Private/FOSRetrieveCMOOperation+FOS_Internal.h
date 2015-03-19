@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveCMOOperation+FOS_Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/15/13.
 //

@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveCMODataOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/1/13.
 //
@@ -29,9 +29,8 @@
 
 @import Foundation;
 @import CoreData;
-
-#import <FOSRest/FOSWebServiceRequest.h>
-#import <FOSRest/FOSRetrieveCMODataOperationProtocol.h>
+#import "FOSWebServiceRequest.h"
+#import "FOSRetrieveCMODataOperationProtocol.h"
 
 @class FOSItemMatcher;
 @class FOSURLBinding;

@@ -1,6 +1,6 @@
 //
 //  FOSItemMatcher.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/19/14.
 //
@@ -27,26 +27,11 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSCompiledAtom.h>
+@import Foundation;
+#import "FOSCompiledAtom.h"
+#import "FOSItemMatch.h"
 
 @protocol FOSExpression;
-
-/*!
- * @typedef FOSItemMatch
- *
- * @constant FOSItemMatchAll  Ignores any items specified by the @link FOSItemMatcher/items %/link
- *                              property matching all entities in the data model.
- *
- * @constant FOSItemMatchAllExcept Matches all entities in the data model except for those that
- *                                   are listed in @link FOSItemMatcher/items %/link.
- *
- * @constant FOSItemMatchItems Matches only the entities listed in @link FOSItemMatcher/items %/link.
- */
-typedef NS_ENUM(NSUInteger, FOSItemMatch) {
-    FOSItemMatchAll = 0,
-    FOSItemMatchAllExcept = 1,
-    FOSItemMatchItems = 2
-};
 
 /*!
  * @class FOSItemMatcher

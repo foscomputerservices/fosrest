@@ -1,6 +1,6 @@
 //
 //  FOSSearchOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
-#import <FOSRest/FOSCacheManager.h>
+#import "FOSOperation.h"
+#import "FOSHandlers.h"
 
 @interface FOSSearchOperation : FOSOperation
 

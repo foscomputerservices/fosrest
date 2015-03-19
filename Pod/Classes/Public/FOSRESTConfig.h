@@ -1,6 +1,6 @@
 //
-//  FOSRESTConfig.h
-//  FOSREST
+//  FOSRestConfig.h
+//  FOSRest
 //
 //  Created by David Hunt on 12/25/12.
 //
@@ -27,16 +27,18 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <FOSRest/FOSNetworkStatus.h>
-#import <FOSRest/FOSRESTConfigOptions.h>
-#import <FOSRest/FOSAnalytics.h>
+@import Foundation;
+#import "FOSAnalytics.h"
+#import "FOSNetworkStatus.h"
+#import "FOSRESTConfigOptions.h"
 
 @protocol FOSRESTServiceAdapter;
 
 @class FOSLoginManager;
 @class FOSDatabaseManager;
 @class FOSCacheManager;
+
+@protocol FOSRESTServiceAdapter;
 
 @interface FOSRESTConfig : NSObject<
     FOSAnalytics

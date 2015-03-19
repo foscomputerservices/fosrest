@@ -1,6 +1,6 @@
 //
 //  FOSVariableExpression.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/17/14.
 //
