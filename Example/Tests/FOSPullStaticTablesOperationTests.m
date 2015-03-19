@@ -149,8 +149,6 @@ SETUP_TEARDOWN_NOLOGIN
     WAIT_FOR_TEST_END
 }
 
-// TODO : Restore when determine how to access private headers
-#ifdef later
 - (void)testPullPartialStaticTables {
     START_TEST
 
@@ -209,7 +207,6 @@ SETUP_TEARDOWN_NOLOGIN
     
     WAIT_FOR_TEST_END
 }
-#endif
 
 #pragma mark - Private Methods
 

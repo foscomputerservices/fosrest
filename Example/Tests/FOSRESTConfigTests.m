@@ -46,17 +46,16 @@ SETUP_TEARDOWN_LOGIN(FOSRESTConfigOptionsNone | FOSRESTConfigAutomaticallySynchr
 #pragma mark - Tests
 
 - (void)testRecoverFromForcingOffline {
+    FOSNetworkStatusMonitor *status = [FOSLoginManagerTests networkStatusMonitor];
     FOSRESTConfig *restConfig = [FOSRESTConfig sharedInstance];
 
     XCTAssertTrue(restConfig.networkStatus != FOSNetworkStatusNotReachable);
 
-    // TODO : Restore when determine how to access private headers
-    //    status.forceOffline = YES;
+    status.forceOffline = YES;
 
     XCTAssertTrue(restConfig.networkStatus == FOSNetworkStatusNotReachable);
 
-    // TODO : Restore when determine how to access private headers
-    //    status.forceOffline = NO;
+    status.forceOffline = NO;
 
     // iOS 8 Simulator -- This is currently broken as reachability says that updated status is offline *always*
     XCTAssertTrue(restConfig.networkStatus != FOSNetworkStatusNotReachable);

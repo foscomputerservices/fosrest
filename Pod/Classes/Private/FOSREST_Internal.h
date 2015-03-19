@@ -21,16 +21,8 @@
 //  SOFTWARE.
 //
 
-#ifdef __OBJC__
 @import Foundation;
 @import CoreData;
-#endif
-
-#if defined(TARGET_OS_IPHONE) || defined(TARGET_IPHONE_SIMULATOR)
-@import UIKit;
-#else
-@import AppKit.h;
-#endif
 
 #import <FOSRest/FOSREST.h>
 

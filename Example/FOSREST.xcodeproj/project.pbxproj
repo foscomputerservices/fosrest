@@ -17,6 +17,7 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
+		6315789C1ABA84BD00A49424 /* FOSParse.adaptermap in Resources */ = {isa = PBXBuildFile; fileRef = 6315789B1ABA84BD00A49424 /* FOSParse.adaptermap */; };
 		636848121A8504BA00B36CD9 /* FOSBackgroundOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 636847E71A8504BA00B36CD9 /* FOSBackgroundOperationTests.m */; };
 		636848131A8504BA00B36CD9 /* FOSCachedManagedObjectReadOnlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 636847E81A8504BA00B36CD9 /* FOSCachedManagedObjectReadOnlyTests.m */; };
 		636848141A8504BA00B36CD9 /* FOSCachedManagedObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 636847EA1A8504BA00B36CD9 /* FOSCachedManagedObjectTests.m */; };
@@ -103,6 +104,7 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		628F70E8B4533AA03B0CDC98 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		6315789B1ABA84BD00A49424 /* FOSParse.adaptermap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = FOSParse.adaptermap; path = ../../Pod/Assets/FOSParse.adaptermap; sourceTree = "<group>"; };
 		636847E71A8504BA00B36CD9 /* FOSBackgroundOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSBackgroundOperationTests.m; sourceTree = "<group>"; };
 		636847E81A8504BA00B36CD9 /* FOSCachedManagedObjectReadOnlyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FOSCachedManagedObjectReadOnlyTests.m; sourceTree = "<group>"; };
 		636847E91A8504BA00B36CD9 /* FOSCachedManagedObjectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FOSCachedManagedObjectTests.h; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 		6003F5B6195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6315789B1ABA84BD00A49424 /* FOSParse.adaptermap */,
 				6003F5B7195388D20070C39A /* Tests-Info.plist */,
 				6003F5B8195388D20070C39A /* InfoPlist.strings */,
 				606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */,
@@ -447,11 +450,6 @@
 				CLASSPREFIX = FOS;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "David Hunt";
-				TargetAttributes = {
-					6003F5AD195388D20070C39A = {
-						TestTargetID = 6003F589195388D20070C39A;
-					};
-				};
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "FOSREST" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -489,6 +487,7 @@
 			files = (
 				6368481C1A8504BA00B36CD9 /* FOSRESTTests-Info.plist in Resources */,
 				6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */,
+				6315789C1ABA84BD00A49424 /* FOSParse.adaptermap in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -813,7 +812,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 00BA7E9F9727026C81060D03 /* Pods-Tests.debug.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FOSRESTApp.app/FOSRESTApp";
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -828,9 +826,18 @@
 					"$(inherited)",
 				);
 				GCC_WARN_PEDANTIC = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					Pods/Headers/Private/fosrest,
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-iquote",
+					"\"$PODS_FRAMEWORK_BUILD_PATH/FOSRest.framework/Headers\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -839,7 +846,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5AA758B02B6CF6AC5AC91F56 /* Pods-Tests.release.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FOSRESTApp.app/FOSRESTApp";
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -853,9 +859,13 @@
 					"$(inherited)",
 				);
 				GCC_WARN_PEDANTIC = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					Pods/Headers/Private/fosrest,
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
