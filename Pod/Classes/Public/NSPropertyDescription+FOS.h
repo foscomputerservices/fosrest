@@ -1,6 +1,6 @@
 //
 //  NSPropertyDescription+FOS.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 9/3/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 @interface NSPropertyDescription (FOS)
 

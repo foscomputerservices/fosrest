@@ -1,6 +1,6 @@
 //
 //  FOSSendServerRecordOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/10/14.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
-#import <FOSRest/FOSURLBinding.h>
+#import "FOSOperation.h"
+#import "FOSLifecyclePhase.h"
 
 @class FOSCachedManagedObject;
 @class FOSWebServiceRequest;

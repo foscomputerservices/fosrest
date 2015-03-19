@@ -1,6 +1,6 @@
 //
 //  FOSRelationshipBinding.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/11/14.
 //
@@ -28,8 +28,8 @@
 //
 
 @import Foundation;
-#import <FOSRest/FOSPropertyBinding.h>
-#import <FOSRest/FOSTwoWayPropertyBinding.h>
+#import "FOSPropertyBinding.h"
+#import "FOSTwoWayPropertyBinding.h"
 
 @protocol FOSExpression;
 @class FOSItemMatcher;

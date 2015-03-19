@@ -1,6 +1,6 @@
 //
 //  FOSLog.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/30/14.
 //
@@ -27,16 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-
-typedef NS_ENUM(NSUInteger, FOSLogLevel) {
-    FOSLogLevelCritical,
-    FOSLogLevelError,
-    FOSLogLevelWarning,
-    FOSLogLevelInfo,
-    FOSLogLevelDebug,
-    FOSLogLevelPedantic
-};
+@import Foundation;
+#import "FOSLogLevel.h"
 
 /*!
  * @function FOSLogCritical

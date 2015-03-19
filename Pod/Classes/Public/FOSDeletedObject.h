@@ -1,6 +1,6 @@
 //
 //  FOSDeletedObject.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/19/14.
 //
@@ -27,9 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-
+@import Foundation;
+@import CoreData;
 
 @interface FOSDeletedObject : NSManagedObject
 

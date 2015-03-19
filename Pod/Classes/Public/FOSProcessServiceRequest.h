@@ -1,6 +1,6 @@
 //
 //  FOSProcessServiceRequest.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 2/11/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @class FOSRESTConfig;
 @class FOSWebServiceRequest;

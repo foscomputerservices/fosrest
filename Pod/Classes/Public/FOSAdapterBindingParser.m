@@ -1,6 +1,6 @@
 //
 //  FOSAdapterBindingParser.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 3/14/14.
 //

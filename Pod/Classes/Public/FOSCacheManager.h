@@ -1,6 +1,6 @@
 //
 //  FOSCacheManager.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -29,22 +29,13 @@
 
 @import CoreData;
 
+#import "FOSHandlers.h"
+
 @class FOSCachedManagedObject;
 @class FOSWebServiceRequest;
 @class FOSOperation;
 @class FOSRESTConfig;
 @class FOSBackgroundOperation;
-
-typedef NS_ENUM(NSUInteger, FOSRecoveryOption) {
-    FOSRecoveryOption_NoRecovery = 0,
-    FOSRecoveryOption_Recovered = 1
-};
-
-typedef void (^FOSCacheErrorHandler)(NSError *error);
-typedef void (^FOSCacheFetchHandler)(NSManagedObjectID *result, NSError *error);
-typedef void (^FOSCacheSearchHandler)(NSSet *results, NSError *error);
-typedef void (^FOSBackgroundRequest)(BOOL cancelled, NSError *error);
-typedef FOSRecoveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSError *error);
 
 @class FOSUser;
 

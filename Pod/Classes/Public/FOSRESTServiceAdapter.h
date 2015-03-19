@@ -1,6 +1,6 @@
 //
-//  FOSRESTServiceAdapter.h
-//  FOSREST
+//  FOSRestServiceAdapter.h
+//  FOSRest
 //
 //  Created by David Hunt on 3/14/14.
 //
@@ -27,12 +27,15 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <FOSRest/FOSURLBinding.h> /* FOSLifecyclePhase */
+@import Foundation;
+@import CoreData;
+#import "FOSLifecyclePhase.h"
 
-@class FOSNetworkStatusMonitor;
 @protocol FOSAnalytics;
 @protocol FOSTwoWayRecordBinding;
+
+@class FOSNetworkStatusMonitor;
+@class FOSURLBinding;
 @class FOSWebServiceRequest;
 
 /*

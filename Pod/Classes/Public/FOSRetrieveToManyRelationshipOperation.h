@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveToManyRelationshipOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/31/12.
 //
@@ -27,8 +27,10 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
-#import <FOSRest/FOSCachedManagedObject.h>
+@import Foundation;
+@import CoreData;
+#import "FOSOperation.h"
+#import "FOSJsonId.h"
 
 @class FOSCMOBinding;
 

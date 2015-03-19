@@ -1,6 +1,6 @@
 //
 //  FOSStaticTableSearchOperation.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/21/13.
 //

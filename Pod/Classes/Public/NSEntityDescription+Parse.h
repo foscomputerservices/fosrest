@@ -1,6 +1,6 @@
 //
 //  NSEntityDescription+Parse.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/27/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 @interface NSEntityDescription (Parse)
 

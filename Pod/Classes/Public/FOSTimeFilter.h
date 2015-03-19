@@ -1,6 +1,6 @@
 //
 //  FOSTimeFilter.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/26/12.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @interface FOSTimeFilter : NSObject
 

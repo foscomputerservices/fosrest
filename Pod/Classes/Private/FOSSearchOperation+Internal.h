@@ -1,6 +1,6 @@
 //
 //  FOSSearchOperation+Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 10/7/13.
 //

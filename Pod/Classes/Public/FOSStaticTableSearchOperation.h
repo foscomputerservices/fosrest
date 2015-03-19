@@ -1,6 +1,6 @@
 //
 //  FOSStaticTableSearchOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/21/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSSearchOperation.h>
+#import "FOSSearchOperation.h"
 
 @interface FOSStaticTableSearchOperation : FOSSearchOperation
 

@@ -1,6 +1,6 @@
 //
 //  NSPropertyDescription+FOS.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 9/3/14.
 //

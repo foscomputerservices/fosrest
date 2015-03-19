@@ -1,6 +1,6 @@
 //
 //  FOSPushCacheChangesOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/3/13.
 //
@@ -27,12 +27,12 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
+#import "FOSOperation.h"
 
 @class FOSPushCacheChangesOperation;
 
 @interface FOSPushCacheChangesOperation : FOSOperation
 
-+ (FOSPushCacheChangesOperation *)pushCacheChangesOperation;
++ (instancetype)pushCacheChangesOperation;
 
 @end

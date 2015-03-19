@@ -5,7 +5,7 @@
 //  Copyright 2011 FOS Computer Services. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 
 @interface NSString (FOS)

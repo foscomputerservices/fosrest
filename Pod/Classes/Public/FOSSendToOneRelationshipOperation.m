@@ -1,6 +1,6 @@
 //
 //  FOSSendToOneRelationshipOperation.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/10/14.
 //

@@ -1,6 +1,6 @@
 //
 //  FOSWebServiceRequest.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -27,28 +27,14 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
+@import Foundation;
+#import "FOSOperation.h"
+#import "FOSRequestMethod.h"
+#import "FOSWSRequestState.h"
+#import "FOSHandlers.h"
 
-@class FOSCachedManagedObject;
-@class FOSWebService;
 @class FOSURLBinding;
 @protocol FOSProcessServiceRequest;
-
-typedef NS_ENUM(NSUInteger, FOSRequestMethod) {
-    FOSRequestMethodPOST = 1,
-    FOSRequestMethodPUT = 2,
-    FOSRequestMethodGET = 3,
-    FOSRequestMethodDELETE = 4
-};
-
-typedef NSManagedObjectID *(^FOSWebServiceWillProcessHandler)();
-
-typedef NS_ENUM(NSUInteger, FOSWSRequestState) {
-    FOSWSRequestStateNotStarted = 0,
-    FOSWSRequestStateReady = 1,
-    FOSWSRequestStateExecuting = 2,
-    FOSWSRequestStateFinished = 3
-};
 
 @interface FOSWebServiceRequest : FOSOperation {
     @protected

@@ -1,6 +1,6 @@
 //
 //  FOSOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -27,6 +27,7 @@
 //  SOFTWARE.
 //
 
+@import Foundation;
 @import CoreData;
 
 @class FOSRESTConfig;

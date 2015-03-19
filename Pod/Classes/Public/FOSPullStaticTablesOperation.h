@@ -1,6 +1,6 @@
 //
 //  FOSPullStaticTablesOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/23/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
+#import "FOSOperation.h"
 
 @interface FOSPullStaticTablesOperation : FOSOperation
 

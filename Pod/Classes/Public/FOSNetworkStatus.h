@@ -27,9 +27,6 @@
 //  SOFTWARE.
 //
 
-#ifndef FOSNetworkStatus_h
-#define FOSNetworkStatus_h
-
 /*!
  * @typedef FOSNetworkStatus
  */
@@ -44,4 +41,3 @@ typedef NS_ENUM(NSUInteger, FOSNetworkStatus) {
 
 #define kFOSNetworkStatusChangedNotification @"kFOSNetworkStatusChangedNotification"
 
-#endif

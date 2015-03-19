@@ -1,13 +1,10 @@
 //
-//  FOSRESTConfigOptions.h
+//  FOSRestConfigOptions.h
 //  Pods
 //
 //  Created by David Hunt on 3/18/15.
 //
 //
-
-#ifndef FOSRESTConfigOptions_h
-#define FOSRESTConfigOptions_h
 
 /*!
  * @enum FOSRESTConfigOptions
@@ -35,5 +32,3 @@ typedef NS_OPTIONS(NSUInteger, FOSRESTConfigOptions) {
     FOSRESTConfigUseOfflineFiles = (1 << 4),
     FOSRESTConfigDeleteDBOnLogout = (1 << 5),
 };
-
-#endif

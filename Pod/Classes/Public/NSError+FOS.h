@@ -1,6 +1,6 @@
 //
 //  NSError+FOS.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 5/23/12.
 //

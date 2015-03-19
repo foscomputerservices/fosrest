@@ -27,10 +27,10 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSJsonId.h>
+@import CoreData;
+#import "FOSJsonId.h"
 
 @class FOSItemMatcher;
-@class NSEntityDescription;
 
 @protocol FOSRetrieveCMODataOperationProtocol <NSObject>
 

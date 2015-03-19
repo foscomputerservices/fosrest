@@ -1,6 +1,6 @@
 //
 //  NSRelationshipDescription+FOS_Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/28/12.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 @interface NSRelationshipDescription (FOS_Internal)
 

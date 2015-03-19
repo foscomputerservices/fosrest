@@ -1,6 +1,6 @@
 //
 //  FOSAnalytics.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by Administrator on 9/15/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @protocol FOSAnalytics <NSObject>
 

@@ -1,6 +1,6 @@
 //
 //  FOSAtomicCreateServerRecordOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 10/3/13.
 //
@@ -27,8 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
-#import <FOSRest/FOSRetrieveCMODataOperationProtocol.h>
+#import "FOSOperation.h"
+#import "FOSRetrieveCMODataOperationProtocol.h"
 
 @interface FOSAtomicCreateServerRecordOperation : FOSOperation<FOSRetrieveCMODataOperationProtocol>
 

@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveRelationshipUpdatesOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 6/3/14.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
+#import "FOSOperation.h"
 
 @class FOSCachedManagedObject;
 @class FOSItemMatcher;

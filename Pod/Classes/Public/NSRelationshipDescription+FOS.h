@@ -1,6 +1,6 @@
 //
 //  NSRelationshipDescription+FOS.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/22/12.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 /*!
  * @typedef FOSForcePullType

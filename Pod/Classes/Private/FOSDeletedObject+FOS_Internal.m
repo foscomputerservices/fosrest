@@ -1,6 +1,6 @@
 //
 //  FOSDeletedObject+FOS_Internal.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 9/17/13.
 //

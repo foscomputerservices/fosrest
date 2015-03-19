@@ -21,7 +21,7 @@
 //     distribution.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 void *NewBase64Decode(
 	const char *inputBuffer,

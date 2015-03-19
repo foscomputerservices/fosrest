@@ -1,6 +1,6 @@
 //
 //  FOSUpdateServerRecordOperation.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/8/14.
 //

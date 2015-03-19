@@ -1,6 +1,6 @@
 //
 //  FOSRelationshipFault.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/18/13.
 //
@@ -27,10 +27,8 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-#import <FOSRest/FOSManagedObject.h>
-
+@import Foundation;
+#import "FOSManagedObject.h"
 
 @interface FOSRelationshipFault : FOSManagedObject
 

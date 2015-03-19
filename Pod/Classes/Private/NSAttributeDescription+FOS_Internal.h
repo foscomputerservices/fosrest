@@ -1,6 +1,6 @@
 //
 //  NSAttributeDescription+FOS_Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/1/13.
 //
@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 @interface NSAttributeDescription (FOS_Internal)
 

@@ -1,6 +1,6 @@
 //
 //  FOSManagedObjectContext.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 6/14/14.
 //

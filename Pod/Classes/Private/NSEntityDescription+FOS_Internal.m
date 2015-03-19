@@ -1,6 +1,6 @@
 //
 //  NSEntityDescription+FOS_Internal.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/28/12.
 //

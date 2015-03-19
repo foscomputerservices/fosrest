@@ -1,6 +1,6 @@
 //
-//  FOSRESTConfig.m
-//  FOSREST
+//  FOSRestConfig.m
+//  FOSRest
 //
 //  Created by David Hunt on 12/25/12.
 //

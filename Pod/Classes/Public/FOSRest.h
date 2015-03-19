@@ -1,6 +1,6 @@
 //
 //  FOSRest.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 2/7/15.
 //
@@ -28,9 +28,19 @@
 //
 
 #pragma mark - Types
+#import <FOSRest/FOSBindingOptions.h>
+#import <FOSRest/FOSHandlers.h>
+#import <FOSRest/FOSItemMatch.h>
 #import <FOSRest/FOSJsonId.h>
+#import <FOSRest/FOSLifecycleDirection.h>
+#import <FOSRest/FOSLifecyclePhase.h>
+#import <FOSRest/FOSLogLevel.h>
 #import <FOSRest/FOSRESTConfigOptions.h>
 #import <FOSRest/FOSNetworkStatus.h>
+#import <FOSRest/FOSRecoveryOption.h>
+#import <FOSRest/FOSRequestFormat.h>
+#import <FOSRest/FOSRequestMethod.h>
+#import <FOSRest/FOSWSRequestState.h>
 
 #pragma mark - Protocols
 #import <FOSRest/FOSProcessServiceRequest.h>

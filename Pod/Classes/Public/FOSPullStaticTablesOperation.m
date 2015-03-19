@@ -1,6 +1,6 @@
 //
 //  FOSPullStaticTablesOperation.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 4/23/13.
 //

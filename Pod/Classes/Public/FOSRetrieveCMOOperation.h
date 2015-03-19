@@ -1,6 +1,6 @@
 //
 //  FOSRetrieveCMOOperation.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 12/31/12.
 //
@@ -27,10 +27,11 @@
 //  SOFTWARE.
 //
 
-#import <FOSRest/FOSOperation.h>
-#import <FOSRest/FOSCachedManagedObject.h>
-#import <FOSRest/FOSURLBinding.h>
+#import "FOSOperation.h"
+#import "FOSJsonId.h"
+#import "FOSLifecyclePhase.h"
 
+@class FOSCachedManagedObject;
 @protocol FOSRetrieveCMODataOperationProtocol;
 
 @interface FOSRetrieveCMOOperation : FOSOperation

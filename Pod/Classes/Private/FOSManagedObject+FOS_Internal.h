@@ -1,6 +1,6 @@
 //
 //  FOSManagedObject+FOS_Internal.h
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/5/13.
 //

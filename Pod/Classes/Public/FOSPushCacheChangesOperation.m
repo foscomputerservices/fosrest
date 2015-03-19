@@ -1,6 +1,6 @@
 //
 //  FOSPushCacheChangesOperation.m
-//  FOSREST
+//  FOSRest
 //
 //  Created by David Hunt on 1/3/13.
 //
@@ -32,7 +32,7 @@
 
 @implementation FOSPushCacheChangesOperation
 
-+ (FOSPushCacheChangesOperation *)pushCacheChangesOperation {
++ (instancetype)pushCacheChangesOperation {
     return [[self alloc] init];
 }
 
