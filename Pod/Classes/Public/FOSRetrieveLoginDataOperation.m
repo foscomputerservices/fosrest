@@ -27,6 +27,7 @@
 //  SOFTWARE.
 //
 
+#import "FOSRetrieveLoginDataOperation.h"
 #import "FOSWebServiceRequest+FOS_Internal.h"
 #import "FOSREST_Internal.h"
 
