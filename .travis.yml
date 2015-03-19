@@ -1,8 +1,11 @@
 language: objective-c
-
 env:
-    SDK:iphonesimulator
-    SDK:iphoneos
+  matrix:
+    - SDK:iphonesimulator SDK:iphoneos
+
+  global:
+    - secure: "Sl/dLymLeop1McrFi/yLoU/LJoL19dlOge0+OF4PTCV9uSt0IJerrOrU2NkS++wQNTTUgkt34QedteZ55Z+kbGKeAvQMwG0g/Ubxbeza8xXfsqAqFH5akDQ4MlsKc3a+zgQ8TbUElFN1GufJ0/kjcrJTAc3uQhG9Q2cfNxBMPzg="
+    - secure: "CxfTC+rWgVeMSvo9wGT9GcPhMAbkrVVgPO9YmBxJW6rsq17t3w3rhX4cQV7dPZJwSHbi6jMeL2LVY61I+s1+lf6pYT6UpCtPfV7J0Lx5AkxJzDDpcWRz0VsWRrGhm5gb0mg05gEo1FXfhhCuLGEoSywPwzuDn+Ti2VkYqiuQ66I=" 
 
 before_install:
     - export LANG=en_US.UTF-8
@@ -18,5 +21,5 @@ script:
     - pod lib lint
     - cd Example
     - pod update
-    - xcodebuild build -workspace FOSREST.xcworkspace -scheme FOSREST-Example -destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1' | xcpretty -c
+    - xcodebuild test -workspace FOSREST.xcworkspace -scheme FOSREST-Example -destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1' | xcpretty -c
 

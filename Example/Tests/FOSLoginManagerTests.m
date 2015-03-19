@@ -58,19 +58,16 @@
     } \
 }
 
-
 @implementation FOSLoginManagerTests
 
 #pragma mark - Private Test Configuration
 
 + (NSString *)_parseAppId {
-    // TODO: Determine a way to store the Parse AppID w/o making it public
-    return @""; // TEST_APP_ID;
+    return @"uMDqEYDMrjEFRo4vtlhx4qaFVwrvw68cPPMsVHqp";
 }
 
 + (NSString *)_parseRESTToken {
-    // TODO: Determine a way to store the Parse REST Token w/o making it public
-    return @""; // TEST_TOKEN;
+    return @"XXRQQ3349yU4AV3wsVxetNAwOpnkYVCVloPCVppu";
 }
 
 #pragma mark - Class methods
@@ -84,15 +81,13 @@
 }
 
 + (void)setupStandardWebServiceConfigWithOptions:(FOSRESTConfigOptions)configOptions {
-    // TODO : Restore when determine how to access private headers
-    if (YES) { // !FOSRESTConfig.sharedInstanceInitialized) {
+    if (!FOSRESTConfig.sharedInstanceInitialized) {
 
         // We want all output during testing
         FOSSetLogLevel(FOSLogLevelPedantic);
 
         // Force to forget that we were logged in via a previous session
-        // TODO : Restore when determine how to access private headers
-//        [FOSLoginManager clearLoggedInUserId];
+        [FOSLoginManager clearLoggedInUserId];
 
         FOSTestHarnessAdapter *adapter =
             [FOSTestHarnessAdapter adapterWithApplicationId:[self _parseAppId]

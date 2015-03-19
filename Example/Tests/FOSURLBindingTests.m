@@ -103,9 +103,6 @@ SETUP_TEARDOWN_NOLOGIN
     XCTAssertEqual(urlBinding.requestFormat, expectedResult, @"Bad result");
 }
 
-// TODO : Restore when determine how to access private headers
-
-#ifdef later
 - (void)testSettingEntityDescription {
     FOSURLBinding *urlBinding = [[FOSURLBinding alloc] init];
     NSEntityDescription *entityDesc = [TestCreate entityDescription];
@@ -115,7 +112,6 @@ SETUP_TEARDOWN_NOLOGIN
 
     XCTAssertTrue([urlBinding.entityMatcher isEqual:expectedResult], @"Bad result");
 }
-#endif
 
 #pragma mark - Test Methods
 
@@ -139,8 +135,6 @@ SETUP_TEARDOWN_NOLOGIN
     XCTAssertNotNil(result, @"Bad result");
 }
 
-// TODO : Restore when determine how to access private headers
-#ifdef later
 - (void)testNilError_Failure {
     FOSURLBinding *urlBinding = [[FOSURLBinding alloc] init];
 
@@ -182,7 +176,6 @@ SETUP_TEARDOWN_NOLOGIN
     XCTAssertNil(result, @"Bad result");
     XCTAssertNotNil(error, @"Bad error");
 }
-#endif
 
 - (void)testDefaultBinding {
     FOSURLBinding *urlBinding = [[FOSURLBinding alloc] init];

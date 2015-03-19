@@ -5,122 +5,109 @@
 //  Created by David Hunt on 2/6/15.
 //  Copyright (c) 2015 David Hunt. All rights reserved.
 //
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 FOS Services, LLC
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//
 
-#pragma mark - Protocols
-#import <FOSRest/FOSProcessServiceRequest.h>
-#import <FOSRest/FOSRESTServiceAdapter.h>
+@import FOSRest;
 
-#pragma mark - Log Service
-#import <FOSRest/FOSLog.h>
+#pragma mark - Expose Private Testing Interfaces
 
-#pragma mark - Extensions
-#import <FOSRest/NSAttributeDescription+FOS.h>
-#import <FOSRest/NSDate+FOS.h>
-#import <FOSRest/NSEntityDescription+FOS.h>
-#import <FOSRest/NSError+FOS.h>
-#import <FOSRest/NSManagedObjectModel+FOS.h>
-#import <FOSRest/NSMutableDictionary+FOS.h>
-#import <FOSRest/NSMutableString+FOS.h>
-#import <FOSRest/NSPropertyDescription+FOS.h>
-#import <FOSRest/NSBundle+FOS.h>
-#import <FOSRest/NSRelationshipDescription+FOS.h>
-#import <FOSRest/NSString+FOS.h>
+@interface NSError (FOS_Internal)
 
-#pragma mark - Data Model
-#import <FOSRest/FOSManagedObject.h>
-#import <FOSRest/FOSCachedManagedObject.h>
-#import <FOSRest/FOSParseCachedManagedObject.h>
++ (NSError *)errorWithMessage:(NSString *)message;
++ (NSError *)errorWithMessage:(NSString *)message forAtom:(id<FOSCompiledAtomInfo>)atom;
 
-#pragma mark - Binding Support
-#import <FOSRest/FOSCompiledAtom.h>
-#import <FOSRest/FOSTwoWayRecordBinding.h>
-#import <FOSRest/FOSTwoWayPropertyBinding.h>
-#import <FOSRest/FOSTwoWayRecordBinding.h>
-#import <FOSRest/FOSExpression.h>
-#import <FOSRest/FOSAdapterBinding.h>
-#import <FOSRest/FOSAdapterBindingParser.h>
-#import <FOSRest/FOSCMOBinding.h>
-#import <FOSRest/FOSConcatExpression.h>
-#import <FOSRest/FOSConstantExpression.h>
-#import <FOSRest/FOSItemMatcher.h>
-#import <FOSRest/FOSKeyPathExpression.h>
-#import <FOSRest/FOSPropertyBinding.h>
-#import <FOSRest/FOSAttributeBinding.h>
-#import <FOSRest/FOSRelationshipBinding.h>
-#import <FOSRest/FOSSharedBindingReference.h>
-#import <FOSRest/FOSURLBinding.h>
-#import <FOSRest/FOSVariableExpression.h>
+@end
 
-#pragma mark - Logging
-#import <FOSRest/FOSAnalytics.h>
-#import <FOSRest/FOSParseAnalyticsManager.h>
+@interface FOSRESTConfig ()
 
-#pragma mark - Authentication
-#import <FOSRest/FOSUser.h>
-#import <FOSRest/FOSLoginManager.h>
++ (BOOL)sharedInstanceInitialized;
++ (void)resetSharedInstance;
 
-#pragma mark - Queue Management
-#import <FOSRest/FOSOperation.h>
-#import <FOSRest/FOSBackgroundOperation.h>
-#import <FOSRest/FOSBeginOperation.h>
-#import <FOSRest/FOSEnsureNetworkConnection.h>
-#import <FOSRest/FOSSendServerRecordOperation.h>
-#import <FOSRest/FOSAtomicCreateServerRecordOperation.h>
-#import <FOSRest/FOSCreateServerRecordOperation.h>
-#import <FOSRest/FOSFlushCachesOperation.h>
-#import <FOSRest/FOSLoginOperation.h>
-#import <FOSRest/FOSLogoutOperation.h>
-#import <FOSRest/FOSRetrieveLoginDataOperation.h>
-#import <FOSRest/FOSPushCacheChangesOperation.h>
-#import <FOSRest/FOSRefreshUserOperation.h>
-#import <FOSRest/FOSRetrieveCMOOperation.h>
-#import <FOSRest/FOSRetrieveToOneRelationshipOperation.h>
-#import <FOSRest/FOSRetrieveToManyRelationshipOperation.h>
-#import <FOSRest/FOSPullStaticTablesOperation.h>
-#import <FOSRest/FOSSendToOneRelationshipOperation.h>
-#import <FOSRest/FOSSendToManyRelationshipOperation.h>
-#import <FOSRest/FOSStaticTableSearchOperation.h>
-#import <FOSRest/FOSUpdateServerRecordOperation.h>
+@end
 
-#import <FOSRest/FOSSaveOperation.h>
-#import <FOSRest/FOSSleepOperation.h>
-#import <FOSRest/FOSThreadSleep.h>
+@interface FOSLoginManager(Test)
 
-#pragma mark - Search Support
-#import <FOSRest/FOSSearchOperation.h>
-#import <FOSRest/FOSTimeFilter.h>
++ (void)dropSharedInstace;
++ (void)clearLoggedInUserId;
 
-#pragma mark - Cache Management
-#import <FOSRest/FOSCacheManager.h>
-#import <FOSRest/FOSDatabaseManager.h>
-#import <FOSRest/FOSManagedObjectContext.h>
+- (void)setLoggedInUserId:(NSManagedObjectID *)loggedInUserId;
 
-#pragma mark - REST Adapters
-#import <FOSRest/FOSBoundServiceAdapter.h>
-#import <FOSRest/FOSParseServiceAdapter.h>
+@end
 
-#pragma mark - REST Support
-#import <FOSRest/FOSRelationshipFault.h>
-#import <FOSRest/FOSWebServiceRequest.h>
-#import <FOSRest/FOSParseFileService.h>
-#import <FOSRest/FOSRESTConfig.h>
-#import <FOSRest/FOSNetworkStatusMonitor.h>
+#ifdef CONFIGURATION_Debug
+@interface FOSOperation (Testing)
 
-#pragma mark - Stock Transformers
-#import <FOSRest/FOSValueTransformer.h>
-#import <FOSRest/FOSJSONTransformer.h>
-#import <FOSRest/FOSURLTransformer.h>
+- (void)setError:(NSError *)error;
 
-#pragma mark - Parse.com Support
-#import <FOSRest/FOSParseCachedManagedObject.h>
-#import <FOSRest/FOSParseUser.h>
+@end
+#endif
 
-#pragma mark - Internal Testing Headers
-//#import "../Pods/Headers/Private/FOSREST/FOSNetworkStatusMonitor_FOS_Internal.h"
-//#import "../Pods/Headers/Private/FOSREST/FOSRESTConfig+FOS_Internal.h"
-//#import "../Pods/Headers/Private/FOSREST/FOSLoginManager_Internal.h"
-//#import "../Pods/Headers/Private/FOSREST/FOSOperation+FOS_Internal.h"
-//#import "../Pods/Headers/Private/FOSREST/FOSWebServiceRequest+FOS_Internal.h"
-//#import "../Pods/Headers/Private/FOSREST/NSError+FOS_Internal.h"
-//#import "../Pods/Headers/Private/FOSREST/FOSOperation+FOS_Internal.h"
-//#import "../Pods/Headers/Private/FOSREST/FOSPullStaticTablesOperation+FOS_Internal.h"
+@interface FOSPullStaticTablesOperation ()
+
+#pragma mark - Testing Only!
+
++ (void)_initStaticTablesList:(BOOL)resetTables managedObjectContext:(NSManagedObjectContext *)moc;
+
+@end
+
+@interface FOSNetworkStatusMonitor ()
+
+/*!
+ * @property forceOffline
+ *
+ * This is an internal property for testing online/offline mode.  By setting
+ * this property to YES, it will cause the receiver to report back
+ * FOSNetworkStatusNotReachable from the networkStatus property.  It will also
+ * trigger the appropriate change in status notifications.
+ *
+ * @discussion
+ *
+ * Setting this property will reset forceOnline to NO.
+ */
+@property (nonatomic, assign, getter=isForcedOffline) BOOL forceOffline;
+
+@end
+
+@interface FOSCachedManagedObject(FOS_Internal)
+
++ (NSString *)entityName;
+
+/*!
+ * @method entityDescription
+ *
+ * Returns the NSEntityDescription associated with the
+ * receiver's class.
+ */
++ (NSEntityDescription *)entityDescription;
+
+/*!
+ * @method initSkippingReadOnlyCheck
+ *
+ * An internal initializer that allows skipping the
+ * static table check so that static table instances
+ * can be created when being pulled from the server.
+ */
+- (id)initSkippingReadOnlyCheck;
+
+@end
