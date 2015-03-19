@@ -1,6 +1,6 @@
 # fosrest
 
-[![CI Status](http://img.shields.io/travis/David Hunt/fosrest.svg?style=flat)](https://travis-ci.org/foscomputerservices/fosrest)
+[![CI Status](http://img.shields.io/travis/foscomputerservices/fosrest.svg?style=flat)](https://travis-ci.org/foscomputerservices/fosrest)
 [![Version](https://img.shields.io/cocoapods/v/fosrest.svg?style=flat)](http://cocoadocs.org/docsets/fosrest)
 [![License](https://img.shields.io/cocoapods/l/fosrest.svg?style=flat)](http://cocoadocs.org/docsets/fosrest)
 [![Platform](https://img.shields.io/cocoapods/p/fosrest.svg?style=flat)](http://cocoadocs.org/docsets/fosrest)
