@@ -65,7 +65,6 @@
 		6368485B1A8504FB00B36CD9 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368484E1A8504FB00B36CD9 /* User.m */; };
 		6368485C1A8504FB00B36CD9 /* Widget.m in Sources */ = {isa = PBXBuildFile; fileRef = 636848501A8504FB00B36CD9 /* Widget.m */; };
 		6368485D1A8504FB00B36CD9 /* WidgetInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 636848521A8504FB00B36CD9 /* WidgetInfo.m */; };
-		63685BA31AC5017A00F8DB02 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = 63685BA21AC5017A00F8DB02 /* CHANGELOG.md */; };
 		6391203B1AB9F82100CA5E29 /* FOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */; };
 		6391203F1AB9FAF800CA5E29 /* FOSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391203E1AB9FAF800CA5E29 /* FOSViewController.swift */; };
 		63B8BEA51A87C164002BD72F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B8BEA41A87C164002BD72F /* CoreData.framework */; };
@@ -595,7 +594,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6391203B1AB9F82100CA5E29 /* FOSAppDelegate.swift in Sources */,
-				63685BA31AC5017A00F8DB02 /* CHANGELOG.md in Sources */,
 				6391203F1AB9FAF800CA5E29 /* FOSViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
