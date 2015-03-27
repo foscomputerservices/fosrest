@@ -65,6 +65,7 @@
 		6368485B1A8504FB00B36CD9 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368484E1A8504FB00B36CD9 /* User.m */; };
 		6368485C1A8504FB00B36CD9 /* Widget.m in Sources */ = {isa = PBXBuildFile; fileRef = 636848501A8504FB00B36CD9 /* Widget.m */; };
 		6368485D1A8504FB00B36CD9 /* WidgetInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 636848521A8504FB00B36CD9 /* WidgetInfo.m */; };
+		63685BA31AC5017A00F8DB02 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = 63685BA21AC5017A00F8DB02 /* CHANGELOG.md */; };
 		6391203B1AB9F82100CA5E29 /* FOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */; };
 		6391203F1AB9FAF800CA5E29 /* FOSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391203E1AB9FAF800CA5E29 /* FOSViewController.swift */; };
 		63B8BEA51A87C164002BD72F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B8BEA41A87C164002BD72F /* CoreData.framework */; };
@@ -176,6 +177,7 @@
 		636848511A8504FB00B36CD9 /* WidgetInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetInfo.h; sourceTree = "<group>"; };
 		636848521A8504FB00B36CD9 /* WidgetInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetInfo.m; sourceTree = "<group>"; };
 		6368485E1A850D2200B36CD9 /* FOSRest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FOSRest.h; sourceTree = "<group>"; };
+		63685BA21AC5017A00F8DB02 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		63836EDC1A85B9FC00209BB2 /* FOSREST.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FOSREST.xcdatamodel; sourceTree = "<group>"; };
 		639120391AB9F82100CA5E29 /* FOSRESTApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FOSRESTApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOSAppDelegate.swift; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				63685BA21AC5017A00F8DB02 /* CHANGELOG.md */,
 				5956E780BB088907DC9E7E45 /* fosrest.podspec */,
 				628F70E8B4533AA03B0CDC98 /* README.md */,
 				AA4EFC414121C42B064F5028 /* LICENSE */,
@@ -592,6 +595,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6391203B1AB9F82100CA5E29 /* FOSAppDelegate.swift in Sources */,
+				63685BA31AC5017A00F8DB02 /* CHANGELOG.md in Sources */,
 				6391203F1AB9FAF800CA5E29 /* FOSViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
