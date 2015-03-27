@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = "FOSRest"
+  s.name             = "fosrest"
   s.module_name      = "FOSRest"
   s.version          = "0.2.4"
   s.summary          = "A group of classes for connecting CoreData to REST services."
