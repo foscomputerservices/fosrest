@@ -86,7 +86,7 @@
 		00BA7E9F9727026C81060D03 /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		30FC2FC44F3CDF78CBFC4B25 /* Pods_FOSRESTApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FOSRESTApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EDDDE845DE761383B52D8CC /* Pods-FOSREST.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FOSREST.release.xcconfig"; path = "Pods/Target Support Files/Pods-FOSREST/Pods-FOSREST.release.xcconfig"; sourceTree = "<group>"; };
-		5956E780BB088907DC9E7E45 /* fosrest.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = fosrest.podspec; path = ../fosrest.podspec; sourceTree = "<group>"; };
+		5956E780BB088907DC9E7E45 /* FOSRest.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = FOSRest.podspec; path = ../FOSRest.podspec; sourceTree = "<group>"; };
 		5AA758B02B6CF6AC5AC91F56 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		5E0C9DDA77DECE28779523F2 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* FOSRESTApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FOSRESTApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +176,7 @@
 		636848511A8504FB00B36CD9 /* WidgetInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetInfo.h; sourceTree = "<group>"; };
 		636848521A8504FB00B36CD9 /* WidgetInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetInfo.m; sourceTree = "<group>"; };
 		6368485E1A850D2200B36CD9 /* FOSRest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FOSRest.h; sourceTree = "<group>"; };
+		63685BA21AC5017A00F8DB02 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		63836EDC1A85B9FC00209BB2 /* FOSREST.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FOSREST.xcdatamodel; sourceTree = "<group>"; };
 		639120391AB9F82100CA5E29 /* FOSRESTApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FOSRESTApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FOSAppDelegate.swift; sourceTree = "<group>"; };
@@ -361,7 +362,8 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				5956E780BB088907DC9E7E45 /* fosrest.podspec */,
+				63685BA21AC5017A00F8DB02 /* CHANGELOG.md */,
+				5956E780BB088907DC9E7E45 /* FOSRest.podspec */,
 				628F70E8B4533AA03B0CDC98 /* README.md */,
 				AA4EFC414121C42B064F5028 /* LICENSE */,
 			);

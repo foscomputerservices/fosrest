@@ -1,4 +1,4 @@
-# fosrest
+# FOSRest
 
 [![CI Status](http://img.shields.io/travis/foscomputerservices/fosrest.svg?style=flat)](https://travis-ci.org/foscomputerservices/fosrest)
 [![Version](https://img.shields.io/cocoapods/v/fosrest.svg?style=flat)](http://cocoadocs.org/docsets/fosrest)
@@ -13,10 +13,10 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-fosrest is available through [CocoaPods](http://cocoapods.org). To install
+FOSRest is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
-    pod "fosrest"
+    pod "FOSRest"
 
 ## Author
 
@@ -24,5 +24,5 @@ David Hunt, david@foscomputerservices.com
 
 ## License
 
-fosrest is available under the MIT license. See the LICENSE file for more info.
+FOSRest is available under the MIT license. See the LICENSE file for more info.
 
