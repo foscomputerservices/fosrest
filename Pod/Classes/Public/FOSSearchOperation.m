@@ -229,7 +229,6 @@
     __block FOSSearchOperation *blockSelf = self;
 
     __block NSMutableSet *newEntities = [NSMutableSet set];
-    __block NSError *searchError = nil;
 
     // The top-level operation that will handle the pulled results
     __block FOSBackgroundOperation *finalOp =  [FOSBackgroundOperation backgroundOperationWithRecoverableRequest:^FOSRecoveryOption(BOOL cancelled, NSError *error) {
@@ -238,7 +237,6 @@
         : FOSRecoveryOption_NoRecovery;
 
         blockSelf.results = newEntities;
-        blockSelf->_error = searchError;
 
         return result;
     }];
@@ -254,9 +252,10 @@
                 jsonFragments = (NSArray *)webRequest.jsonResult;
             }
             else {
-                NSString *msgFormat = @"Expected search response as an NSArray, but received %@";
+                NSString *msgFormat = @"Expected search response as an NSArray, but received %@ for request: %@.  Is it possible that a JSON_WRAPPER_KEY specification is missing?";
                 NSString *msg = [NSString stringWithFormat:msgFormat,
-                                 NSStringFromClass([webRequest.jsonResult class])];
+                                 NSStringFromClass([webRequest.jsonResult class]),
+                                 webRequest.url];
 
                 localError = [NSError errorWithMessage:msg];
                 blockSelf->_error = localError;
@@ -329,7 +328,7 @@
                         }
                         else if (!self.saveIndividualResults) {
                             newEntities = nil;
-                            searchError = fetchEntityOp.error;
+                            blockSelf->_error = fetchEntityOp.error;
                         }
                     }];
 

@@ -79,7 +79,7 @@ ADAPTER ::
         LIFECYCLE :: RETRIEVE_SERVER_RECORD ;
         REQUEST_METHOD :: GET ;
         REQUEST_FORMAT :: NO_DATA ;
-        END_POINT :: ( '1/user/' + $CMOID ) ;
+        END_POINT :: ( '1/users/' + $CMOID ) ;
 #        END_POINT_PARAMETERS :: 
 #            { 'keys' : # TODO : We should derrive this from END_POINT.ATTRIBUTE_BINDINGS.ATTRIBUTES } ,
         CMO_BINDING :: $$PARSE_CMO_BINDING ;
@@ -127,7 +127,7 @@ ADAPTER ::
         BINDING_OPTIONS :: UNORDERED | ORDERED | ONE_TO_ONE ;
         REQUEST_METHOD :: GET ;
         REQUEST_FORMAT :: NO_DATA ;
-        END_POINT :: ( '1/user/' + $CMOID ) ;
+        END_POINT :: ( '1/users/' + $CMOID ) ;
 #        END_POINT_PARAMETERS :: 
 #            { 'keys' : # TODO : We should derrive this from END_POINT.ATTRIBUTE_BINDINGS.ATTRIBUTES } ,
         CMO_BINDING :: $$PARSE_CMO_BINDING ;

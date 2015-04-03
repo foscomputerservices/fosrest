@@ -57,6 +57,10 @@
 }
 
 - (NSURL *)url {
+    if (_urlRequest != nil) {
+        return _urlRequest.URL;
+    }
+
     FOSRESTConfig *restConfig = [FOSRESTConfig sharedInstance];
 
     // Build up the full URL

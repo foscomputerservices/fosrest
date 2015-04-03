@@ -362,6 +362,8 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 - (void)refreshLoggedInUser:(FOSLoginHandler)handler {
     NSAssert([NSThread isMainThread], @"User refresh should only be done from the main thread.");
 
+    __block FOSLoginManager *blockSelf = self;
+
     if (self.isLoggedIn) {
         FOSUser *loggedInUser = self.loggedInUser;
 
@@ -377,6 +379,11 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                 [refreshOp addDependency:pullStaticTablesOp];
 
                 FOSBackgroundOperation *handlerOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
+
+                    if (error != nil) {
+                        [[blockSelf class] clearLoggedInUserId];
+                    }
+
                     if (handler != nil) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             handler(refreshOp.error == nil, refreshOp.error);
