@@ -56,10 +56,6 @@
 
 #pragma mark - Overrides
 
-- (NSError *)error {
-    return _error;
-}
-
 - (void)main {
     [super main];
 
