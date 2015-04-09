@@ -176,6 +176,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
                 // No need for KVO here and the local member variables are not yet set
                 // by definition.
                 [[self class] clearLoggedInUserId];
+                __loggedInUserMOID = nil;
             }
         }
     }
@@ -382,6 +383,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
                     if (error != nil) {
                         [[blockSelf class] clearLoggedInUserId];
+                        blockSelf->__loggedInUserMOID = nil;
                     }
 
                     if (handler != nil) {

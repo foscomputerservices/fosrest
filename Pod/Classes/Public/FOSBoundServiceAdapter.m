@@ -44,7 +44,7 @@
 }
 
 + (instancetype)serviceAdapterFromBindingDescription:(NSString *)description
-                                          error:(NSError *__autoreleasing *)error {
+                                               error:(NSError *__autoreleasing *)error {
     return [[self alloc] initFromBindingDescription:description
                                               error:error];
 }
@@ -75,17 +75,14 @@
 - (id)initFromBindingDescription:(NSString *)description error:(NSError **)error {
     NSParameterAssert(description != nil);
     if (error != nil) { *error = nil; }
-
     NSError *localError = nil;
-    FOSAdapterBinding *adapterBinding =
-        [FOSAdapterBinding parseAdapterBindingDescription:description
-                                               forAdapter:self
-                                                    error:&localError];
 
-    if (adapterBinding && localError == nil) {
-        self = [self initWithBinding:adapterBinding];
+    if ((self = [super init]) != nil) {
+        _bindings = [FOSAdapterBinding parseAdapterBindingDescription:description
+                                                           forAdapter:self                                                    error:&localError];
     }
-    else {
+
+    if (localError != nil) {
         if (error != nil) {
             *error = localError;
         }
@@ -99,16 +96,15 @@
 - (id)initFromBindingFile:(NSURL *)url error:(NSError **)error {
     NSParameterAssert(url != nil);
     if (error != nil) { *error = nil; }
-
     NSError *localError = nil;
-    FOSAdapterBinding *bindings = [FOSAdapterBinding parseAdapterBindings:url
-                                                               forAdapter:self
-                                                                    error:&localError];
 
-    if (bindings && localError == nil) {
-        self = [self initWithBinding:bindings];
+    if ((self = [super init]) != nil) {
+        _bindings = [FOSAdapterBinding parseAdapterBindings:url
+                                                 forAdapter:self
+                                                      error:&localError];
     }
-    else {
+
+    if (localError != nil) {
         if (error != nil) {
             *error = localError;
         }
@@ -157,13 +153,13 @@
 - (FOSURLBinding *)urlBindingForLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                              forLifecycleStyle:(NSString *)lifecycleStyle
                                forRelationship:(NSRelationshipDescription *)relDesc
-                                 forEntity:(NSEntityDescription *)entity {
+                                     forEntity:(NSEntityDescription *)entity {
     NSParameterAssert(entity != nil);
     NSParameterAssert(lifecyclePhase != FOSLifecyclePhaseRetrieveServerRecordRelationship ||
                       relDesc != nil);
 
     FOSURLBinding *urlBinding = [_bindings urlBindingForLifecyclePhase:lifecyclePhase
-                                                        forLifecycleStyle:lifecycleStyle
+                                                     forLifecycleStyle:lifecycleStyle
                                                        forRelationship:relDesc
                                                              forEntity:entity];
 
@@ -248,7 +244,7 @@
         if (attrDesc.attributeType == NSTransformableAttributeType) {
 
             NSValueTransformer *transformer =
-                [NSValueTransformer valueTransformerForName:attrDesc.valueTransformerName];
+            [NSValueTransformer valueTransformerForName:attrDesc.valueTransformerName];
 
             if (transformer == nil) {
                 NSString *msgFmt = NSLocalizedString(@"Unable to locate an NSValueTransformer of type '%@' as specified by the NSAttributeDescription '%@' of Entity '%@'.", "");
@@ -291,7 +287,7 @@
 
         result = nil;
     }
-    
+
     return result;
 }
 
@@ -311,7 +307,7 @@
     else if (jsonValue != nil) {
         if (attrDesc.attributeType == NSTransformableAttributeType) {
             NSValueTransformer *transformer =
-                [NSValueTransformer valueTransformerForName:attrDesc.valueTransformerName];
+            [NSValueTransformer valueTransformerForName:attrDesc.valueTransformerName];
 
             if ([[transformer class] conformsToProtocol:@protocol(FOSValueTransformer)]) {
                 id<FOSValueTransformer> fosTransformer = (id<FOSValueTransformer>)transformer;
@@ -348,7 +344,7 @@
 
         result = nil;
     }
-    
+
     return result;
 }
 
@@ -376,10 +372,10 @@
 }
 
 - (BOOL)processWebServiceResponse:(NSHTTPURLResponse *)httpResponse
-              json:(id) jsonResult
-            responseData:(NSData *)data
-                userInfo:(NSMutableDictionary *)errorUserInfo
-                   error:(NSError **)error {
+                             json:(id) jsonResult
+                     responseData:(NSData *)data
+                         userInfo:(NSMutableDictionary *)errorUserInfo
+                            error:(NSError **)error {
     NSString *msg = [NSString stringWithFormat:@"Concrete subclasses of FOSBoundServiceAdapter must override and implement %@.", NSStringFromSelector(_cmd)];
 
     @throw [NSException exceptionWithName:@"FOSREST_MustOverride"
@@ -435,7 +431,7 @@
         NSException *e = [NSException exceptionWithName:@"FOSREST" reason:msg userInfo:nil];
         @throw e;
     }
-    
+
     return result;
 }
 
@@ -505,7 +501,7 @@
     NSDateFormatter *formatter = [self _dateFormatterForAttribute:attrDesc error:error];
 
     if (formatter != nil) {
-       result = [formatter stringFromDate:date];
+        result = [formatter stringFromDate:date];
     }
 
     return result;
@@ -550,19 +546,19 @@
 
         NSArray *formatStrings = [[self class] serverDateFormats];
         NSMutableArray *formatters = [NSMutableArray arrayWithCapacity:formatStrings.count];
-
+        
         for (NSString *formatString in formatStrings) {
-
+            
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             dateFormatter.dateFormat = formatString;
             dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-
+            
             [formatters addObject:dateFormatter];
         }
-
+        
         __serverDateFormatters = formatters;
     }
-
+    
     return __serverDateFormatters;
 }
 
