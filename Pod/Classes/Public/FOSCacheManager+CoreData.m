@@ -151,10 +151,8 @@
                     completeDeletion = NO;
                 }
                 else if (error != nil) {
-                    // TODO : This is parse specific
-                    // 101 = object not found for delete, the record is no longer on the server
-
-                    if (error.code == 101) {
+                    // TODO : This seems reasonable, but possibly the adapter needs to be involved
+                    if (error.code == 404) {
                         completeDeletion = YES;
                         result = FOSRecoveryOption_Recovered;
                     }

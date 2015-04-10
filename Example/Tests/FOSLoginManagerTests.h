@@ -46,5 +46,6 @@ typedef void (^TestCallBack)();
 + (void)setupStandardWebServiceConfigAndLogInWithOptions:(FOSRESTConfigOptions)configOptions
                                              andCallback:(TestCallBack)handler;
 + (void)tearDownWebServiceAndLogOut;
++ (void)tearDownWebServiceAndLogOut:(TestCallBack)handler;
 
 @end

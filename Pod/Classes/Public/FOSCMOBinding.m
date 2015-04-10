@@ -356,9 +356,13 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                                                   error:&localError];
                     }
 
-                    if (!result) {
+                    if (!result || localError != nil) {
                         break;
                     }
+                }
+
+                if (localError != nil) {
+                    break;
                 }
             }
         }

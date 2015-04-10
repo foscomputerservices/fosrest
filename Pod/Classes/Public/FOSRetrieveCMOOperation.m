@@ -142,8 +142,8 @@
         }
     }
 
-    // This is expensive, so don't let it out into any other build types
-#ifdef CONFIGURATION_Debug
+    // This is *extrmely* expensive, so don't let it out into any other build types
+#if defined(DEBUG) && !defined(NS_BLOCK_ASSERTIONS)
     {
         Class class = NSClassFromString(entity.managedObjectClassName);
 
@@ -336,54 +336,65 @@
             }
         }
 
-        FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
-            if (fetchDataOp.error == nil) {
-                NSError *localError = nil;
+        if (localError == nil) {
 
-                if (fetchDataOp.jsonId == nil) {
-                    NSString *msgFmt = @"The CMO data operation returned a nil jsonId while retrieving entity %@";
-                    NSString *msg = [NSString stringWithFormat:msgFmt, blockSelf.entity.name];
+            // Once we've retrieved our jsonId with the fetchDataOp, then we need to update our
+            // local information accordingly before running our main() method.
+            FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
+                if (fetchDataOp.error == nil) {
+                    NSError *localError = nil;
 
-                    localError = [NSError errorWithMessage:msg];
-                }
-                if (localError == nil && fetchDataOp.jsonResult == nil) {
-                    NSString *msgFmt = @"The CMO data operation returned a nil jsonResult while retrieving entity %@";
-                    NSString *msg = [NSString stringWithFormat:msgFmt, blockSelf.entity.name];
+                    if (fetchDataOp.jsonId == nil) {
+                        NSString *msgFmt = @"The CMO data operation returned a nil jsonId while retrieving entity %@";
+                        NSString *msg = [NSString stringWithFormat:msgFmt, blockSelf.entity.name];
 
-                    localError = [NSError errorWithMessage:msg];
-                }
+                        localError = [NSError errorWithMessage:msg];
+                    }
+                    if (localError == nil && fetchDataOp.jsonResult == nil) {
+                        NSString *msgFmt = @"The CMO data operation returned a nil jsonResult while retrieving entity %@";
+                        NSString *msg = [NSString stringWithFormat:msgFmt, blockSelf.entity.name];
 
-                if (localError == nil &&
-                    ![[blockSelf class] _checkItemDeleted:fetchDataOp.jsonId
-                                                forEntity:blockSelf->_entity
-                                                    error:&localError]) {
-                    blockSelf->_jsonId = fetchDataOp.jsonId;
-                    blockSelf.dslQuery = fetchDataOp.dslQuery;
+                        localError = [NSError errorWithMessage:msg];
+                    }
+
+                    if (localError == nil &&
+                        ![[blockSelf class] _checkItemDeleted:fetchDataOp.jsonId
+                                                    forEntity:blockSelf->_entity
+                                                        error:&localError]) {
+
+                        // We do NOT call the jsonId property setter here, just save the value.
+                        // This is because we already have the json in fdo.jsonResult.  If we
+                        // called the jsonId setter here, it would automatically try to retrieve
+                        // the json again.
+                        blockSelf->_jsonId = fetchDataOp.jsonId;
+                        blockSelf.dslQuery = fetchDataOp.dslQuery;
                         blockSelf.mergeResults = fetchDataOp.mergeResults;
-                    blockSelf.json = fetchDataOp.jsonResult;
+                        blockSelf.json = fetchDataOp.jsonResult;
 
-                    // Also store the 'originalJson' in the bindings if we're the top-level
-                    // data pull as it can have related-CMO data as well.
-                    if (fetchDataOp.originalJsonResult != nil) {
-                        bindings[@"originalJsonResult"] = fetchDataOp.originalJsonResult;
+                        // Also store the 'originalJson' in the bindings if we're the top-level
+                        // data pull as it can have related-CMO data as well.
+                        if (fetchDataOp.originalJsonResult != nil) {
+                            bindings[@"originalJsonResult"] = fetchDataOp.originalJsonResult;
+                        }
+                    }
+
+                    if (localError != nil) {
+                        blockSelf->_error = localError;
+                        [blockSelf _updateReady];
                     }
                 }
-
-                if (localError != nil) {
-                    blockSelf->_error = localError;
+                else {
                     [blockSelf _updateReady];
                 }
-            }
-            else {
-                [blockSelf _updateReady];
-            }
-        }];
+            }];
 
-        [bgOp addDependency:fetchDataOp];
-        [self addDependency:bgOp];
+            [bgOp addDependency:fetchDataOp];
+            [self addDependency:bgOp];
+        }
 
         if (localError != nil) {
             _error = localError;
+            [self _updateReady];
         }
     }
 
@@ -638,6 +649,7 @@
 
     if (localError != nil) {
         _error = localError;
+        [self _updateReady];
     }
 }
 
@@ -749,6 +761,7 @@
                 }
 
                 if (_error != nil) {
+                    [self _updateReady];
                     break;
                 }
             };
@@ -961,20 +974,6 @@
                 }
             }
 
-            // NOTE: It's a bit unclear how this is possible. Nonetheless we get crash logs
-            //       where @[ newCMO ] above crashes with newCMO == nil.  I've reviewed
-            //       _objectFromJSON:... and it's not obvious how such a thing is possible.
-            //       Maybe from the logs we'll learn more.
-            else if (newCMO == nil) {
-                NSString *msgFmt = @"Unknown error. Unable to create/retrieve object for id '%@'";
-                NSString *msg = [NSString stringWithFormat:msgFmt, [_jsonId description]];
-                NSDictionary *userInfo = @{
-                   @"JSON_ID" : _jsonId,
-                   @"JSON" : _json
-                };
-
-                _error = [NSError errorWithDomain:@"FOSREST" message:msg andUserInfo:userInfo];
-            }
             else {
                 _error = localError;
             }
@@ -1011,7 +1010,7 @@
             NSAssert([[self class] _bindingValueForKey:_jsonId entity:_entity inBindings:_bindings] != nil, @"Entity object missing from bindings???");
             NSAssert(![[[self class] _bindingValueForKey:_jsonId entity:_entity inBindings:_bindings] isKindOfClass:[NSNull class]],
                      @"Entity object missing from bindings???");
-#ifdef CONFIGURATION_Debug
+#ifdef DEBUG
             // This is expensive, so don't let it out into any other build type
             NSAssert([NSClassFromString(_entity.managedObjectClassName) fetchWithId:_jsonId] != nil,
                      @"Where's the instance in the DB???");

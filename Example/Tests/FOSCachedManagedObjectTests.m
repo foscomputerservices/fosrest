@@ -703,6 +703,11 @@ TEARDOWN_LOGIN
                     XCTAssertTrue(remainingDels.count == 0, @"%lu deleted TestCreate records remain??",
                                   (unsigned long)remainingDels.count);
 
+                    // All deletion records should be gone too
+                    FOSDatabaseManager *dbm = [FOSRESTConfig sharedInstance].databaseManager;
+                    NSArray *deleteCmdObjs = [dbm fetchEntitiesNamed:@"FOSDeletedObject"];
+                    XCTAssertEqual(deleteCmdObjs.count, 0, @"%lu FOSDeletedObject instances still remain in the db!!!", deleteCmdObjs.count);
+
                     // TODO : Need a search op to test that it was deleted on the server
 
                     END_TEST

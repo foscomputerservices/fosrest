@@ -27,10 +27,6 @@
 //  SOFTWARE.
 //
 
-#ifdef DEBUG
-#define DEBUG_PRINT
-#endif
-
 #import "FOSOperation+FOS_Internal.h"
 
 @implementation FOSOperation (FOS_Internal)
@@ -59,17 +55,17 @@
 
 #pragma mark - Private Methods
 
-#ifdef DEBUG_PRINT
-- (void)_dumpDeps {
+#ifdef DEBUG
+- (void)dumpDeps {
     NSMutableSet *result = [NSMutableSet setWithCapacity:self.dependencies.count];
 
-#ifdef DEBUG_PRINT
+#ifdef DEBUG
     FOSLogDebug(@"\r\nFLATTENED BEGIN ***");
 #endif
 
     [self _addDepsFromOperation:self toSet:result level:0 stopAtBegin:YES];
 
-#ifdef DEBUG_PRINT
+#ifdef DEBUG
     FOSLogDebug(@"\r\n*** FLATTENED END");
 #endif
 }
@@ -85,7 +81,7 @@
 
     for (FOSOperation *nextOp in operation.dependencies) {
 
-#ifdef DEBUG_PRINT
+#ifdef DEBUG
         if (level >= 0 && ![set containsObject:nextOp]) {
             NSMutableString *tabFormat = [NSMutableString stringWithCapacity:(NSUInteger)level];
 
@@ -93,10 +89,11 @@
                 [tabFormat appendString:@"  "];
             }
 
-            [tabFormat appendString:@"%i : %@ - %@ - %@ - %@"];
+            [tabFormat appendString:@"%i : %@ - %@ - %@ - %@ - %@"];
 
             FOSLogDebug(tabFormat, level, [nextOp description],
-                  nextOp.isQueued ? (nextOp.isFinished ? @"FINISHED" : @"QUEUED") : @"*** NOT QUEUED ***",
+                        nextOp.isQueued ? (nextOp.isFinished ? @"FINISHED" :(nextOp.isExecuting ? @"EXECUTING" : @"QUEUED")) : @"*** NOT QUEUED ***",
+                        nextOp.error == nil ? @"NO ERROR" : [NSString stringWithFormat:@"FAILURE: %@", nextOp.error],
                   nextOp.groupName,
                   nextOp.debugDescription);
         }
