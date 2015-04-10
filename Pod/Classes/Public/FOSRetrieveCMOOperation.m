@@ -133,7 +133,7 @@
     if ([bindingVal isKindOfClass:[NSManagedObjectID class]]) {
         result = (FOSCachedManagedObject *)[moc objectWithID:(NSManagedObjectID *)bindingVal];
     }
-    else if (bindingVal == nil) {
+    else if (bindingVal == nil || [bindingVal isKindOfClass:[NSNull class]]) {
         Class class = NSClassFromString(entity.managedObjectClassName);
         result = [class fetchWithId:jsonId];
 
@@ -226,8 +226,8 @@
                             [matchPredStr appendFormat:@"(%@ == %%@)", attrDesc.name];
 
                             foundStringProp =
-                                foundStringProp ||
-                                [svrValue isKindOfClass:[NSString class]];
+                            foundStringProp ||
+                            [svrValue isKindOfClass:[NSString class]];
                         }
                     }
                 };
@@ -237,7 +237,7 @@
                                                            argumentArray:predVals];
 
                     NSArray *matched = [cmoClass fetchWithPredicate:pred];
-                    
+
                     if (matched.count == 1) {
                         result = matched.lastObject;
                     }
@@ -250,7 +250,7 @@
         _error = localError;
         result = nil;
     }
-    
+
     return result;
 }
 
@@ -286,8 +286,8 @@
                              lifecycleStyle,
                              entity.name,
                              relDesc == nil
-                                ? @""
-                                : [NSString stringWithFormat:@" for relationship '%@'", relDesc.name]
+                             ? @""
+                                                      : [NSString stringWithFormat:@" for relationship '%@'", relDesc.name]
                              ];
 
             localError = [NSError errorWithMessage:msg];
@@ -311,7 +311,7 @@
                      ofRelationship:nil
                              withId:nil
                     isTopLevelFetch:isTopLevelFetch
-                 forLifecyclePhase:lifecyclePhase
+                  forLifecyclePhase:lifecyclePhase
                   forLifecycleStyle:lifecycleStyle
                        withBindings:bindings]) != nil) {
         __block FOSRetrieveCMOOperation *blockSelf = self;
@@ -362,21 +362,21 @@
                                                     forEntity:blockSelf->_entity
                                                         error:&localError]) {
 
-                        // We do NOT call the jsonId property setter here, just save the value.
-                        // This is because we already have the json in fdo.jsonResult.  If we
-                        // called the jsonId setter here, it would automatically try to retrieve
-                        // the json again.
-                        blockSelf->_jsonId = fetchDataOp.jsonId;
-                        blockSelf.dslQuery = fetchDataOp.dslQuery;
-                        blockSelf.mergeResults = fetchDataOp.mergeResults;
-                        blockSelf.json = fetchDataOp.jsonResult;
+                            // We do NOT call the jsonId property setter here, just save the value.
+                            // This is because we already have the json in fdo.jsonResult.  If we
+                            // called the jsonId setter here, it would automatically try to retrieve
+                            // the json again.
+                            blockSelf->_jsonId = fetchDataOp.jsonId;
+                            blockSelf.dslQuery = fetchDataOp.dslQuery;
+                            blockSelf.mergeResults = fetchDataOp.mergeResults;
+                            blockSelf.json = fetchDataOp.jsonResult;
 
-                        // Also store the 'originalJson' in the bindings if we're the top-level
-                        // data pull as it can have related-CMO data as well.
-                        if (fetchDataOp.originalJsonResult != nil) {
-                            bindings[@"originalJsonResult"] = fetchDataOp.originalJsonResult;
+                            // Also store the 'originalJson' in the bindings if we're the top-level
+                            // data pull as it can have related-CMO data as well.
+                            if (fetchDataOp.originalJsonResult != nil) {
+                                bindings[@"originalJsonResult"] = fetchDataOp.originalJsonResult;
+                            }
                         }
-                    }
 
                     if (localError != nil) {
                         blockSelf->_error = localError;
@@ -490,7 +490,7 @@
             _error = localError;
         }
     }
-    
+
     return self;
 }
 
@@ -514,7 +514,7 @@
     if (!result && _error != nil) {
         result = [_error.domain isEqualToString:@"FOSFetchEntityOperation_ItemDeletedLocally"];
     }
-    
+
     return result;
 }
 
@@ -579,6 +579,9 @@
                                                              forKey:jsonId
                                                               enity:blockSelf->_entity
                                                          inBindings:blockSelf->_bindings];
+                            }
+                            else {
+                                NSLog(@"Type: %@ ID: %@", blockSelf->_entity.name, jsonId);
                             }
                         }
                     }
@@ -801,10 +804,10 @@
 
             if (!encounteredErrors) {
                 // Fix up any graph linked ordered relationships
-        #ifndef NS_BLOCK_ASSERTIONS
+#ifndef NS_BLOCK_ASSERTIONS
                 FOSCachedManagedObject *owner = self.managedObject;
                 NSAssert(owner != nil, @"Unable to locate owner object!");
-        #endif
+#endif
 
                 for (NSRelationshipDescription *relDesc in _entity.cmoRelationships) {
                     if (relDesc.isOrdered && !relDesc.isOwnershipRelationship) {
@@ -814,7 +817,7 @@
                         BOOL ownerWasDirty = owner.isDirty;
 
                         NSMutableOrderedSet *mutableOrderedSet =
-                            [owner mutableOrderedSetValueForKey:relDesc.name];
+                        [owner mutableOrderedSetValueForKey:relDesc.name];
 
                         NSString *orderProp = relDesc.jsonOrderProp;
                         NSArray *sortKeys = [orderProp componentsSeparatedByString:@","];
@@ -907,8 +910,8 @@
             // NOTE: Cannot use self.managedObject as it consults the error/cancelled status
             NSManagedObjectContext *moc = self.managedObjectContext;
             FOSCachedManagedObject *cmo =  _managedObjectID != nil
-                ? (FOSCachedManagedObject *)[moc objectWithID:_managedObjectID]
-                : nil;
+            ? (FOSCachedManagedObject *)[moc objectWithID:_managedObjectID]
+            : nil;
 
             if (cmo != nil) {
                 [self.managedObjectContext deleteObject:cmo];
@@ -1028,8 +1031,8 @@
                 if (localError != nil) {
                     NSManagedObjectContext *moc = self.managedObjectContext;
                     FOSCachedManagedObject *cmo =  _managedObjectID != nil
-                        ? (FOSCachedManagedObject *)[moc objectWithID:_managedObjectID]
-                        : nil;
+                    ? (FOSCachedManagedObject *)[moc objectWithID:_managedObjectID]
+                    : nil;
 
                     if (cmo != nil) {
                         FOSLogDebug(@"DISCARDING INSTANCE: The entity %@ (%@-%@) failed binding/ordering/validation and has been discarded: %@", self.entity.name, cmo.jsonIdValue, cmo.objectID.description,
@@ -1085,7 +1088,7 @@
         }
         result = YES;
     }
-    
+
     return result;
 }
 
@@ -1095,8 +1098,8 @@
     //       set in the initializer, but we're not *really* ready until we've been queued.  This is
     //       because the user can set _allowFastTrack between init and being queued
     BOOL ready = _json != nil ||
-        (self.isQueued && _allowFastTrack && _managedObjectID != nil) ||
-        self.error != nil;
+    (self.isQueued && _allowFastTrack && _managedObjectID != nil) ||
+    self.error != nil;
 
     if (_ready != ready) {
         [self willChangeValueForKey:@"isReady"];
@@ -1194,7 +1197,7 @@
             result = nil;
         }
     }
-    
+
     return result;
 }
 
@@ -1220,20 +1223,20 @@
     // at the last minute by FOSCachedManagedObject::willAccessValueForKey
     for (NSRelationshipDescription *relDesc in filteredRels) {
         FOSOperation *nextOp = nil;
-        
+
         if (// Skip the inverse ownership relationship, as it will be resolved via finishBinding if
             // this isn't a topLevelFetch, otherwise, we'll have to go get it.
             ((!relDesc.isOptional &&
               (!relDesc.inverseRelationship.isOwnershipRelationship || self.isTopLevelFetch)) ||
              relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
-                
-            nextOp = [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
-                                                                      jsonFragment:self.json
-                                                                      withBindings:_bindings
-                                                               andParentCMOBinding:_urlBinding.cmoBinding];
 
-            [result addObject:nextOp];
-        }
+                nextOp = [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
+                                                                          jsonFragment:self.json
+                                                                          withBindings:_bindings
+                                                                   andParentCMOBinding:_urlBinding.cmoBinding];
+
+                [result addObject:nextOp];
+            }
     }
 
     return result;
@@ -1246,37 +1249,37 @@
 
     // Process toMany relationships, but only from the 'owner's' side
     for (NSRelationshipDescription *relDesc in filteredRels) {
-        
+
         // Let's see if we can short circuit out
         // -1 => unknown, need to fetch to see
         NSInteger childCount = [self _serverChildCountForToManyRelationship:relDesc];
-        
+
         // If we *know* that there are no children, we can skip trying to fetch them
         if ((childCount != 0 && relDesc.jsonRelationshipForcePull == FOSForcePullType_UseCount) ||
             !relDesc.isOptional ||
             relDesc.jsonRelationshipForcePull == FOSForcePullType_Always ||
             (_relationshipsToPull != nil)) {
-            
+
             // We don't auto-pull on optional relationships, unless they tell us to do so.
             if (relDesc.isOptional && relDesc.jsonRelationshipForcePull == FOSForcePullType_Never &&
                 (_relationshipsToPull == nil)) {
                 [self _configureFaultingForRelationship:relDesc];
             }
-            
+
             // Nope, must process many-to-one relationship now!
             else if (!relDesc.inverseRelationship.isToMany) {
                 FOSOperation *nextOp =
-                    [FOSRetrieveToManyRelationshipOperation fetchToManyRelationship:relDesc
-                                                                          ownerJson:self.json
-                                                                        ownerJsonId:self.jsonId
-                                                                           dslQuery:self.dslQuery
-                                                                       mergeResults:self.mergeResults
-                                                                       withBindings:_bindings
-                                                                andParentCMOBinding:_urlBinding.cmoBinding];
-                
+                [FOSRetrieveToManyRelationshipOperation fetchToManyRelationship:relDesc
+                                                                      ownerJson:self.json
+                                                                    ownerJsonId:self.jsonId
+                                                                       dslQuery:self.dslQuery
+                                                                   mergeResults:self.mergeResults
+                                                                   withBindings:_bindings
+                                                            andParentCMOBinding:_urlBinding.cmoBinding];
+
                 [result addObject:nextOp];
             }
-            
+
             // Process many-to-many relationships
             // Only process toMany rels from the 'owner' side.  The 'owner' is
             // the entity that has 'cascade' delete rule
@@ -1337,8 +1340,8 @@
                                                               withId:self.jsonId
                                                 forRelationshipNamed:relDesc.name];
         NSArray *relationshipFaults =
-            [self.restConfig.databaseManager fetchEntitiesNamed:@"FOSRelationshipFault"
-                                                  withPredicate:pred];
+        [self.restConfig.databaseManager fetchEntitiesNamed:@"FOSRelationshipFault"
+                                              withPredicate:pred];
 
         if (relationshipFaults.count == 0) {
             FOSRelationshipFault *relFault = [[FOSRelationshipFault alloc] init];
@@ -1385,31 +1388,31 @@
     if (entity != nil) {
         finalKey = [NSString stringWithFormat:@"%@:%@", entity.name, key.description];
     }
-
+    
     return finalKey;
 }
 
 - (BOOL)_bindToJSONInBindings {
     NSError *localError = nil;
     BOOL result = NO;
-
+    
     // Can we find the json in bindings?
     id<NSObject> originalJson = _bindings[@"originalJsonResult"];
     if (originalJson != nil) {
         NSDictionary *context = @{ @"ENTITY" : self.entity };
-
+        
         id<NSObject> unwrappedJson = [_urlBinding unwrapBulkJSON:originalJson
                                                          context:context
                                                            error:&localError];
-
+        
         // We expect an array of possibilities here. We'll look into
         // the array and attempt to match jsonId.
         if (unwrappedJson != nil && [unwrappedJson isKindOfClass:[NSArray class]]) {
             FOSCMOBinding *cmoBinding = _urlBinding.cmoBinding;
-
+            
             // FF-11 TODO : Fefactor all such impls into a single impl on FOSAttributeBinding.
             FOSAttributeBinding *identityBinding = cmoBinding.identityBinding;
-
+            
             NSDictionary *propsByName = self.entity.propertiesByName;
             NSArray *propNames = propsByName.allKeys;
             NSSet *identNames = [[identityBinding attributeMatcher] matchedItems:propNames
@@ -1417,14 +1420,14 @@
                                                                          context:context];
             context = [context mutableCopy];
             ((NSMutableDictionary *)context)[@"ATTRDESC"] = propsByName[identNames.anyObject];
-
+            
             id<FOSExpression> jsonKeyExpression = identityBinding.jsonKeyExpression;
             NSString *jsonIdKeyPath = [jsonKeyExpression evaluateWithContext:context
                                                                        error:&localError];
             if (localError == nil && jsonIdKeyPath.length > 0) {
                 for (id<NSObject> nextJson in (NSArray *)unwrappedJson) {
                     id nextJsonId = [(id)nextJson valueForKeyPath:jsonIdKeyPath];
-
+                    
                     if ([nextJsonId isEqual:_jsonId]) {
                         self.json = nextJson;
                         result = YES;
@@ -1432,16 +1435,16 @@
                     }
                 }
             }
-
+            
             // For now we'll ignore any errors as this is just fast tracking...
             else {
                 FOSLogPedantic(@"Skipping binding to _bindings[\"originalJsonResult\"] for entity %@ due to error :%@",
-                                localError.description);
+                               localError.description);
                 localError = nil;
             }
         }
     }
-
+    
     return result;
 }
 
