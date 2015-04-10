@@ -97,8 +97,23 @@
 
 #define TEARDOWN_LOGIN \
 - (void)tearDown { \
+\
     FOSSetLogLevel(TEST_LOG_LEVEL); \
-    [[FOSLoginManagerTests class] tearDownWebServiceAndLogOut]; \
+    [[FOSLoginManagerTests class] tearDownWebServiceAndLogOut:^{ \
+        NSInteger outstandingOps = \
+            [FOSRESTConfig sharedInstance].cacheManager.outstandingQueuedOperations; \
+\
+        XCTAssertEqual(outstandingOps, 0, @"There are %lu oustanding operations in the queue.  The queue should be empty!!!", (unsigned long)outstandingOps); \
+\
+        _Pragma("clang diagnostic push") \
+        _Pragma("clang diagnostic ignored \"-Wundeclared-selector\"") \
+        if (outstandingOps != 0) { \
+            FOSSetLogLevel(TEST_LOG_LEVEL); \
+            [[FOSRESTConfig sharedInstance].cacheManager performSelector:@selector(dumpQueues)]; \
+            FOSSetLogLevel(FOSLogLevelDebug); \
+        } \
+        _Pragma("clang diagnostic pop") \
+    }]; \
 \
     [super tearDown]; \
     FOSSetLogLevel(FOSLogLevelDebug); \

@@ -142,8 +142,8 @@
         }
     }
 
-    // This is expensive, so don't let it out into any other build types
-#ifdef CONFIGURATION_Debug
+    // This is *extrmely* expensive, so don't let it out into any other build types
+#if defined(DEBUG) && !defined(NS_BLOCK_ASSERTIONS)
     {
         Class class = NSClassFromString(entity.managedObjectClassName);
 
@@ -1010,7 +1010,7 @@
             NSAssert([[self class] _bindingValueForKey:_jsonId entity:_entity inBindings:_bindings] != nil, @"Entity object missing from bindings???");
             NSAssert(![[[self class] _bindingValueForKey:_jsonId entity:_entity inBindings:_bindings] isKindOfClass:[NSNull class]],
                      @"Entity object missing from bindings???");
-#ifdef CONFIGURATION_Debug
+#ifdef DEBUG
             // This is expensive, so don't let it out into any other build type
             NSAssert([NSClassFromString(_entity.managedObjectClassName) fetchWithId:_jsonId] != nil,
                      @"Where's the instance in the DB???");

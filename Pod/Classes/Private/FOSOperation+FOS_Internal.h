@@ -34,10 +34,13 @@
 @property (nonatomic, readonly) NSSet *flattenedDependencies;
 
 - (NSUInteger)calcFinishedOps;
+#ifdef DEBUG
+- (void)dumpDeps;
+#endif
 
 @end
 
-#ifdef CONFIGURATION_Debug
+#ifdef DEBUG
 @interface FOSOperation (Testing)
 
 - (void)setError:(NSError *)error;

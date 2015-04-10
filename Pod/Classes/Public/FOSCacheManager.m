@@ -29,6 +29,9 @@
 
 #import <FOSCacheManager.h>
 #import "FOSREST_Internal.h"
+#ifdef DEBUG
+#import "FOSOperation+FOS_Internal.h"
+#endif
 
 @implementation FOSCacheManager {
     id<FOSProcessServiceRequest> _serviceRequestProcessor;
@@ -60,6 +63,26 @@
 
 - (BOOL)updatingMainThreadMOC {
     return _updatingMainThreadMOC;
+}
+
+- (NSInteger)outstandingQueuedOperations {
+    NSInteger result = 0;
+
+    for (NSOperation *op in _beginOpQueue.operations) {
+        if (!op.isFinished && !op.isCancelled) {
+            result += 1;
+        }
+    }
+
+    for (NSOperationQueue *queue in _groupQueues) {
+        for (NSOperation *op in queue.operations) {
+            if (!op.isFinished && !op.isCancelled) {
+                result += 1;
+            }
+        }
+    }
+
+    return result;
 }
 
 #pragma mark - Public methods
@@ -121,6 +144,16 @@
                withGroupName:@"Flush caches"];
     }];
 
+    // Before pushing the op, make it dependant on any outstanding save ops in the queue
+    for (FOSOperationQueue *opQueue in _groupQueues) {
+        for (FOSOperation *op in opQueue.operations) {
+            if ([op isKindOfClass:[FOSSaveOperation class]]) {
+                FOSOperation *saveOp = (FOSSaveOperation *)op;
+                [bgOp addDependency:saveOp];
+            }
+        }
+    }
+
     [self queueOperation:bgOp withCompletionOperation:nil withGroupName:@"Queue Flush Caches"];
 }
 
@@ -150,6 +183,22 @@
 - (id<FOSProcessServiceRequest>)serviceRequestProcessor {
     return _serviceRequestProcessor;
 }
+
+#ifdef DEBUG
+- (void)dumpQueues {
+    for (FOSOperationQueue *opQueue in _groupQueues) {
+        FOSLogDebug(@"\r\nQUEUE BEGIN *** (%lu operations)", (unsigned long)opQueue.operationCount);
+
+        for (FOSOperation *op in opQueue.operations) {
+            if ([op isKindOfClass:[FOSSaveOperation class]]) {
+                [op dumpDeps];
+            }
+        }
+
+        FOSLogDebug(@"\r\nQUEUE END ***");
+    }
+}
+#endif
 
 #pragma mark - Private Methods
 

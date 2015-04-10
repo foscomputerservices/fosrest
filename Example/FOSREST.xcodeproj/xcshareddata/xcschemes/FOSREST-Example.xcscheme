@@ -39,16 +39,16 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "FOSCMOReadOnlyStaticTableTests">
+                  Identifier = "FOSCMOReadOnlyStaticTableTests/testCopyStaticObjectFails">
+               </Test>
+               <Test
+                  Identifier = "FOSCMOReadOnlyStaticTableTests/testCreateStaticObjectFails">
                </Test>
                <Test
                   Identifier = "FOSCachedManagedObjectTests/testAtomicCreate">
                </Test>
                <Test
                   Identifier = "FOSCachedManagedObjectTests/testDeleteFromServerToClient_ToMany_SingleItem">
-               </Test>
-               <Test
-                  Identifier = "FOSCachedManagedObjectTests/testDeleteFromServerToClient_ToMany_SingleItemOfMultiple">
                </Test>
                <Test
                   Identifier = "FOSCachedManagedObjectTests/testSetUserToOneRelationship">

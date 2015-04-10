@@ -167,6 +167,10 @@
 }
 
 + (void)tearDownWebServiceAndLogOut {
+    [self tearDownWebServiceAndLogOut:nil];
+}
+
++ (void)tearDownWebServiceAndLogOut:(TestCallBack)handler {
     [self tearDownWebService];
 
     START_TEST
@@ -176,11 +180,17 @@
     if (lm.isLoggedIn) {
 
         [lm logout:^(BOOL succeeded, NSError *error) {
+            if (handler != nil) {
+                handler();
+            }
             END_TEST
         }];
     }
     else {
         [[FOSRESTConfig sharedInstance].cacheManager flushCaches:^(BOOL isCancelled, NSError *error) {
+            if (handler != nil) {
+                handler();
+            }
             END_TEST
         }];
     }

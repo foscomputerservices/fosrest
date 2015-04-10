@@ -60,6 +60,7 @@
 
 @property (nonatomic, readonly) BOOL updatingMainThreadMOC;
 @property (nonatomic, assign) BOOL pauseAutoSync;
+@property (nonatomic, readonly) NSInteger outstandingQueuedOperations;
 
 #pragma mark - Public methods
 

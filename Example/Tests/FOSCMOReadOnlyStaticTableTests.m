@@ -47,7 +47,7 @@
 SETUP_TEARDOWN_LOGIN(FOSRESTConfigOptionsNone)
 
 // NOTE: Sadly, if there are any breakpoints set in the debugger the debugger will
-//       top on each exception and you'll have to manually click continue...
+//       stop on each exception and you'll have to manually click continue...
 - (void)testCreateStaticObjectFails {
     XCTAssertThrowsSpecificNamed([[Role alloc] init], NSException, @"FOSREST",
                                  @"Should not be able to create static object instances!");
