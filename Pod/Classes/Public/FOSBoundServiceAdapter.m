@@ -234,7 +234,7 @@
 
     if (error != nil) { *error = nil; }
 
-    id result = cmoValue;
+    id<NSObject> result = cmoValue;
     NSError *localError = nil;
 
     if (cmoValue == nil || [cmoValue isKindOfClass:[NSNull class]]) {

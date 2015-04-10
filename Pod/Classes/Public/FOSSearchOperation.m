@@ -244,7 +244,7 @@
     // An operation to process the results of the given webRequest
     FOSBackgroundOperation *webProcOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL isCancelled, NSError *error) {
 
-        if (!isCancelled && error == nil) {
+        if (!isCancelled && error == nil && !blockSelf.isCancelled) {
             NSError *localError = nil;
             NSArray *jsonFragments = nil;
 

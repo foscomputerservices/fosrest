@@ -187,7 +187,9 @@ static NSMutableDictionary *_processingFaults = nil;
     for (NSRelationshipDescription *relDesc in self.entity.cmoRelationships) {
         // Does the inverse of this rel own us?
         if (relDesc.inverseRelationship.isOwnershipRelationship) {
-            NSAssert(!relDesc.isToMany, @"Expected only a to-One owner relationship");
+            if (relDesc.isToMany) {
+                FOSLogCritical(@"INVALID DATA MODEL CONFIGURATION: Entity %@ has a to-Many relationship '%@' that is set as being an owner (Delete Rule = Cascade|Deny) of this entity.  This delete rule should be 'Nullify or No Action'", self.entity.name, relDesc.name);
+            }
 
             result = [self valueForKey:relDesc.name];
 

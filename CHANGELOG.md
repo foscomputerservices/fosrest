@@ -11,3 +11,7 @@
 * Converted away from CONFIGURATION_Debug to simply DEBUG.
 
 NOTE: This may mean that client code slows down execution when compiled with the DEBUG flag turned on. There are internal (documented) tests that ensure that things are working correctly, but they execute rather slowly. If the DEBUG flag is off, there should be no concerns.
+
+# v 0.2.6
+
+* Minor bug fixes, see logs
