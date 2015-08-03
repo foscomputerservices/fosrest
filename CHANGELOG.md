@@ -15,3 +15,9 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # v 0.2.6
 
 * Minor bug fixes, see logs
+
+# v 0.2.7
+
+* Fixed a serious issue in the way that errors were handled in FOSOperation.isReady.  Previously it looked to self.error as the comments therein indicated.  However, this caused the entire error dependency chain to be examined, which was not the intent.  The sole intent was to determine if self had an error, not the entire chain.  This was fixed by simply looking to _error vs. self.error.
+
+  This fixes issues where an assert would be thrown ("Save op already finished???").  This would happen if a dependency of the FOSSaveOperation failed.  Since the previous implementation was to look at all depdencies for isReady, any dependency of FOSSaveOperation that might have failed would cause FOSSaveOperation to be ready, even though other dependencies were not yet ready.

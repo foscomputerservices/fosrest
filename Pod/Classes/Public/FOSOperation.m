@@ -251,7 +251,7 @@
     // This implementation allows operations to set their error status to an error
     // condition in their initializer.  Thus, when the operation is queued, it
     // will automatically be marked as 'ready' and main() processing will begin immediately.
-    BOOL result = [super isReady] || _cancelled || self.error != nil;
+    BOOL result = [super isReady] || _cancelled || _error != nil;
 
     return result;
 }
