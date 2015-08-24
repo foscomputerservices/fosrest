@@ -34,7 +34,7 @@
 
 #pragma mark - Class Methods
 
-+ (NSString *)entityNameForClass:(Class)class {
++ (NSString  * _Nonnull)entityNameForClass:(Class)class {
     NSString *entityName = NSStringFromClass(class);
 
     // Handle Swift classes

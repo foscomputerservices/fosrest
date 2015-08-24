@@ -46,22 +46,22 @@
 
 // NOTE: If any properties are added, add them to the skip list
 //       in NSAttributeDescription's +isFOSAttribute: impl.
-@property (nonatomic, strong) NSDate *updatedWithServerAt;
+@property (nonatomic, strong) NSDate * _Nullable updatedWithServerAt;
 @property (nonatomic) BOOL markedClean;
 @property (nonatomic) BOOL hasRelationshipFaults;
 @property (nonatomic) BOOL hasModifiedProperties;
 @property (nonatomic) BOOL isFaultObject;
 @property (nonatomic) BOOL isLocalOnly;
 @property (nonatomic) BOOL isSendOnly;
-@property (nonatomic, strong) NSData *originalJsonData;
+@property (nonatomic, strong) NSData * _Nullable originalJsonData;
 
 #pragma mark - Public Properties
 
 @property (nonatomic, readonly) BOOL isDirty;
 @property (nonatomic, readonly) BOOL hasLocalOnlyParent;
-@property (nonatomic, readonly) NSSet *faultedRelationships;
+@property (nonatomic, readonly) NSSet * _Nullable faultedRelationships;
 @property (nonatomic, readonly) BOOL isSubTreeDirty;
-@property (nonatomic, readonly) FOSRESTConfig *restConfig;
+@property (nonatomic, readonly) FOSRESTConfig * _Nonnull restConfig;
 
 /*!
  * @property isUploadable
@@ -83,7 +83,7 @@
  * Subclasses should make their operation dependant on
  * the super class's result, if not nil.
  */
-@property (nonatomic, readonly) FOSOperation *prepareForSendOperation;
+@property (nonatomic, readonly) FOSOperation * _Nonnull prepareForSendOperation;
 
 /*!
  * @property skipServerDelete
@@ -110,11 +110,11 @@
  *  1) The receiver has a relationship where relationship.isOwnershipRelationship == YES
  *  2) The ownership relationship is a to-One relation from the receiver to the owner.
  */
-@property (nonatomic, readonly) FOSCachedManagedObject *owner;
+@property (nonatomic, readonly) FOSCachedManagedObject * _Nullable owner;
 
 #pragma mark - Class methods
 
-+ (BOOL)idIsInDatabase:(FOSJsonId)jsonId;
++ (BOOL)idIsInDatabase:(FOSJsonId _Nonnull)jsonId;
 
 // See: http://fosmain.foscomputerservices.com:8080/browse/FF-12
 + (BOOL)canHaveDuplicateJsonIds;
@@ -128,9 +128,9 @@
  * @param jsonId  The unique identifier of the instance
  *     to retrieve.
  */
-+ (instancetype)fetchWithId:(FOSJsonId)jsonId;
++ (instancetype _Nonnull)fetchWithId:(FOSJsonId _Nonnull)jsonId;
 
-+ (NSSet *)fetchWithIds:(id<NSFastEnumeration>)jsonIds;
++ (NSSet * _Nonnull)fetchWithIds:(id<NSFastEnumeration> _Nonnull)jsonIds;
 
 /*!
  * @method fetchWithId:forJsonRelation:
@@ -141,23 +141,23 @@
  * @param jsonRelId  The unique identifier of the instance
  *     to retrieve.
  */
-+ (NSSet *)fetchWithRelId:(FOSJsonId)jsonRelId forJsonRelation:(NSString *)jsonRelation;
++ (NSSet * _Nonnull)fetchWithRelId:(FOSJsonId _Nonnull)jsonRelId forJsonRelation:(NSString * _Nonnull)jsonRelation;
 
 /*!
  * @method fetchAll
  */
-+ (NSArray *)fetchAll;
++ (NSArray * _Nullable)fetchAll;
 
 /*!
  * @method fetchWithPredicate:
  */
-+ (NSArray *)fetchWithPredicate:(NSPredicate *)pred;
++ (NSArray * _Nullable)fetchWithPredicate:(NSPredicate * _Nullable)pred;
 
 /*!
  * @method fetchWithPredicate:withSortDescriptors:
  */
-+ (NSArray *)fetchWithPredicate:(NSPredicate *)pred
-            withSortDescriptors:(NSArray *)sortDescriptors;
++ (NSArray * _Nullable)fetchWithPredicate:(NSPredicate * _Nullable)pred
+            withSortDescriptors:(NSArray * _Nullable)sortDescriptors;
 
 /*!
  * @method count
@@ -172,7 +172,7 @@
  * Returns the number of instances of the receiver's type in the database that
  * match the given predicate.
  */
-+ (NSUInteger)countWithPredicate:(NSPredicate *)pred;
++ (NSUInteger)countWithPredicate:(NSPredicate * _Nullable)pred;
 
 /*!
  * @methodgroup FOSLifecyclePhase Methods
@@ -187,7 +187,7 @@
  * This method corresponds to the FOSLifecyclePhaseRetrieveServerRecord
  * @link FOSLifecyclePhase @/link.
  */
-+ (FOSRetrieveCMOOperation *)retrieveCMOForJsonId:(FOSJsonId)jsonId;
++ (FOSRetrieveCMOOperation * _Nonnull)retrieveCMOForJsonId:(FOSJsonId _Nonnull)jsonId;
 
 /*!
  * @method retrieveCMOsWithDSLQuery:
@@ -195,7 +195,7 @@
  * This method corresponds to the FOSLifecyclePhaseRetrieveServerRecords
  * @link FOSLifecyclePhase @/link.
  */
-+ (FOSSearchOperation *)retrieveCMOsWithDSLQuery:(NSString *)dslQuery;
++ (FOSSearchOperation * _Nonnull)retrieveCMOsWithDSLQuery:(NSString * _Nullable)dslQuery;
 
 /*!
  * @method sendServerRecordWithLifecycleStyle:
@@ -212,9 +212,9 @@
  * depending on the receiver's @link hasBeenUploadedToServer @/link
  * status.
  */
-- (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle;
+- (FOSSendServerRecordOperation * _Nonnull)sendServerRecordWithLifecycleStyle:(NSString * _Nullable)lifecycleStyle;
 
-- (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle parentSentIDs:parentSentIDs;
+- (FOSSendServerRecordOperation * _Nonnull)sendServerRecordWithLifecycleStyle:(NSString * _Nullable)lifecycleStyle parentSentIDs:(NSSet * _Nullable)parentSentIDs;
 
 /*!
  * @method createAndRetrieveServerRecordWithJSON:
@@ -235,7 +235,7 @@
  *       for creating atomic instances needs to be put in place by
  *       utilizing separate NSManagedObjectContexts.
  */
-+ (FOSRetrieveCMOOperation *)createAndRetrieveServerRecordWithJSON:(id<NSObject>)json;
++ (FOSRetrieveCMOOperation * _Nonnull)createAndRetrieveServerRecordWithJSON:(id<NSObject> _Nonnull)json;
 
 /*!
  * @group Public Properties
@@ -254,7 +254,7 @@
  * mapping.  Thus, this property must not be used to specify the adapter map's
  * ID_ATTRIBUTE.
  */
-@property (nonatomic, strong) FOSJsonId jsonIdValue;
+@property (nonatomic, strong) FOSJsonId _Nullable jsonIdValue;
 
 #pragma mark - Public methods
 
@@ -272,7 +272,7 @@
  *
  * The original json from which the receiver was created.
  */
-- (id<NSObject>)originalJson;
+- (id<NSObject> _Nullable)originalJson;
 
 /*!
  * @method hasBeenUploadedToServer
@@ -294,7 +294,7 @@
  * Returns the set of properties that have changed since the last time
  * that @link markClean @/link was called.
  */
-- (NSSet *)propertiesModifiedSinceLastUpload;
+- (NSSet * _Nullable)propertiesModifiedSinceLastUpload;
 
 /*! @methodgroup Refresh */
 #pragma mark - Refresh methods
@@ -304,7 +304,7 @@
  *
  * Refreshes the receiver and it's 'forcePull' relationships with the REST server.
  */
-- (void)refreshWithHandler:(FOSBackgroundRequest)handler;
+- (void)refreshWithHandler:(FOSBackgroundRequest _Nullable)handler;
 
 /*!
  * @method refreshRelationshipNamed:dslQuery:mergeResults:handler:
@@ -321,9 +321,9 @@
  * This method calls efreshRelationshipNamed:dslQuery:mergeResults:handler: with
  * mergeResults = NO; that is, results will be synchronized.
  */
-- (void)refreshRelationshipNamed:(NSString *)relName
-                        dslQuery:(NSString *)dslQuery
-                         handler:(FOSBackgroundRequest)handler;
+- (void)refreshRelationshipNamed:(NSString * _Nonnull)relName
+                        dslQuery:(NSString * _Nullable)dslQuery
+                         handler:(FOSBackgroundRequest _Nullable)handler;
 
 /*!
  * @method refreshRelationshipNamed:dslQuery:mergeResults:handler:
@@ -339,29 +339,29 @@
  *
  * Refreshes the receiver's named relationship with the REST server.
  */
-- (void)refreshRelationshipNamed:(NSString *)relName
-                        dslQuery:(NSString *)dslQuery
+- (void)refreshRelationshipNamed:(NSString * _Nonnull)relName
+                        dslQuery:(NSString * _Nullable)dslQuery
                     mergeResults:(BOOL)mergeResults
-                         handler:(FOSBackgroundRequest)handler;
+                         handler:(FOSBackgroundRequest _Nullable)handler;
 
 /*!
  * @method refreshRelationshipNamed:handler:
  *
  * Refreshes the receiver's named relationships with the REST server.
  */
-- (void)refreshAllRelationshipsNamed:(id<NSFastEnumeration>)relNames
-                             handler:(FOSBackgroundRequest)handler;
+- (void)refreshAllRelationshipsNamed:(id<NSFastEnumeration> _Nonnull)relNames
+                             handler:(FOSBackgroundRequest _Nullable)handler;
 
 /*!
  * @method refreshAllRelationships:
  *
  * Refreshes the receiver's managed relationships with the REST server.
  */
-- (void)refreshAllRelationships:(FOSBackgroundRequest)handler;
+- (void)refreshAllRelationships:(FOSBackgroundRequest _Nullable)handler;
 
 #pragma mark - Override Points
 
-+ (id)objectForAttribute:(NSAttributeDescription *)attrDesc forJsonValue:(id)jsonValue;
-+ (id)jsonValueForObject:(id)objValue forAttribute:(NSAttributeDescription *)attrDesc;
++ (id _Nullable)objectForAttribute:(NSAttributeDescription * _Nonnull)attrDesc forJsonValue:(id _Nonnull)jsonValue;
++ (id _Nullable)jsonValueForObject:(id _Nonnull)objValue forAttribute:(NSAttributeDescription * _Nonnull)attrDesc;
 
 @end

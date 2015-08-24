@@ -330,7 +330,7 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 - (FOSSendServerRecordOperation *)sendServerRecordWithLifecycleStyle:(NSString *)lifecycleStyle
-                                                       parentSentIDs:parentSentIDs {
+                                                       parentSentIDs:(NSSet *)parentSentIDs {
     FOSSendServerRecordOperation *result = nil;
 
     if (!self.hasBeenUploadedToServer) {
@@ -931,19 +931,19 @@ static NSMutableDictionary *_processingFaults = nil;
                                    withGroupName:@"Refresh CMO"];
 }
 
-- (void)refreshRelationshipNamed:(NSString *)relName
-                        dslQuery:(NSString *)dslQuery
-                         handler:(FOSBackgroundRequest)handler {
+- (void)refreshRelationshipNamed:(NSString * _Nonnull)relName
+                        dslQuery:(NSString * _Nullable)dslQuery
+                         handler:(FOSBackgroundRequest _Nullable)handler {
     return [self refreshRelationshipNamed:relName
                                  dslQuery:dslQuery
                              mergeResults:NO
                                   handler:handler];
 }
 
-- (void)refreshRelationshipNamed:(NSString *)relName
-                        dslQuery:(NSString *)dslQuery
+- (void)refreshRelationshipNamed:(NSString * _Nonnull)relName
+                        dslQuery:(NSString * _Nullable)dslQuery
                     mergeResults:(BOOL)mergeResults
-                         handler:(FOSBackgroundRequest)handler {
+                         handler:(FOSBackgroundRequest _Nullable)handler {
     NSParameterAssert(relName != nil);
 
     // Nothing to refresh on localOnly instances
@@ -1027,8 +1027,10 @@ static NSMutableDictionary *_processingFaults = nil;
     NSArray *ownerRelationshipNames =
         [self.entity.ownerRelationships valueForKeyPath:@"name"];
 
-    [self refreshAllRelationshipsNamed:ownerRelationshipNames
-                               handler:handler];
+    if (ownerRelationshipNames != nil) {
+        [self refreshAllRelationshipsNamed:ownerRelationshipNames
+                                   handler:handler];
+    }
 }
 
 #pragma mark - Override Points

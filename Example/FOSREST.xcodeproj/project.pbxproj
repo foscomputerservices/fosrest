@@ -450,6 +450,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = FOS;
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "David Hunt";
 			};
