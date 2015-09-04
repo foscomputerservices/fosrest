@@ -57,4 +57,8 @@
  */
 @property (nonatomic, readonly) BOOL isReadOnly;
 
+#pragma mark - Initialization Methods
+
+- (instancetype)initInsertingIntoManagedObjectContext:(NSManagedObjectContext *)moc;
+
 @end

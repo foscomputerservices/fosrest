@@ -90,23 +90,31 @@
         NSSet *identNames = [[identityBinding attributeMatcher] matchedItems:propNames
                                                                matchSelector:nil
                                                                      context:context];
-        context[@"ATTRDESC"] = propsByName[identNames.anyObject];
 
+        if (identNames.count == 0) {
+            NSString *msgFmt = @"No property for entity '%@' matches the specification.";
+            NSString *msg = [NSString stringWithFormat:msgFmt, entity.name];
 
-        id<NSObject> unwrappedJson = [self _unwrappedJSON:json context:context error:&localError];
-        if (unwrappedJson && localError == nil) {
-            result = [identityBinding jsonIdFromJSON:unwrappedJson
-                                         withContext:context
-                                               error:&localError];
+            localError = [NSError errorWithMessage:msg forAtom:identityBinding];
+        }
+        else {
+            context[@"ATTRDESC"] = propsByName[identNames.anyObject];
 
-            if ([result isKindOfClass:[NSDictionary class]] ||
-                [result isKindOfClass:[NSArray class]]) {
-                NSString *msgFmt = @"Unexpected type '%@' received while binding ID_ATTRIBUTE for entity of type '%@'. Expected a value type from unwrapped JSON: %@ {wrapped JSON: %@}";
-                NSString *msg = [NSString stringWithFormat:msgFmt,
-                                 NSStringFromClass([result class]), entity.name, unwrappedJson, json];
+            id<NSObject> unwrappedJson = [self _unwrappedJSON:json context:context error:&localError];
+            if (unwrappedJson && localError == nil) {
+                result = [identityBinding jsonIdFromJSON:unwrappedJson
+                                             withContext:context
+                                                   error:&localError];
 
-                localError = [NSError errorWithMessage:msg
-                                               forAtom:identityBinding];
+                if ([result isKindOfClass:[NSDictionary class]] ||
+                    [result isKindOfClass:[NSArray class]]) {
+                    NSString *msgFmt = @"Unexpected type '%@' received while binding ID_ATTRIBUTE for entity of type '%@'. Expected a value type from unwrapped JSON: %@ {wrapped JSON: %@}";
+                    NSString *msg = [NSString stringWithFormat:msgFmt,
+                                     NSStringFromClass([result class]), entity.name, unwrappedJson, json];
+
+                    localError = [NSError errorWithMessage:msg
+                                                   forAtom:identityBinding];
+                }
             }
         }
     }

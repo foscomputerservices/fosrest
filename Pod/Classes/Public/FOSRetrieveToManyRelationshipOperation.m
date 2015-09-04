@@ -137,156 +137,159 @@
     NSParameterAssert(ownerId != nil);
 
     if (!self.isCancelled && self.error == nil) {
-        id relationshipMutableSet = nil;
-
         NSManagedObjectContext *moc = self.managedObjectContext;
-        FOSCachedManagedObject *owner = (FOSCachedManagedObject *)[moc objectWithID:ownerId];
+        __block FOSRetrieveToManyRelationshipOperation *blockSelf = self;
 
-        NSAssert(owner != nil, @"Unable to locate owner object!");
-        NSAssert(_relationship.isOwnershipRelationship, @"Not an ownership relationship???");
+        [moc performBlockAndWait:^{
+            FOSCachedManagedObject *owner = (FOSCachedManagedObject *)[moc objectWithID:ownerId];
 
-        if (_relationship.isOrdered) {
-            relationshipMutableSet = [owner mutableOrderedSetValueForKey:_relationship.name];
-        }
-        else {
-            relationshipMutableSet = [owner mutableSetValueForKey:_relationship.name];
-        }
+            NSAssert(owner != nil, @"Unable to locate owner object!");
+            NSAssert(_relationship.isOwnershipRelationship, @"Not an ownership relationship???");
 
-        BOOL encounteredErrors = NO;
-
-        // There no longer exist any relations, so make sure to clear the local relationships.
-        if (_childRetrieveCMOOps.count == 0) {
-            if (!_mergeResults) {
-                id<NSFastEnumeration> deadCMOs = [relationshipMutableSet mutableCopy];
-
-                for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
-                    if (nextDeadCMO.hasBeenUploadedToServer) {
-                        if (nextDeadCMO.isDirty) {
-                            FOSLogDebug(@"Deleting a dirty object: %@ (%@)",
-                                        NSStringFromClass([nextDeadCMO class]),
-                                        nextDeadCMO.jsonIdValue);
-                        }
-
-                        // Tell the underlying delete code not to attempt to remove this obj from
-                        // the server, as it's already been done.
-                        nextDeadCMO.skipServerDelete = YES;
-
-                        [relationshipMutableSet removeObject:nextDeadCMO];
-                        [nextDeadCMO.managedObjectContext deleteObject:nextDeadCMO];
-                    }
-                }
+            id relationshipMutableSet = nil;
+            if (_relationship.isOrdered) {
+                relationshipMutableSet = [owner mutableOrderedSetValueForKey:_relationship.name];
             }
-        }
-        else {
-            // Gather the, now realized, entities
-            NSMutableSet *newEntries = [NSMutableSet setWithCapacity:_childRetrieveCMOOps.count];
-            for (FOSRetrieveCMOOperation *nextOp in _childRetrieveCMOOps) {
-
-                // If the op was cancelled, we won't include it in our result set.
-                // One way that an op can be cancelled is if it was marked as deleted
-                // locally, but still remains on the server.
-                if (!nextOp.isCancelled) {
-                    [nextOp finishBinding];
-
-                    FOSCachedManagedObject *nextCMO = nextOp.managedObject;
-                    BOOL cmoWasDirty = nextCMO.isDirty;
-
-                    NSAssert(nextCMO != nil || nextOp.error != nil, @"We must have an instance or an error by now.");
-
-                    // It's possible that there were lower-level binding issues, so we need to check
-                    if (nextCMO != nil) {
-
-#if !defined(DEBUG) && !defined(NS_BLOCK_ASSERTIONS)
-                        Class destClass = NSClassFromString(_relationship.destinationEntity.managedObjectClassName);
-
-                        NSAssert([nextCMO isKindOfClass:destClass], @"Received type %@, expected %@.",
-                                 NSStringFromClass([nextCMO class]),
-                                 _relationship.destinationEntity.managedObjectClassName);
-#endif
-                        // Set the forward relationship
-                        [newEntries addObject:nextCMO];
-
-                        // Set Inverse relationship
-                        NSRelationshipDescription *inverse = _relationship.inverseRelationship;
-                        if (!inverse.isToMany) {
-
-                            // It is possible that they 'force resolved' the owner by setting
-                            // the owner's relationship 'jsonRelationshipForcePull == Always'.
-                            // This might be done if the query for these objects is broader than
-                            // just the simple owner as reolved by this protocol.
-                            if (!inverse.jsonRelationshipForcePull) {
-                                [nextCMO setValue:owner forKey:inverse.name];
-                            }
-                            else {
-                                [newEntries removeObject:nextCMO];
-                            }
-                        }
-                        else {
-                            NSAssert(NO, @"Many-to-many not yet implemented!");
-                        }
-
-                        if (!cmoWasDirty && nextCMO.isDirty) {
-                            [nextCMO markClean];
-                        }
-                    }
-                    else {
-                        if (!_relationship.isOptional) {
-                            NSAssert(nextOp.error != nil, @"Should only get here on an error!");
-                            NSAssert(self.error != nil, @"We should have an error as one of our deps has an error.");
-
-                            encounteredErrors = YES;
-                            _ignoreDependentErrors = NO;
-                            break;
-                        }
-                        else {
-                            FOSLogWarning(@"IGNORING ERROR: during to-many fetch operation %@ to entity %@: %@",
-                                  _relationship.name, _relationship.entity.name, nextOp.error.description);
-                            _ignoreDependentErrors = YES;
-                        }
-                    }
-                }
+            else {
+                relationshipMutableSet = [owner mutableSetValueForKey:_relationship.name];
             }
 
-            if (!encounteredErrors) {
-                // Clean up the entries that might be locally deleted
-                [self _removeDeadCMOSFromRelationshipSet:relationshipMutableSet newEntries:newEntries];
+            BOOL encounteredErrors = NO;
 
-                // Combine with the new entries
-                [relationshipMutableSet unionSet:newEntries];
+            // There no longer exist any relations, so make sure to clear the local relationships.
+            if (_childRetrieveCMOOps.count == 0) {
+                if (!_mergeResults) {
+                    id<NSFastEnumeration> deadCMOs = [relationshipMutableSet mutableCopy];
 
-                // Sort the ordered set
-                if (_relationship.isOrdered) {
-                    NSString *orderProp = _relationship.jsonOrderProp;
-                    NSArray *sortKeys = [orderProp componentsSeparatedByString:@","];
-                    NSMutableArray *sortDescs = [NSMutableArray arrayWithCapacity:sortKeys.count];
-
-                    for (NSString *nextSortKey in sortKeys) {
-                        NSSortDescriptor *nextSortDesc = [NSSortDescriptor sortDescriptorWithKey:nextSortKey
-                                                                                       ascending:YES];
-                        [sortDescs addObject:nextSortDesc];
-                    }
-
-                    NSMutableOrderedSet *orderedSet = (NSMutableOrderedSet *)relationshipMutableSet;
-
-                    // Why NSMutableOrdered set doesn't implement sortUsingDescriptors is beyond me!
-                    [orderedSet sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                        NSComparisonResult compResult = NSOrderedSame;
-
-                        for (NSSortDescriptor *nextSortDesc in sortDescs) {
-                            compResult = [nextSortDesc compareObject:obj1 toObject:obj2];
-                            if (compResult != NSOrderedSame) {
-                                break;
+                    for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
+                        if (nextDeadCMO.hasBeenUploadedToServer) {
+                            if (nextDeadCMO.isDirty) {
+                                FOSLogDebug(@"Deleting a dirty object: %@ (%@)",
+                                            NSStringFromClass([nextDeadCMO class]),
+                                            nextDeadCMO.jsonIdValue);
                             }
-                        }
 
-                        return compResult;
-                    }];
+                            // Tell the underlying delete code not to attempt to remove this obj from
+                            // the server, as it's already been done.
+                            nextDeadCMO.skipServerDelete = YES;
+
+                            [relationshipMutableSet removeObject:nextDeadCMO];
+                            [nextDeadCMO.managedObjectContext deleteObject:nextDeadCMO];
+                        }
+                    }
                 }
             }
             else {
-                [relationshipMutableSet removeAllObjects];
+                // Gather the, now realized, entities
+                NSMutableSet *newEntries = [NSMutableSet setWithCapacity:_childRetrieveCMOOps.count];
+                for (FOSRetrieveCMOOperation *nextOp in _childRetrieveCMOOps) {
+
+                    // If the op was cancelled, we won't include it in our result set.
+                    // One way that an op can be cancelled is if it was marked as deleted
+                    // locally, but still remains on the server.
+                    if (!nextOp.isCancelled) {
+                        [nextOp finishBinding];
+
+                        FOSCachedManagedObject *nextCMO = [moc objectWithID:nextOp.managedObjectID];
+                        BOOL cmoWasDirty = nextCMO.isDirty;
+
+                        NSAssert(nextCMO != nil || nextOp.error != nil, @"We must have an instance or an error by now.");
+
+                        // It's possible that there were lower-level binding issues, so we need to check
+                        if (nextCMO != nil) {
+
+    #if !defined(DEBUG) && !defined(NS_BLOCK_ASSERTIONS)
+                            Class destClass = NSClassFromString(_relationship.destinationEntity.managedObjectClassName);
+
+                            NSAssert([nextCMO isKindOfClass:destClass], @"Received type %@, expected %@.",
+                                     NSStringFromClass([nextCMO class]),
+                                     _relationship.destinationEntity.managedObjectClassName);
+    #endif
+                            // Set the forward relationship
+                            [newEntries addObject:nextCMO];
+
+                            // Set Inverse relationship
+                            NSRelationshipDescription *inverse = _relationship.inverseRelationship;
+                            if (!inverse.isToMany) {
+
+                                // It is possible that they 'force resolved' the owner by setting
+                                // the owner's relationship 'jsonRelationshipForcePull == Always'.
+                                // This might be done if the query for these objects is broader than
+                                // just the simple owner as reolved by this protocol.
+                                if (!inverse.jsonRelationshipForcePull) {
+                                    [nextCMO setValue:owner forKey:inverse.name];
+                                }
+                                else {
+                                    [newEntries removeObject:nextCMO];
+                                }
+                            }
+                            else {
+                                NSAssert(NO, @"Many-to-many not yet implemented!");
+                            }
+
+                            if (!cmoWasDirty && nextCMO.isDirty) {
+                                [nextCMO markClean];
+                            }
+                        }
+                        else {
+                            if (!_relationship.isOptional) {
+                                NSAssert(nextOp.error != nil, @"Should only get here on an error!");
+                                NSAssert(blockSelf.error != nil, @"We should have an error as one of our deps has an error.");
+
+                                encounteredErrors = YES;
+                                _ignoreDependentErrors = NO;
+                                break;
+                            }
+                            else {
+                                FOSLogWarning(@"IGNORING ERROR: during to-many fetch operation %@ to entity %@: %@",
+                                      _relationship.name, _relationship.entity.name, nextOp.error.description);
+                                _ignoreDependentErrors = YES;
+                            }
+                        }
+                    }
+                }
+
+                if (!encounteredErrors) {
+                    // Clean up the entries that might be locally deleted
+                    [blockSelf _removeDeadCMOSFromRelationshipSet:relationshipMutableSet newEntries:newEntries];
+
+                    // Combine with the new entries
+                    [relationshipMutableSet unionSet:newEntries];
+
+                    // Sort the ordered set
+                    if (_relationship.isOrdered) {
+                        NSString *orderProp = _relationship.jsonOrderProp;
+                        NSArray *sortKeys = [orderProp componentsSeparatedByString:@","];
+                        NSMutableArray *sortDescs = [NSMutableArray arrayWithCapacity:sortKeys.count];
+
+                        for (NSString *nextSortKey in sortKeys) {
+                            NSSortDescriptor *nextSortDesc = [NSSortDescriptor sortDescriptorWithKey:nextSortKey
+                                                                                           ascending:YES];
+                            [sortDescs addObject:nextSortDesc];
+                        }
+
+                        NSMutableOrderedSet *orderedSet = (NSMutableOrderedSet *)relationshipMutableSet;
+
+                        // Why NSMutableOrdered set doesn't implement sortUsingDescriptors is beyond me!
+                        [orderedSet sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                            NSComparisonResult compResult = NSOrderedSame;
+
+                            for (NSSortDescriptor *nextSortDesc in sortDescs) {
+                                compResult = [nextSortDesc compareObject:obj1 toObject:obj2];
+                                if (compResult != NSOrderedSame) {
+                                    break;
+                                }
+                            }
+
+                            return compResult;
+                        }];
+                    }
+                }
+                else {
+                    [relationshipMutableSet removeAllObjects];
+                }
             }
-        }
+        }];
     }
 }
 

@@ -259,6 +259,45 @@ static NSMutableDictionary *_processingFaults = nil;
     return result;
 }
 
++ (instancetype _Nullable)fetchWithId:(FOSJsonId)jsonId
+               inManagedObjectContext:(NSManagedObjectContext *)moc {
+    id result = nil;
+
+    if (jsonId != nil) {
+        NSString *cmoKeyPath = [self _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"%K == %@", cmoKeyPath, jsonId];
+
+        NSString *entityName = [self entityName];
+        NSError *localError = nil;
+        NSArray *entities = [[FOSRESTConfig sharedInstance].databaseManager fetchEntitiesNamed:entityName
+                                                                                 withPredicate:pred
+                                                                           withSortDescriptors:nil
+                                                                             withObjectContext:moc
+                                                                                         error:&localError];
+
+        if (entities == nil && localError != nil) {
+            NSDictionary *userInfo = @{ @"error" : localError };
+            NSString *msg = [NSString stringWithFormat:@"Error fetching %@: %@",
+                             entityName, localError.description];
+
+            @throw [NSException exceptionWithName:@"DBError"
+                                           reason:msg
+                                         userInfo:userInfo];
+        }
+
+        else if (entities.count > 0) {
+            // See: http://fosmain.foscomputerservices.com:8080/browse/FF-12
+            NSAssert([[self class] canHaveDuplicateJsonIds] || entities.count == 1,
+                     @"Fetched more than one %@ with the same id (%@)",
+                     entityName, jsonId);
+
+            result = entities.lastObject;
+        }
+    }
+    
+    return result;
+}
+
 + (NSSet *)fetchWithIds:(id<NSFastEnumeration>)jsonIds {
     NSSet *result = nil;
 

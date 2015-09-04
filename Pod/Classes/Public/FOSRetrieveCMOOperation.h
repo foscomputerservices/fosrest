@@ -42,7 +42,6 @@
 @property (nonatomic, readonly) FOSJsonId jsonId;
 @property (nonatomic, readonly) id<NSObject> json;
 @property (nonatomic, readonly) NSManagedObjectID *managedObjectID;
-@property (nonatomic, readonly) FOSCachedManagedObject *managedObject;
 @property (nonatomic, readonly) BOOL isTopLevelFetch;
 @property (nonatomic, assign) BOOL allowFastTrack;
 @property (nonatomic, strong) NSString *dslQuery;
@@ -64,13 +63,15 @@
 + (NSMutableDictionary *)primeBindingsForEntity:(NSEntityDescription *)entity
                                     withJsonIDs:(NSArray *)jsonIds;
 
-+ (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
++ (NSManagedObjectID *)cmoForEntity:(NSEntityDescription *)entity
                               withJsonId:(FOSJsonId)jsonId
-                            fromBindings:(NSMutableDictionary *)bindings;
+                       fromBindings:(NSMutableDictionary *)bindings
+             inManagedObjectContext:(NSManagedObjectContext *)moc;
 
-- (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
+- (NSManagedObjectID *)cmoForEntity:(NSEntityDescription *)entity
                                 withJson:(id<NSObject>)json
-                            fromBindings:(NSMutableDictionary *)bindings;
+                       fromBindings:(NSMutableDictionary *)bindings
+             inManagedObjectContext:(NSManagedObjectContext *)moc;
 
 #pragma mark - Initialization Methods
 

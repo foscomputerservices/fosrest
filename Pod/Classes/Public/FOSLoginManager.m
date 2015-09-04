@@ -52,7 +52,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _loginUserContext =
-            [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
+            [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         _loginUserContext.persistentStoreCoordinator = [FOSRESTConfig sharedInstance].databaseManager.storeCoordinator;
     });
 

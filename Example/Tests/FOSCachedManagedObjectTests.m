@@ -311,7 +311,7 @@ TEARDOWN_LOGIN
 
     FOSRetrieveCMOOperation *createOp = [TestCreate createAndRetrieveServerRecordWithJSON:json];
 
-    FOSBackgroundOperation *finishOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+    FOSBackgroundOperation *finishOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
 
         XCTAssertFalse(cancelled, @"Cancelled???");
         XCTAssertNil(error, @"Error received: %@", error.description);
@@ -321,7 +321,8 @@ TEARDOWN_LOGIN
         // FOSCreateObjectOperation that might fail and FOSCreateObjectOperation doesn't
         // know that they failed, only that it succeeded.
         if (!cancelled && error == nil) {
-            NSManagedObject *obj = createOp.managedObject;
+            NSManagedObjectID *objID = createOp.managedObjectID;
+            NSManagedObject *obj = [[FOSRESTConfig sharedInstance].databaseManager.currentMOC objectWithID:objID];
 
             XCTAssertEqual(obj.managedObjectContext, [FOSRESTConfig sharedInstance].databaseManager.currentMOC,
                           @"Wrong MOC!");
@@ -1102,16 +1103,19 @@ TEARDOWN_LOGIN
                                                withId:testWidgetId];
     XCTAssertTrue(retrieveOp.allowFastTrack, @"allowFastTrack should be YES by default");
 
-    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError * _Nullable error) {
         XCTAssertFalse(cancelled, @"Cancelled???");
         XCTAssertNil(error, @"Error: %@", error.description);
 
-        XCTAssertNotNil(retrieveOp.managedObject, @"Missing cmo???");
-        XCTAssertTrue([retrieveOp.managedObject.jsonIdValue isEqual:testWidgetId], @"Bad JSONID?");
+        XCTAssertNotNil(retrieveOp.managedObjectID, @"Missing cmo???");
+
+        NSManagedObjectID *objID = retrieveOp.managedObjectID;
+        FOSCachedManagedObject *cmo = [[FOSRESTConfig sharedInstance].databaseManager.currentMOC objectWithID:objID];
+        XCTAssertTrue([cmo.jsonIdValue isEqual:testWidgetId], @"Bad JSONID?");
 
         END_TEST
 
-    } callRequestIfCancelled:YES];
+    }];
 
     [[FOSRESTConfig sharedInstance].cacheManager queueOperation:retrieveOp
                                         withCompletionOperation:finalOp

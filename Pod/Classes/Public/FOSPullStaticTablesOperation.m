@@ -79,22 +79,26 @@ static NSMutableArray *_checkingStaticTables = nil;
 
                         NSMutableSet *idsToRemove =
                             [NSMutableSet setWithArray:[existingInstances valueForKeyPath:@"objectID"]];
-                        NSSet *serverIDs = [searchOp.results valueForKeyPath:@"objectID"];
+                        NSSet *serverIDs = searchOp.results;
 
-                        [idsToRemove minusSet:serverIDs];
+                        if (serverIDs != nil) {
+                            [idsToRemove minusSet:serverIDs];
+                        }
 
                         NSManagedObjectContext *moc = [FOSRESTConfig sharedInstance].databaseManager.currentMOC;
 
-                        // The remaining ids are no longer available on the server
-                        for (NSManagedObjectID *deletedCMOID in idsToRemove) {
-                            FOSCachedManagedObject *deletedCMO =
-                                (FOSCachedManagedObject *)[moc objectWithID:deletedCMOID];
-                            
-                            // No need to attempt to delete it from the server
-                            deletedCMO.skipServerDelete = YES;
-                            
-                            [moc deleteObject:deletedCMO];
-                        }
+                        [moc performBlockAndWait:^{
+                            // The remaining ids are no longer available on the server
+                            for (NSManagedObjectID *deletedCMOID in idsToRemove) {
+                                FOSCachedManagedObject *deletedCMO =
+                                    (FOSCachedManagedObject *)[moc objectWithID:deletedCMOID];
+
+                                // No need to attempt to delete it from the server
+                                deletedCMO.skipServerDelete = YES;
+
+                                [moc deleteObject:deletedCMO];
+                            }
+                        }];
                     }
 
                     // Any canceled operation is just one that we can skip

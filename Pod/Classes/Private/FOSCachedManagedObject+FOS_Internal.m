@@ -61,8 +61,8 @@
     return result;
 }
 
-- (id)initSkippingReadOnlyCheck {
-    return [super init];
+- (id)initSkippingReadOnlyCheckAndInsertingIntoMOC:(NSManagedObjectContext *)moc {
+    return [super initInsertingIntoManagedObjectContext:moc];
 }
 
 @end

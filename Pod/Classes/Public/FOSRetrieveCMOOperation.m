@@ -45,6 +45,7 @@
     FOSURLBinding *_urlBinding;
     FOSItemMatcher *_relationshipsToPull;
     NSRelationshipDescription *_relDesc;
+    NSManagedObjectID *_managedObjectID;
 }
 
 + (instancetype)retrieveCMOUsingDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
@@ -118,28 +119,32 @@
     return bindings;
 }
 
-+ (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
-                              withJsonId:(FOSJsonId)jsonId
-                            fromBindings:(NSMutableDictionary *)bindings {
++ (NSManagedObjectID *)cmoForEntity:(NSEntityDescription *)entity
+                         withJsonId:(FOSJsonId)jsonId
+                       fromBindings:(NSMutableDictionary *)bindings
+             inManagedObjectContext:(NSManagedObjectContext *)moc {
     NSParameterAssert(entity != nil);
     NSParameterAssert(jsonId != nil);
     NSParameterAssert(bindings != nil);
 
-    FOSCachedManagedObject *result = nil;
-    NSManagedObjectContext *moc = [FOSRESTConfig sharedInstance].databaseManager.currentMOC;
+    __block NSManagedObjectID *result = nil;
 
     id bindingVal = [self _bindingValueForKey:jsonId entity:entity inBindings:bindings];
 
     if ([bindingVal isKindOfClass:[NSManagedObjectID class]]) {
-        result = (FOSCachedManagedObject *)[moc objectWithID:(NSManagedObjectID *)bindingVal];
+        result = (NSManagedObjectID *)bindingVal;
     }
     else if (bindingVal == nil || [bindingVal isKindOfClass:[NSNull class]]) {
-        Class class = NSClassFromString(entity.managedObjectClassName);
-        result = [class fetchWithId:jsonId];
 
-        if (result != nil) {
-            bindings[jsonId] = result.objectID;
-        }
+        [moc performBlockAndWait:^{
+            Class class = NSClassFromString(entity.managedObjectClassName);
+            FOSCachedManagedObject *cmo = [class fetchWithId:jsonId inManagedObjectContext:moc];
+            result = cmo.objectID;
+
+            if (result != nil) {
+                bindings[jsonId] = result;
+            }
+        }];
     }
 
     // This is *extrmely* expensive, so don't let it out into any other build types
@@ -149,7 +154,7 @@
 
         // See: http://fosmain.foscomputerservices.com:8080/browse/FF-12
         if (![class canHaveDuplicateJsonIds]) {
-            NSManagedObjectID *id1 = result.objectID;
+            NSManagedObjectID *id1 = result;
             NSManagedObjectID *id2 = [[NSClassFromString(entity.managedObjectClassName) fetchWithId:jsonId] objectID];
 
             NSAssert(id1 == id2 || [id1 isEqual:id2], @"Something's really out of whack!");
@@ -160,14 +165,15 @@
     return result;
 }
 
-- (FOSCachedManagedObject *)cmoForEntity:(NSEntityDescription *)entity
+- (NSManagedObjectID *)cmoForEntity:(NSEntityDescription *)entity
                                 withJson:(id<NSObject>)json
-                            fromBindings:(NSMutableDictionary *)bindings {
+                       fromBindings:(NSMutableDictionary *)bindings
+             inManagedObjectContext:(NSManagedObjectContext *)moc {
 
     NSParameterAssert(entity != nil);
     NSParameterAssert(json != nil);
 
-    FOSCachedManagedObject *result = nil;
+    NSManagedObjectID *result = nil;
 
     // Let's try just using the FOSJsonId 1st
     NSError *localError = nil;
@@ -178,7 +184,8 @@
     if (localError == nil) {
         result = [[self class] cmoForEntity:entity
                                  withJsonId:jsonId
-                               fromBindings:bindings];
+                               fromBindings:bindings
+                     inManagedObjectContext:moc];
 
         // We didn't find using the jsonId, is there a local object that has all of the
         // same values for all other fields other than the id?  This can happen if
@@ -239,7 +246,7 @@
                     NSArray *matched = [cmoClass fetchWithPredicate:pred];
 
                     if (matched.count == 1) {
-                        result = matched.lastObject;
+                        result = [(FOSCachedManagedObject *)matched.lastObject objectID];
                     }
                 }
             }
@@ -465,13 +472,15 @@
                     // We don't 'respect previous' as we might have been handed an 'originalJson'
                     // packet from a top-level pull in which the bindings will not have
                     // this entry.
-                    FOSCachedManagedObject *cmo = [self cmoForEntity:_entity
-                                                            withJson:json
-                                                        fromBindings:_bindings];
-                    _managedObjectID = cmo.objectID;
+                    _managedObjectID = [self cmoForEntity:_entity
+                                                 withJson:json
+                                             fromBindings:_bindings
+                                   inManagedObjectContext:self.managedObjectContext];
                     if (_managedObjectID != nil) {
 
-                        [[self class] _setBindingValue:cmo.objectID forKey:_jsonId enity:entity inBindings:_bindings];
+                        [[self class] _setBindingValue:_managedObjectID
+                                                forKey:_jsonId enity:entity
+                                            inBindings:_bindings];
                     }
 
                     self.json = json;
@@ -568,12 +577,12 @@
                         blockSelf->_fastTracked = YES;
 
                         if (result == nil) {
-                            FOSCachedManagedObject *cmo = [[self class] cmoForEntity:blockSelf->_entity
+                            NSManagedObjectID *cmoObjID = [[self class] cmoForEntity:blockSelf->_entity
                                                                           withJsonId:jsonId
-                                                                        fromBindings:blockSelf->_bindings];
+                                                                        fromBindings:blockSelf->_bindings inManagedObjectContext:blockSelf.managedObjectContext];
 
-                            if (cmo != nil) {
-                                result = cmo.objectID;
+                            if (cmoObjID != nil) {
+                                result = cmoObjID;
 
                                 [[blockSelf class] _setBindingValue:result
                                                              forKey:jsonId
@@ -698,15 +707,12 @@
     [self _updateReady];
 }
 
-- (FOSCachedManagedObject *)managedObject {
-    FOSCachedManagedObject *result = nil;
+
+- (NSManagedObjectID *)managedObjectID {
+    NSManagedObjectID *result = nil;
 
     if (_managedObjectID != nil && self.error == nil) {
-        // This method can be called from various threads, so get the MOC of the
-        // current thread.
-        NSManagedObjectContext *moc = self.managedObjectContext;
-
-        result = (FOSCachedManagedObject *)[moc objectWithID:_managedObjectID];
+        result = _managedObjectID;
     }
 
     return result;
@@ -726,11 +732,10 @@
         // Set at the beginning to skip cycles that might be triggered below
         _finishedBinding = YES;
 
-        FOSCachedManagedObject *owner = self.managedObject;
-        NSManagedObjectID *ownerID = owner.objectID;
+        NSManagedObjectID *ownerID = self.managedObjectID;
+        BOOL encounteredErrors = NO;
 
         // Bind the to-one relationships
-        BOOL encounteredErrors = NO;
         for (FOSRetrieveToOneRelationshipOperation *nextToOneOp in _toOneOps) {
             [nextToOneOp bindToOwner:ownerID];
 
@@ -744,30 +749,35 @@
             // Check each of the toOne optional relationships to make sure that the destination
             // hasn't been deleted.
 
-            for (NSRelationshipDescription *relDesc in _entity.cmoRelationships) {
-                if (!relDesc.isToMany && relDesc.isOptional) {
+            __block FOSRetrieveCMOOperation *blockSelf = self;
+            [self.managedObjectContext performBlockAndWait:^{
+                FOSCachedManagedObject *owner = [blockSelf.managedObjectContext objectWithID:ownerID];
 
-                    NSError *localError = nil;
-                    FOSCMOBinding *cmoBinding = _urlBinding.cmoBinding;
-                    FOSJsonId jsonRelId = [cmoBinding jsonIdFromJSON:_json
-                                                           forEntity:_entity
-                                                               error:&localError];
+                for (NSRelationshipDescription *relDesc in _entity.cmoRelationships) {
+                    if (!relDesc.isToMany && relDesc.isOptional) {
 
-                    if (localError == nil) {
-                        if (jsonRelId == nil) {
-                            [owner setValue:nil forKey:relDesc.name];
+                        NSError *localError = nil;
+                        FOSCMOBinding *cmoBinding = _urlBinding.cmoBinding;
+                        FOSJsonId jsonRelId = [cmoBinding jsonIdFromJSON:_json
+                                                               forEntity:_entity
+                                                                   error:&localError];
+
+                        if (localError == nil) {
+                            if (jsonRelId == nil) {
+                                [owner setValue:nil forKey:relDesc.name];
+                            }
+                        }
+                        else {
+                            _error = localError;
                         }
                     }
-                    else {
-                        _error = localError;
-                    }
-                }
 
-                if (_error != nil) {
-                    [self _updateReady];
-                    break;
-                }
-            };
+                    if (_error != nil) {
+                        [blockSelf _updateReady];
+                        break;
+                    }
+                };
+            }];
 
             // Bind the to-many relationships
             for (FOSRetrieveToManyRelationshipOperation *nextToManyOp in _toManyOps) {
@@ -804,57 +814,59 @@
 
             if (!encounteredErrors) {
                 // Fix up any graph linked ordered relationships
-#ifndef NS_BLOCK_ASSERTIONS
-                FOSCachedManagedObject *owner = self.managedObject;
-                NSAssert(owner != nil, @"Unable to locate owner object!");
-#endif
 
-                for (NSRelationshipDescription *relDesc in _entity.cmoRelationships) {
-                    if (relDesc.isOrdered && !relDesc.isOwnershipRelationship) {
-                        FOSCachedManagedObject *owner = self.managedObject;
-                        NSAssert(owner != nil, @"Unable to locate owner object!");
+                NSManagedObjectID *ownerID = self.managedObjectID;
+                NSManagedObjectContext *moc = self.managedObjectContext;
 
-                        BOOL ownerWasDirty = owner.isDirty;
+                [moc performBlockAndWait:^{
+                    FOSCachedManagedObject *owner = [moc objectWithID:ownerID];
 
-                        NSMutableOrderedSet *mutableOrderedSet =
-                        [owner mutableOrderedSetValueForKey:relDesc.name];
+                    for (NSRelationshipDescription *relDesc in _entity.cmoRelationships) {
+                        if (relDesc.isOrdered && !relDesc.isOwnershipRelationship) {
+                            NSAssert(owner != nil, @"Unable to locate owner object!");
 
-                        NSString *orderProp = relDesc.jsonOrderProp;
-                        NSArray *sortKeys = [orderProp componentsSeparatedByString:@","];
-                        NSMutableArray *sortDescs = [NSMutableArray arrayWithCapacity:sortKeys.count];
+                            BOOL ownerWasDirty = owner.isDirty;
 
-                        for (NSString *nextSortKey in sortKeys) {
-                            NSSortDescriptor *nextSortDesc = [NSSortDescriptor sortDescriptorWithKey:nextSortKey
-                                                                                           ascending:YES];
-                            [sortDescs addObject:nextSortDesc];
-                        }
+                            NSMutableOrderedSet *mutableOrderedSet =
+                                [owner mutableOrderedSetValueForKey:relDesc.name];
 
-                        // Why NSMutableOrdered set doesn't implement sortUsingDescriptors is beyond me!
-                        [mutableOrderedSet sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                            NSComparisonResult compResult = NSOrderedSame;
+                            NSString *orderProp = relDesc.jsonOrderProp;
+                            NSArray *sortKeys = [orderProp componentsSeparatedByString:@","];
+                            NSMutableArray *sortDescs = [NSMutableArray arrayWithCapacity:sortKeys.count];
 
-                            for (NSSortDescriptor *nextSortDesc in sortDescs) {
-                                compResult = [nextSortDesc compareObject:obj1 toObject:obj2];
-                                if (compResult != NSOrderedSame) {
-                                    break;
-                                }
+                            for (NSString *nextSortKey in sortKeys) {
+                                NSSortDescriptor *nextSortDesc = [NSSortDescriptor sortDescriptorWithKey:nextSortKey
+                                                                                               ascending:YES];
+                                [sortDescs addObject:nextSortDesc];
                             }
 
-                            return compResult;
-                        }];
+                            // Why NSMutableOrdered set doesn't implement sortUsingDescriptors is beyond me!
+                            [mutableOrderedSet sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                                NSComparisonResult compResult = NSOrderedSame;
 
-                        if (!ownerWasDirty) {
-                            [owner markClean];
+                                for (NSSortDescriptor *nextSortDesc in sortDescs) {
+                                    compResult = [nextSortDesc compareObject:obj1 toObject:obj2];
+                                    if (compResult != NSOrderedSame) {
+                                        break;
+                                    }
+                                }
+                                
+                                return compResult;
+                            }];
+                            
+                            if (!ownerWasDirty) {
+                                [owner markClean];
+                            }
                         }
                     }
-                }
+                }];
             }
         }
     }
 }
 
 - (NSError *)finishValidation {
-    NSError *localError = nil;
+    __block NSError *localError = nil;
 
     _finishedErrorPass = NO;
 
@@ -862,7 +874,13 @@
     if (!_finishedValidation && !self.isCancelled) {
         _finishedValidation = YES;
 
-        [self.managedObject validateForInsert:&localError];
+        NSManagedObjectContext *moc = self.managedObjectContext;
+        NSManagedObjectID *objID = self.managedObjectID;
+        if (objID != nil) {
+            [moc performBlockAndWait:^{
+                [[moc objectWithID:objID] validateForInsert:&localError];
+            }];
+        }
 
         if (localError == nil) {
             for (FOSRetrieveToOneRelationshipOperation *nextToOneOp in _toOneOps) {
@@ -937,7 +955,7 @@
         NSManagedObjectContext *moc = self.managedObjectContext;
 
         // Did we short-circuit to an existing object?  If not, create it now.
-        BOOL markClean = YES;
+        __block BOOL markClean = YES;
 
         // There are cases where the _managedObjecgtID is no longer available.
         // I'm not sure how it happens, but it does.
@@ -946,21 +964,26 @@
         }
 
         if (_managedObjectID == nil) {
-            NSError *localError = nil;
+            __block NSError *localError = nil;
 
             id<FOSTwoWayRecordBinding> recordBinder = _urlBinding.cmoBinding;
 
             // Create the new entity
-            FOSCachedManagedObject *newCMO = [self _objectFromJSON:_json
+            NSManagedObjectID *newCMOID = [self _objectFromJSON:_json
                                                         withJsonId:_jsonId
                                                          forEntity:_entity
                                                       withBindings:_bindings
                                                       twoWayBinder:recordBinder
                                                              error:&localError];
-            if (localError == nil && newCMO != nil) {
-                newCMO.hasRelationshipFaults = _createdFaults;
+            if (localError == nil && newCMOID != nil) {
+                __block FOSRetrieveCMOOperation *blockSelf = self;
+                NSManagedObjectContext *moc = self.managedObjectContext;
 
-                if ([moc obtainPermanentIDsForObjects:@[ newCMO ] error:&localError]) {
+                [moc performBlockAndWait:^{
+                    FOSCachedManagedObject *newCMO = [moc objectWithID:newCMOID];
+
+                    newCMO.hasRelationshipFaults = blockSelf->_createdFaults;
+
                     _managedObjectID = newCMO.objectID;
 
                     // The jsonId and managed object's jsonId should now align
@@ -971,10 +994,7 @@
                                             forKey:newCMO.jsonIdValue
                                              enity:_entity
                                         inBindings:_bindings];
-                }
-                else {
-                    _error = localError;
-                }
+                }];
             }
 
             else {
@@ -987,26 +1007,32 @@
 
             id<FOSTwoWayRecordBinding> binder = _urlBinding.cmoBinding;
 
-            NSError *error = nil;
-            // Store the json
-            self.managedObject.originalJsonData = [NSJSONSerialization dataWithJSONObject:_json
-                                                                                  options:0
-                                                                                    error:&error];
+            __block NSError *error = nil;
 
-            if (error == nil) {
-                [binder updateCMO:self.managedObject
-                         fromJSON:(NSDictionary *)_json
-                forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                            error:&error];
-            }
+            NSManagedObjectID *objID = self.managedObjectID;
+            [moc performBlockAndWait:^{
+                FOSCachedManagedObject *obj = (FOSCachedManagedObject *)[moc objectWithID:objID];
 
-            _error = error;
+                // Store the json
+                obj.originalJsonData = [NSJSONSerialization dataWithJSONObject:_json
+                                                                       options:0
+                                                                         error:&error];
 
-            // updateWithJSONDictionary will mark the object clean (and thus remove
-            // all modified properties), if there were not conflicts while updating.
-            // If there were conflicts, then we still have modifications and are not
-            // 'clean' w.r.t. the server.
-            markClean = ![self.managedObject hasModifiedProperties];
+                if (error == nil) {
+                    [binder updateCMO:obj
+                             fromJSON:(NSDictionary *)_json
+                    forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                error:&error];
+                }
+
+                _error = error;
+
+                // updateWithJSONDictionary will mark the object clean (and thus remove
+                // all modified properties), if there were not conflicts while updating.
+                // If there were conflicts, then we still have modifications and are not
+                // 'clean' w.r.t. the server.
+                markClean = ![obj hasModifiedProperties];
+            }];
         }
 
         if (_error == nil) {
@@ -1029,15 +1055,8 @@
                 }
 
                 if (localError != nil) {
-                    NSManagedObjectContext *moc = self.managedObjectContext;
-                    FOSCachedManagedObject *cmo =  _managedObjectID != nil
-                    ? (FOSCachedManagedObject *)[moc objectWithID:_managedObjectID]
-                    : nil;
-
-                    if (cmo != nil) {
-                        FOSLogDebug(@"DISCARDING INSTANCE: The entity %@ (%@-%@) failed binding/ordering/validation and has been discarded: %@", self.entity.name, cmo.jsonIdValue, cmo.objectID.description,
-                                    _isTopLevelFetch ? self.error.description : @"");
-                    }
+                    FOSLogDebug(@"DISCARDING INSTANCE: The entity %@ (%@-%@) failed binding/ordering/validation and has been discarded: %@", self.entity.name, self.jsonId, self.managedObjectID.description,
+                                _isTopLevelFetch ? self.error.description : @"");
                 }
 
                 [self finishCleanup:(localError != nil)];
@@ -1045,7 +1064,10 @@
 
             // We're now done binding the object, mark it as clean w.r.t. the server
             if (markClean && self.error == nil) {
-                [self.managedObject markClean];
+                NSManagedObjectID *objID = self.managedObjectID;
+                [moc performBlockAndWait:^{
+                    [(FOSCachedManagedObject *)[moc objectWithID:objID] markClean];
+                }];
             }
         }
     }
@@ -1108,18 +1130,18 @@
     }
 }
 
-- (FOSCachedManagedObject *)_objectFromJSON:(id<NSObject>)json
-                                 withJsonId:(FOSJsonId)jsonId
-                                  forEntity:(NSEntityDescription *)entity
-                               withBindings:(NSMutableDictionary *)bindings
-                               twoWayBinder:(id<FOSTwoWayRecordBinding>)twoWayBinder
-                                      error:(NSError **)error {
+- (NSManagedObjectID *)_objectFromJSON:(id<NSObject>)json
+                            withJsonId:(FOSJsonId)jsonId
+                             forEntity:(NSEntityDescription *)entity
+                          withBindings:(NSMutableDictionary *)bindings
+                          twoWayBinder:(id<FOSTwoWayRecordBinding>)twoWayBinder
+                                 error:(NSError **)error {
     NSParameterAssert(json != nil);
     NSParameterAssert(jsonId != nil);
     NSParameterAssert(entity != nil);
     NSParameterAssert(twoWayBinder != nil);
 
-    FOSCachedManagedObject *result = nil;
+    __block NSManagedObjectID *result = nil;
     if (error != nil) {
         *error = nil;
     }
@@ -1128,8 +1150,9 @@
         Class managedClass = NSClassFromString(entity.managedObjectClassName);
 
         // Let's see if we already know this managed object
-        FOSCachedManagedObject *cmo = nil;
-        NSError *localError = nil;
+        __block NSManagedObjectID *cmoObjID = nil;
+        __block NSError *localError = nil;
+        NSManagedObjectContext *moc = self.managedObjectContext;
 
         // If the item has been locally deleted, we don't want to restore it back to our
         // parent's context, just skip it.
@@ -1143,9 +1166,10 @@
 
             if (localError == nil) {
                 if (localJsonId == nil) {
-                    cmo = [[self class] cmoForEntity:entity
+                    cmoObjID = [[self class] cmoForEntity:entity
                                           withJsonId:jsonId
-                                        fromBindings:bindings];
+                                        fromBindings:bindings
+                                   inManagedObjectContext:moc];
                 }
                 else {
                     NSAssert([localJsonId isEqual:jsonId], @"Why are these different???");
@@ -1153,40 +1177,49 @@
                     // We'll use the JSON form, if possible, to handle the case that we cannot
                     // find a local instance with the id set; then we can search using
                     // "data equality".
-                    cmo = [self cmoForEntity:entity
+                    cmoObjID = [self cmoForEntity:entity
                                     withJson:json
-                                fromBindings:bindings];
+                                fromBindings:bindings
+                           inManagedObjectContext:moc];
                 }
             }
         }
 
         if (localError == nil) {
-            // Nope, create a new one
-            if (cmo == nil) {
-                cmo = [[managedClass alloc] initSkippingReadOnlyCheck];
-                [cmo setJsonIdValue:jsonId];
+            [moc performBlockAndWait:^{
+                FOSCachedManagedObject *cmo = nil;
 
-                bindings[jsonId] = cmo.objectID;
-            }
-
-
-            if (localError == nil) {
-                // Store the json
-                cmo.originalJsonData = [NSJSONSerialization dataWithJSONObject:json
-                                                                       options:0
-                                                                         error:&localError];
-
-                // Bind the local vars to the json
-                if ([twoWayBinder updateCMO:cmo
-                                   fromJSON:json
-                          forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
-                                      error:&localError]) {
-
-                    NSAssert([cmo.jsonIdValue isEqual:jsonId], @"Ids not equal???");
-
-                    result = cmo;
+                // Nope, create a new one
+                if (cmoObjID == nil) {
+                    cmo = [[managedClass alloc] initSkippingReadOnlyCheckAndInsertingIntoMOC:moc];
+                    [cmo setJsonIdValue:jsonId];
+                    if ([moc obtainPermanentIDsForObjects:@[cmo] error:&localError]) {
+                        cmoObjID = cmo.objectID;
+                        bindings[jsonId] = cmoObjID;
+                    }
                 }
-            }
+                else {
+                    cmo = [moc objectWithID:cmoObjID];
+                }
+
+                if (localError == nil) {
+                    // Store the json
+                    cmo.originalJsonData = [NSJSONSerialization dataWithJSONObject:json
+                                                                           options:0
+                                                                             error:&localError];
+
+                    // Bind the local vars to the json
+                    if ([twoWayBinder updateCMO:cmo
+                                       fromJSON:json
+                              forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
+                                          error:&localError]) {
+
+                        NSAssert([cmo.jsonIdValue isEqual:jsonId], @"Ids not equal???");
+
+                        result = cmoObjID;
+                    }
+                }
+            }];
         }
 
         if (localError != nil) {

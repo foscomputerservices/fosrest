@@ -128,7 +128,10 @@
  * @param jsonId  The unique identifier of the instance
  *     to retrieve.
  */
-+ (instancetype _Nonnull)fetchWithId:(FOSJsonId _Nonnull)jsonId;
++ (instancetype _Nullable)fetchWithId:(FOSJsonId _Nonnull)jsonId;
+
++ (instancetype _Nullable)fetchWithId:(FOSJsonId _Nonnull)jsonId
+               inManagedObjectContext:(NSManagedObjectContext * _Nonnull)moc;
 
 + (NSSet * _Nonnull)fetchWithIds:(id<NSFastEnumeration> _Nonnull)jsonIds;
 
