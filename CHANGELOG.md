@@ -26,3 +26,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 
 * Updated to use Xcode 7.0 beta compiler. 
 * Began adding new optionality flags to better align with Swift clients.
+
+# v 0.3.1
+
+* Added the ability to override any NSEntity.managedClassName while merging the models
