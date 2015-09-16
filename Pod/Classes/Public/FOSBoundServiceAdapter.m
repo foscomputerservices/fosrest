@@ -362,7 +362,10 @@
         *matched = YES;
     }
     else if ([varName isEqualToString:@"USER_ENTITY"]) {
-        result = [NSEntityDescription entityNameForClass:[FOSRESTConfig sharedInstance].userSubType];
+        result = [[FOSRESTConfig sharedInstance].userSubType entityDescription].name;
+        NSAssert(result != nil,
+                 @"Unable to locate an NSEntityDescription for type: %@",
+                 NSStringFromClass([FOSRESTConfig sharedInstance].userSubType));
     }
     else if ([varName isEqualToString:@"DSLQUERY"]) {
         result = @"";

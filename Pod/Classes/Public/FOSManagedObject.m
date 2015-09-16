@@ -34,14 +34,12 @@
 #pragma mark - Initialization methods
 
 - (instancetype)initInsertingIntoManagedObjectContext:(NSManagedObjectContext *)moc {
-    NSString *entityName = [NSEntityDescription entityNameForClass:[self class]];
-    NSEntityDescription *desc = [NSEntityDescription entityForName:entityName
-                                            inManagedObjectContext:moc];
+    NSEntityDescription *desc = [[self class] entityDescription];
 
     if (desc == nil) {
-        NSString *msg = NSLocalizedString(@"Entity %@ is missing from the managed object model", @"");
+        NSString *msg = NSLocalizedString(@"Entity for class %@ is missing from the managed object model", @"");
 
-        [NSException raise:@"FOSMissing_EntityInModel" format:msg, entityName];
+        [NSException raise:@"FOSMissing_EntityInModel" format:msg, NSStringFromClass([self class])];
     }
 
     return [self initWithEntity:desc insertIntoManagedObjectContext:moc];

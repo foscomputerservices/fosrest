@@ -36,8 +36,13 @@
     NSParameterAssert(jsonId != nil);
     NSParameterAssert(type != nil);
 
+    NSEntityDescription *typeDesc = [type entityDescription];
+    NSAssert(typeDesc != nil,
+             @"Unable to locate an NSEntityDescription for type: %@",
+             NSStringFromClass(type));
+
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"deletedJsonId = %@ && deletedEntityName == %@",
-                         jsonId, [NSEntityDescription entityNameForClass:type]];
+                         jsonId, typeDesc];
 
     NSManagedObjectContext *moc = [FOSRESTConfig sharedInstance].databaseManager.currentMOC;
 

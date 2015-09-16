@@ -32,20 +32,6 @@
 
 @implementation NSEntityDescription (FOS_Internal)
 
-#pragma mark - Class Methods
-
-+ (NSString  * _Nonnull)entityNameForClass:(Class)class {
-    NSString *entityName = NSStringFromClass(class);
-
-    // Handle Swift classes
-    NSRange dotRange = [entityName rangeOfString:@"."];
-    if (dotRange.location != NSNotFound) {
-        entityName = [entityName substringFromIndex:dotRange.location + 1];
-    }
-
-    return entityName;
-}
-
 #pragma mark - Public Properties
 
 - (BOOL)isFOSEntity {
