@@ -78,7 +78,9 @@
         isGet || fragmentIsQueryString;
 
     NSMutableString *endPointAndQuery = [NSMutableString stringWithCapacity:128];
-    [endPointAndQuery appendString:_endPoint];
+
+    NSString *endPoint = [_endPoint stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
+    [endPointAndQuery appendString:endPoint];
     if (fragmentIsQueryParameter) {
         NSUInteger i = 0, count = _uriFragments.count;
         for (id<NSObject> nextFragment in _uriFragments) {
@@ -100,7 +102,7 @@
                                                       error:&jsonError];
                     NSAssert(jsonError == nil, @"Error received encoding JSON data???");
 
-                    uriFragment = [NSString stringWithUTF8String:serializedJSON.bytes];
+                    uriFragment = [[NSString stringWithUTF8String:serializedJSON.bytes] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
                 }
             }
             else {
@@ -144,11 +146,8 @@
                             localEndPointAndQuery];
     }
 
-    // Encode the URL
-    NSString *encodedRequestURLString = [requestURLString
-                                         stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    NSURL *result = [NSURL URLWithString:encodedRequestURLString];
+    // Encode the URL    
+    NSURL *result = [NSURL URLWithString:requestURLString];
 
     return result;
 }
@@ -492,7 +491,7 @@
     }
 
     NSString *localBaseURL = [baseURL copy];
-    NSString *localEndPointAndQuery = [endPointAndQuery copy];
+    NSString *localEndPointAndQuery = [[endPointAndQuery copy] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
     NSArray *localFragments = [uriFragments copy];
 
     NSString *requestURLString = localBaseURL;
@@ -503,15 +502,14 @@
         requestURLString = [localBaseURL stringByAppendingFormat:@"%@%@",
                             baseEndsWithSlash ? @"" : @"/",
                             localEndPointAndQuery];
+        requestURLString = [requestURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
     }
     errorUserInfo[@"requestURLString"] = requestURLString;
 
     // Encode the URL
-    NSString *encodedRequestURLString = [requestURLString
-                                         stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    errorUserInfo[@"encodedRequestURLString"] = encodedRequestURLString;
+    errorUserInfo[@"encodedRequestURLString"] = requestURLString;
 
-    NSURL *requestURL = [NSURL URLWithString:encodedRequestURLString];
+    NSURL *requestURL = [NSURL URLWithString:requestURLString];
 
     if (requestURL == nil) {
 
