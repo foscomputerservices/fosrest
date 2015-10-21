@@ -30,3 +30,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # v 0.3.[1|2]
 
 * Added the ability to override any NSEntity.managedClassName while merging the models
+
+# v 0.3.3
+
+* Updated away from iOS 9 deprecated APIs..  Yet to do: NSURLConnection->NSURLSession 
