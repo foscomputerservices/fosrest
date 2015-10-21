@@ -253,7 +253,11 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
         if (result!= nil) {
             result->_reachabilityRef = reachability;
             result->_localWiFiRef = NO;
+
+            CFRetain(result->_reachabilityRef);
         }
+
+        CFRelease(reachability);
     }
     return result;
 }

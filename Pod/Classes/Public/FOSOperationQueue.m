@@ -55,12 +55,16 @@
         if (_moc == nil) {
             NSAssert(self.restConfig != nil, @"No restConfig???");
 
-            _moc = [[FOSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
+            _moc = [[FOSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
             _moc.cacheManager = self.restConfig.cacheManager;
             _moc.persistentStoreCoordinator = self.restConfig.databaseManager.storeCoordinator;
             _moc.mergePolicy =
                 [[FOSMergePolicy alloc] initWithMergeType:NSMergeByPropertyStoreTrumpMergePolicyType];
             _moc.undoManager = nil;
+
+            // We reference instances by their objectID in the backround threads and
+            // do not hold on to references.  Thus, the MOC serves as a cache too.
+            _moc.retainsRegisteredObjects = true;
         }
     }
 

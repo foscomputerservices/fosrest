@@ -39,15 +39,21 @@
 
 @implementation NSManagedObjectModel (FOS)
 
-+ (NSManagedObjectModel *)modelByMergingModels:(NSArray *)models
-                           ignoringPlaceholder:(NSString *)placeholder {
++ (nonnull NSManagedObjectModel *)modelByMergingModels:(nonnull NSArray<NSManagedObjectModel *> *)models
+                                   ignoringPlaceholder:(nonnull NSString *)placeholder {
+    return [self modelByMergingModels:models ignoringPlaceholder:placeholder typeNameSubstitutions:nil];
+}
+
++ (nonnull NSManagedObjectModel *)modelByMergingModels:(nonnull NSArray<NSManagedObjectModel *> *)models
+                                   ignoringPlaceholder:(nonnull NSString *)placeholder
+                                 typeNameSubstitutions:(nullable NSDictionary<NSString *, NSString *> *)subs {
     NSManagedObjectModel *result = [[NSManagedObjectModel alloc] init];
 
     // Set placeholder
     [NSEntityDescription setPlaceholder:placeholder];
 
-    NSArray *oldEntities = [self _orderedAndFilteredEntities:models];
-    NSDictionary *placeholderEntities = [self _placeholderEntities:models];
+    NSArray *oldEntities = [self _orderedAndFilteredEntities:models typeNameSubstitutions:subs];
+    NSDictionary *placeholderEntities = [self _placeholderEntities:models typeNameSubstitutions:subs];
     NSMutableDictionary *newEntities = [NSMutableDictionary dictionary];
 
     for (NSEntityDescription *oldParentEntity in oldEntities) {
@@ -87,8 +93,9 @@
     return result;
 }
 
-+ (NSArray *)_orderedAndFilteredEntities:(NSArray *)models {
-    NSArray *mergedEntities = [self _mergedEntities:models];
++ (NSArray *)_orderedAndFilteredEntities:(nonnull NSArray<NSManagedObjectModel *> *)models
+                   typeNameSubstitutions:(nullable NSDictionary<NSString *, NSString *> *)subs {
+    NSArray *mergedEntities = [self _mergedEntities:models typeNameSubstitutions:subs];
 
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"isPlaceholder == NO"];
     NSArray *filteredEntities = [mergedEntities filteredArrayUsingPredicate:pred];
@@ -96,8 +103,9 @@
     return filteredEntities;
 }
 
-+ (NSDictionary *)_placeholderEntities:(NSArray *)models {
-    NSArray *mergedEntities = [self _mergedEntities:models];
++ (NSDictionary *)_placeholderEntities:(nonnull NSArray<NSManagedObjectModel *> *)models
+                 typeNameSubstitutions:(nullable NSDictionary<NSString *, NSString *> *)subs {
+    NSArray *mergedEntities = [self _mergedEntities:models typeNameSubstitutions:subs];
 
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"isPlaceholder == YES"];
     NSArray *filteredEntities = [mergedEntities filteredArrayUsingPredicate:pred];
@@ -119,7 +127,8 @@
     return result;
 }
 
-+ (NSArray *)_mergedEntities:(NSArray *)models {
++ (NSArray *)_mergedEntities:(nonnull NSArray<NSManagedObjectModel *> *)models
+       typeNameSubstitutions:(nullable NSDictionary<NSString *, NSString *> *)subs {
     NSMutableArray *result = [NSMutableArray array];
 
     // Sort before filtering to get a true depth
@@ -131,6 +140,11 @@
         NSArray *sortedEntities = [model.entities sortedArrayUsingDescriptors:@[ sortDesc ]];
 
         for (NSEntityDescription *entity in sortedEntities) {
+            NSString *subType = subs[entity.managedObjectClassName];
+            if (subType != nil) {
+                entity.managedObjectClassName = subType;
+            }
+
             [result addObject:entity];
         }
     }
@@ -138,7 +152,7 @@
     return result;
 }
 
-+ (NSDictionary *)_mergedLocalizationDictionaries:(NSArray *)models {
++ (NSDictionary *)_mergedLocalizationDictionaries:(nonnull NSArray<NSManagedObjectModel *> *)models {
 
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
 

@@ -1063,8 +1063,7 @@
             valueStr = value.description;
         }
 
-        NSString *escapedValueStr =
-            [valueStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *escapedValueStr = [valueStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
 
         [result appendString:escapedValueStr];
     }

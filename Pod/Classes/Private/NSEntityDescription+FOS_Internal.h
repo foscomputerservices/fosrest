@@ -51,20 +51,6 @@
 @property (nonatomic, readonly) NSSet *flattenedOwnershipRelationships;
 @property (nonatomic, readonly) BOOL isStaticTableEntity;
 
-#pragma mark - Public Class Methods
-
-/*!
- * @method
- *
- * Converts a class name into an entity name that will bind to NSEntityDescription.
- *
- * @discussion
- *
- * This method should *always* be used, never expect that NSStringFromClass() is
- * a substitute for retrieving the entity name.
- */
-+ (NSString *)entityNameForClass:(Class)class;
-
 #pragma mark - Public Methods
 
 - (BOOL)isFOSEntityWithRestConfig:(FOSRESTConfig *)restConfig;

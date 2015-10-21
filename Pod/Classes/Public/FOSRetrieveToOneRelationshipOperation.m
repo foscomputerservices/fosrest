@@ -34,7 +34,7 @@
     FOSRetrieveCMOOperation *_fetchRelatedEntityOp;
     BOOL *_relAlreadyProcessing;
     NSMutableDictionary *_bindings;
-    FOSCMOBinding *_parentCMOBinding;
+    __block FOSCMOBinding *_parentCMOBinding;
 }
 
 + (instancetype)fetchToOneRelationship:(NSRelationshipDescription *)relDesc
@@ -109,127 +109,135 @@
     NSParameterAssert(ownerId != nil);
 
     if (!self.isCancelled && self.error == nil) {
-        FOSCachedManagedObject *childObj = nil;
+        NSManagedObjectContext *moc = self.managedObjectContext;
+        __block FOSRetrieveToOneRelationshipOperation *blockSelf = self;
 
-        NSDictionary *childFragment = ((NSDictionary *)_jsonFragment);
+        [moc performBlockAndWait:^{
+            FOSCachedManagedObject *childObj = nil;
+            NSRelationshipDescription *relDesc = blockSelf.relationship;
 
-        if (_fetchRelatedEntityOp != nil) {
-            NSAssert(_relationship.isOwnershipRelationship ||
-                     !_relationship.isOptional ||
-                     _relationship.jsonRelationshipForcePull != FOSForcePullType_Never,
-                     @"Expected an ownership relationship, not a graph relationship.");
-            [_fetchRelatedEntityOp finishBinding];
-            childObj = _fetchRelatedEntityOp.managedObject;
-        }
-        else {
-            NSEntityDescription *childEntity = _relationship.destinationEntity;
+            NSDictionary *childFragment = ((NSDictionary *)blockSelf.jsonFragment);
 
-            if (childFragment != nil) {
-                NSError *localError = nil;
-
-                FOSJsonId childId = [_parentCMOBinding jsonIdFromJSON:childFragment
-                                                      forRelationship:_relationship
-                                                                error:&localError];
-
-                if (localError == nil && childId != nil) {
-                    childObj = [FOSRetrieveCMOOperation cmoForEntity:childEntity
-                                                          withJsonId:childId
-                                                        fromBindings:_bindings];
-                }
-                else {
-                    _error = localError;
-                }
-            }
-
-            // Here we have a relationship to an instance that does not exist on the
-            // server.
-            if (_error == nil && childObj == nil) {
-                if (!_relationship.isOptional) {
-                    NSManagedObjectContext *moc = self.managedObjectContext;
-                    FOSCachedManagedObject *owner = (FOSCachedManagedObject *)[moc objectWithID:ownerId];
-
-                    NSString *msgFormat = NSLocalizedString(@"Unable to pull %@ on relationship %@ of instance %@ of type %@ from the server.", @"");
-                    NSString *msg = [NSString stringWithFormat:msgFormat,
-                                     childEntity.name, _relationship.name, owner.jsonIdValue,
-                                     _relationship.entity.name];
-
-                    NSError *error = [NSError errorWithMessage:msg];
-
-                    _error = error;
-                }
-                else {
-                    _ignoreDependentErrors = YES;
-                }
-            }
-        }
-
-        if (_error == nil && !_ignoreDependentErrors) {
-            if (childObj == nil) {
-                FOSJsonId jsonId = [_parentCMOBinding jsonIdFromJSON:childFragment
-                                                           forEntity:_relationship.destinationEntity
-                                                               error:nil];
-                NSString *title = @"FOSMissingChildEntity";
-                NSString *msg = [NSString stringWithFormat:@"A child object is missing for relationship '%@' on entity '%@' for child entity %@ with childId '%@'.",
-                                 _relationship.name,
-                                 _relationship.entity.name,
-                                 _relationship.destinationEntity.name,
-                                 jsonId
-                                 ];
-                NSDictionary *userInfo = @{
-                                           @"relationship" : _relationship.name,
-                                           @"entity" : _relationship.entity.name,
-                                           @"destEntity" : _relationship.destinationEntity.name,
-                                           @"jsonFragment" : _jsonFragment
-                                           };
-
-                NSError *error = [NSError errorWithDomain:title
-                                                  message:msg
-                                              andUserInfo:userInfo];
-                _error = error;
+            if (blockSelf->_fetchRelatedEntityOp != nil) {
+                NSAssert(blockSelf.relationship.isOwnershipRelationship ||
+                         !relDesc.isOptional ||
+                         relDesc.jsonRelationshipForcePull != FOSForcePullType_Never,
+                         @"Expected an ownership relationship, not a graph relationship.");
+                [blockSelf->_fetchRelatedEntityOp finishBinding];
+                childObj = [moc objectWithID:blockSelf->_fetchRelatedEntityOp.managedObjectID];
             }
             else {
-                NSManagedObjectContext *moc = self.managedObjectContext;
-                FOSCachedManagedObject *owner = (FOSCachedManagedObject *)[moc objectWithID:ownerId];
-                BOOL ownerWasDirty = owner.isDirty;
-                BOOL childWasDirty = childObj.isDirty;
+                NSEntityDescription *childEntity = relDesc.destinationEntity;
 
-                NSAssert(owner != nil, @"Unable to locate owner object???");
+                if (childFragment != nil) {
+                    NSError *localError = nil;
 
-                // Check FOSForcePullType_Always. Some clients use this to force the owner
-                // to be different than what would normally be found when a parent pulls their
-                // children.  That is, the parent object may pull children from its siblings
-                // too, so those owners are not the parent object that performed the pull.
-                NSAssert([owner primitiveValueForKey:_relationship.name] == nil ||
-                         [owner primitiveValueForKey:_relationship.name] == childObj ||
-                         _relationship.jsonRelationshipForcePull == FOSForcePullType_Always,
-                         @"Relationship already bound???");
+                    FOSJsonId childId = [blockSelf->_parentCMOBinding jsonIdFromJSON:childFragment
+                                                          forRelationship:relDesc
+                                                                    error:&localError];
 
-                // Set the forward relationship
-                if ([owner primitiveValueForKey:_relationship.name] == nil ||
-                    _relationship.jsonRelationshipForcePull == FOSForcePullType_Always) {
-                    [owner setValue:childObj forKey:_relationship.name];
+                    if (localError == nil && childId != nil) {
+                        NSManagedObjectID *childObjID = [FOSRetrieveCMOOperation cmoForEntity:childEntity
+                                                                                   withJsonId:childId
+                                                                                 fromBindings:blockSelf->_bindings
+                                                                       inManagedObjectContext:blockSelf.managedObjectContext];
+
+                        childObj = [moc objectWithID:childObjID];
+                    }
+                    else {
+                        blockSelf->_error = localError;
+                    }
                 }
 
-                // Set the inverse relationship
-                NSRelationshipDescription *inverse = _relationship.inverseRelationship;
+                // Here we have a relationship to an instance that does not exist on the
+                // server.
+                if (blockSelf->_error == nil && childObj == nil) {
+                    if (!relDesc.isOptional) {
+                        NSManagedObjectContext *moc = blockSelf.managedObjectContext;
+                        FOSCachedManagedObject *owner = (FOSCachedManagedObject *)[moc objectWithID:ownerId];
 
-                if (!inverse.isToMany) {
-                    [childObj setValue:owner forKey:inverse.name];
-                }
-                else {
-                    NSMutableSet *mutableSet = [childObj primitiveValueForKey:inverse.name];
+                        NSString *msgFormat = NSLocalizedString(@"Unable to pull %@ on relationship %@ of instance %@ of type %@ from the server.", @"");
+                        NSString *msg = [NSString stringWithFormat:msgFormat,
+                                         childEntity.name, relDesc.name, owner.jsonIdValue,
+                                         relDesc.entity.name];
 
-                    [mutableSet addObject:owner];
-                }
+                        NSError *error = [NSError errorWithMessage:msg];
 
-                if (!ownerWasDirty) {
-                    [owner markClean];
-                }
-                if (!childWasDirty) {
-                    [childObj markClean];
+                        blockSelf->_error = error;
+                    }
+                    else {
+                        blockSelf->_ignoreDependentErrors = YES;
+                    }
                 }
             }
-        }
+
+            if (blockSelf->_error == nil && !blockSelf->_ignoreDependentErrors) {
+                if (childObj == nil) {
+                    FOSJsonId jsonId = [blockSelf->_parentCMOBinding jsonIdFromJSON:childFragment
+                                                               forEntity:relDesc.destinationEntity
+                                                                   error:nil];
+                    NSString *title = @"FOSMissingChildEntity";
+                    NSString *msg = [NSString stringWithFormat:@"A child object is missing for relationship '%@' on entity '%@' for child entity %@ with childId '%@'.",
+                                     relDesc.name,
+                                     relDesc.entity.name,
+                                     relDesc.destinationEntity.name,
+                                     jsonId
+                                     ];
+                    NSDictionary *userInfo = @{
+                                               @"relationship" : relDesc.name,
+                                               @"entity" : relDesc.entity.name,
+                                               @"destEntity" : relDesc.destinationEntity.name,
+                                               @"jsonFragment" : blockSelf.jsonFragment
+                                               };
+
+                    NSError *error = [NSError errorWithDomain:title
+                                                      message:msg
+                                                  andUserInfo:userInfo];
+                    blockSelf->_error = error;
+                }
+                else {
+                    FOSCachedManagedObject *owner = (FOSCachedManagedObject *)[moc objectWithID:ownerId];
+                    BOOL ownerWasDirty = owner.isDirty;
+                    BOOL childWasDirty = childObj.isDirty;
+
+                    NSAssert(owner != nil, @"Unable to locate owner object???");
+
+                    // Check FOSForcePullType_Always. Some clients use this to force the owner
+                    // to be different than what would normally be found when a parent pulls their
+                    // children.  That is, the parent object may pull children from its siblings
+                    // too, so those owners are not the parent object that performed the pull.
+                    NSAssert([owner primitiveValueForKey:relDesc.name] == nil ||
+                             [owner primitiveValueForKey:relDesc.name] == childObj ||
+                             relDesc.jsonRelationshipForcePull == FOSForcePullType_Always,
+                             @"Relationship already bound???");
+
+                    // Set the forward relationship
+                    if ([owner primitiveValueForKey:relDesc.name] == nil ||
+                        relDesc.jsonRelationshipForcePull == FOSForcePullType_Always) {
+                        [owner setValue:childObj forKey:relDesc.name];
+                    }
+
+                    // Set the inverse relationship
+                    NSRelationshipDescription *inverse = relDesc.inverseRelationship;
+
+                    if (!inverse.isToMany) {
+                        [childObj setValue:owner forKey:inverse.name];
+                    }
+                    else {
+                        NSMutableSet *mutableSet = [childObj primitiveValueForKey:inverse.name];
+
+                        [mutableSet addObject:owner];
+                    }
+
+                    if (!ownerWasDirty) {
+                        [owner markClean];
+                    }
+                    if (!childWasDirty) {
+                        [childObj markClean];
+                    }
+                }
+            }
+        }];
     }
 }
 

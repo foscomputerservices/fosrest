@@ -30,7 +30,9 @@
 #import <FOSUser.h>
 #import "FOSREST_Internal.h"
 
-@implementation FOSUser
+@implementation FOSUser {
+    int userNum;
+}
 
 @synthesize isLoginUser = _isLoginUser;
 @synthesize password = _password;
@@ -43,6 +45,15 @@
     FOSUser *result = [[self alloc] initWithEntity:[self entityDescription]
                     insertIntoManagedObjectContext:moc];
     result->_isLoginUser = YES;
+
+    return result;
+}
+
+static int totalUserNum = 0;
+- (FOSUser *)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context {
+    FOSUser *result = [super initWithEntity:entity insertIntoManagedObjectContext:context];
+
+    userNum = totalUserNum++;
 
     return result;
 }

@@ -36,7 +36,7 @@
 @interface NSManagedObjectModel (FOS)
 
 /*!
- * @method modelByMergingModelsButIgnoringPlaceholders:
+ * @method modelByMergingModelsButIgnoringPlaceholders:typeNameSubstitutions:
  *
  * Merges models together by replacing any entities that have
  * a userInfo key of 'placeholder' with the corresponding
@@ -54,8 +54,15 @@
  *
  * This implementation fully supports inheritance and placeholder
  * entites in multiple models.
+ *
+ * @param subs Allows for substituting the managedObjectClassName on the resulting entities.
+ *      This enables subtypes to be created that might not alter the data model from
+ *      a Core Data point of view, but override other class functionality.
  */
-+ (NSManagedObjectModel *)modelByMergingModels:(NSArray *)models
-                           ignoringPlaceholder:(NSString *)placeholder;
++ (nonnull NSManagedObjectModel *)modelByMergingModels:(nonnull NSArray<NSManagedObjectModel *> *)models
+                                   ignoringPlaceholder:(nonnull NSString *)placeholder
+                                 typeNameSubstitutions:(nullable NSDictionary<NSString *, NSString *> *)subs;
++ (nonnull NSManagedObjectModel *)modelByMergingModels:(nonnull NSArray<NSManagedObjectModel *> *)models
+                                   ignoringPlaceholder:(nonnull NSString *)placeholder;
 
 @end

@@ -174,7 +174,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * The set of properties that are of type NSAttributeDescription and
  * !relDesc.isFOSProperty.
  */
-@property (nonatomic, readonly) NSSet *cmoAttributes;
+@property (nonatomic, readonly) NSSet<NSAttributeDescription *> *cmoAttributes;
 
 /*!
  * @property cmoRelationships
@@ -182,7 +182,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * The set of properties that are of type NSRelationshipDescription and
  * !relDesc.isFOSRelationship.
  */
-@property (nonatomic, readonly) NSSet *cmoRelationships;
+@property (nonatomic, readonly) NSSet<NSRelationshipDescription *> *cmoRelationships;
 
 /*!
  * @property cmoToOneRelationships
@@ -190,7 +190,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * The set of properties that are of type NSRelationshipDescription and
  * !relDesc.isFOSRelationship && !relDesc.isToMany.
  */
-@property (nonatomic, readonly) NSSet *cmoToOneRelationships;
+@property (nonatomic, readonly) NSSet<NSRelationshipDescription *> *cmoToOneRelationships;
 
 /*!
  * @property cmoToManyRelationships
@@ -198,7 +198,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * The set of properties that are of type NSRelationshipDescription and
  * !relDesc.isFOSRelationship && relDesc.isToMany.
  */
-@property (nonatomic, readonly) NSSet *cmoToManyRelationships;
+@property (nonatomic, readonly) NSSet<NSRelationshipDescription *> *cmoToManyRelationships;
 
 /*!
  * @property cmoOwnedRelationships
@@ -206,7 +206,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * The set of properties that are of type NSRelationshipDescription and
  * !relDesc.isFOSRelationship && relDesc.isOwnershipRelationship.
  */
-@property (nonatomic, readonly) NSSet *cmoOwnedRelationships;
+@property (nonatomic, readonly) NSSet<NSRelationshipDescription *> *cmoOwnedRelationships;
 
 /*!
  * @property cmoOwnedToManyRelationships
@@ -214,7 +214,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * The set of properties that are of type NSRelationshipDescription and
  * !relDesc.isFOSRelationship && relDesc.isOwnershipRelationship && relDesc.isToMany.
  */
-@property (nonatomic, readonly) NSSet *cmoOwnedToManyRelationships;
+@property (nonatomic, readonly) NSSet<NSRelationshipDescription *> *cmoOwnedToManyRelationships;
 
 /*!
  * @methodgroup  Inferred Properties

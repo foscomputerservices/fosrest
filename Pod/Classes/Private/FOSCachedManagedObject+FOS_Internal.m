@@ -36,33 +36,38 @@
 #pragma mark - Class Methods
 
 + (NSString *)entityName {
-    NSString *entityName = [NSEntityDescription entityNameForClass:[self class]];
-
-    return entityName;
+    return [[self entityDescription] name];
 }
 
 + (NSEntityDescription *)entityDescription {
-    NSString *entityName = [self entityName];
+    NSString *entityClass = NSStringFromClass([self class]);
     NSEntityDescription  *result = nil;
+
+    NSManagedObjectModel *model = nil;
 
     NSManagedObjectContext *context = [FOSRESTConfig sharedInstance].databaseManager.currentMOC;
     if (context != nil) {
-        result = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
+        model = context.persistentStoreCoordinator.managedObjectModel;
     }
     else {
-        NSManagedObjectModel *model = [FOSRESTConfig sharedInstance].databaseManager.storeCoordinator.managedObjectModel;
-
-        result  = [model entitiesByName][entityName];
-
+        model = [FOSRESTConfig sharedInstance].databaseManager.storeCoordinator.managedObjectModel;
     }
+
+    for (NSEntityDescription *desc in model.entities) {
+        if ([desc.managedObjectClassName isEqualToString:entityClass]) {
+            result = desc;
+            break;
+        }
+    }
+
     NSAssert(result != nil, @"Unable to find an entity description for entity: %@",
-             entityName);
+             entityClass);
 
     return result;
 }
 
-- (id)initSkippingReadOnlyCheck {
-    return [super init];
+- (id)initSkippingReadOnlyCheckAndInsertingIntoMOC:(NSManagedObjectContext *)moc {
+    return [super initInsertingIntoManagedObjectContext:moc];
 }
 
 @end

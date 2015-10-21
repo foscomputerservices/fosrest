@@ -106,18 +106,21 @@
     for (NSEntityDescription *nonOwnedEntity in nonOwnedEntities) {
         Class nonOwnedClass = NSClassFromString(nonOwnedEntity.managedObjectClassName);
         NSPredicate *isDirtyPred = [FOSCacheManager isDirtyServerPredicate];
-        NSArray *dirtyNonOwnedCMOs = [nonOwnedClass fetchWithPredicate:isDirtyPred];
 
-        for (FOSCachedManagedObject *nextDirtyCMO in dirtyNonOwnedCMOs) {
+        [self.managedObjectContext performBlockAndWait:^{
+            NSArray *dirtyNonOwnedCMOs = [nonOwnedClass fetchWithPredicate:isDirtyPred];
 
-            // Still need to check a few things in the instance as the predicate doesn't
-            // cover any overridden functionality.
-            if (!nextDirtyCMO.isLocalOnly && nextDirtyCMO.isDirty) {
-                FOSOperation *pushOp = [nextDirtyCMO sendServerRecordWithLifecycleStyle:nil];
+            for (FOSCachedManagedObject *nextDirtyCMO in dirtyNonOwnedCMOs) {
 
-                [completePushOp addDependency:pushOp];
+                // Still need to check a few things in the instance as the predicate doesn't
+                // cover any overridden functionality.
+                if (!nextDirtyCMO.isLocalOnly && nextDirtyCMO.isDirty) {
+                    FOSOperation *pushOp = [nextDirtyCMO sendServerRecordWithLifecycleStyle:nil];
+
+                    [completePushOp addDependency:pushOp];
+                }
             }
-        }
+        }];
     }
 }
 

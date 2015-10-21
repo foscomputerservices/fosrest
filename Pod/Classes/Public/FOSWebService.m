@@ -211,7 +211,7 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
 
         FOSLogDebug(@"FOSWebService (%li) Sync: %@ - %@",
                     (long)currentRequestId, requestMethod,
-                    [requestURLString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]);
+                    requestURLString);
         if (urlRequest.allHTTPHeaderFields.count > 0) {
             FOSLogPedantic(@"\nHTTP-Headers: %@",
                              urlRequest.allHTTPHeaderFields.description);

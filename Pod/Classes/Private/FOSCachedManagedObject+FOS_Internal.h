@@ -42,12 +42,12 @@
 + (NSEntityDescription *)entityDescription;
 
 /*!
- * @method initSkippingReadOnlyCheck
+ * @method initWithMSkippingReadOnlyCheckAndInsertingIntoMOC:
  *
  * An internal initializer that allows skipping the
  * static table check so that static table instances
  * can be created when being pulled from the server.
  */
-- (id)initSkippingReadOnlyCheck;
+- (id)initSkippingReadOnlyCheckAndInsertingIntoMOC:(NSManagedObjectContext *)moc;
 
 @end

@@ -33,23 +33,23 @@
 
 #pragma mark - Initialization methods
 
-- (id)init {
+- (instancetype)initInsertingIntoManagedObjectContext:(NSManagedObjectContext *)moc {
+    NSEntityDescription *desc = [[self class] entityDescription];
+
+    if (desc == nil) {
+        NSString *msg = NSLocalizedString(@"Entity for class %@ is missing from the managed object model", @"");
+
+        [NSException raise:@"FOSMissing_EntityInModel" format:msg, NSStringFromClass([self class])];
+    }
+
+    return [self initWithEntity:desc insertIntoManagedObjectContext:moc];
+}
+
+- (instancetype)init {
     NSManagedObjectContext *ctxt = [FOSRESTConfig sharedInstance].databaseManager.currentMOC;
     NSAssert(ctxt != nil, @"No context???");
 
-    NSString *entityName = [NSEntityDescription entityNameForClass:[self class]];
-    NSEntityDescription *desc = [NSEntityDescription entityForName:entityName
-                                            inManagedObjectContext:ctxt];
-
-    if (desc == nil) {
-        NSString *msg = NSLocalizedString(@"Entity %@ is missing from the managed object model", @"");
-
-        [NSException raise:@"FOSMissing_EntityInModel" format:msg, entityName];
-    }
-
-    self = [self initWithEntity:desc insertIntoManagedObjectContext:ctxt];
-
-    return self;
+    return [self initInsertingIntoManagedObjectContext:ctxt];
 }
 
 #pragma mark - NSCopying methods

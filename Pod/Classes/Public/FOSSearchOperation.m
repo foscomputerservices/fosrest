@@ -121,9 +121,9 @@
                 if (!self.isCancelled) {
                     NSManagedObjectContext *fgCtxt = self.managedObjectContext;
 
-                    for (NSManagedObject *bgObj in bgResults) {
+                    for (NSManagedObjectID *bgObjID in bgResults) {
                         NSError *error = nil;
-                        NSManagedObject *fbObj = [fgCtxt existingObjectWithID:bgObj.objectID
+                        NSManagedObject *fbObj = [fgCtxt existingObjectWithID:bgObjID
                                                                         error:&error];
 
                         if (error == nil) {
@@ -321,10 +321,7 @@
                         // The fetchEntityOp returns isCancelled if the entity is deleted locally
                         if (!fetchEntityOp.isCancelled && fetchEntityOp.error == nil) {
 
-                            FOSCachedManagedObject *cmo = fetchEntityOp.managedObject;
-                            NSAssert(cmo != nil, @"Why don't we have a CMO on a successfully search?");
-
-                            [newEntities addObject:cmo];
+                            [newEntities addObject:fetchEntityOp.managedObjectID];
                         }
                         else if (!self.saveIndividualResults) {
                             newEntities = nil;

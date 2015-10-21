@@ -32,8 +32,6 @@
 
 @implementation FOSLoginOperation {
     FOSRetrieveCMOOperation *__fetchUserRequest;
-
-    __block FOSUser *_loggedInUser;
 }
 
 #pragma mark - Class methods
@@ -47,6 +45,7 @@
 - (id)initForUser:(FOSUser *)user withLoginStyle:(NSString *)loginStyle {
     NSParameterAssert(user != nil);
     NSParameterAssert(user.isLoginUser);
+    NSAssert([NSThread isMainThread], @"Can only create a login operation from the main thread.");
 
     if ((self = [super init]) != nil) {
         _loginStyle = loginStyle;
@@ -88,9 +87,14 @@
     [super main];
 
     if (!self.isCancelled && self.error == nil) {
-        // Don't try to send this to the server
-        self.user.jsonIdValue = _loggedInUser.jsonIdValue;
-        [self.user markClean];
+        __block FOSLoginOperation *blockSelf = self;
+
+        // Only update from the main queue
+        [[FOSLoginManager loginUserContext] performBlockAndWait:^{
+            // Don't try to send this to the server
+            blockSelf.user.jsonIdValue = blockSelf.loggedInUid;
+            [blockSelf.user markClean];
+        }];
 
         FOSLogInfo(@"Logged in: %@", _loggedInUid);
     }
@@ -165,28 +169,28 @@
 
                 // Make it real
                 NSManagedObjectContext *moc = blockSelf.managedObjectContext;
-                FOSUser *loggedInUser = (FOSUser *)loginRequest.managedObject;
+                [moc performBlockAndWait:^{
+                    NSManagedObjectID *loginUserID = loginRequest.managedObjectID;
+                    FOSUser *loggedInUser = (FOSUser *)[moc objectWithID:loginUserID];
 
-                NSAssert(!loggedInUser.isLoginUser,
-                         @"We should have a *real* user instance now, not a loginUser!");
+                    NSAssert(!loggedInUser.isLoginUser,
+                             @"We should have a *real* user instance now, not a loginUser!");
 
-                NSError *error = nil;
-                if ([moc obtainPermanentIDsForObjects:@[ loggedInUser ] error:&error]) {
+                    NSError *error = nil;
+                    if ([moc obtainPermanentIDsForObjects:@[ loggedInUser ] error:&error]) {
 
-                    blockSelf->_loggedInUid = loginRequest.jsonId;
-                    blockSelf->_loggedInUser = loggedInUser;
-                    blockSelf->_loggedInMOID = loggedInUser.objectID;
+                        blockSelf->_loggedInUid = loginRequest.jsonId;
+                        blockSelf->_loggedInMOID = loggedInUser.objectID;
 
-                    NSAssert(blockSelf->_loggedInUid != nil, @"Why is the loggedInUid nil?");
-                    NSAssert([blockSelf->_loggedInUser.uid isEqual:blockSelf->_loggedInUid],
-                             @"Why aren't the uids equal???");
+                        NSAssert(blockSelf->_loggedInUid != nil, @"Why is the loggedInUid nil?");
 
-                    // This is not 'dirty' as we pulled it from the web service
-                    [blockSelf->_loggedInUser markClean];
-                }
-                else {
-                    blockSelf->_error = error;
-                }
+                        // This is not 'dirty' as we pulled it from the web service
+                        [loggedInUser markClean];
+                    }
+                    else {
+                        blockSelf->_error = error;
+                    }
+                }];
             }
             else {
                 blockSelf.restConfig.loginManager.loggedInUserId = nil;
