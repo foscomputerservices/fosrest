@@ -68,8 +68,8 @@
 		6391203B1AB9F82100CA5E29 /* FOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391203A1AB9F82100CA5E29 /* FOSAppDelegate.swift */; };
 		6391203F1AB9FAF800CA5E29 /* FOSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391203E1AB9FAF800CA5E29 /* FOSViewController.swift */; };
 		63B8BEA51A87C164002BD72F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B8BEA41A87C164002BD72F /* CoreData.framework */; };
-		AA38F5E2957894AC93DEB8BC /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E0C9DDA77DECE28779523F2 /* Pods_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		BB0CCB32E694B625D1F0654F /* Pods_FOSRESTApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30FC2FC44F3CDF78CBFC4B25 /* Pods_FOSRESTApp.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		AA38F5E2957894AC93DEB8BC /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E0C9DDA77DECE28779523F2 /* Pods_Tests.framework */; };
+		BB0CCB32E694B625D1F0654F /* Pods_FOSRESTApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30FC2FC44F3CDF78CBFC4B25 /* Pods_FOSRESTApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

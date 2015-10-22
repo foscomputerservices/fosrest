@@ -502,7 +502,6 @@
         requestURLString = [localBaseURL stringByAppendingFormat:@"%@%@",
                             baseEndsWithSlash ? @"" : @"/",
                             localEndPointAndQuery];
-        requestURLString = [requestURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
     }
     errorUserInfo[@"requestURLString"] = requestURLString;
 

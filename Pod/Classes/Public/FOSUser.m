@@ -51,11 +51,11 @@
 
 static int totalUserNum = 0;
 - (FOSUser *)initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context {
-    FOSUser *result = [super initWithEntity:entity insertIntoManagedObjectContext:context];
+    if ((self = [super initWithEntity:entity insertIntoManagedObjectContext:context]) != nil) {
+        userNum = totalUserNum++;
+    }
 
-    userNum = totalUserNum++;
-
-    return result;
+    return self;
 }
 
 #pragma mark - Property Overrides

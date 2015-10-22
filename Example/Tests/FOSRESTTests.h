@@ -95,6 +95,10 @@
     FOSSetLogLevel(FOSLogLevelDebug); \
 }
 
+// NOTE: Care must be taken when counting outstanding operations.  Operation queues are
+//       multithreaded and thus the counts might be off just a bit.  So we allow 1 extra
+//       operation to be in the queue without generating an error.  This is because
+//       the tearDown code itself is called from an operation.
 #define TEARDOWN_LOGIN \
 - (void)tearDown { \
 \
@@ -103,7 +107,7 @@
         NSInteger outstandingOps = \
             [FOSRESTConfig sharedInstance].cacheManager.outstandingQueuedOperations; \
 \
-        XCTAssertEqual(outstandingOps, 0, @"There are %lu oustanding operations in the queue.  The queue should be empty!!!", (unsigned long)outstandingOps); \
+        XCTAssertLessThanOrEqual(outstandingOps, 1, @"There are %lu oustanding operations in the queue.  The queue should be empty!!!", (unsigned long)outstandingOps); \
 \
         _Pragma("clang diagnostic push") \
         _Pragma("clang diagnostic ignored \"-Wundeclared-selector\"") \
