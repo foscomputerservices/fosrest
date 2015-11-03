@@ -518,6 +518,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
 - (void)_clearLoginUserContext {
     _loginUser = nil;
+    _userIsLoggingIn = NO;
 
     NSManagedObjectContext *moc = [[self class] loginUserContext];
 
