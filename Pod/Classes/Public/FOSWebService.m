@@ -247,12 +247,6 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
                              responseError:error];
     }
     else {
-        FOSOperationQueue *queue = (FOSOperationQueue *)[FOSOperationQueue currentQueue];
-        NSAssert(queue != nil, @"No current queue???");
-        NSAssert([queue isKindOfClass:[FOSOperationQueue class]],
-                 @"Expected FOSOperationQueue, got %@.",
-                 NSStringFromClass([queue class]));
-
         FOSLogDebug(@"FOSWebService (%li) Async: %@ - %@", (long)currentRequestId, requestMethod, requestURLString);
 
         __block FOSWebService *blockSelf = self;
