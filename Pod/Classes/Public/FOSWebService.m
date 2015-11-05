@@ -37,6 +37,7 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
     NSInteger _nextRequestId;
     NSMutableArray *_queuedRequests;
     FOSOperationQueue *_timerQueue;
+    NSURLSession *_urlSession;
 }
 
 #pragma mark - FOSProcessServiceRequest Protocol Methods
@@ -51,6 +52,10 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
         _timerQueue = [FOSOperationQueue queueWithRestConfig:restConfig];
         _timerQueue.maxConcurrentOperationCount = 1;
         _timerQueue.name = @"Web Service Batch Queue";
+
+        NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+        sessionConfig.timeoutIntervalForRequest = restConfig.defaultTimeout;
+        _urlSession = [NSURLSession sessionWithConfiguration:sessionConfig];
     }
 
     return self;
@@ -203,11 +208,19 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
     }
 
     if (synchronous) {
-        NSURLResponse *response = nil;
-        NSError *error = nil;
-        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
-                                             returningResponse:&response
-                                                         error:&error];
+        __block NSURLResponse *response = nil;
+        __block NSData *data = nil;
+        __block NSError *error = nil;
+
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
+        NSURLSessionDataTask *dataTask = [_urlSession dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable theData, NSURLResponse * _Nullable theResponse, NSError * _Nullable theError) {
+            response = theResponse;
+            data = theData;
+            error = theError;
+
+            dispatch_semaphore_signal(semaphore);
+        }];
 
         FOSLogDebug(@"FOSWebService (%li) Sync: %@ - %@",
                     (long)currentRequestId, requestMethod,
@@ -220,6 +233,12 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
             FOSLogPedantic(@"\nHTTP-Data: %@",
                    [requestDebugData stringByRemovingPercentEncoding]);
         }
+        
+        // Go!
+        [dataTask resume];
+
+        // Wait for it...
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         
         [self _completionHandlerForRequest:webServiceRequest
                             withURLRequest:urlRequest
@@ -240,7 +259,8 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
 
         // Capture the request Id
         NSInteger requestId = _nextRequestId;
-        [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+
+        NSURLSessionDataTask *dataTask = [_urlSession dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
             FOSLogDebug(@"   FOSWebService (%li) response...", (long)requestId);
 
@@ -250,6 +270,9 @@ const NSTimeInterval kFOSQueueingDelay = 0.26f;
                                        responseData:data
                                       responseError:error];
         }];
+
+        // GO!
+        [dataTask resume];
     }
 }
 

@@ -34,3 +34,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # v 0.3.3
 
 * Updated away from iOS 9 deprecated APIs..  Yet to do: NSURLConnection->NSURLSession 
+
+# v 0.3.5
+
+* Replaced NSURLConnection with NSURLSession
