@@ -522,7 +522,6 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
     NSManagedObjectContext *moc = [[self class] loginUserContext];
 
-    [moc rollback];
     [moc reset];
 }
 
