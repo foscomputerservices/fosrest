@@ -38,3 +38,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # v 0.3.5
 
 * Replaced NSURLConnection with NSURLSession
+
+# v 0.4.0
+
+* Added an associated property cache to FOSCachedManagedObject

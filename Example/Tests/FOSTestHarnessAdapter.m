@@ -42,7 +42,9 @@
     NSFileManager *fileMgr = [NSFileManager defaultManager];
     NSURL *appLibDirURL = [[fileMgr URLsForDirectory:NSLibraryDirectory
                                            inDomains:NSUserDomainMask] lastObject];
-    NSURL *storeURL = [appLibDirURL URLByAppendingPathComponent:@"testDB.sqlite"];
+    NSString *fileName = [NSString stringWithFormat:@"testDB_%f.sqlite",
+                          [NSDate date].timeIntervalSince1970];
+    NSURL *storeURL = [appLibDirURL URLByAppendingPathComponent:fileName];
     NSError *localError = nil;
 
     // Delete the DB between tests

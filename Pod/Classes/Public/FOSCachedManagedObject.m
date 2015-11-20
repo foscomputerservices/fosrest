@@ -44,6 +44,8 @@ static NSMutableDictionary *_processingFaults = nil;
 @implementation FOSCachedManagedObject {
     // NOTE: _modifiedPropertiesCache *must* be cleared whenever hasModifiedProperties is modified!!!
     NSArray *_modifiedPropertiesCache;
+
+    NSMutableDictionary *_associatedValues;
 }
 
 #pragma mark - DB Properties
@@ -416,6 +418,30 @@ static NSMutableDictionary *_processingFaults = nil;
                                                                                withJSON:json];
 
     return result;
+}
+
+#pragma mark - Associated Values
+
+- (void)associateValue:(id _Nonnull)value toPropertyNamed:(NSString * _Nonnull)propName {
+    if (_associatedValues == nil) {
+        _associatedValues = [NSMutableDictionary dictionary];
+    }
+
+    _associatedValues[propName] = value;
+}
+
+- (id)associatedValueForProperty:(NSString * _Nonnull)propName {
+    return _associatedValues[propName];
+}
+
+- (void)resetAssociatedValues {
+    _associatedValues = nil;
+}
+
+- (void)willTurnIntoFault {
+    [super willTurnIntoFault];
+
+    [self resetAssociatedValues];
 }
 
 #pragma mark - Overrides

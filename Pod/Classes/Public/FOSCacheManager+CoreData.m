@@ -34,11 +34,23 @@
 
 - (void)registerMOC:(FOSManagedObjectContext *)moc {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    BOOL isMainThread = [NSThread isMainThread];
+
+    SEL sel = isMainThread
+        ? @selector(_pushFromMainQueue:)
+        : @selector(_updateMainQueue:);
 
     [center addObserver:self
-               selector:@selector(_modelUpdated:)
+               selector:sel
                    name:NSManagedObjectContextDidSaveNotification
                  object:moc];
+
+    if (isMainThread) {
+        [center addObserver:self
+                   selector:@selector(_flushAssociatedCaches:)
+                       name:NSManagedObjectContextObjectsDidChangeNotification
+                     object:moc];
+    }
 }
 
 - (void)unregisterMOC:(FOSManagedObjectContext *)moc {
@@ -46,6 +58,9 @@
 
     [center removeObserver:self
                       name:NSManagedObjectContextDidSaveNotification
+                    object:moc];
+    [center removeObserver:self
+                      name:NSManagedObjectContextObjectsDidChangeNotification
                     object:moc];
 }
 
@@ -196,131 +211,155 @@
 //
 // However, if changes are noted coming from the main thread, then we
 // need to trigger an operation to push those changes to the web server.
-- (void)_modelUpdated:(NSNotification *)notification {
+- (void)_pushFromMainQueue:(NSNotification *)notification {
+    NSAssert([NSThread isMainThread], @"Wrong thread!");
 
     __block FOSCacheManager *blockSelf = self;
 
-    // The queue to update is the opposite of the thread on which
-    // we were called.  So, main thread, means push changes to server.
-    if ([NSThread isMainThread]) {
-        FOSLogDebug(@"*** Database *** updated from MAIN thread...");
+    FOSLogDebug(@"*** Database *** updated from MAIN thread...");
 
-        // Only auto-push changes if we're configured to do so
-        if (_restConfig.isAutomaticallySynchronizing &&
-            _restConfig.networkStatus != FOSNetworkStatusNotReachable) {
+    // Only auto-push changes if we're configured to do so
+    if (_restConfig.isAutomaticallySynchronizing &&
+        _restConfig.networkStatus != FOSNetworkStatusNotReachable) {
 
-            FOSOperation *op = [FOSPushCacheChangesOperation pushCacheChangesOperation];
-            FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
-                FOSLogDebug(@"*** Database *** finished pushing changes to server.");
-            }];
+        FOSOperation *op = [FOSPushCacheChangesOperation pushCacheChangesOperation];
+        FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+            FOSLogDebug(@"*** Database *** finished pushing changes to server.");
+        }];
 
-            [self queueOperation:op
-         withCompletionOperation:bgOp
-                   withGroupName:@"Saving changes from MAIN thread"];
-        }
+        [self queueOperation:op
+     withCompletionOperation:bgOp
+               withGroupName:@"Saving changes from MAIN thread"];
+    }
 
-        // Reset pause auto sync
-        self.pauseAutoSync = NO;
+    // Reset pause auto sync
+    self.pauseAutoSync = NO;
 
-        // Process deletions
-        NSSet *deletedSet;
-        deletedSet = [notification.userInfo objectForKey:NSDeletedObjectsKey];
-        NSArray *deletedObjects = [deletedSet allObjects];
+    // Process deletions
+    NSSet *deletedSet = [notification.userInfo objectForKey:NSDeletedObjectsKey];
+    NSArray *deletedObjects = [deletedSet allObjects];
 
-        // For Deleted objects, we need to remove them from the server as well.
-        // Instead of queueing requests here, we create FOSDeletedObject entries
-        // that will be processed later.  This ensures that the objects get deleted
-        // from the server in then event that the request isn't able to go through
-        // right away.
-        NSMutableArray *queuedDeletedObjects = [NSMutableArray arrayWithCapacity:deletedObjects.count];
+    // For Deleted objects, we need to remove them from the server as well.
+    // Instead of queueing requests here, we create FOSDeletedObject entries
+    // that will be processed later.  This ensures that the objects get deleted
+    // from the server in then event that the request isn't able to go through
+    // right away.
+    NSMutableArray *queuedDeletedObjects = [NSMutableArray arrayWithCapacity:deletedObjects.count];
 
-        for (id nextDelete in deletedObjects) {
-            if ([nextDelete isKindOfClass:[FOSCachedManagedObject class]]) {
-                FOSCachedManagedObject *deletedCMO = (FOSCachedManagedObject *)nextDelete;
-                FOSJsonId delJsonId = deletedCMO.jsonIdValue;
+    for (id nextDelete in deletedObjects) {
+        if ([nextDelete isKindOfClass:[FOSCachedManagedObject class]]) {
+            FOSCachedManagedObject *deletedCMO = (FOSCachedManagedObject *)nextDelete;
+            FOSJsonId delJsonId = deletedCMO.jsonIdValue;
 
-                if (deletedCMO.hasBeenUploadedToServer && !deletedCMO.skipServerDelete) {
-                    // We do *not* want to create objects in the main thread moc as the user
-                    // has full control to save/rollback/modify/etc the main thread moc.  So,
-                    // we store up the requests in an array and create a background operation
-                    // that will create them in a separate moc.
-                    [queuedDeletedObjects addObject:nextDelete];
-                }
-
-                [_skipServerDeletionIds removeObject:delJsonId];
-            }
-        }
-
-        if (queuedDeletedObjects.count > 0) {
-
-            NSManagedObjectContext *moc = _restConfig.databaseManager.currentMOC;
-            NSEntityDescription *entityDesc = [NSEntityDescription entityForName:@"FOSDeletedObject"
-                                                          inManagedObjectContext:moc];
-
-            for (FOSCachedManagedObject *cmo in queuedDeletedObjects) {
-                FOSDeletedObject *newEntry = [[FOSDeletedObject alloc] initWithEntity:entityDesc
-                                                       insertIntoManagedObjectContext:moc];
-
-                newEntry.deletedJsonId = (NSString *)cmo.jsonIdValue.description;
-                newEntry.deletedEntityName = cmo.entity.name;
-
-                FOSLogDebug(@"MARKED FOR DELETION: %@ (%@)",
-                            newEntry.deletedEntityName,
-                            newEntry.deletedJsonId);
+            if (deletedCMO.hasBeenUploadedToServer && !deletedCMO.skipServerDelete) {
+                // We do *not* want to create objects in the main thread moc as the user
+                // has full control to save/rollback/modify/etc the main thread moc.  So,
+                // we store up the requests in an array and create a background operation
+                // that will create them in a separate moc.
+                [queuedDeletedObjects addObject:nextDelete];
             }
 
-            if (_restConfig.isAutomaticallySynchronizing) {
-                FOSBackgroundOperation *processDeletionsOp = nil;
-
-                processDeletionsOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
-                    [blockSelf processOutstandingDeleteRequests];
-                }];
-
-                [self queueOperation:processDeletionsOp
-             withCompletionOperation:nil
-                       withGroupName:@"Processing DELETE Records"];
-            }
-        }
-        else {
-            NSArray *outstandingDeletions = [_restConfig.databaseManager fetchEntitiesNamed:@"FOSDeletedObject"];
-
-            if (outstandingDeletions.count && _restConfig.isAutomaticallySynchronizing) {
-                FOSBackgroundOperation *processDeletionsOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
-                    if (!cancelled && error == nil) {
-                        // We put this call here as save will have been called for the FOSDeletedObject
-                        // entites that we might have created below.
-                        [blockSelf processOutstandingDeleteRequests];
-                    }
-                }];
-
-                [self queueOperation:processDeletionsOp
-             withCompletionOperation:nil
-                       withGroupName:@"Processing DELETE Records"];
-            }
+            [_skipServerDeletionIds removeObject:delJsonId];
         }
     }
 
-    // Non-main thread means update mainThreadMOC (and deliver any change notifications).
+    if (queuedDeletedObjects.count > 0) {
+
+        NSManagedObjectContext *moc = _restConfig.databaseManager.currentMOC;
+        NSEntityDescription *entityDesc = [NSEntityDescription entityForName:@"FOSDeletedObject"
+                                                      inManagedObjectContext:moc];
+
+        for (FOSCachedManagedObject *cmo in queuedDeletedObjects) {
+            FOSDeletedObject *newEntry = [[FOSDeletedObject alloc] initWithEntity:entityDesc
+                                                   insertIntoManagedObjectContext:moc];
+
+            newEntry.deletedJsonId = (NSString *)cmo.jsonIdValue.description;
+            newEntry.deletedEntityName = cmo.entity.name;
+
+            FOSLogDebug(@"MARKED FOR DELETION: %@ (%@)",
+                        newEntry.deletedEntityName,
+                        newEntry.deletedJsonId);
+        }
+
+        if (_restConfig.isAutomaticallySynchronizing) {
+            FOSBackgroundOperation *processDeletionsOp = nil;
+
+            processDeletionsOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+                [blockSelf processOutstandingDeleteRequests];
+            }];
+
+            [self queueOperation:processDeletionsOp
+         withCompletionOperation:nil
+                   withGroupName:@"Processing DELETE Records"];
+        }
+    }
     else {
-        FOSLogDebug(@"*** Database *** updated from BACKGROUND thread...");
+        NSArray *outstandingDeletions = [_restConfig.databaseManager fetchEntitiesNamed:@"FOSDeletedObject"];
 
-        void (^syncNotifyRequest)() = ^ {
+        if (outstandingDeletions.count && _restConfig.isAutomaticallySynchronizing) {
+            FOSBackgroundOperation *processDeletionsOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+                if (!cancelled && error == nil) {
+                    // We put this call here as save will have been called for the FOSDeletedObject
+                    // entites that we might have created below.
+                    [blockSelf processOutstandingDeleteRequests];
+                }
+            }];
 
+            [self queueOperation:processDeletionsOp
+         withCompletionOperation:nil
+                   withGroupName:@"Processing DELETE Records"];
+        }
+    }
+}
+
+- (void)_updateMainQueue:(NSNotification *)notification {
+
+    // Non-main thread means update mainThreadMOC (and deliver any change notifications).
+    FOSLogDebug(@"*** Database *** updated from BACKGROUND thread...");
+
+    __block FOSCacheManager *blockSelf = self;
+    void (^syncNotifyRequest)() = ^ {
+
+        NSManagedObjectContext *moc = blockSelf->_restConfig.databaseManager.currentMOC;
+
+        [moc performBlock:^{
             blockSelf->_updatingMainThreadMOC = YES;
 
+            // Fault in all updated objects so that NSFetchedResultsController will
+            // properly handle filter predicates:
+            //
+            // http://mikeabdullah.net/merging-saved-changes-betwe.html
+            NSSet *updated = [notification.userInfo objectForKey:NSUpdatedObjectsKey];
+            for (NSManagedObject *anObject in updated) {
+                [moc existingObjectWithID:anObject.objectID error:NULL];
+            }
+
             // Bring over the changes
-            [blockSelf->_restConfig.databaseManager.currentMOC mergeChangesFromContextDidSaveNotification:notification];
+            [moc mergeChangesFromContextDidSaveNotification:notification];
 
             blockSelf->_updatingMainThreadMOC = NO;
 
             FOSLogDebug(@"*** MAIN Thread *** merged changes from BACKGROUND ***");
-        };
-        
-        
-        // Switch to main thread and update its MOC & send notifications
-        // Don't let this thread go until that has completed.
-        dispatch_sync(dispatch_get_main_queue(), syncNotifyRequest);
-    }
+        }];
+    };
+
+    // Switch to main thread and update its MOC & send notifications
+    // Don't let this thread go until that has completed.
+    dispatch_sync(dispatch_get_main_queue(), syncNotifyRequest);
+}
+
+- (void)_flushAssociatedCaches:(NSNotification *)notification {
+    NSAssert([NSThread isMainThread], @"Wrong thread!");
+
+    NSManagedObjectContext *moc = _restConfig.databaseManager.currentMOC;
+
+    [moc performBlock:^{
+        for (id obj in [notification.userInfo valueForKey:NSRefreshedObjectsKey]) {
+            if ([obj isKindOfClass:[FOSCachedManagedObject class]]) {
+                [(FOSCachedManagedObject *)obj resetAssociatedValues];
+            }
+        }
+    }];
 }
 
 @end

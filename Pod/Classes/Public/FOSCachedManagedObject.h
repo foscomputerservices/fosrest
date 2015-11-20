@@ -362,6 +362,34 @@
  */
 - (void)refreshAllRelationships:(FOSBackgroundRequest _Nullable)handler;
 
+#pragma mark - Associated Caches
+
+/*!
+ * @method associateValue:toPropertyNamed:
+ *
+ * The associated value mechanism allows values to be stored related to
+ * another property.  Tha  value will be retained as long as the related property
+ * doesn't change.  If a change is observed for that property,
+ * the related value will be dropped.
+ */
+- (void)associateValue:(id _Nonnull)value toPropertyNamed:(NSString * _Nonnull)propName;
+
+/*!
+ * @method associatedValueForProperty:
+ */
+- (id _Nullable)associatedValueForProperty:(NSString * _Nonnull)propName;
+
+/*!
+ * @method resetAssociatedValues
+ *
+ * Causes the receiver to drop all property-associated values.
+ *
+ * @discussion
+ *
+ * Generally this method is only called internally by the FOSCacheManager.
+ */
+- (void)resetAssociatedValues;
+
 #pragma mark - Override Points
 
 + (id _Nullable)objectForAttribute:(NSAttributeDescription * _Nonnull)attrDesc forJsonValue:(id _Nonnull)jsonValue;
