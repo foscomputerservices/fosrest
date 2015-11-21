@@ -59,7 +59,8 @@
         [propertyName isEqualToString:@"hasLocalOnlyParent"] ||
         [propertyName isEqualToString:@"isSubTreeDirty"] ||
         [propertyName isEqualToString:@"jsonIdValue"] ||
-        [propertyName isEqualToString:@"skipServerDelete"]
+        [propertyName isEqualToString:@"skipServerDelete"] ||
+        [propertyName isEqualToString:@"skipNextReset"]
     ) {
         result = YES;
     }

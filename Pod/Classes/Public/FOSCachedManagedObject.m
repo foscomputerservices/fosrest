@@ -59,6 +59,7 @@ static NSMutableDictionary *_processingFaults = nil;
 @dynamic originalJsonData;
 
 @synthesize isDirty;
+@synthesize skipNextReset;
 
 #pragma mark - Public Properties
 
@@ -435,13 +436,9 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 - (void)resetAssociatedValues {
-    _associatedValues = nil;
-}
-
-- (void)willTurnIntoFault {
-    [super willTurnIntoFault];
-
-    [self resetAssociatedValues];
+    if (!self.skipNextReset) {
+        _associatedValues = nil;
+    }
 }
 
 #pragma mark - Overrides

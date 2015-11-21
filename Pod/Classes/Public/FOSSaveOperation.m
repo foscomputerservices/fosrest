@@ -89,6 +89,12 @@
         else {
             FOSLogDebug(@"SAVE: Save operation was initiated for queue group: %@", self.groupName);
 
+            for (id obj in self.managedObjectContext.updatedObjects) {
+                if ([obj isKindOfClass:[FOSCachedManagedObject class]]) {
+                    ((FOSCachedManagedObject *)obj).skipNextReset = false;
+                }
+            }
+
             // We don't really do anything, all the work is done by
             // our dependencies.  So, all we need to do is to save
             // the changes to get them back to the main thread.
