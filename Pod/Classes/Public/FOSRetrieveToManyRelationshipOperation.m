@@ -136,7 +136,9 @@
 - (void)bindToOwner:(NSManagedObjectID *)ownerId {
     NSParameterAssert(ownerId != nil);
 
-    if (!self.isCancelled && self.error == nil) {
+    // NOTE: We call super here *on purpose*.  Locally we don't cancel (not sure that I remember
+    //       why, but it must have been important...doh!)
+    if (!super.isCancelled && self.error == nil) {
         NSManagedObjectContext *moc = self.managedObjectContext;
         __block FOSRetrieveToManyRelationshipOperation *blockSelf = self;
 

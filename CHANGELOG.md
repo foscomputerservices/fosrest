@@ -42,3 +42,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # v 0.4.0
 
 * Added an associated property cache to FOSCachedManagedObject
+
+# V 0.4.2
+
+* Fixed a bug where refreshing a relationship while offline would locally delete all children of the top-level object that was refreshed.
