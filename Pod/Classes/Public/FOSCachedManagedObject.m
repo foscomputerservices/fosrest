@@ -1006,6 +1006,19 @@ static NSMutableDictionary *_processingFaults = nil;
                         dslQuery:(NSString * _Nullable)dslQuery
                     mergeResults:(BOOL)mergeResults
                          handler:(FOSBackgroundRequest _Nullable)handler {
+    return [self refreshRelationshipNamed:relName
+                                 dslQuery:dslQuery
+                             mergeResults:mergeResults
+                         preSaveOperation:nil
+                                  handler:handler];
+}
+
+- (void)refreshRelationshipNamed:(NSString * _Nonnull)relName
+                        dslQuery:(NSString * _Nullable)dslQuery
+                    mergeResults:(BOOL)mergeResults
+                preSaveOperation:(FOSOperation * _Nullable)preSaveOp
+                         handler:(FOSBackgroundRequest _Nullable)handler {
+
     NSParameterAssert(relName != nil);
 
     // Nothing to refresh on localOnly instances
@@ -1029,7 +1042,13 @@ static NSMutableDictionary *_processingFaults = nil;
 
         NSString *groupName = [NSString stringWithFormat:@"Refresh relationship: %@", relName];
 
-        [self.restConfig.cacheManager queueOperation:relUpdatesOp
+        FOSOperation *baseOp = relUpdatesOp;
+        if (preSaveOp != nil) {
+            [preSaveOp addDependency:relUpdatesOp];
+            baseOp = relUpdatesOp;
+        }
+
+        [self.restConfig.cacheManager queueOperation:baseOp
                              withCompletionOperation:finalOp
                                        withGroupName:groupName];
     }

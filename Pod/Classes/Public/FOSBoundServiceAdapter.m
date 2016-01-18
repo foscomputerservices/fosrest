@@ -181,7 +181,7 @@
     NSError *localError = nil;
 
     // Without more info, about all we can do is pull out the JSON, if there was one
-    if (httpResponse.statusCode == 200) {
+    if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299) {
         if (responseData != nil && responseData.length > 0) {
             *jsonResult = [NSJSONSerialization JSONObjectWithData:responseData
                                                           options:0

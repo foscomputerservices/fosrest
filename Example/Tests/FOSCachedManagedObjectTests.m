@@ -1066,7 +1066,7 @@ TEARDOWN_LOGIN
 
     FOSBackgroundOperation *bgOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
         XCTAssertFalse(cancelled, @"Cancelled???");
-        XCTAssertEqual(error.code, 201, @"Error: %@", error.description);
+        XCTAssertNil(error, @"Error: %@", error.description);
 
         [loggedInUser refreshRelationshipNamed:@"testCreations" dslQuery:nil mergeResults:NO handler:^(BOOL cancelled, NSError *error) {
             XCTAssertFalse(cancelled, @"Cancelled???");

@@ -348,6 +348,32 @@
                          handler:(FOSBackgroundRequest _Nullable)handler;
 
 /*!
+ * @method refreshRelationshipNamed:dslQuery:mergeResults:handler:
+ *
+ * @param relName The name of the CMOs relationship to refresh
+ *
+ * @param dslQuery A 'Domain Specific Query' that will be bound to the $DSLQUERY
+ *                 variable when the URL_BINDING is bound to a URL.
+ *
+ * @param mergeResults YES will inhibit the synchronization of the server results with
+ *                     the existing results.  This allows the relationship to be
+ *                     incrementally add to as opposed to synchronized.
+ *
+ * @param preSaveOperation An operation that is queued to run immediately before
+ *                         any updates that are made by the refresh are saved
+ *                         to the managed object context.  This allows for many
+ *                         options, but one in particular is to cancel the refresh
+ *                         action in the case that it is no longer needed.
+ *
+ * Refreshes the receiver's named relationship with the REST server.
+ */
+- (void)refreshRelationshipNamed:(NSString * _Nonnull)relName
+                        dslQuery:(NSString * _Nullable)dslQuery
+                    mergeResults:(BOOL)mergeResults
+                preSaveOperation:(FOSOperation * _Nullable)preSaveOp
+                         handler:(FOSBackgroundRequest _Nullable)handler;
+
+/*!
  * @method refreshRelationshipNamed:handler:
  *
  * Refreshes the receiver's named relationships with the REST server.
