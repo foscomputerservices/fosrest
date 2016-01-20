@@ -525,14 +525,22 @@ TEARDOWN_LOGIN
         [[FOSRESTConfig sharedInstance].databaseManager saveChanges];
 
         XCTAssertTrue(testCreate.hasModifiedProperties, @"No modified props???");
+        NSDictionary *origOrigJson = (NSDictionary *)testCreate.originalJson;
 
         [[FOSRESTConfig sharedInstance].cacheManager flushCaches:^(BOOL isCancelled, NSError *error) {
+            XCTAssertFalse(isCancelled, @"Cancelled???");
+            XCTAssertNil(error, @"Error: %@", error.description);
             XCTAssertTrue([NSThread isMainThread], @"Wrong thread!");
             XCTAssertNotNil(testCreate.objectId, @"No web service id.");
             XCTAssertTrue(testCreate.hasBeenUploadedToServer, @"Why not uploaded?");
             XCTAssertTrue(testCreate.propertiesModifiedSinceLastUpload.count == 0,
                          @"Properties not uploaded: %@", testCreate.propertiesModifiedSinceLastUpload);
             XCTAssertFalse(testCreate.isDirty, @"Why is this entity dirty?");
+
+            // We cannot say what will change in the dict as different servers return different
+            // JSON responses from their PUT requests, but something should be different.
+            TestCreate *updated = [TestCreate fetchWithId:testCreate.jsonIdValue];
+            XCTAssertFalse([((NSDictionary *)updated.originalJson) isEqualToDictionary:origOrigJson]);
 
             END_TEST
         }];

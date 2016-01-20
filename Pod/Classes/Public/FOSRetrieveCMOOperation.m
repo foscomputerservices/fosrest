@@ -1020,7 +1020,7 @@
 
                 if (error == nil) {
                     [binder updateCMO:obj
-                             fromJSON:(NSDictionary *)_json
+                        fromJSON:(NSDictionary *)_json
                     forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                 error:&error];
                 }

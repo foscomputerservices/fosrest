@@ -373,6 +373,28 @@ forLifecyclePhase:(FOSLifecyclePhase)lifecyclePhase
                     break;
                 }
             }
+
+            if (localError == nil) {
+                id updatedJson = json;
+
+                if (cmo.originalJson != nil) {
+                    // Maybe it's not the best thing to assume that originalJson is a dictionary...not sure...
+                    NSMutableDictionary *mergedDict = [((NSDictionary *)cmo.originalJson) mutableCopy];
+
+                    // The problem here is that we might not get a *full* json dictionary back from
+                    // the server, but only a parital one.  So we cannot just replace the original
+                    // JSON with the new json.
+                    for (id nextKey in ((NSDictionary *)json).allKeys) {
+                        mergedDict[nextKey] = ((NSDictionary *)json)[nextKey];
+                    }
+
+                    updatedJson = mergedDict;
+                }
+
+                cmo.originalJsonData = [NSJSONSerialization dataWithJSONObject:updatedJson
+                                                                       options:0
+                                                                         error:&localError];
+            }
         }
     }
 
