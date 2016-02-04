@@ -102,19 +102,27 @@ __strong FOSRESTConfig *__sharedInstance = nil;
 - (NSMutableDictionary *)modelCacheForModelKey:(NSString *)modelKey {
     NSMutableDictionary *result = nil;
 
-    if (_entityModelCache == nil) {
-        _entityModelCache = [NSMutableDictionary dictionaryWithCapacity:100];
-    }
+    @synchronized(self) {
+        if (_entityModelCache == nil) {
+            _entityModelCache = [NSMutableDictionary dictionaryWithCapacity:100];
+        }
 
-    result = _entityModelCache[modelKey];
+        result = _entityModelCache[modelKey];
 
-    if (result == nil) {
-        result = [NSMutableDictionary dictionaryWithCapacity:25];
+        if (result == nil) {
+            result = [NSMutableDictionary dictionaryWithCapacity:25];
 
-        _entityModelCache[modelKey] = result;
+            _entityModelCache[modelKey] = result;
+        }
     }
 
     return result;
+}
+
+- (void)clearModelCache {
+    @synchronized(self) {
+        _entityModelCache = nil;
+    }
 }
 
 - (Class)serviceRequestProcessorType {

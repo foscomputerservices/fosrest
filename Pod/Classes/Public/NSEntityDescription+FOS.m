@@ -118,84 +118,107 @@
     return result;
 }
 
-// TODO: Below the algorithms could be optimized a bit as they build on one
-//       another, which generates temporary garbage.
-//
-//       This implementaiton was chosen for the following reasons:
-//         1) Reduce the likeliness that errors will get in
-//            if things were to change in the future
-//
-//         2) Show the true cost of iterating the properties, where as
-//            previously the cost was spread across the entire framework
-//            in different areas
-//
-//       Probably the best way to optimize this would be to cache the results
-//       in a static dictionary keyed by entity name, if this becomes too
-//       expensive.
-
 - (NSSet *)cmoRelationships {
-    NSArray *props = self.properties;
-    NSMutableSet *result = [NSMutableSet setWithCapacity:props.count];
-
-    for (NSPropertyDescription *nextProp in props) {
-        if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
-            !((NSRelationshipDescription *)nextProp).isFOSRelationship) {
-            [result addObject:nextProp];
-        }
-    }
-
-    return result;
+    return self.flattenedRelationships;
 }
 
 - (NSSet *)cmoToOneRelationships {
-    NSSet *cmoRels = self.cmoRelationships;
-    NSMutableSet *result = [NSMutableSet setWithCapacity:cmoRels.count];
+    NSMutableSet *result = nil;
 
-    for (NSRelationshipDescription *relDesc in cmoRels) {
-        if (!relDesc.isToMany) {
-            [result addObject:relDesc];
+    NSString *modelCacheKey = self.name;
+    NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
+
+    NSString *selName = NSStringFromSelector(_cmd);
+    result = entityCache[selName];
+
+    if (result == nil) {
+        NSSet *cmoRels = self.cmoRelationships;
+        result = [NSMutableSet setWithCapacity:cmoRels.count];
+
+        for (NSRelationshipDescription *relDesc in cmoRels) {
+            if (!relDesc.isToMany) {
+                [result addObject:relDesc];
+            }
         }
+
+        entityCache[selName] = result;
     }
 
     return result;
 }
 
 - (NSSet *)cmoToManyRelationships {
-    NSSet *cmoRels = self.cmoRelationships;
-    NSMutableSet *result = [NSMutableSet setWithCapacity:cmoRels.count];
+    NSMutableSet *result = nil;
 
-    for (NSRelationshipDescription *relDesc in cmoRels) {
-        if (relDesc.isToMany) {
-            [result addObject:relDesc];
+    NSString *modelCacheKey = self.name;
+    NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
+
+    NSString *selName = NSStringFromSelector(_cmd);
+    result = entityCache[selName];
+
+    if (result == nil) {
+        NSSet *cmoRels = self.cmoRelationships;
+        result = [NSMutableSet setWithCapacity:cmoRels.count];
+
+        for (NSRelationshipDescription *relDesc in cmoRels) {
+            if (relDesc.isToMany) {
+                [result addObject:relDesc];
+            }
         }
+
+        entityCache[selName] = result;
     }
 
     return result;
 }
 
 - (NSSet *)cmoOwnedRelationships {
-    NSSet *cmoRels = self.cmoRelationships;
-    NSMutableSet *result = [NSMutableSet setWithCapacity:cmoRels.count];
+    NSMutableSet *result = nil;
 
-    for (NSRelationshipDescription *relDesc in cmoRels) {
-        if (relDesc.isOwnershipRelationship) {
-            [result addObject:relDesc];
+    NSString *modelCacheKey = self.name;
+    NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
+
+    NSString *selName = NSStringFromSelector(_cmd);
+    result = entityCache[selName];
+
+    if (result == nil) {
+        NSSet *cmoRels = self.cmoRelationships;
+        result = [NSMutableSet setWithCapacity:cmoRels.count];
+
+        for (NSRelationshipDescription *relDesc in cmoRels) {
+            if (relDesc.isOwnershipRelationship) {
+                [result addObject:relDesc];
+            }
         }
+
+        entityCache[selName] = result;
     }
 
     return result;
 }
 
 - (NSSet *)cmoOwnedToManyRelationships {
-    NSSet *cmoRels = self.cmoOwnedRelationships;
-    NSMutableSet *result = [NSMutableSet setWithCapacity:cmoRels.count];
+    NSMutableSet *result = nil;
 
-    for (NSRelationshipDescription *relDesc in cmoRels) {
-        if (relDesc.isToMany) {
-            [result addObject:relDesc];
+    NSString *modelCacheKey = self.name;
+    NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
+
+    NSString *selName = NSStringFromSelector(_cmd);
+    result = entityCache[selName];
+
+    if (result == nil) {
+        NSSet *cmoRels = self.cmoOwnedRelationships;
+        result = [NSMutableSet setWithCapacity:cmoRels.count];
+
+        for (NSRelationshipDescription *relDesc in cmoRels) {
+            if (relDesc.isToMany) {
+                [result addObject:relDesc];
+            }
         }
+
+        entityCache[selName] = result;
     }
-    
+
     return result;
 }
 

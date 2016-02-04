@@ -43,5 +43,6 @@
 @property (nonatomic, readonly) Class serviceRequestProcessorType;
 
 - (NSMutableDictionary *)modelCacheForModelKey:(NSString *)modelKey;
+- (void)clearModelCache;
 
 @end

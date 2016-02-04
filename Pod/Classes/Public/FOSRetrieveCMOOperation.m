@@ -615,11 +615,9 @@
                         NSAssert([blockSelf->_jsonId isEqual:(NSString *)cmo.jsonIdValue],
                                  @"Ids aren't the same?");
 
-                        blockSelf->_json = cmo.originalJson;
+                        blockSelf.json = cmo.originalJson;
 
-                        FOSLogDebug(@"FOSFETCHENTITY - BEGIN (FASTRACK): %@ (%@)", blockSelf->_entity.name, blockSelf->_jsonId);
-
-                        [blockSelf _updateReady];
+                        FOSLogDebug(@"FOSFETCHENTITY - FASTRACK: %@ (%@)", blockSelf->_entity.name, blockSelf->_jsonId);
                     }
                     else if (jsonDataRequest.jsonResult == nil) {
                         NSString *msgFmt = NSLocalizedString(@"Received no data in response to the query '%@' for entity '%@'.", @"");
@@ -700,10 +698,13 @@
                 }
             }
 
-            // If we fast-tracked, there's no reason to resolve the references
-            if (!_fastTracked) {
-                [self _resolveReferences];
-            }
+            // Previously it was that that if we fast-tracked, there's no reason to resolve the references.
+            // However, this is not the case.  When we're refreshing relationships where the receiver
+            // has relationships marked jsonRelationshipForcePull == Always, we want to ensure
+            // that the entire graph is traversed updating across these boundaries.  Thus, even
+            // if the object is in the system, we want to ensure that it's force-pull dependencies
+            // are up-to-date.
+            [self _resolveReferences];
 
             // Queue subops, if we're already queued
             if (self.isQueued) {
@@ -743,7 +744,7 @@
 
     // In graph resolution cycles, we might get called more than once, so cut off more than
     // the 1st attempt.
-    if (!_fastTracked && !_finishedBinding && !self.isCancelled) {
+    if (!_finishedBinding && !self.isCancelled) {
 
         // Set at the beginning to skip cycles that might be triggered below
         _finishedBinding = YES;

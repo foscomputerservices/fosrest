@@ -112,11 +112,18 @@
     result = entityCache[selName];
 
     if (result == nil) {
-        result = [NSMutableSet set];
+        result = [NSMutableSet setWithCapacity:10];
 
         NSEntityDescription *nextEntity = self;
         do {
-            [result unionSet:nextEntity.cmoRelationships];
+            NSArray *props = nextEntity.properties;
+
+            for (NSPropertyDescription *nextProp in props) {
+                if ([nextProp isKindOfClass:[NSRelationshipDescription class]] &&
+                    !((NSRelationshipDescription *)nextProp).isFOSRelationship) {
+                    [result addObject:nextProp];
+                }
+            }
 
             nextEntity = nextEntity.superentity;
         } while (nextEntity != nil && !nextEntity.isFOSEntity);
