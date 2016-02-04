@@ -195,6 +195,23 @@
  */
 - (id)valueForExpressionVariable:(NSString *)varName matched:(BOOL *)matched error:(NSError **)error;
 
+/*
+ * @method subtypeFromBase:givenJSON:
+ *
+ * Provide a mechanism for determing which subtype of a base entity type should be used
+ * given the provided JSON.
+ *
+ * @discussion
+ *
+ * Often in SQL-based backends single-table inheritance will be used. In this case,
+ * a standard design pattern is to have a column in the data describe the subtype
+ * of a basedtype to instantiate for that row.
+ *
+ * A service adapter can implement this method to provide a mapping from the given JSON
+ * data to the appropriate subtype to be instantiated.
+ */
+- (NSEntityDescription *)subtypeFromBase:(NSEntityDescription *)baseType givenJSON:(id)json;
+
 /*!
  * @method swizzleURL:endPoint:andFragments:
  *

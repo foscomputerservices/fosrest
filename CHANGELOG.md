@@ -46,3 +46,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # V 0.4.2
 
 * Fixed a bug where refreshing a relationship while offline would locally delete all children of the top-level object that was refreshed.
+
+# V 0.5.0
+
+* Added support for inheritcance from a single REST endpoint. Look for the new NSEntityDescription UserInfo key jsonUseAbstract and the new FOSRESTServiceAdapter method subtypeFromBAse:givenJSON:

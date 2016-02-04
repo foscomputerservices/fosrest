@@ -91,8 +91,13 @@
     return result;
 }
 
-- (NSString *)jsonAbstractRelationshipMaps {
-    NSString *result = [self _bindPropertyForSelector:_cmd throwIfMissing:YES];
+- (BOOL)jsonUseAbstract {
+    BOOL result = NO;
+
+    NSString *jsonValue = [self _bindPropertyForSelector:_cmd throwIfMissing:NO];
+    if (jsonValue != nil) {
+        result = ([jsonValue caseInsensitiveCompare:@"YES"] == NSOrderedSame);
+    }
 
     return result;
 }

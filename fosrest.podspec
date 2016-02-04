@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "fosrest"
   s.module_name      = "FOSRest"
-  s.version          = "0.4.4"
+  s.version          = "0.5.0"
   s.summary          = "A group of classes for connecting CoreData to REST services."
   s.homepage         = "https://github.com/foscomputerservices/fosrest"
   s.license          = 'MIT'

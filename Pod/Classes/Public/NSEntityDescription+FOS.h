@@ -146,23 +146,28 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
 @property (nonatomic, readonly) BOOL jsonIgnoreAsStaticTableEntity;
 
 /*!
- * @property jsonAbstractRelationshipMaps
+ * @property jsonUseAbstract
  *
- * A string containing maps between properties on parent abstract entity
- * relationships and the concrete entity type that is used by this entity.
- *
- * The format of this string is:  <property>:<entity name>[,<property>:<entity name>, ...]
+ * Tells the infrastructure to communicate with REST service using the REST API
+ * of the abstract entity as opposed to each of the subtypes.
  *
  * @discussion
  *
- * On entities that have relationships to abstract entities, at some time the final
- * concrete entity type is required.  When pushing an instance for the relationship,
- * the entity can be determined from that instance.  However, if the relationship
- * is severed (e.g. assigned to nil), then the entity type cannot be determined.
+ * For entities that are declared as abstract we need to know how the concrete
+ * entities align with the webservice API.  Sometimes there is a separate end point
+ * for each subtype and other times there's a shared end point for all subtypes
+ * (like SQL single-table inheritance).
  *
- * In this case, some statement of the entity type must be specified.
+ * Specifying 'YES' will cause all REST communication to be completed
+ * through the end point associaited with the abstract entity.  In this case,
+ * the FOSRESTServiceAdapter implementation should implement the subtypeFromBase:givenJSON:
+ * method to disambiguate the final entity type to instantiate.
+ *
+ * Specifying 'NO' (the default) will cause all REST communication to be
+ * completed through each of the leaf types of the entity.  Thus a call will be made
+ * to the REST service for each leaf (concrete) type.
  */
-@property (nonatomic, readonly) NSString *jsonAbstractRelationshipMaps;
+@property (nonatomic, readonly) BOOL jsonUseAbstract;
 
 /*!
  * @methodgroup Computed Attribute and Relationship properties

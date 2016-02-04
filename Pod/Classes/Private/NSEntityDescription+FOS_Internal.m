@@ -71,27 +71,32 @@
 - (NSSet *)leafEntities {
     NSSet *result = nil;
 
-    NSString *modelCacheKey = self.name;
-    NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
+    if (self.jsonUseAbstract) {
+        result = [NSSet setWithObject:self];
+    }
+    else {
+        NSString *modelCacheKey = self.name;
+        NSMutableDictionary *entityCache = [[FOSRESTConfig sharedInstance] modelCacheForModelKey:modelCacheKey];
 
-    NSString *selName = NSStringFromSelector(_cmd);
-    result = entityCache[selName];
+        NSString *selName = NSStringFromSelector(_cmd);
+        result = entityCache[selName];
 
-    if (result == nil) {
-        if (self.subentities.count == 0) {
-            result = [NSSet setWithObject:self];
-        }
-        else {
-            NSMutableSet *mutableSet = [NSMutableSet set];
+        if (result == nil) {
+            if (self.subentities.count == 0) {
+                result = [NSSet setWithObject:self];
+            }
+            else {
+                NSMutableSet *mutableSet = [NSMutableSet set];
 
-            for (NSEntityDescription *nextSubEntity in self.subentities) {
-                [mutableSet unionSet:nextSubEntity.leafEntities];
+                for (NSEntityDescription *nextSubEntity in self.subentities) {
+                    [mutableSet unionSet:nextSubEntity.leafEntities];
+                }
+
+                result = mutableSet;
             }
 
-            result = mutableSet;
+            entityCache[selName] = result;
         }
-
-        entityCache[selName] = result;
     }
 
     return result;

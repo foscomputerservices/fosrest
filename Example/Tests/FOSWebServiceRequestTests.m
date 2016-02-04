@@ -144,6 +144,34 @@ SETUP_TEARDOWN_NOLOGIN
     WAIT_FOR_TEST_END
 }
 
+- (void)testOperationError {
+    START_TEST
+
+    FOSURLBinding *urlBinding = [self _userURLBinding];
+    NSEntityDescription *entity = [FOSParseUser entityDescription];
+    NSError *error = nil;
+
+    NSURLRequest *urlRequest = [urlBinding urlRequestServerRecordOfType:entity
+                                                             withJsonId:@"__badUID__"
+                                                           withDSLQuery:nil
+                                                                  error:&error];
+
+    FOSWebServiceRequest *request = [FOSWebServiceRequest requestWithURLRequest:urlRequest
+                                                                  forURLBinding:urlBinding];
+    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
+        XCTAssertFalse(cancelled, @"Cancelled???");
+        XCTAssertNotNil(error, @"Received no error??");
+
+        END_TEST
+    }];
+
+    [[FOSRESTConfig sharedInstance].cacheManager queueOperation:request
+                                        withCompletionOperation:finalOp
+                                                  withGroupName:@"TEST: testErrorGETCall"];
+    
+    WAIT_FOR_TEST_END
+}
+
 #pragma mark - Will Process Handler Tests
 
 - (void)testSuccessfulWillProcessHandler {

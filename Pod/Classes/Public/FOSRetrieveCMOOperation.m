@@ -574,7 +574,6 @@
                     // Can we FAST-TRACK to an existing object and skip pulling down this instance?
                     if (blockSelf->_allowFastTrack) {
                         result = blockSelf->_managedObjectID;
-                        blockSelf->_fastTracked = YES;
 
                         if (result == nil) {
                             NSManagedObjectID *cmoObjID = [[self class] cmoForEntity:blockSelf->_entity
@@ -589,11 +588,10 @@
                                                               enity:blockSelf->_entity
                                                          inBindings:blockSelf->_bindings];
                             }
-                            else {
-                                NSLog(@"Type: %@ ID: %@", blockSelf->_entity.name, jsonId);
-                            }
                         }
                     }
+
+                    blockSelf->_fastTracked = (result != nil);
 
                     return result;
                 };
@@ -682,6 +680,24 @@
         if (localError == nil) {
             if (jsonId != nil) {
                 _jsonId = jsonId;
+            }
+
+            // Now that we have the json, it's possible that we need to map an abstract entity
+            // to the final entity
+            if (self.entity.jsonUseAbstract) {
+                if ([self.restAdapter respondsToSelector:@selector(subtypeFromBase:givenJSON:)]) {
+                    NSEntityDescription *finalEntity = [self.restAdapter subtypeFromBase:self.entity givenJSON:json];
+
+                    if (finalEntity != nil) {
+                        _entity = finalEntity;
+                    }
+                    else {
+                        FOSLogCritical(@"Entity '%@' is marked as 'jsonUseAbstract', however the service adapter returned nill for subtypeFromBase:givenJSON: with the following JSON: %@", self.entity.name, json);
+                    }
+                }
+                else if (self.entity.isAbstract) {
+                    FOSLogCritical(@"Entity '%@' is marked as 'jsonUseAbstract' and the entity isAbstract == YES, however the service adapter does not implement 'subtypeFromBase:givenJSON:'.  The abstract entity will be used, but this is almost certainly wrong and will cause subsequent failures.", self.entity.name);
+                }
             }
 
             // If we fast-tracked, there's no reason to resolve the references
@@ -1147,7 +1163,10 @@
     }
 
     @synchronized(self.restConfig) { // A complete mutex lock across all threads for this REST Config
-        Class managedClass = NSClassFromString(entity.managedObjectClassName);
+        NSEntityDescription *finalEntity = [self.restAdapter respondsToSelector:@selector(subtypeFromBase:givenJSON:)]
+            ? [self.restAdapter subtypeFromBase:entity givenJSON:json]
+            : entity;
+        Class managedClass = NSClassFromString(finalEntity.managedObjectClassName);
 
         // Let's see if we already know this managed object
         __block NSManagedObjectID *cmoObjID = nil;
