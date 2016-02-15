@@ -250,7 +250,7 @@
             ([entityClass isSubclassOfClass:[FOSCachedManagedObject class]]) &&
             (![entityClass isSubclassOfClass:[FOSUser class]]) &&
             (self.subentities.count == 0) &&
-            ([self.properties filteredArrayUsingPredicate:ownerPropertyPred].count == 0);
+            ([self.flattenedRelationships filteredSetUsingPredicate:ownerPropertyPred].count == 0);
 
         entityCache[selName] = result ? @YES : @NO;
     }
