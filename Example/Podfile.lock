@@ -1,5 +1,5 @@
 PODS:
-  - fosrest (0.5.2)
+  - fosrest (0.5.3)
 
 DEPENDENCIES:
   - fosrest (from `../`)
@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  fosrest: 8a2e4f5961a7e3b04da3fc8406ce2a1d680b16da
+  fosrest: e341b04ce2ccb046839d243115c868b848ce9859
 
 COCOAPODS: 0.39.0
