@@ -91,6 +91,14 @@
 @property (nonatomic, readonly) BOOL isAutomaticallySynchronizing;
 
 /*!
+ * @property isSavingOfflineChanges
+ *
+ * Returns YES if FOSRESTConfigSaveOfflineChanges was specified as an option
+ * during configuration.
+ */
+@property (nonatomic, readonly) BOOL isSavingOfflineChanges;
+
+/*!
  * @property userNamesAreCaseSensitive
  *
  * Returns YES if FOSRESTConfigCaseSensitiveUserNames was specified as an option

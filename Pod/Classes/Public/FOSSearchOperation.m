@@ -169,7 +169,9 @@
     NSError *localError = nil;
     NSSet *depOps = [self dependentSearchOperations:&localError];
 
-    // TODO : Something doesn't seem quite right as nothing is calling this method.
+    // TODO : At this time, this class cannot be used directly by non-framework
+    //        users as an operation as this method must be called, but currently
+    //        it's not a public method.
     NSAssert(localError == nil, @"Error: %@", localError.description);
 
     // This op is dependent on all other search ops

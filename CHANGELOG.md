@@ -50,3 +50,8 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # V 0.5.0
 
 * Added support for inheritcance from a single REST endpoint. Look for the new NSEntityDescription UserInfo key jsonUseAbstract and the new FOSRESTServiceAdapter method subtypeFromBAse:givenJSON:
+
+# V 0.6.0
+
+* Added configuration support for whether offline changes (changes made while the user is logged out) are saved to the database
+* Fixed a bug in FOSCachedManagedObject.retrieveCMOsWithDSLQuery() so that it now acutally does something (oops!)

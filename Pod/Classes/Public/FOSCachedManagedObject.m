@@ -405,6 +405,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSString *managedClassName = [self entityDescription].managedObjectClassName;
     result.managedClass = NSClassFromString(managedClassName);
     result.dslQuery = dslQuery;
+    [result finalizeDependencies];
 
     return result;
 }

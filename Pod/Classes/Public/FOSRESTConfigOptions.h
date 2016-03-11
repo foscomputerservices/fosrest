@@ -41,6 +41,8 @@
  *
  * @constant FOSRESTConfigDeleteDBOnLogout Deletes the database file once a user's logout process has been completed (a full synchronize of the user is done before logout completes).
  *
+ * @constant FOSRESTConfigSaveOfflineChanges Causes any changes made while the user is offline (logged out) to the database.  The default behavior is to not save changes.
+ *
  * @discussion
  *
  * These configuration options turn on optional behaviors of the FOSREST service.
@@ -53,4 +55,5 @@ typedef NS_OPTIONS(NSUInteger, FOSRESTConfigOptions) {
     FOSRESTConfigAllowStaticTableModifications = (1 << 3),
     FOSRESTConfigUseOfflineFiles = (1 << 4),
     FOSRESTConfigDeleteDBOnLogout = (1 << 5),
+    FOSRESTConfigSaveOfflineChanges = (1 << 6)
 };
