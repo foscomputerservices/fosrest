@@ -61,7 +61,8 @@
 - (void)main {
     [super main];
 
-    if (self.restConfig.loginManager.isLoggedIn || self.restConfig.isSavingOfflineChanges) {
+    if (self.restConfig.loginManager.isLoggedIn ||
+        (self.restConfig.isSavingOfflineChanges && !self.restConfig.loginManager.isLoggingOut)) {
         FOSDatabaseManager *dbMgr = self.restConfig.databaseManager;
 
         if (self.isCancelled) {
