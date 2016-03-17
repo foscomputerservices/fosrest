@@ -55,3 +55,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 
 * Added configuration support for whether offline changes (changes made while the user is logged out) are saved to the database
 * Fixed a bug in FOSCachedManagedObject.retrieveCMOsWithDSLQuery() so that it now acutally does something (oops!)
+
+# V 0.6.2
+
+* Fixed FOSCachedManagedObject.refreshWithHandler.  It wasn't actually pulling from the server as it was hitting the cache and not pulling through.

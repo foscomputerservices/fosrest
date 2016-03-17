@@ -984,6 +984,7 @@ static NSMutableDictionary *_processingFaults = nil;
     FOSRetrieveCMOOperation *retrieveCMOOp =
         [FOSRetrieveCMOOperation retrieveCMOForEntity:self.entity
                                                withId:self.jsonIdValue];
+    retrieveCMOOp.allowFastTrack = false; // Force a server pull
 
     FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
         handler(cancelled, error);
