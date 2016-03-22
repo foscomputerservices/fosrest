@@ -682,12 +682,22 @@
 
             // Now that we have the json, it's possible that we need to map an abstract entity
             // to the final entity
-            if (self.entity.jsonUseAbstract) {
+            if (self.entity.isAbstract || self.entity.jsonUseAbstract) {
                 if ([self.restAdapter respondsToSelector:@selector(subtypeFromBase:givenJSON:)]) {
                     NSEntityDescription *finalEntity = [self.restAdapter subtypeFromBase:self.entity givenJSON:json];
 
-                    if (finalEntity != nil) {
+                    if (finalEntity != nil && finalEntity != _entity) {
                         _entity = finalEntity;
+
+                        // We need to re-obtain the urlBinding now that we have a final type
+                        id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
+                        FOSLifecyclePhase lifecyclePhase = _urlBinding.lifecyclePhase;
+                        FOSItemMatcher *lifecycleStyle = _urlBinding.lifecycleStyle;
+
+                        _urlBinding = [adapter urlBindingForLifecyclePhase:lifecyclePhase
+                                                         forLifecycleStyle:lifecycleStyle
+                                                           forRelationship:_relDesc
+                                                                 forEntity:_entity];
                     }
                     else {
                         FOSLogCritical(@"Entity '%@' is marked as 'jsonUseAbstract', however the service adapter returned nill for subtypeFromBase:givenJSON: with the following JSON: %@", self.entity.name, json);

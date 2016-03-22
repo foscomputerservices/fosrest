@@ -228,10 +228,17 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
             // to store info, if necessary.
             if (blockSelf->_webServiceRequest != nil) {
                 NSDictionary *json = (NSDictionary *)blockSelf->_webServiceRequest.jsonResult;
-                [blockSelf->_urlBinding.cmoBinding updateCMO:blockSelf.cmo
-                                                    fromJSON:json
-                                           forLifecyclePhase:blockSelf->_lifecyclePhase
-                                                       error:&localError];
+
+                if (json == nil) {
+                    NSString *msg = [NSString stringWithFormat:@"Received an empty response from the server for request: %@", blockSelf->_webServiceRequest.description];
+                    localError = [NSError errorWithDomain:@"FOSRest" andMessage:msg];
+                }
+                else {
+                    [blockSelf->_urlBinding.cmoBinding updateCMO:blockSelf.cmo
+                                                        fromJSON:json
+                                               forLifecyclePhase:blockSelf->_lifecyclePhase
+                                                           error:&localError];
+                }
 
                 if (localError == nil) {
                     [blockSelf.cmo markClean];
