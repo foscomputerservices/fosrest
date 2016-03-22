@@ -184,8 +184,8 @@ ADAPTER ::
           RELATIONSHIP_BINDING :: 
             JSON_BINDING :: 
               { ( $RELDESC.name + '.__type' ) : 'Pointer' }, 
-              { ( $RELDESC.name + '.className' ) : $RELDESC.destinationEntity.parseClassName }, 
-              { ( $RELDESC.name + '.objectId' ) : $CMO.`$RELDESC.destinationEntity.name`.jsonIdValue } ;
+              { ( $RELDESC.name + '.className' ) : $RELDESC.destinationLeafEntity.parseClassName },
+              { ( $RELDESC.name + '.objectId' ) : $CMO.`$RELDESC.destinationLeafEntity.name`.jsonIdValue } ;
             JSON_ID_BINDING :: ( $RELDESC.name + '.objectId' ) ;
             RELATIONSHIPS :: ALL ;
             ENTITIES :: ALL ; 

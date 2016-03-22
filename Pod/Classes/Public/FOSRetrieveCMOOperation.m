@@ -1370,7 +1370,7 @@
     if ([self.json isKindOfClass:[NSDictionary class]]) {
 
         // Don't check counts between static table classes and non-static table entities.
-        if (!self.entity.isStaticTableEntity || relDesc.destinationEntity.isStaticTableEntity) {
+        if (!self.entity.isStaticTableEntity || relDesc.destinationLeafEntity.isStaticTableEntity) {
             NSString *childCountKey = [NSString stringWithFormat:@"%@ChildCount_",
                                        relDesc.name];
             id childCountJson = ((NSDictionary *)self.json)[childCountKey];
@@ -1388,7 +1388,7 @@
 
 - (void)_configureFaultingForRelationship:(NSRelationshipDescription *)relDesc {
     // Does the user want to auto-pull the relationship when it is crossed?
-    if (relDesc.destinationEntity.jsonAllowFault) {
+    if (relDesc.destinationLeafEntity.jsonAllowFault) {
         NSPredicate *pred = [FOSRelationshipFault predicateForEntity:self.entity
                                                               withId:self.jsonId
                                                 forRelationshipNamed:relDesc.name];

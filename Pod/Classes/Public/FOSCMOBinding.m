@@ -146,7 +146,7 @@
     BOOL foundRelBinding = NO;
 
     id<FOSTwoWayPropertyBinding> identityBinding = nil;
-    NSDictionary *context = @{ @"ENTITY" : relDesc.destinationEntity, @"RELDESC" : relDesc };
+    NSDictionary *context = @{ @"ENTITY" : relDesc.destinationLeafEntity, @"RELDESC" : relDesc };
 
     for (FOSRelationshipBinding *relBinding in self.relationshipBindings) {
         if ([relBinding.relationshipMatcher itemIsIncluded:relDesc.name context:context]) {
@@ -170,7 +170,7 @@
         if (foundRelBinding) {
             NSString *msgFmt = @"Missing JSON_ID_BINDING in RELATIONSHIP_BINDING for Entity '%@', a destination entity of relationship '%@' with parent Entity '%@'.";
             msg = [NSString stringWithFormat:msgFmt,
-                   relDesc.destinationEntity.name,
+                   relDesc.destinationLeafEntity.name,
                    relDesc.name,
                    relDesc.entity.name];
         }
@@ -178,7 +178,7 @@
             NSString *msgFmt = @"Missing RELATIONSHIP_BINDING from Entity '%@' to Entity '%@' across relationship '%@'.";
             msg = [NSString stringWithFormat:msgFmt,
                    relDesc.entity.name,
-                   relDesc.destinationEntity.name,
+                   relDesc.destinationLeafEntity.name,
                    relDesc.name];
         }
 

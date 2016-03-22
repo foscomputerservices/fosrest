@@ -204,7 +204,7 @@
 
         for (NSRelationshipDescription *ownerRel in self.ownerRelationships) {
             [result addObject:ownerRel];
-            [result unionSet:ownerRel.destinationEntity.flattenedOwnershipRelationships];
+            [result unionSet:ownerRel.destinationLeafEntity.flattenedOwnershipRelationships];
         }
 
         entityCache[selName] = result;

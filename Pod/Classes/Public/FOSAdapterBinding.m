@@ -135,7 +135,7 @@
     for (FOSURLBinding *binding in self.urlBindings) {
         // Match the destination entity name, not the source for relationship bindings
         NSString *entityName = lifecyclePhase == FOSLifecyclePhaseRetrieveServerRecordRelationship
-            ? relDesc.destinationEntity.name
+            ? relDesc.destinationLeafEntity.name
             : entity.name;
 
         if ((binding.entityMatcher == nil ||

@@ -75,4 +75,20 @@ typedef NS_ENUM(NSUInteger, FOSForcePullType) {
  */
 @property (nonatomic, readonly) FOSForcePullType jsonRelationshipForcePull;
 
+/*!
+ * @property destinationLeafEntity
+ *
+ * Resolves to the leaf entity of this relationship as long as there is
+ * exactly one leaf entity in the final tree.
+ *
+ * @discussion
+ *
+ * The issue is that the model often has relationships to entities that are not
+ * abstract, but might have subtypes (possibly introduced in secondary models).
+ * Thus, when we ask for the destinationEntity, we need the final subtype, not
+ * just the intermediate type in the hierarcy.
+ */
+@property (nonatomic, readonly) NSEntityDescription *destinationLeafEntity;
+
+
 @end

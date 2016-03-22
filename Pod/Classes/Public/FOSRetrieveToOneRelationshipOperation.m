@@ -70,6 +70,10 @@
         NSEntityDescription *destEntity = _relationship.destinationEntity;
         NSError *localError = nil;
 
+        if (destEntity.leafEntities.count == 1) {
+            destEntity = destEntity.leafEntities.anyObject;
+        }
+
         if (!destEntity.isAbstract) {
 
             // Retrieve the relationship id from the parent's json

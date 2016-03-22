@@ -38,6 +38,17 @@
     return result;
 }
 
+- (NSEntityDescription *)destinationLeafEntity {
+    NSEntityDescription *destEntity = self.destinationEntity;
+
+    NSSet *leafEntities = destEntity.leafEntities;
+    if (leafEntities.count == 1) {
+        destEntity = leafEntities.anyObject;
+    }
+
+    return destEntity;
+}
+
 - (FOSForcePullType)jsonRelationshipForcePull {
     FOSForcePullType result = FOSForcePullType_Never;
     NSString *propValue = [self _bindValueForSelector:_cmd throwIfMissing:NO];

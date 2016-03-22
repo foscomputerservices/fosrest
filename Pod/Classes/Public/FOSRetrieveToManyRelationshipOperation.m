@@ -201,11 +201,11 @@
                         if (nextCMO != nil) {
 
     #if !defined(DEBUG) && !defined(NS_BLOCK_ASSERTIONS)
-                            Class destClass = NSClassFromString(_relationship.destinationEntity.managedObjectClassName);
+                            Class destClass = NSClassFromString(_relationship.destinationLeafEntity.managedObjectClassName);
 
                             NSAssert([nextCMO isKindOfClass:destClass], @"Received type %@, expected %@.",
                                      NSStringFromClass([nextCMO class]),
-                                     _relationship.destinationEntity.managedObjectClassName);
+                                     _relationship.destinationLeafEntity.managedObjectClassName);
     #endif
                             // Set the forward relationship
                             [newEntries addObject:nextCMO];

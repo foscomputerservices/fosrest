@@ -728,7 +728,7 @@ static NSMutableDictionary *_processingFaults = nil;
                     // if the destination entity is a static entity, because we've
                     // got all of those instances locally.
                     if (!found &&
-                        !relDesc.destinationEntity.jsonIsStaticTableEntity) {
+                        !relDesc.destinationLeafEntity.jsonIsStaticTableEntity) {
                         for (NSUInteger i = 0; i < resolvers.count; i++) {
                             FOSOperation *resolver = resolvers[i];
                             FOSOperation *finalOp = finalOps[i];
@@ -1292,7 +1292,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
         // Find the binding that matches this relationship
         for (FOSRelationshipBinding *relBinding in relBindings) {
-            if ([relBinding.entityMatcher itemIsIncluded:relDesc.destinationEntity context:context] &&
+            if ([relBinding.entityMatcher itemIsIncluded:relDesc.destinationLeafEntity context:context] &&
                 [relBinding.relationshipMatcher itemIsIncluded:relDesc.name context:context]) {
 
                 [result addObject:relDesc.name];

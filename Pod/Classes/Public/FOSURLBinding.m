@@ -777,7 +777,7 @@
 
     // Ensure that the cmo is managed by this request
     NSMutableURLRequest *result= nil;
-    NSEntityDescription *entity = relDesc.destinationEntity;
+    NSEntityDescription *entity = relDesc.destinationLeafEntity;
     if ([self _matchEntity:entity error:error] &&
         [self.relationshipMatcher itemIsIncluded:relDesc.name context:context]) {
 

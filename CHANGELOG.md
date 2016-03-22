@@ -59,3 +59,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # V 0.6.2
 
 * Fixed FOSCachedManagedObject.refreshWithHandler.  It wasn't actually pulling from the server as it was hitting the cache and not pulling through.
+
+# V 0.6.3
+
+* Fixed another issue with inheritance. Now inheritance works across relationships.  So relationships can be made to base types, but if the base type later has a subtype, the subtype will be used when pulling acorss the relationship.
