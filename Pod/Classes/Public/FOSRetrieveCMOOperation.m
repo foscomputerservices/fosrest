@@ -46,6 +46,7 @@
     FOSItemMatcher *_relationshipsToPull;
     NSRelationshipDescription *_relDesc;
     NSManagedObjectID *_managedObjectID;
+    NSString *_lifecycleStyle;
 }
 
 + (instancetype)retrieveCMOUsingDataOperation:(FOSOperation<FOSRetrieveCMODataOperationProtocol> *)fetchOp
@@ -322,6 +323,7 @@
                   forLifecycleStyle:lifecycleStyle
                        withBindings:bindings]) != nil) {
         __block FOSRetrieveCMOOperation *blockSelf = self;
+        _lifecycleStyle = lifecycleStyle;
 
         NSError *localError = nil;
 
@@ -692,10 +694,9 @@
                         // We need to re-obtain the urlBinding now that we have a final type
                         id<FOSRESTServiceAdapter> adapter = self.restConfig.restServiceAdapter;
                         FOSLifecyclePhase lifecyclePhase = _urlBinding.lifecyclePhase;
-                        FOSItemMatcher *lifecycleStyle = _urlBinding.lifecycleStyle;
 
                         _urlBinding = [adapter urlBindingForLifecyclePhase:lifecyclePhase
-                                                         forLifecycleStyle:lifecycleStyle
+                                                         forLifecycleStyle:_lifecycleStyle
                                                            forRelationship:_relDesc
                                                                  forEntity:_entity];
                     }
