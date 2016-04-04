@@ -259,7 +259,9 @@
                 [queuedDeletedObjects addObject:nextDelete];
             }
 
-            [_skipServerDeletionIds removeObject:delJsonId];
+            if (delJsonId != nil) {
+                [_skipServerDeletionIds removeObject:delJsonId];
+            }
         }
     }
 

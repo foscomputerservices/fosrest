@@ -981,18 +981,23 @@ static NSMutableDictionary *_processingFaults = nil;
 #pragma mark - Refresh methods
 
 - (void)refreshWithHandler:(FOSBackgroundRequest)handler {
-    FOSRetrieveCMOOperation *retrieveCMOOp =
-        [FOSRetrieveCMOOperation retrieveCMOForEntity:self.entity
-                                               withId:self.jsonIdValue];
-    retrieveCMOOp.allowFastTrack = false; // Force a server pull
+    if (self.jsonIdValue != nil) {
+        FOSRetrieveCMOOperation *retrieveCMOOp =
+            [FOSRetrieveCMOOperation retrieveCMOForEntity:self.entity
+                                                   withId:self.jsonIdValue];
+        retrieveCMOOp.allowFastTrack = false; // Force a server pull
 
-    FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
-        handler(cancelled, error);
-    }];
+        FOSBackgroundOperation *finalOp = [FOSBackgroundOperation backgroundOperationWithMainThreadRequest:^(BOOL cancelled, NSError *error) {
+            handler(cancelled, error);
+        }];
 
-    [self.restConfig.cacheManager queueOperation:retrieveCMOOp
-                         withCompletionOperation:finalOp
-                                   withGroupName:@"Refresh CMO"];
+        [self.restConfig.cacheManager queueOperation:retrieveCMOOp
+                             withCompletionOperation:finalOp
+                                       withGroupName:@"Refresh CMO"];
+    }
+    else {
+        handler(false, nil);
+    }
 }
 
 - (void)refreshRelationshipNamed:(NSString * _Nonnull)relName
