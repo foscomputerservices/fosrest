@@ -125,7 +125,7 @@
             if (blockSelf->_fetchRelatedEntityOp != nil) {
                 NSAssert(blockSelf.relationship.isOwnershipRelationship ||
                          !relDesc.isOptional ||
-                         relDesc.jsonRelationshipForcePull != FOSForcePullType_Never,
+                         [[[moc objectWithID:ownerId] class] forcePullForRelationship:relDesc givenJSON:[[moc objectWithID:ownerId] originalJson]] != FOSForcePullType_Never,
                          @"Expected an ownership relationship, not a graph relationship.");
                 [blockSelf->_fetchRelatedEntityOp finishBinding];
                 childObj = [moc objectWithID:blockSelf->_fetchRelatedEntityOp.managedObjectID];
@@ -212,12 +212,14 @@
                     // too, so those owners are not the parent object that performed the pull.
                     NSAssert([owner primitiveValueForKey:relDesc.name] == nil ||
                              [owner primitiveValueForKey:relDesc.name] == childObj ||
-                             relDesc.jsonRelationshipForcePull == FOSForcePullType_Always,
+                             [[owner class] forcePullForRelationship:relDesc givenJSON:owner.originalJson] == FOSForcePullType_Always,
                              @"Relationship already bound???");
 
                     // Set the forward relationship
+                    FOSForcePullType forcePull = [[owner class] forcePullForRelationship:relDesc givenJSON: owner.originalJson];
+                    
                     if ([owner primitiveValueForKey:relDesc.name] == nil ||
-                        relDesc.jsonRelationshipForcePull == FOSForcePullType_Always) {
+                        forcePull == FOSForcePullType_Always) {
                         [owner setValue:childObj forKey:relDesc.name];
                     }
 

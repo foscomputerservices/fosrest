@@ -1282,17 +1282,19 @@
     NSMutableArray *result = [NSMutableArray array];
 
     NSSet *filteredRels = [self _filterRelationships:self.entity.cmoToOneRelationships];
+    Class managedClass = NSClassFromString(self.entity.managedObjectClassName);
 
     // Process toOne relationships, optional relationships will be hooked up
     // at the last minute by FOSCachedManagedObject::willAccessValueForKey
     for (NSRelationshipDescription *relDesc in filteredRels) {
         FOSOperation *nextOp = nil;
+        FOSForcePullType forcePull = [managedClass forcePullForRelationship:relDesc givenJSON:_json];
 
         if (// Skip the inverse ownership relationship, as it will be resolved via finishBinding if
             // this isn't a topLevelFetch, otherwise, we'll have to go get it.
             ((!relDesc.isOptional &&
               (!relDesc.inverseRelationship.isOwnershipRelationship || self.isTopLevelFetch)) ||
-             relDesc.jsonRelationshipForcePull == FOSForcePullType_Always)) {
+             forcePull == FOSForcePullType_Always)) {
 
                 nextOp = [FOSRetrieveToOneRelationshipOperation fetchToOneRelationship:relDesc
                                                                           jsonFragment:self.json
@@ -1310,22 +1312,24 @@
     NSMutableArray *result = [NSMutableArray array];
 
     NSSet *filteredRels = [self _filterRelationships:self.entity.cmoOwnedToManyRelationships];
+    Class managedClass = NSClassFromString(self.entity.managedObjectClassName);
 
     // Process toMany relationships, but only from the 'owner's' side
     for (NSRelationshipDescription *relDesc in filteredRels) {
-
+        FOSForcePullType forcePull = [managedClass forcePullForRelationship:relDesc givenJSON:_json];
+        
         // Let's see if we can short circuit out
         // -1 => unknown, need to fetch to see
         NSInteger childCount = [self _serverChildCountForToManyRelationship:relDesc];
 
         // If we *know* that there are no children, we can skip trying to fetch them
-        if ((childCount != 0 && relDesc.jsonRelationshipForcePull == FOSForcePullType_UseCount) ||
+        if ((childCount != 0 && forcePull == FOSForcePullType_UseCount) ||
             !relDesc.isOptional ||
-            relDesc.jsonRelationshipForcePull == FOSForcePullType_Always ||
+            forcePull == FOSForcePullType_Always ||
             (_relationshipsToPull != nil)) {
 
             // We don't auto-pull on optional relationships, unless they tell us to do so.
-            if (relDesc.isOptional && relDesc.jsonRelationshipForcePull == FOSForcePullType_Never &&
+            if (relDesc.isOptional && forcePull == FOSForcePullType_Never &&
                 (_relationshipsToPull == nil)) {
                 [self _configureFaultingForRelationship:relDesc];
             }

@@ -215,6 +215,10 @@ static NSMutableDictionary *_processingFaults = nil;
     }
 }
 
++ (FOSForcePullType)forcePullForRelationship:(NSRelationshipDescription *)relDesc givenJSON:(id<NSObject>)json {
+    return relDesc.jsonRelationshipForcePull;
+}
+
 + (BOOL)idIsInDatabase:(FOSJsonId)jsonId {
     BOOL result = NO;
 

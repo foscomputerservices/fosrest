@@ -213,12 +213,14 @@
                             // Set Inverse relationship
                             NSRelationshipDescription *inverse = _relationship.inverseRelationship;
                             if (!inverse.isToMany) {
+                                Class managedClass = NSClassFromString([inverse.entity managedObjectClassName]);
+                                FOSForcePullType forcePull = [managedClass forcePullForRelationship:inverse givenJSON:nextCMO.originalJson];
 
                                 // It is possible that they 'force resolved' the owner by setting
                                 // the owner's relationship 'jsonRelationshipForcePull == Always'.
                                 // This might be done if the query for these objects is broader than
                                 // just the simple owner as reolved by this protocol.
-                                if (!inverse.jsonRelationshipForcePull) {
+                                if (!forcePull) {
                                     [nextCMO setValue:owner forKey:inverse.name];
                                 }
                                 else {

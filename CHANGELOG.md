@@ -63,3 +63,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # V 0.6.3
 
 * Fixed another issue with inheritance. Now inheritance works across relationships.  So relationships can be made to base types, but if the base type later has a subtype, the subtype will be used when pulling acorss the relationship.
+
+# V 0.7.0
+
+* Added support for dynamically managing force-pulling relationships
