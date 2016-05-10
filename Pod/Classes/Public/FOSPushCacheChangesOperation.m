@@ -91,6 +91,7 @@
 
     [self _pushNonOwnedEntityChanges:completePushOp];
     [self _pushLoggedInUserChanges:completePushOp];
+    [self _pushAdapterChanges:completePushOp];
 
     return completePushOp;
 }
@@ -137,5 +138,16 @@
         }
     }
 }
+
+- (void)_pushAdapterChanges:(FOSOperation *)completePushOp {
+    if ([self.restAdapter respondsToSelector:@selector(additionalPushCacheChangesOperations)]) {
+        FOSOperation *op = [self.restAdapter additionalPushCacheChangesOperations];
+        
+        if (op != nil) {
+            [completePushOp addDependency:op];
+        }
+    }
+}
+
 
 @end

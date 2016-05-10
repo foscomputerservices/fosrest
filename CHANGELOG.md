@@ -67,3 +67,7 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # V 0.7.0
 
 * Added support for dynamically managing force-pulling relationships
+
+# V 0.8.0
+
+* Added the ability for a FOSRESTServiceAdapter to augment the operations that are used to automatically push changes to the web service

@@ -37,6 +37,7 @@
 @class FOSNetworkStatusMonitor;
 @class FOSURLBinding;
 @class FOSWebServiceRequest;
+@class FOSOperation;
 
 /*
  * @protocol FOSRESTServiceAdapter
@@ -300,5 +301,21 @@
  */
 - (void)request:(NSURLRequest *)request receivedResponse:(NSHTTPURLResponse *)response
        andError:(NSError *)error;
+
+/*!
+ * @property additionalPushCacheChangesOperations
+ *
+ * FOSPushCacheChangesOperation handles the pushing of changes back to the server by
+ * pushing all non-owned and all logged in user-owned changes.  However, it's possible
+ * that the application authorizes non-owned changes via some permission scheme as well.
+ *
+ * If this is the case, then additional operations will need to be chained in, in order
+ * to push those changes to the server.
+ *
+ * An example might be:
+ *
+ *   return [otherAuthorizedUser sendServerRecordWithLifecycleStyle:nil];
+ */
+@property (nonatomic, readonly) FOSOperation *additionalPushCacheChangesOperations;
 
 @end
