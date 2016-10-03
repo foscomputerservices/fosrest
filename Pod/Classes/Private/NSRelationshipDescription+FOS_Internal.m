@@ -38,12 +38,22 @@
 }
 
 - (BOOL)isOwnershipRelationship {
-    BOOL result =
-        // delete rule == (Cascade | Deny) => we're the owner
-        (self.deleteRule == NSCascadeDeleteRule || self.deleteRule == NSDenyDeleteRule) &&
+    BOOL result = NO;
+    
+    NSString *isOwnerRel = self.userInfo[@"jsonIsOwnerRelationship"];
+    if (isOwnerRel != nil) {
+        isOwnerRel = isOwnerRel.lowercaseString;
+        
+        result = ([isOwnerRel isEqualToString:@"yes"] || [isOwnerRel isEqualToString:@"true"]);
+    }
+    else {
+        result =
+            // delete rule == (Cascade | Deny) => we're the owner
+            (self.deleteRule == NSCascadeDeleteRule || self.deleteRule == NSDenyDeleteRule) &&
 
-        // Skip FOS's internal relationships
-        !self.isFOSRelationship;
+            // Skip FOS's internal relationships
+            !self.isFOSRelationship;
+    }
 
     return result;
 }

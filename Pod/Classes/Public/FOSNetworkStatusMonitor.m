@@ -333,8 +333,10 @@ static void _ReachabilityCallback(SCNetworkReachabilityRef target,
     _PrintReachabilityFlags(flags, "localWiFiStatusForFlags");
 
     FOSNetworkStatus result = FOSNetworkStatusNotReachable;
-    if((flags & kSCNetworkReachabilityFlagsReachable) &&
-       (flags & kSCNetworkReachabilityFlagsIsDirect)) {
+    
+    // Removed kSCNetworkReachabilityFlagsIsDirect
+    // https://forums.developer.apple.com/thread/54395
+    if (flags & kSCNetworkReachabilityFlagsReachable) {
         result = FOSNetworkStatusReachableViaWiFi;
     }
 

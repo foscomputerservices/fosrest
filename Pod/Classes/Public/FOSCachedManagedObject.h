@@ -315,6 +315,21 @@
  */
 - (NSSet * _Nullable)propertiesModifiedSinceLastUpload;
 
+/*!
+ * @method forcePullForRelationship:
+ *
+ * Returns the force-pull status for the given relationship.
+ *
+ * @discussion
+ *
+ * The default implementation of this method returns the jsonRelationshipForcePull property of the relationship.
+ *
+ * If the given type prefers to determine this status dynamically based on the receiver's state this method may be overridden.
+ *
+ * An example where this might be useful is pulling relationships on a user object.  For the logged in user, possibly many more relationships need to be force-pulled.  Where as for a related user, possibly no relationships need to be force-pulled.
+ */
+- (FOSForcePullType)forcePullForRelationship:(NSRelationshipDescription * _Nonnull)relDesc givenJSON:(id<NSObject> _Nonnull)json;
+
 /*! @methodgroup Refresh */
 #pragma mark - Refresh methods
 

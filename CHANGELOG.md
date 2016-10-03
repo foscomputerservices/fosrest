@@ -71,3 +71,10 @@ NOTE: This may mean that client code slows down execution when compiled with the
 # V 0.8.0
 
 * Added the ability for a FOSRESTServiceAdapter to augment the operations that are used to automatically push changes to the web service
+
+# V 0.9.0
+
+* Added the ability for individual CMO instances to override the 'forcePullForRelationship:givenJSON:' method
+* Added 'jsonIsOwnerRelationship' to allow manually setting the ownership of a relationship using the UserData dictionary
+* Fixed an issue with iOS 10 and reachability's kSCNetworkReachabilityFlagsIsDirect flag (it no longer seems to work)
+* Restored support for late-binding to-one relationships

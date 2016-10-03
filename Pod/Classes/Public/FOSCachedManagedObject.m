@@ -618,13 +618,58 @@ static NSMutableDictionary *_processingFaults = nil;
     [super willAccessValueForKey:key];
 
     FOSRESTConfig *restConfig = [FOSRESTConfig sharedInstance];
+    
+    if ([NSThread isMainThread] &&
+        ![NSAttributeDescription isFOSAttribute:key] &&
+        !restConfig.cacheManager.updatingMainThreadMOC &&
+        [self originalJson] != nil) {
+    
+        NSDictionary *rels = self.entity.relationshipsByName;
+        NSRelationshipDescription *relDesc = [rels objectForKey:key];
+        
+        // Auto-resolve nil to-one relationships
+        if (relDesc != nil && !relDesc.isToMany && [self primitiveValueForKey:relDesc.name] == nil) {
+            NSMutableDictionary *bindings = [NSMutableDictionary dictionary];
+            NSManagedObjectContext *moc = restConfig.databaseManager.currentMOC;
+            
+            id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
+            FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                             forLifecycleStyle:nil
+                                               forRelationship:relDesc
+                                                     forEntity:relDesc.destinationEntity];
+            FOSCMOBinding *objBinding = urlBinding.cmoBinding;
+
+            NSError *localError = nil;
+            FOSJsonId jsonId = [objBinding jsonIdFromJSON:[self originalJson]
+                                          forRelationship:relDesc
+                                                    error:&localError];
+            if (localError == nil && jsonId != nil) {
+                NSManagedObjectID *objId = [FOSRetrieveCMOOperation cmoForEntity:relDesc.destinationEntity
+                                                                      withJsonId:jsonId
+                                                                    fromBindings:bindings
+                                                          inManagedObjectContext:moc];
+                if (objId != nil) {
+                    NSManagedObject *relatedObj = [moc objectWithID:objId];
+                    
+                    [self setPrimitiveValue:relatedObj forKey:key];
+                }
+                else {
+                    FOSLogWarning(@"Unable to retrieve late-bound to-one relationship '%@' of type '%@' on class '%@'.  Have '%@' objects been pulled from the server?",
+                                relDesc.name, relDesc.destinationEntity.name, relDesc.entity.name, relDesc.destinationEntity.name);
+                }
+            }
+            else if (localError != nil) {
+                FOSLogError(@"Error occurred while attempting to late-bind a to-one relationship: %@", localError.description);
+            }
+        }
+    }
 
     // Ignore when pushing updates into main thread by cache manager
     // Ignore our own 'internal' keys
     //
     // NOTE: Perform isCMOPoperty check 1st, so that at startup internal properties
     // can be accessed before FOSRESTConfig is fully initialized.
-    if ([NSThread isMainThread] &&
+    else if ([NSThread isMainThread] &&
         ![NSAttributeDescription isFOSAttribute:key] &&
         restConfig.isFaultingEnabled &&
         !restConfig.cacheManager.updatingMainThreadMOC &&
@@ -980,6 +1025,10 @@ static NSMutableDictionary *_processingFaults = nil;
     NSMutableSet *result = modProps ? [NSMutableSet setWithArray:modProps] : nil;
 
     return result;
+}
+
+- (FOSForcePullType)forcePullForRelationship:(NSRelationshipDescription *)relDesc givenJSON:(id<NSObject>)json {
+    return [[self class] forcePullForRelationship:relDesc givenJSON:json];
 }
 
 #pragma mark - Refresh methods
