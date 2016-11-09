@@ -429,6 +429,8 @@ static NSMutableDictionary *_processingFaults = nil;
 #pragma mark - Associated Values
 
 - (void)associateValue:(id _Nonnull)value toPropertyNamed:(NSString * _Nonnull)propName {
+    NSAssert([NSThread isMainThread], @"Values can only be associated to Main-Thread instances");
+    
     if (_associatedValues == nil) {
         _associatedValues = [NSMutableDictionary dictionary];
     }
@@ -437,10 +439,14 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 - (id)associatedValueForProperty:(NSString * _Nonnull)propName {
+    NSAssert([NSThread isMainThread], @"Values can only be associated to Main-Thread instances");
+    
     return _associatedValues[propName];
 }
 
 - (void)resetAssociatedValues {
+    NSAssert([NSThread isMainThread], @"Values can only be associated to Main-Thread instances");
+    
     if (!self.skipNextReset) {
         _associatedValues = nil;
     }

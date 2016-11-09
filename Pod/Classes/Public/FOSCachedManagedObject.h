@@ -428,11 +428,15 @@
  * another property.  Tha  value will be retained as long as the related property
  * doesn't change.  If a change is observed for that property,
  * the related value will be dropped.
+ *
+ * NOTE: Associations can only be made on Main-Thread instances.
  */
 - (void)associateValue:(id _Nonnull)value toPropertyNamed:(NSString * _Nonnull)propName;
 
 /*!
  * @method associatedValueForProperty:
+ *
+ * NOTE: Associations can only be made on Main-Thread instances.
  */
 - (id _Nullable)associatedValueForProperty:(NSString * _Nonnull)propName;
 
@@ -444,6 +448,8 @@
  * @discussion
  *
  * Generally this method is only called internally by the FOSCacheManager.
+ *
+ * NOTE: Associations can only be made on Main-Thread instances.
  */
 - (void)resetAssociatedValues;
 

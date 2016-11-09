@@ -89,13 +89,28 @@
         }
         else {
             FOSLogDebug(@"SAVE: Save operation was initiated for queue group: %@", self.groupName);
-
+            NSMutableArray *objIDs = [[NSMutableArray alloc] init];
+            
             for (id obj in self.managedObjectContext.updatedObjects) {
                 if ([obj isKindOfClass:[FOSCachedManagedObject class]]) {
-                    ((FOSCachedManagedObject *)obj).skipNextReset = false;
+                    [objIDs addObject:((FOSCachedManagedObject *)obj).objectID];
                 }
             }
 
+            // Caches are only stored on the instances in the main thread, so we need to get those instances
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                NSManagedObjectContext *moc = dbMgr.currentMOC;
+                
+                for (NSManagedObjectID *objID in objIDs) {
+                    
+                    // Retrieve object from main queue
+                    FOSCachedManagedObject *cmo = [moc objectRegisteredForID:objID];
+                    if (cmo != nil) {
+                        cmo.skipNextReset = false;
+                    }
+                }
+            });
+            
             // We don't really do anything, all the work is done by
             // our dependencies.  So, all we need to do is to save
             // the changes to get them back to the main thread.
