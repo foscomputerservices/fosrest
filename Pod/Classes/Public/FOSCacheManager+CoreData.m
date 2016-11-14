@@ -316,38 +316,30 @@
 
 - (void)_updateMainQueue:(NSNotification *)notification {
 
-    // Non-main thread means update mainThreadMOC (and deliver any change notifications).
-    FOSLogDebug(@"*** Database *** updated from BACKGROUND thread...");
-
     __block FOSCacheManager *blockSelf = self;
-    void (^syncNotifyRequest)() = ^ {
+    NSManagedObjectContext *moc = [blockSelf->_restConfig.databaseManager mainThreadMOC];
 
-        NSManagedObjectContext *moc = blockSelf->_restConfig.databaseManager.currentMOC;
+    [moc performBlock:^{
+        FOSLogPedantic(@"*** MAIN Thread *** merging changes from BACKGROUND ***");
 
-        [moc performBlock:^{
-            blockSelf->_updatingMainThreadMOC = YES;
+        blockSelf->_updatingMainThreadMOC = YES;
 
-            // Fault in all updated objects so that NSFetchedResultsController will
-            // properly handle filter predicates:
-            //
-            // http://mikeabdullah.net/merging-saved-changes-betwe.html
-            NSSet *updated = [notification.userInfo objectForKey:NSUpdatedObjectsKey];
-            for (NSManagedObject *anObject in updated) {
-                [moc existingObjectWithID:anObject.objectID error:NULL];
-            }
+        // Fault in all updated objects so that NSFetchedResultsController will
+        // properly handle filter predicates:
+        //
+        // http://mikeabdullah.net/merging-saved-changes-betwe.html
+        NSSet *updated = [notification.userInfo objectForKey:NSUpdatedObjectsKey];
+        for (NSManagedObject *anObject in updated) {
+            [moc existingObjectWithID:anObject.objectID error:NULL];
+        }
 
-            // Bring over the changes
-            [moc mergeChangesFromContextDidSaveNotification:notification];
+        // Bring over the changes
+        [moc mergeChangesFromContextDidSaveNotification:notification];
 
-            blockSelf->_updatingMainThreadMOC = NO;
+        blockSelf->_updatingMainThreadMOC = NO;
 
-            FOSLogDebug(@"*** MAIN Thread *** merged changes from BACKGROUND ***");
-        }];
-    };
-
-    // Switch to main thread and update its MOC & send notifications
-    // Don't let this thread go until that has completed.
-    dispatch_sync(dispatch_get_main_queue(), syncNotifyRequest);
+        FOSLogPedantic(@"*** MAIN Thread *** merged changes from BACKGROUND ***");
+    }];
 }
 
 - (void)_flushAssociatedCaches:(NSNotification *)notification {

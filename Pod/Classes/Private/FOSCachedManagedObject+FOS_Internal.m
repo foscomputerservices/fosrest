@@ -41,24 +41,7 @@
 
 + (NSEntityDescription *)entityDescription {
     NSString *entityClass = NSStringFromClass([self class]);
-    NSEntityDescription  *result = nil;
-
-    NSManagedObjectModel *model = nil;
-
-    NSManagedObjectContext *context = [FOSRESTConfig sharedInstance].databaseManager.currentMOC;
-    if (context != nil) {
-        model = context.persistentStoreCoordinator.managedObjectModel;
-    }
-    else {
-        model = [FOSRESTConfig sharedInstance].databaseManager.storeCoordinator.managedObjectModel;
-    }
-
-    for (NSEntityDescription *desc in model.entities) {
-        if ([desc.managedObjectClassName isEqualToString:entityClass]) {
-            result = desc;
-            break;
-        }
-    }
+    NSEntityDescription  *result = [[FOSRESTConfig sharedInstance].databaseManager entityDescriptForClassName:entityClass];
 
     NSAssert(result != nil, @"Unable to find an entity description for entity: %@",
              entityClass);

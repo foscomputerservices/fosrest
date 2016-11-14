@@ -97,7 +97,9 @@
     BOOL result = YES;
 
     // Check if this would override a locally updated value
-    if (cmo.hasBeenUploadedToServer && cmo.hasModifiedProperties) {
+    // NOTE: The order of the && is important as hasModifiedProperties is
+    //       MUCH easier to check than hasBeenUploadedToServer.
+    if (cmo.hasModifiedProperties && cmo.hasBeenUploadedToServer) {
         for (FOSModifiedProperty *modProd in cmo.propertiesModifiedSinceLastUpload) {
             if ([modProd.propertyName isEqualToString:propDesc.name]) {
                 result = NO;

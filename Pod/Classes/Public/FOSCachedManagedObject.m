@@ -46,6 +46,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSArray *_modifiedPropertiesCache;
 
     NSMutableDictionary *_associatedValues;
+    NSString *_cmoIdentityKeyPath;
 }
 
 #pragma mark - DB Properties
@@ -627,8 +628,7 @@ static NSMutableDictionary *_processingFaults = nil;
     
     if ([NSThread isMainThread] &&
         ![NSAttributeDescription isFOSAttribute:key] &&
-        !restConfig.cacheManager.updatingMainThreadMOC &&
-        [self originalJson] != nil) {
+        !restConfig.cacheManager.updatingMainThreadMOC) {
     
         NSDictionary *rels = self.entity.relationshipsByName;
         NSRelationshipDescription *relDesc = [rels objectForKey:key];
@@ -638,17 +638,22 @@ static NSMutableDictionary *_processingFaults = nil;
             NSMutableDictionary *bindings = [NSMutableDictionary dictionary];
             NSManagedObjectContext *moc = restConfig.databaseManager.currentMOC;
             
-            id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
-            FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
-                                             forLifecycleStyle:nil
-                                               forRelationship:relDesc
-                                                     forEntity:relDesc.destinationEntity];
-            FOSCMOBinding *objBinding = urlBinding.cmoBinding;
-
             NSError *localError = nil;
-            FOSJsonId jsonId = [objBinding jsonIdFromJSON:[self originalJson]
-                                          forRelationship:relDesc
-                                                    error:&localError];
+            FOSJsonId jsonId = self.jsonIdValue;
+            
+            if (jsonId == nil && self.originalJsonData != nil) {
+                id<FOSRESTServiceAdapter> adapter = restConfig.restServiceAdapter;
+                FOSURLBinding *urlBinding = [adapter urlBindingForLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecordRelationship
+                                                               forLifecycleStyle:nil
+                                                                 forRelationship:relDesc
+                                                                       forEntity:relDesc.destinationEntity];
+                FOSCMOBinding *objBinding = urlBinding.cmoBinding;
+                
+                jsonId = [objBinding jsonIdFromJSON:self.originalJson
+                                    forRelationship:relDesc
+                                              error:&localError];
+            }
+            
             if (localError == nil && jsonId != nil) {
                 NSManagedObjectID *objId = [FOSRetrieveCMOOperation cmoForEntity:relDesc.destinationEntity
                                                                       withJsonId:jsonId
@@ -944,15 +949,26 @@ static NSMutableDictionary *_processingFaults = nil;
 #pragma mark - Public properties
 
 - (FOSJsonId)jsonIdValue {
-    // REVIEW : I'm not positive that this is the best way to accomplish this...
-    // NOTE: Not all entities are going to have identities.  Some may be send only, for example.
-    NSString *idProp = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]
-                                              notFoundOK:YES];
+    BOOL isMainThread = [NSThread isMainThread];
+    FOSJsonId result = isMainThread ? [self associatedValueForProperty:@"jsonIdValue"] : nil;
+    
+    if (result == nil) {
+        result = [NSNull null];
 
-    FOSJsonId result = [NSNull null];
+        // REVIEW : I'm not positive that this is the best way to accomplish this...
+        // NOTE: Not all entities are going to have identities.  Some may be send only, for example.
+        if (_cmoIdentityKeyPath == nil) {
+            _cmoIdentityKeyPath = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]
+                                                      notFoundOK:YES];
+        }
 
-    if (idProp != nil) {
-        result = [self primitiveValueForKey:idProp];
+        if (_cmoIdentityKeyPath != nil) {
+            result = [self primitiveValueForKey:_cmoIdentityKeyPath];
+            
+            if (isMainThread) {
+                [self associateValue:result toPropertyNamed:@"jsonIdValue"];
+            }
+        }
     }
 
     return result;
@@ -960,9 +976,16 @@ static NSMutableDictionary *_processingFaults = nil;
 
 - (void)setJsonIdValue:(FOSJsonId)jsonIdValue {
     NSParameterAssert(jsonIdValue != nil);
+    
+    if ([NSThread isMainThread]) {
+        [self associateValue:jsonIdValue toPropertyNamed:@"jsonIdValue"];
+    }
 
-    NSString *idProp = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]];
-    [self setValue:jsonIdValue forKeyPath:idProp];
+    if (_cmoIdentityKeyPath == nil) {
+        _cmoIdentityKeyPath = [[self class] _cmoIdentityKeyPath:[FOSRESTConfig sharedInstance]
+                                                     notFoundOK:YES];
+    }
+    [self setValue:jsonIdValue forKeyPath:_cmoIdentityKeyPath];
 
     [self setPrimitiveIsFaultObject:@NO];
 }
@@ -998,12 +1021,22 @@ static NSMutableDictionary *_processingFaults = nil;
 
 
 - (id<NSObject>)originalJson {
+    BOOL isMainThread = [NSThread isMainThread];
     NSDictionary *result = nil;
+    
+    
+    if (isMainThread) {
+        [self associatedValueForProperty:@"originalJsonData"];
+    }
 
     if (self.originalJsonData != nil) {
         result = [NSJSONSerialization JSONObjectWithData:self.originalJsonData
                                                  options:0
                                                    error:nil];
+        
+        if (isMainThread) {
+            [self associateValue: result toPropertyNamed:@"originalJsonData"];
+        }
     }
 
     return result;

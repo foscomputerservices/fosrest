@@ -30,7 +30,9 @@
 #import <FOSItemMatcher.h>
 #import "FOSREST_Internal.h"
 
-@implementation FOSItemMatcher
+@implementation FOSItemMatcher {
+    NSSet *_cachedConstantExpressions;
+}
 
 #pragma mark - Class Methods
 
@@ -77,6 +79,7 @@
 
 - (BOOL)itemIsIncluded:(id)item context:(NSDictionary *)context {
     BOOL result = NO;
+    BOOL invertResult = NO;
 
     switch (self.itemMatch) {
         case FOSItemMatchAll:
@@ -84,15 +87,14 @@
             break;
 
         case FOSItemMatchAllExcept:
-            result = ![[self _itemsForContext:context ] containsObject:item];
-            break;
+            invertResult = YES;
 
         case FOSItemMatchItems:
             result = [[self _itemsForContext:context] containsObject:item];
             break;
     }
 
-    return result;
+    return invertResult ? !result : result;
 }
 
 - (BOOL)itemsAreIncluded:(id<NSFastEnumeration>)items
@@ -152,7 +154,13 @@
 #pragma mark - Private Methods
 
 - (NSSet *)_itemsForContext:(NSDictionary *)context {
+    if (_cachedConstantExpressions != nil) {
+        return _cachedConstantExpressions;
+    }
+    
     NSMutableSet *result = [NSMutableSet setWithCapacity:self.itemExpressions.count];
+    
+    BOOL allConstantExprs = YES;
 
     for (id<FOSExpression> expr in self.itemExpressions) {
         id item = [expr evaluateWithContext:context error:nil];
@@ -160,6 +168,14 @@
         if (item != nil) {
             [result addObject:item];
         }
+        
+        if (![expr isKindOfClass:[FOSConstantExpression class]]) {
+            allConstantExprs = NO;
+        }
+    }
+    
+    if (allConstantExprs) {
+        _cachedConstantExpressions = result;
     }
 
     return result;

@@ -32,6 +32,24 @@
 @interface FOSDatabaseManager (FOS_Internal)
 
 /*!
+ * @property mainThreadMOC
+ *
+ * Returns the MOC for the main thread.
+ *
+ * NOTE: Calling this method is not locked and may return null.  However, an implementation
+ *       detail is that the main thread MOC is held for the lifetime of the receiver, or
+ *       until resetDatabase is called, which should only be done for testing.
+ */
+- (NSManagedObjectContext * _Nullable)mainThreadMOC;
+
+/*!
+ * @method entityDescriptForClassName:
+ *
+ * Looks up the entity description by matching managedObjectClassName as opposed to name.
+ */
+- (NSEntityDescription * _Nullable)entityDescriptForClassName:(NSString *)className;
+
+/*!
  * @method resetDatabase
  *
  * Completely resets the database and the connection to it by the following

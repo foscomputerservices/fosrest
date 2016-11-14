@@ -33,6 +33,7 @@
 @implementation FOSDatabaseManager {
     __weak FOSRESTConfig *_restConfig;
     NSManagedObjectContext *_mainThreadMOC;
+    NSMutableDictionary *_entityClassNameCache;
 }
 
 #pragma mark - Public Properties
@@ -268,6 +269,24 @@
 }
 
 #pragma mark - Internal Methods
+
+- (NSEntityDescription *)entityDescriptForClassName:(NSString *)className {
+    if (_entityClassNameCache == nil) {
+        _entityClassNameCache = [NSMutableDictionary dictionary];
+
+        NSManagedObjectModel *model = _storeCoordinator.managedObjectModel;
+        
+        for (NSEntityDescription *desc in model.entities) {
+            _entityClassNameCache[desc.managedObjectClassName] = desc;
+        }
+    }
+    
+    return _entityClassNameCache[className];
+}
+
+- (NSManagedObjectContext *)mainThreadMOC {
+    return _mainThreadMOC;
+}
 
 // NOTE: The implementation of this method is *NOT* thread safe.  It is expected that it
 //       will only be called at exacting points in the process where it is safe to
