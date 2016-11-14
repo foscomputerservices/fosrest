@@ -298,6 +298,7 @@
 
     _storeCoordinator = [[self class] _attachToDatabase:_restConfig forceRemoval:YES error:&localError];
     _mainThreadMOC = nil;
+    _entityClassNameCache = nil;
 
     if (localError != nil) {
         NSString *msgFmt = @"Unable to RE-create CoreData database: %@";
