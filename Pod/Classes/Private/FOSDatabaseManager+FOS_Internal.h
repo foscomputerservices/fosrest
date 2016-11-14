@@ -47,7 +47,7 @@
  *
  * Looks up the entity description by matching managedObjectClassName as opposed to name.
  */
-- (NSEntityDescription * _Nullable)entityDescriptForClassName:(NSString *)className;
+- (NSEntityDescription * _Nullable)entityDescriptForClassName:(NSString * _Nonnull)className;
 
 /*!
  * @method resetDatabase
