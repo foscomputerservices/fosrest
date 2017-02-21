@@ -1661,7 +1661,18 @@ static NSMutableDictionary *_processingFaults = nil;
 }
 
 - (id)_associatedPropertyValueChecksum:(NSString *)propName {
-    id propData = [self respondsToSelector:NSSelectorFromString(propName)] ? [self performSelector:NSSelectorFromString(propName)] : nil;
+    id propData = nil;
+    SEL selector = NSSelectorFromString(propName);
+    
+    if ([self respondsToSelector:selector]) {
+        // This allows for dynamic invoke of a selector w/o ARC problems
+        // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
+        IMP imp = [self methodForSelector:selector];
+        id (*func)(id, SEL) = (void *)imp;
+
+        propData = func(self, selector);
+    }
+    
     id dataHash = [NSNull null];
     
     // It is expected that most of the caching that goes on here is between
