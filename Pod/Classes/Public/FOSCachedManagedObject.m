@@ -435,7 +435,12 @@ static NSMutableDictionary *_processingFaults = nil;
         _associatedValues = [NSMutableDictionary dictionary];
     }
     
-    _associatedValues[propName] = @[[self _associatedPropertyValueChecksum:propName], value];
+    if (value != nil) {
+        _associatedValues[propName] = @[[self _associatedPropertyValueChecksum:propName], value];
+    }
+    else {
+        [_associatedValues removeObjectForKey:propName];
+    }
 }
 
 - (id)associatedValueForProperty:(NSString * _Nonnull)propName {
