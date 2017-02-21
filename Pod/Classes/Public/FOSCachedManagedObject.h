@@ -445,27 +445,9 @@
  *
  * Causes the receiver to drop all property-associated values.
  *
- * @discussion
- *
- * Generally this method is only called internally by the FOSCacheManager.
- *
  * NOTE: Associations can only be made on Main-Thread instances.
  */
 - (void)resetAssociatedValues;
-
-/*!
- * @property skipNextReset
- *
- * Allows for skipping the next round of associated value resets for this instance.
- *
- * @discussion
- *
- * When a CMO is updated and its values are sent to the server, the local instance
- * is updated with the values that come back from the server.  However, those
- * values are probably simply what was sent to the server and there's no reason
- * to clear the associated value caches.
- */
-@property (nonatomic) BOOL skipNextReset;
 
 #pragma mark - Override Points
 

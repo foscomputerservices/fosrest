@@ -78,3 +78,17 @@ NOTE: This may mean that client code slows down execution when compiled with the
 * Added 'jsonIsOwnerRelationship' to allow manually setting the ownership of a relationship using the UserData dictionary
 * Fixed an issue with iOS 10 and reachability's kSCNetworkReachabilityFlagsIsDirect flag (it no longer seems to work)
 * Restored support for late-binding to-one relationships
+
+# V 0.11.0
+
+* Reworked the FOSCachedManagedObject associated value cache code. It is now expected that associated values are
+* of type: NSString, NSData or NSValue.  Other types may be cached, but they will not be invalidated if the associated
+* property changes.
+*
+* The map between the property and the associated value is checked each time the associated value is requested.  That is,
+* on each request the property is pulled and a checksum is calculated on the data.  If the checksum is the same as the
+* previous request, the cached value is returned; otherwise nil is returned and the cache for that property is cleared.
+*
+* Previous attempts to watch changes pass between the background NSManagedObjectContexts and foreground did not prove
+* to be stable enough resulting in the caches being purged too often.
+

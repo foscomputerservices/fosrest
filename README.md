@@ -11,6 +11,8 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
+NOTE: As of the end of January 2017, parse.com is now offline.  All of the tests in the pod used parse.com, so they are all failing.  I will update the tests to a new web service when I can.
+
 ## Installation
 
 ### CocoaPods

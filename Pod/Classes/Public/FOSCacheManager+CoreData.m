@@ -44,13 +44,6 @@
                selector:sel
                    name:NSManagedObjectContextDidSaveNotification
                  object:moc];
-
-    if (isMainThread) {
-        [center addObserver:self
-                   selector:@selector(_flushAssociatedCaches:)
-                       name:NSManagedObjectContextObjectsDidChangeNotification
-                     object:moc];
-    }
 }
 
 - (void)unregisterMOC:(FOSManagedObjectContext *)moc {
@@ -58,9 +51,6 @@
 
     [center removeObserver:self
                       name:NSManagedObjectContextDidSaveNotification
-                    object:moc];
-    [center removeObserver:self
-                      name:NSManagedObjectContextObjectsDidChangeNotification
                     object:moc];
 }
 
@@ -335,24 +325,10 @@
 
         // Bring over the changes
         [moc mergeChangesFromContextDidSaveNotification:notification];
-
+        
         blockSelf->_updatingMainThreadMOC = NO;
 
         FOSLogPedantic(@"*** MAIN Thread *** merged changes from BACKGROUND ***");
-    }];
-}
-
-- (void)_flushAssociatedCaches:(NSNotification *)notification {
-    NSAssert([NSThread isMainThread], @"Wrong thread!");
-
-    NSManagedObjectContext *moc = _restConfig.databaseManager.currentMOC;
-
-    [moc performBlock:^{
-        for (id obj in [notification.userInfo valueForKey:NSRefreshedObjectsKey]) {
-            if ([obj isKindOfClass:[FOSCachedManagedObject class]]) {
-                [(FOSCachedManagedObject *)obj resetAssociatedValues];
-            }
-        }
     }];
 }
 

@@ -60,7 +60,6 @@ static NSMutableDictionary *_processingFaults = nil;
 @dynamic originalJsonData;
 
 @synthesize isDirty;
-@synthesize skipNextReset;
 
 #pragma mark - Public Properties
 
@@ -435,22 +434,28 @@ static NSMutableDictionary *_processingFaults = nil;
     if (_associatedValues == nil) {
         _associatedValues = [NSMutableDictionary dictionary];
     }
-
-    _associatedValues[propName] = value;
+    
+    _associatedValues[propName] = @[[self _associatedPropertyValueChecksum:propName], value];
 }
 
 - (id)associatedValueForProperty:(NSString * _Nonnull)propName {
     NSAssert([NSThread isMainThread], @"Values can only be associated to Main-Thread instances");
     
-    return _associatedValues[propName];
+    NSArray *assocData = _associatedValues[propName];
+    
+    if (assocData != nil) {
+        id checksum = [self _associatedPropertyValueChecksum:propName];
+        
+        return [assocData[0] isEqual:checksum] ? assocData[1] : nil;
+    }
+    
+    return nil;
 }
 
 - (void)resetAssociatedValues {
     NSAssert([NSThread isMainThread], @"Values can only be associated to Main-Thread instances");
-    
-    if (!self.skipNextReset) {
-        _associatedValues = nil;
-    }
+
+    [_associatedValues removeAllObjects];
 }
 
 #pragma mark - Overrides
@@ -950,7 +955,7 @@ static NSMutableDictionary *_processingFaults = nil;
 
 - (FOSJsonId)jsonIdValue {
     BOOL isMainThread = [NSThread isMainThread];
-    FOSJsonId result = isMainThread ? [self associatedValueForProperty:@"jsonIdValue"] : nil;
+    FOSJsonId result = isMainThread ? [self associatedValueForProperty:@"_cmoIdentityKeyPath"] : nil;
     
     if (result == nil) {
         result = [NSNull null];
@@ -966,7 +971,7 @@ static NSMutableDictionary *_processingFaults = nil;
             result = [self primitiveValueForKey:_cmoIdentityKeyPath];
             
             if (isMainThread) {
-                [self associateValue:result toPropertyNamed:@"jsonIdValue"];
+                [self associateValue:result toPropertyNamed:@"_cmoIdentityKeyPath"];
             }
         }
     }
@@ -978,7 +983,7 @@ static NSMutableDictionary *_processingFaults = nil;
     NSParameterAssert(jsonIdValue != nil);
     
     if ([NSThread isMainThread]) {
-        [self associateValue:jsonIdValue toPropertyNamed:@"jsonIdValue"];
+        [self associateValue:jsonIdValue toPropertyNamed:@"_cmoIdentityKeyPath"];
     }
 
     if (_cmoIdentityKeyPath == nil) {
@@ -1653,6 +1658,22 @@ static NSMutableDictionary *_processingFaults = nil;
 - (void)_updateParentsLastModifiedAt {
     FOSCachedManagedObject *ownerCMO = self.owner;
     [ownerCMO setValue:[NSDate utcDate] forKey:@"lastModifiedAt"];
+}
+
+- (id)_associatedPropertyValueChecksum:(NSString *)propName {
+    id propData = [self respondsToSelector:NSSelectorFromString(propName)] ? [self performSelector:NSSelectorFromString(propName)] : nil;
+    id dataHash = [NSNull null];
+    
+    // It is expected that most of the caching that goes on here is between
+    // a JSON string and an object graph.
+    if ([propData isKindOfClass:[NSString class]] || [propData isKindOfClass:[NSData class]]) {
+        dataHash = [propData md5Checksum];
+    }
+    else if ([propData isKindOfClass:[NSValue class]]) {
+        dataHash = propData;
+    }
+
+    return dataHash;
 }
 
 + (NSPredicate *)_faultPredicateForEntity:(NSEntityDescription *)entity

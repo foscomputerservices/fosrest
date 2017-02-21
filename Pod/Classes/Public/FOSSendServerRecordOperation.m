@@ -222,22 +222,25 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
     FOSBackgroundOperation *result = [FOSBackgroundOperation backgroundOperationWithRequest:^(BOOL cancelled, NSError *error) {
 
         if (!cancelled && (error == nil)) {
-            NSError *localError = nil;
+            __block NSError *localError = nil;
 
             // Now that we've got info from the web service, allow subtypes
             // to store info, if necessary.
             if (blockSelf->_webServiceRequest != nil) {
                 NSDictionary *json = (NSDictionary *)blockSelf->_webServiceRequest.jsonResult;
+                NSManagedObjectContext *moc = blockSelf.managedObjectContext;
 
                 if (json == nil) {
                     NSString *msg = [NSString stringWithFormat:@"Received an empty response from the server for request: %@", blockSelf->_webServiceRequest.description];
                     localError = [NSError errorWithDomain:@"FOSRest" andMessage:msg];
                 }
                 else {
-                    [blockSelf->_urlBinding.cmoBinding updateCMO:blockSelf.cmo
-                                                        fromJSON:json
-                                               forLifecyclePhase:blockSelf->_lifecyclePhase
-                                                           error:&localError];
+                    [moc performBlockAndWait:^{
+                        [blockSelf->_urlBinding.cmoBinding updateCMO:blockSelf.cmo
+                                                            fromJSON:json
+                                                   forLifecyclePhase:blockSelf->_lifecyclePhase
+                                                               error:&localError];
+                    }];
                 }
 
                 if (localError == nil) {
@@ -252,7 +255,6 @@ withLifecycleStyle:(NSString *)lifecycleStyle{
                         if (blockSelf.cmo.isSendOnly) {
                             blockSelf.cmo.skipServerDelete = YES;
 
-                            NSManagedObjectContext *moc = blockSelf.managedObjectContext;
                             [moc deleteObject:blockSelf.cmo];
                         }
 

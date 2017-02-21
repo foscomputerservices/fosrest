@@ -14,5 +14,6 @@
 - (NSString *)lowercaseFirstCharString;
 - (BOOL)containsString:(NSString *)otherStr;
 - (NSString *)toUnderscore;
+- (NSString *)md5Checksum;
 
 @end
