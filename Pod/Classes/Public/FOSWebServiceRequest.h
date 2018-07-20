@@ -64,9 +64,7 @@
  *
  * The result of executing the request against the server.
  *
- * @discussion
- *
- * This result is 'unwrapped' automatically by the urlBinding if a urlBinding
+ * @discussion This result is 'unwrapped' automatically by the urlBinding if a urlBinding
  * was specified.
  */
 @property (nonatomic, readonly) id<NSObject> jsonResult;
@@ -76,9 +74,7 @@
  *
  * The result of executing the request against the server.
  *
- * @discussion
- *
- * This result is the original 'wrapped' version received from the server.
+ * @discussion This result is the original 'wrapped' version received from the server.
  */
 @property (nonatomic, readonly) id<NSObject> originalJsonResult;
 

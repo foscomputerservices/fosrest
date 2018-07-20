@@ -42,9 +42,7 @@
  * a userInfo key of 'placeholder' with the corresponding
  * entity in another model that does not have that key.
  *
- * @discussion
- *
- * Original Idea:  http://chanson.livejournal.com/187540.html
+ * @discussion Original Idea:  http://chanson.livejournal.com/187540.html
  *
  * Chris's original code didn't handle inheritance (There
  * have since been a few comments to help fix this problem, but I

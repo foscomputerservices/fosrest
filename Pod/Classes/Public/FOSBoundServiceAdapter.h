@@ -69,9 +69,7 @@
  * and then creates an instance of @link FOSBoundServiceAdapter @/link
  * and binds the compiled adapter binding.
  *
- * @discussion
- *
- * The file described by url is expected to be in ASCII format.
+ * @discussion The file described by url is expected to be in ASCII format.
  */
 + (instancetype)serviceAdapterFromBindingFile:(NSURL *)url error:(NSError **)error;
 

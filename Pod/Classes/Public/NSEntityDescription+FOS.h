@@ -85,15 +85,11 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
 /*!
  * @property jsonAllowFault
  *
- * @return
- *
- * YES if it is acceptable to use faulting for instances
+ * @return YES if it is acceptable to use faulting for instances
  * of the receiver's type, NO if concrete instances are
  * always required.
  *
- * @discussion
- *
- * If 'jsonAllowFault' is not specified on the entity, then
+ * @discussion If 'jsonAllowFault' is not specified on the entity, then
  * faulting is disallowed.
  *
  * Faulting is very similar to CoreData's faulting model
@@ -116,14 +112,10 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  *
  * This can help to alleviate data duplication issues.
  *
- * @return
- *
- * YES if it is acceptable to use value matching to find
+ * @return YES if it is acceptable to use value matching to find
  * instances that match during synchronization.
  *
- * @discussion
- *
- * By default this value is NO. It should only be turned
+ * @discussion By default this value is NO. It should only be turned
  * on for values that have sufficient data to ensure
  * non-ambiguous comparisons.
  */
@@ -136,9 +128,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * as a static table entity and thus treats entities of the recvier's
  * type as normal FOSCachedManagedObject entities.
  *
- * @discussion
- *
- * If this property is not provided in the entity's UserInfo specification,
+ * @discussion If this property is not provided in the entity's UserInfo specification,
  * the framework automatically determines the appropriate value by whether
  * the entity has any owning relationships to or from it.  If no relationships
  * are found, then it is assumed to be a static entity.
@@ -151,9 +141,7 @@ typedef BOOL (^FOSRelationshipHandler)(NSRelationshipDescription *relDesc);
  * Tells the infrastructure to communicate with REST service using the REST API
  * of the abstract entity as opposed to each of the subtypes.
  *
- * @discussion
- *
- * For entities that are declared as abstract we need to know how the concrete
+ * @discussion For entities that are declared as abstract we need to know how the concrete
  * entities align with the webservice API.  Sometimes there is a separate end point
  * for each subtype and other times there's a shared end point for all subtypes
  * (like SQL single-table inheritance).

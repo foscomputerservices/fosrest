@@ -116,9 +116,7 @@
  *
  * Setting this property is optional.
  *
- * @discussion
- *
- * This is a SEND-ONLY binding to add information to the JSON as additional
+ * @discussion This is a SEND-ONLY binding to add information to the JSON as additional
  * parametrization of the request.
  */
 @property (nonatomic, strong) NSArray *jsonBindingExpressions;

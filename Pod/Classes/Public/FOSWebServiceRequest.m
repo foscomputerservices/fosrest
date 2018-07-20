@@ -106,7 +106,7 @@
                 }
             }
             else {
-                NSAssert(@"Do not know how to handle uriFragment of type %@.",
+                NSAssert(false, @"Do not know how to handle uriFragment of type %@.",
                          [[nextFragment class] description]);
             }
 
@@ -471,7 +471,7 @@
                 }
             }
             else {
-                NSAssert(@"Do not know how to handle uriFragment of type %@.",
+                NSAssert(false, @"Do not know how to handle uriFragment of type %@.",
                          [[nextFragment class] description]);
             }
 
@@ -592,7 +592,7 @@
                     break;
                 }
                 else {
-                    NSAssert(@"Do not know how to handle uriFragment of type %@.",
+                    NSAssert(false, @"Do not know how to handle uriFragment of type %@.",
                              [[nextFragment class] description]);
                 }
 

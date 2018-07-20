@@ -38,9 +38,7 @@
  *
  * FOSWebService implements the ability to communicate with the web service.
  *
- * @discussion
- *
- * It should be noted that all handler callbacks are
+ * @discussion It should be noted that all handler callbacks are
  * *** NOT *** guaranteed to be executed on the main thread
  * (in fact, will probably never be).
  */

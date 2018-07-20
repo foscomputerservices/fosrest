@@ -55,9 +55,7 @@
  *
  * Checks whether the default route is available.
  *
- * @discussion
- *
- * This method should be used by applications that do not connect to a particular host
+ * @discussion This method should be used by applications that do not connect to a particular host
  */
 + (instancetype)statusMonitorForInternetConnection;
 
@@ -136,9 +134,7 @@
  * Returns the current network status relative to the general availability of
  * the Internet.
  *
- * @discussion
- *
- * If isNotifierRunning == NO, this is a blocking request that may take a significant
+ * @discussion If isNotifierRunning == NO, this is a blocking request that may take a significant
  * amount of time to complete (see SCNetworkReachabilityGetFlags).
  *
  * If isNotifierRunning == YES, this is a non-blocking request that returns the last

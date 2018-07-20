@@ -33,7 +33,7 @@
 
 @class FOSNetworkStatusMonitor;
 
-typedef void (^TestCallBack)();
+typedef void (^TestCallBack)(void);
 
 @interface FOSLoginManagerTests : XCTestCase
 

@@ -47,5 +47,5 @@ extern void yyensure_buffer_stack (void );
 extern void yy_load_buffer_state (void );
 extern void yy_init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
-extern void yyparse();
-extern void yyreset_state();
+extern void yyparse(void);
+extern void yyreset_state(void);

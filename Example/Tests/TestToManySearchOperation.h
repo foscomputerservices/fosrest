@@ -27,7 +27,7 @@
 //  SOFTWARE.
 //
 
-#import "FOSREST.h"
+#import "FOSRest.h"
 
 @class User;
 

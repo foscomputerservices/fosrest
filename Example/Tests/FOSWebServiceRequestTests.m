@@ -29,7 +29,7 @@
 
 #import "FOSWebServiceRequestTests.h"
 #import "FOSRESTTests.h"
-#import "FOSREST.h"
+#import "FOSRest.h"
 
 @implementation FOSWebServiceRequestTests
 

@@ -39,9 +39,7 @@
  * A separate context into which FOSUser objects are placed during
  * the creation or login process.
  *
- * @discussion
- *
- * The objects created during the create/login process are later
+ * @discussion The objects created during the create/login process are later
  * discarded internally and the replaced with instances that are pulled
  * from the REST service.
  *

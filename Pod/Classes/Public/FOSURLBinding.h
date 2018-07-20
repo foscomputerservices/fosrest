@@ -107,9 +107,7 @@
  * (FOSLifecyclePhaseLogin) wil the REST service.  Each authentication
  * mechanism would need a different @link FOSURLBinding @/link specification.
  *
- * @discussion
- *
- * Setting this property is optional.  The default matcher is
+ * @discussion Setting this property is optional.  The default matcher is
  * [FOSItemMatcher matcherMatchingAllItems];
  */
 @property (nonatomic, strong) FOSItemMatcher *lifecycleStyle;
@@ -130,9 +128,7 @@
  *
  * Setting this property is optional.
  *
- * @discussion
- *
- * If this property is no specified, FOSRequestMethodGET will be used.
+ * @discussion If this property is no specified, FOSRequestMethodGET will be used.
  */
 @property (nonatomic, assign) FOSRequestMethod requestMethod;
 
@@ -152,9 +148,7 @@
  *
  * Setting this property is optional.
  *
- * @discussion
- *
- * Setting this property overrides the setting provided by @link FOSRESTServicesAdapter/defaultTimeout @/link.
+ * @discussion Setting this property overrides the setting provided by @link FOSRESTServicesAdapter/defaultTimeout @/link.
  */
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
 
@@ -166,9 +160,7 @@
  *
  * Setting this property is optional.
  *
- * @discussion
- *
- * If this property is not set, @link FOSRESTServicesAdapter/headerFields @/link will be used.
+ * @discussion If this property is not set, @link FOSRESTServicesAdapter/headerFields @/link will be used.
  * If this property is set, the dictionary from @link FOSRESTServicesAdapter/headerFields @/link
  * will be added to by the settings provided by this property.  The values provided by
  * this property will override any provided by the adapter.
@@ -183,9 +175,7 @@
  *
  * Setting this property is optional.
  *
- * @discussion
- *
- * Setting this property overrides the setting provided by the @link FOSRESTServiceAdapter @/link.
+ * @discussion Setting this property overrides the setting provided by the @link FOSRESTServiceAdapter @/link.
  */
 @property (nonatomic, strong) NSURL *baseURL;
 
@@ -196,9 +186,7 @@
  *
  * Setting this property is optional.
  *
- * @discussion
- *
- * If this property is set, it overrides any value set by baseURL.  However, if the evaluation
+ * @discussion If this property is set, it overrides any value set by baseURL.  However, if the evaluation
  * of baseURLExpr yields an error, baseURL will be returned.
  */
 @property (nonatomic, strong) id<FOSExpression> baseURLExpr;
@@ -222,9 +210,7 @@
  *
  * Setting this property is optional.
  *
- * @discussion
- *
- * For example, given the end point '1/MyClass' you might have additional parameters
+ * @discussion For example, given the end point '1/MyClass' you might have additional parameters
  * such as 'limit=1000' and 'skip=20' for a resulting end point of '1/MyClass?limit=1000&skip=20'.
  */
 @property (nonatomic, strong) NSArray *endPointParameters;
@@ -235,9 +221,7 @@
  * The key that server expects objects to be wrapped under.  If the object is
  * not under any key, this value should be nil.
  *
- * @discussion
- *
- * This key is also used to look into parent-supplied results to see if parent
+ * @discussion This key is also used to look into parent-supplied results to see if parent
  * server queries might have provided the child's information.
  *
  * Setting this property is optional.
@@ -250,9 +234,7 @@
  * The key under which to look in the top-level expression's originalJson to
  * find JSON packets for data that matches the URLBinding.
  *
- * @discussion
- *
- * As an optimization, the server can package up data components related to
+ * @discussion As an optimization, the server can package up data components related to
  * data in a top-level query.  For example, consider pulling a user record
  * from the server.  Almost certainly that record will have relationships to
  * other data that will need to be pulled.  Such additional relationships will
@@ -346,9 +328,7 @@
  *
  * Creates an NSURLRequest that will retrieve the given server record.
  *
- * @discussion
- *
- * @link dslQuery @/link Is a 'Domain Specific Query', which is simply a string
+ * @discussion dslQuery Is a 'Domain Specific Query', which is simply a string
  * that is added as a parameter to the request url.  The query is specific to the
  * REST Service.
  */
@@ -363,9 +343,7 @@
  * Creates an NSURLRequest that will retrieve a set of server records that match the
  * given dslQuery.
  *
- * @discussion
- *
- * @link dslQuery @/link Is a 'Domain Specific Query', which is simply a string
+ * @discussion dslQuery Is a 'Domain Specific Query', which is simply a string
  * that is added as a parameter to the request url.  The query is specific to the
  * REST Service.
  */

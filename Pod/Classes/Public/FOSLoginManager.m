@@ -441,7 +441,7 @@ static NSString *kUserUidKey = @"FOS_LoggedInUserMOId";
 
             [blockSelf _setIsLoggingOut:NO];
 
-            [_restConfig clearModelCache];
+            [blockSelf->_restConfig clearModelCache];
 
             if (handler != nil) {
                 dispatch_async(dispatch_get_main_queue(), ^{

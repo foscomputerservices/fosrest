@@ -1041,7 +1041,7 @@
     NSParameterAssert([json isKindOfClass:[NSDictionary class]]);
 
     for (NSString *key in ((NSDictionary *)json).allKeys) {
-        id<NSObject> value = json[key];
+        id<NSObject> value = ((NSDictionary *)json)[key];
 
         if (result.length > 0) {
             [result appendString:@"&"];

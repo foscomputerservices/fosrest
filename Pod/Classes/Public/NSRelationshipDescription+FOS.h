@@ -38,9 +38,7 @@
  *
  * @field FOSForcePullType_UseCount Works like FOSForcePullType_Always, but consults the XXXCount_ count property on the owner instance to determine if there are any children to resolve.
  *
- * @discussion
- *
- * In the data model, the value of FOSForcePullType can be specified as either
+ * @discussion In the data model, the value of FOSForcePullType can be specified as either
  * the numerical value (e.g. 0, 1, 2), or the terminal name of the type (e.g. Never, Always, UseCount -- case insensitive).
  */
 
@@ -81,9 +79,7 @@ typedef NS_ENUM(NSUInteger, FOSForcePullType) {
  * Resolves to the leaf entity of this relationship as long as there is
  * exactly one leaf entity in the final tree.
  *
- * @discussion
- *
- * The issue is that the model often has relationships to entities that are not
+ * @discussion The issue is that the model often has relationships to entities that are not
  * abstract, but might have subtypes (possibly introduced in secondary models).
  * Thus, when we ask for the destinationEntity, we need the final subtype, not
  * just the intermediate type in the hierarcy.

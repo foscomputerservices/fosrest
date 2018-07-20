@@ -52,9 +52,7 @@
  * value to be used for the corresponding attribute
  * in the object model for a server login request.
  *
- * @return
- *
- * Returns nil if there is no corresponding key in
+ * @return Returns nil if there is no corresponding key in
  * the data model.
  */
 @property (nonatomic, readonly) NSString *jsonLogInProp;
@@ -66,9 +64,7 @@
  * value to be used for the corresponding attribute
  * in the object model for a server log out request.
  *
- * @return
- *
- * Returns nil if there is no corresponding key in
+ * @return Returns nil if there is no corresponding key in
  * the data model.
  */
 @property (nonatomic, readonly) NSString *jsonLogOutProp;

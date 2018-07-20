@@ -41,7 +41,7 @@
     #import "FOSREST_Internal.h"
 
     extern void yyerror(char* s, ...);
-    extern int yylex();
+    extern int yylex(void);
 
     // Referenced/managed by FOSAdapterBindingParser
     FOSAdapterBinding *parserAdapterBinding = nil;
@@ -192,7 +192,7 @@ binding
     | attribute_bindings { $$ = $1; }
     | relationship_bindings { $$ = $1; }
     | cmo_binding { $$ = $1; }
-    | relationship_binding { $$ = $1; }
+| relationship_voidvoidbinding { $$ = $1; }
     | timeout_interval { $$ = $1; }
     | request_format { $$ = (__bridge void *)AT_($1); }
     | matching_entities { $$ = $1; }

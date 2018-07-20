@@ -89,9 +89,7 @@
  * @param groupName  An optional string that will be associated with operation (and its
  *                   dependencies that will be used for logging purposes).
  *
- * @discussion
- *
- * The set of operations is bracketed to ensure that a new
+ * @discussion The set of operations is bracketed to ensure that a new
  * NSManagedObjectContext is added at the beginning and that
  * all changes made during the complete set of operations are
  * saved to the database when the operation set is complete.

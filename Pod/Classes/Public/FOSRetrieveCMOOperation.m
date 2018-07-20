@@ -781,13 +781,13 @@
             [self.managedObjectContext performBlockAndWait:^{
                 FOSCachedManagedObject *owner = [blockSelf.managedObjectContext objectWithID:ownerID];
 
-                for (NSRelationshipDescription *relDesc in _entity.cmoRelationships) {
+                for (NSRelationshipDescription *relDesc in blockSelf->_entity.cmoRelationships) {
                     if (!relDesc.isToMany && relDesc.isOptional) {
 
                         NSError *localError = nil;
-                        FOSCMOBinding *cmoBinding = _urlBinding.cmoBinding;
-                        FOSJsonId jsonRelId = [cmoBinding jsonIdFromJSON:_json
-                                                               forEntity:_entity
+                        FOSCMOBinding *cmoBinding = blockSelf->_urlBinding.cmoBinding;
+                        FOSJsonId jsonRelId = [cmoBinding jsonIdFromJSON:blockSelf->_json
+                                                               forEntity:blockSelf->_entity
                                                                    error:&localError];
 
                         if (localError == nil) {
@@ -796,11 +796,11 @@
                             }
                         }
                         else {
-                            _error = localError;
+                            blockSelf->_error = localError;
                         }
                     }
 
-                    if (_error != nil) {
+                    if (blockSelf->_error != nil) {
                         [blockSelf _updateReady];
                         break;
                     }
@@ -846,10 +846,12 @@
                 NSManagedObjectID *ownerID = self.managedObjectID;
                 NSManagedObjectContext *moc = self.managedObjectContext;
 
+                __block FOSRetrieveCMOOperation *blockSelf = self;
+                
                 [moc performBlockAndWait:^{
                     FOSCachedManagedObject *owner = [moc objectWithID:ownerID];
 
-                    for (NSRelationshipDescription *relDesc in _entity.cmoRelationships) {
+                    for (NSRelationshipDescription *relDesc in blockSelf->_entity.cmoRelationships) {
                         if (relDesc.isOrdered && !relDesc.isOwnershipRelationship) {
                             NSAssert(owner != nil, @"Unable to locate owner object!");
 
@@ -1012,16 +1014,16 @@
 
                     newCMO.hasRelationshipFaults = blockSelf->_createdFaults;
 
-                    _managedObjectID = newCMO.objectID;
+                    blockSelf->_managedObjectID = newCMO.objectID;
 
                     // The jsonId and managed object's jsonId should now align
-                    NSAssert([_jsonId isEqual:newCMO.jsonIdValue], @"Ids aren't the same???");
+                    NSAssert([blockSelf->_jsonId isEqual:newCMO.jsonIdValue], @"Ids aren't the same???");
 
                     // Add to bindings dictionary
-                    [[self class] _setBindingValue:_managedObjectID
+                    [[self class] _setBindingValue:blockSelf->_managedObjectID
                                             forKey:newCMO.jsonIdValue
-                                             enity:_entity
-                                        inBindings:_bindings];
+                                             enity:blockSelf->_entity
+                                        inBindings:blockSelf->_bindings];
                 }];
             }
 
@@ -1038,22 +1040,23 @@
             __block NSError *error = nil;
 
             NSManagedObjectID *objID = self.managedObjectID;
+            __block FOSRetrieveCMOOperation *blockSelf = self;
             [moc performBlockAndWait:^{
                 FOSCachedManagedObject *obj = (FOSCachedManagedObject *)[moc objectWithID:objID];
 
                 // Store the json
-                obj.originalJsonData = [NSJSONSerialization dataWithJSONObject:_json
+                obj.originalJsonData = [NSJSONSerialization dataWithJSONObject:blockSelf->_json
                                                                        options:0
                                                                          error:&error];
 
                 if (error == nil) {
                     [binder updateCMO:obj
-                        fromJSON:(NSDictionary *)_json
+                        fromJSON:(NSDictionary *)blockSelf->_json
                     forLifecyclePhase:FOSLifecyclePhaseRetrieveServerRecord
                                 error:&error];
                 }
 
-                _error = error;
+                blockSelf->_error = error;
 
                 // updateWithJSONDictionary will mark the object clean (and thus remove
                 // all modified properties), if there were not conflicts while updating.

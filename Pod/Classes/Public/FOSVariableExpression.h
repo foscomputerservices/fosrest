@@ -37,9 +37,7 @@
  * Provides a mechanism to set the context for NSExpression instances, thus allowing
  * them to be evaluated on differing 'variables'.
  *
- * @discussion
- *
- * The following variables are well-known variables that are established by the runtime:
+ * @discussion The following variables are well-known variables that are established by the runtime:
  *
  *  CMO             - The CMO
  *  ENTITY          - The entity of the CMO (same as $CMO.entity)

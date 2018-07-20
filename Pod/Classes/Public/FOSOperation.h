@@ -59,9 +59,7 @@
  * A string that is primarily used for debugging purposes that describes
  * the group of operations.
  *
- * @remarks
- *
- * This property is simply an alias for self.beginOperation.groupName;
+ * @remarks This property is simply an alias for self.beginOperation.groupName;
  */
 @property (nonatomic, readonly) NSString *groupName;
 
@@ -71,16 +69,12 @@
  * Each closed set of FOSOperations that are interdependent has a single
  * NSManagedObjectContext that is managed by the associated FOSBeginOperation.
  *
- * @remarks
- *
- * This property is simply an alias for [FOSOperation currentQueue].managedObjectContext.
+ * @remarks This property is an alias for [FOSOperation currentQueue].managedObjectContext.
  */
 @property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
 /*!
- * @property error
- *
- * Traverses the entire dependency tree and returns the first error encountered,
+ * @property error Traverses the entire dependency tree and returns the first error encountered,
  * or nil if none.
  */
 @property (nonatomic, readonly) NSError *error;
@@ -108,9 +102,7 @@
  *
  * Returns the total number operations that this operation is dependent upon.
  *
- * @remarks
- *
- * Due to the undirected graph nature of the dependencies, many operations
+ * @remarks Due to the undirected graph nature of the dependencies, many operations
  * will be counted multiple times.  However the graph is always rooted
  * in a FOSBeginOperation, so the count stops at that point in the graph
  * and does terminate.  This count will just be much larger than
@@ -129,9 +121,7 @@
  * Returns the total number operations that this operation is dependent upon
  * that have been marked as isFinished == YES.
  *
- * @remarks
- *
- * This property is KVO compliant.
+ * @remarks This property is KVO compliant.
  */
 @property (nonatomic, readonly) NSUInteger finishedDependentOperations;
 

@@ -30,7 +30,7 @@
 #import "FOSCachedManagedObjectTests.h"
 #import "FOSRESTTests.h"
 #import "FOSLoginManagerTests.h"
-#import "FOSREST.h"
+#import "FOSRest.h"
 #import "NSObject+Tests.h"
 #import "Note.h"
 #import "TestCreate.h"
@@ -44,7 +44,7 @@
 #import "TestToManyDestMin.h"
 #import "TestToManySearchOperation.h"
 
-typedef void (^EmptyHandler)();
+typedef void (^EmptyHandler)(void);
 
 @implementation FOSCachedManagedObjectTests
 
@@ -638,7 +638,7 @@ TEARDOWN_LOGIN
                     XCTAssertFalse(cancelled, @"Cancelled??");
                     // It should fail as it doesn't exist!
                     XCTAssertNotNil(error, @"No error???");
-                    XCTAssertNil(request.jsonResult[@"objectId"],
+                    XCTAssertNil(((NSDictionary *)request.jsonResult)[@"objectId"],
                                  @"Object still exists on the server!! %@", request.jsonResult);
 
                     END_TEST

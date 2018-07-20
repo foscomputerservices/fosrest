@@ -80,9 +80,7 @@
  * Identifies that this property cannot be sent to the server, only
  * pulled down.
  *
- * @discussion
- *
- * Both isReceiveOnlyAttribute and isSendOnlyAttribute cannot be true.
+ * @discussion Both isReceiveOnlyAttribute and isSendOnlyAttribute cannot be true.
  */
 @property (nonatomic, assign) BOOL isReceiveOnlyAttribute;
 
@@ -92,9 +90,7 @@
  * Identifies that this property cannot be received from the server, only
  * sent to it.
  *
- * @discussion
- *
- * Both isReceiveOnlyAttribute and isSendOnlyAttribute cannot be true.
+ * @discussion Both isReceiveOnlyAttribute and isSendOnlyAttribute cannot be true.
  */
 @property (nonatomic, assign) BOOL isSendOnlyAttribute;
 

@@ -30,7 +30,7 @@
 #import <XCTest/XCTest.h>
 #import "FOSCachedManagedObjectTests.h"
 #import "FOSRESTTests.h"
-#import "FOSREST.h"
+#import "FOSRest.h"
 #import "FOSLoginManagerTests.h"
 #import "FOSPullStaticTablesOperation.h"
 #import "FOSRefreshUserOperation.h"

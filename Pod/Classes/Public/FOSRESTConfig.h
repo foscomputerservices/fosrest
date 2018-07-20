@@ -127,9 +127,7 @@
  *
  * Returns the current networkStatus as provided by the FOSNetworkStatusMonitor.
  *
- * @remarks
- *
- * This property is KVO compliant.
+ * @remarks This property is KVO compliant.
  */
 @property (nonatomic, readonly) FOSNetworkStatus networkStatus;
 
@@ -158,9 +156,7 @@
  * endpoints that can be called even when there's no logged in
  * user.
  *
- * @discussion
- *
- * The following endpoints are automatically considered to be
+ * @discussion The following endpoints are automatically considered to be
  * valid offline endpoints:
  * 
  *   * [userSubType entityDescription].jsonPOSTEndPoint
@@ -192,9 +188,7 @@
  *
  * @throws FOSBadUserSubType
  *
- * @discussion
- *
- * This method can only be called one time at initialization of the application.
+ * @discussion This method can only be called one time at initialization of the application.
  */
 + (void)configWithApplicationVersion:(NSString *)appVersion
                              options:(FOSRESTConfigOptions)options
@@ -208,9 +202,7 @@
  *
  * @throws FOSNotInitialized
  *
- * @discussion
- *
- * This method is safe to use from multiple threads.
+ * @discussion This method is safe to use from multiple threads.
  */
 + (instancetype)sharedInstance;
 

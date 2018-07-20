@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSREST.h"
+#import "FOSRest.h"
 #import "FOSAdapterBindingParser.h"
 
 @interface FOSFOSRESTBindingParserTests : XCTestCase

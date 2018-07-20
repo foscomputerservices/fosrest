@@ -109,13 +109,11 @@
 - (NSDictionary *)headerFields;
 
 /*!
- * @method maxBatchCount
+ * @property maxBatchCount
  *
  * Returns the maximum number of requests that can be batched together.
  *
- * @discussion
- *
- * If the receiver implements this property AND returns a value > 0, then
+ * @discussion If the receiver implements this property AND returns a value > 0, then
  * the receiver *must* implement requestCanBeBatched:, generateBatchRequestForRequests:
  * and processResultsOfBatchRequest:forRequests:.
  */
@@ -156,9 +154,7 @@
  *
  * For example NSColor could be encoded into an NSData or NSString instance.
  *
- * @discussion
- *
- * If this method is implemented, @link decodeJSONValueToCMOValue @/link should also
+ * @discussion If this method is implemented, @link decodeJSONValueToCMOValue @/link should also
  * be implemented.
  */
 - (id<NSObject>)encodeCMOValueToJSON:(id)cmoValue
@@ -173,9 +169,7 @@
  *
  * For example an NSData or NSString could be decoded into an NSColor instance.
  *
- * @discussion
- *
- * If this method is implemented, @link encodeCMOValueToJSON @/link should also
+ * @discussion If this method is implemented, @link encodeCMOValueToJSON @/link should also
  * be implemented.
  */
 - (id)decodeJSONValueToCMOValue:(id<NSObject>)jsonValue
@@ -189,9 +183,7 @@
  * Provides for the binding of adapter specific variables.
  * See @link FOSBindingExpression @/link.
  *
- * @discussion
- *
- * This method is declared as @optional, however if there are
+ * @discussion This method is declared as @optional, however if there are
  * any adapter specific variables, this method must be implemented.
  */
 - (id)valueForExpressionVariable:(NSString *)varName matched:(BOOL *)matched error:(NSError **)error;
@@ -228,9 +220,7 @@
  * It is critical to note that the thread on which this
  * invocation is made is not defined.
  *
- * @discussion
- *
- * For example, parse.com's user model contains a user id
+ * @discussion For example, parse.com's user model contains a user id
  * which is separate from the email.  When we create an
  * account for parse.com, we might want to specify that
  * both the user id and the email are the same upon
@@ -293,9 +283,7 @@
  * It is critical to note that the thread on which this
  * invocation is made is not defined.
  *
- * @discussion
- *
- * An example usage of this functionality would be to store off information
+ * @discussion An example usage of this functionality would be to store off information
  * received when a login completed.  Possibly a token was passed in the
  * information that might be needed at a later point, for example.
  */

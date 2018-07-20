@@ -91,9 +91,7 @@
  *
  * Mark the receiver as not to be deleted from the server.
  *
- * @discussion
- *
- * This is generally used when we have recognized that the server had
+ * @discussion This is generally used when we have recognized that the server had
  * deleted an object and it needs to be removed from the local store.
  *
  * Obviously since the object is no longer on the server, we don't need
@@ -120,9 +118,7 @@
  *
  * Returns the force-pull status for the given relationship.
  *
- * @discussion
- *
- * The default implementation of this method returns the jsonRelationshipForcePull property of the relationship.
+ * @discussion The default implementation of this method returns the jsonRelationshipForcePull property of the relationship.
  *
  * If the given type prefers to determine this status dynamically based on the receiver's state this method may be overridden.
  *
@@ -201,9 +197,7 @@
 /*!
  * @method retrieveCMOForJsonId:
  *
- * @discussion
- *
- * This method corresponds to the FOSLifecyclePhaseRetrieveServerRecord
+ * @discussion This method corresponds to the FOSLifecyclePhaseRetrieveServerRecord
  * @link FOSLifecyclePhase @/link.
  */
 + (FOSRetrieveCMOOperation * _Nonnull)retrieveCMOForJsonId:(FOSJsonId _Nonnull)jsonId;
@@ -223,9 +217,7 @@
  * the values of the properties returned by
  * @link propertiesModifiedSinceLastUpload @/link.
  *
- * @discussion
- *
- * This method corresponds to both the
+ * @discussion This method corresponds to both the
  * FOSLifecyclePhaseCreateServerRecord and the
  * FOSLifecyclePhaseUpdateServerRecord @link FOSLifecyclePhase @/link,
  * depending on the receiver's @link hasBeenUploadedToServer @/link
@@ -241,9 +233,7 @@
  * Creates an instance of the receiver on the server and then
  * pulls the resulting instance into the database from the server.
  *
- * @discussion
- *
- * This helper method corresponds to the FOSLifecyclePhaseCreateServerRecord
+ * @discussion This helper method corresponds to the FOSLifecyclePhaseCreateServerRecord
  * AND FOSLifecyclePhaseRetrieveServerRecord @link FOSLifecyclePhase @/link s.
  *
  * This method has more overhead than simply creating a Core Data
@@ -267,9 +257,7 @@
  * Returns the receiver's id value to use to identify itself
  * in JSON objects.
  *
- * @discussion
- *
- * The implementation of this property uses the adapter map's ID_ATTRIBUTE
+ * @discussion The implementation of this property uses the adapter map's ID_ATTRIBUTE
  * mapping.  Thus, this property must not be used to specify the adapter map's
  * ID_ATTRIBUTE.
  */
@@ -278,9 +266,7 @@
 #pragma mark - Public methods
 
 /*!
- * @method markClean
- *
- * Marks the receiver clean with respect to the REST service.  Any outstanding
+ * @method markClean Marks the receiver clean with respect to the REST service.  Any outstanding
  * indications that local changes were made to the receiver are erased
  * (e.g. propertiesModifiedSinceLastUpload will be empty).
  */
@@ -299,9 +285,7 @@
  * Indicates whether the receiver has ever been uploaded
  * to the server.
  *
- * @discussion
- *
- * The base implementation of this method uses the
+ * @discussion The base implementation of this method uses the
  * @link updatedWithServerAt @/link property to determine this
  * status.
  */
@@ -320,9 +304,7 @@
  *
  * Returns the force-pull status for the given relationship.
  *
- * @discussion
- *
- * The default implementation of this method returns the jsonRelationshipForcePull property of the relationship.
+ * @discussion The default implementation of this method returns the jsonRelationshipForcePull property of the relationship.
  *
  * If the given type prefers to determine this status dynamically based on the receiver's state this method may be overridden.
  *
@@ -350,9 +332,7 @@
  *
  * Refreshes the receiver's named relationship with the REST server.
  *
- * @discussion
- *
- * This method calls efreshRelationshipNamed:dslQuery:mergeResults:handler: with
+ * @discussion This method calls efreshRelationshipNamed:dslQuery:mergeResults:handler: with
  * mergeResults = NO; that is, results will be synchronized.
  */
 - (void)refreshRelationshipNamed:(NSString * _Nonnull)relName
@@ -390,11 +370,11 @@
  *                     the existing results.  This allows the relationship to be
  *                     incrementally add to as opposed to synchronized.
  *
- * @param preSaveOperation An operation that is queued to run immediately before
- *                         any updates that are made by the refresh are saved
- *                         to the managed object context.  This allows for many
- *                         options, but one in particular is to cancel the refresh
- *                         action in the case that it is no longer needed.
+ * @param preSaveOp An operation that is queued to run immediately before
+ *                  any updates that are made by the refresh are saved
+ *                  to the managed object context.  This allows for many
+ *                  options, but one in particular is to cancel the refresh
+ *                  action in the case that it is no longer needed.
  *
  * Refreshes the receiver's named relationship with the REST server.
  */

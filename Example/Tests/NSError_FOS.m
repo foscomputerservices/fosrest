@@ -28,7 +28,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "FOSREST.h"
+#import "FOSRest.h"
 
 @interface NSError_FOS : XCTestCase
 

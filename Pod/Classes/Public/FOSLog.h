@@ -67,9 +67,7 @@ void FOSLogInfoS(NSString *message);
  *
  * Displays a log message at the FOSLogLevelDebug logging level.
  *
- * @discussion
- *
- * By default messages sent by this function will *not* be displayed
+ * @discussion By default messages sent by this function will *not* be displayed
  * as FOSLogLevelDebug is lower than the default level FOSLogLevelInfo.
  *
  * To set a lower threshold, see @link FOSSetLogLevel @/link.
@@ -86,9 +84,7 @@ void FOSLogDebugS(NSString *message);
  * which may be difficult to sift through in general, but extremely useful
  * when things are going wrong.
  *
- * @discussion
- *
- * By default messages sent by this function will *not* be displayed
+ * @discussion By default messages sent by this function will *not* be displayed
  * as FOSLogLevelPedantic is lower than the default level FOSLogLevelInfo.
  *
  * To set a lower threshold, see @link FOSSetLogLevel @/link.
@@ -101,16 +97,14 @@ void FOSLogPedanticS(NSString *message);
  *
  * Returns the current log level setting.
  */
-FOSLogLevel FOSGetLogLevel();
+FOSLogLevel FOSGetLogLevel(void);
 
 /*!
  * @function FOSSetLogLevel
  *
  * Sets the 'lowest' level which will be output to STDERR.
  *
- * @discussion
- *
- * By default this value is set fo FOSLogLevelInfo and no
+ * @discussion By default this value is set fo FOSLogLevelInfo and no
  * FOSLogDebug() messages will be displayed.  This should
  * be the 'lowest' level set for shipping applications.
  */

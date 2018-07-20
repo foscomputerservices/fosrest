@@ -41,14 +41,10 @@
 /*!
  * @property isLoggedIn
  *
- * @return
- *
- * YES if the application has server credentials stored,
+ * @return YES if the application has server credentials stored,
  * NO otherwise.
  *
- * @discussion
- *
- * The concept of 'logged in' is that the application has
+ * @discussion The concept of 'logged in' is that the application has
  * credentials stored that *could* be used to authenticate calls
  * to the server.  Thus, this check is a trivial check that there
  * are credentials saved.
@@ -86,9 +82,7 @@
 /*!
  * @property loggedInUser
  *
- * @return
- *
- * The currently logged in user information or nil if the
+ * @return The currently logged in user information or nil if the
  * user is not logged in.
  *
  * The resulting type is actually an instance of the class
@@ -114,10 +108,8 @@
  *
  * @throws FOSLoggedIn, FOSLocalUser
  *
- * @discussion
- *
- * - It is illegal to call this method if an account is already logged in.
- * - 'user' must be marked as isLoginUser
+ * @discussion It is illegal to call this method if an account is already logged in.
+ * 'user' must be marked as isLoginUser
  *
  * Upon successful call to 'handler', ownership of 'user' is taken over by the login manager.
  * If a temporary user was created, there's no need to delete it.  At the same time,
@@ -141,9 +133,7 @@
  *
  * @throws FOSLoggedIn
  *
- * @discussion
- *
- * - This method must be called from the Main thread.
+ * @discussion - This method must be called from the Main thread.
  * - It is illegal to call this method if an account is already logged in.
  * - 'user' must have either the isLocalOnly or isLoginUser set
  *
@@ -172,9 +162,7 @@
  *
  * @throws FOSNotLoggedIn
  *
- * @discussion
- *
- * It is illegal to call this method if the account is not already logged in or
+ * @discussion It is illegal to call this method if the account is not already logged in or
  * if a logout operation is already scheduled.
  */
 - (void)logout:(FOSLoginHandler)handler;
@@ -195,9 +183,7 @@
  *                 attempted to be delivered to the server and the status
  *                 of the attempt.
  *
- * @discussion
- *
- * This method may be called regardless of whether the user is logged in.
+ * @discussion This method may be called regardless of whether the user is logged in.
  */
 - (void)resetPasswordForResetKey:(NSString *)resetKey
                         andValue:(NSString *)resetValue

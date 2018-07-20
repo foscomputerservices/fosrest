@@ -29,7 +29,7 @@
 
 #import "FOSLoginManagerTests.h"
 #import "FOSRESTTests.h"
-#import "FOSREST.h"
+#import "FOSRest.h"
 #import "User.h"
 #import "Widget.h"
 #import "FOSTestHarnessAdapter.h"

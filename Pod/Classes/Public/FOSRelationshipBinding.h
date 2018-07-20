@@ -93,9 +93,7 @@
  * The key that server expects objects to be wrapped under.  If the object is
  * not under any key, this value should be nil.
  *
- * @discussion
- *
- * This key is also used to look into parent-supplied results to see if parent
+ * @discussion This key is also used to look into parent-supplied results to see if parent
  * server queries might have provided the child's information.
  *
  * Setting this property is optional.

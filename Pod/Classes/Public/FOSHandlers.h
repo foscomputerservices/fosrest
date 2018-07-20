@@ -16,5 +16,5 @@ typedef void (^FOSCacheSearchHandler)(NSSet * _Nullable results, NSError * _Null
 typedef void (^FOSBackgroundRequest)(BOOL cancelled, NSError * _Nullable error);
 typedef FOSRecoveryOption (^FOSRecoverableBackgroundRequest)(BOOL cancelled, NSError * _Nullable error);
 typedef void (^FOSLoginHandler)(BOOL succeeded, NSError * _Nullable error);
-typedef NSManagedObjectID * _Nullable (^FOSWebServiceWillProcessHandler)();
+typedef NSManagedObjectID * _Nullable (^FOSWebServiceWillProcessHandler)(void);
 

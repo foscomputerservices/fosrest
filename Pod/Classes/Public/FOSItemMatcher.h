@@ -117,9 +117,7 @@
  *
  * Enumerates the subjectGroup of instances and all matches are returned.
  *
- * @discussion
- *
- * Selector is invoked on each item in subjectGroup to retrieve a value to compare
+ * @discussion Selector is invoked on each item in subjectGroup to retrieve a value to compare
  * against the item matcher.
  */
 - (NSSet *)matchedItems:(id<NSFastEnumeration>)subjectGroup
@@ -131,9 +129,7 @@
  *
  * Enumerates the subjectGroup of instances and all misses are returned.
  *
- * @discussion
- *
- * Selector is invoked on each item in subjectGroup to retrieve a value to compare
+ * @discussion Selector is invoked on each item in subjectGroup to retrieve a value to compare
  * against the item matcher.
  */
 - (NSSet *)unmatchedItems:(id<NSFastEnumeration>)subjectGroup

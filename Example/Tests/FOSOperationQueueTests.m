@@ -29,7 +29,7 @@
 
 #import <XCTest/XCTest.h>
 #import "FOSRESTTests.h"
-#import "FOSREST.h"
+#import "FOSRest.h"
 #import "TestCreate.h"
 #import "User.h"
 

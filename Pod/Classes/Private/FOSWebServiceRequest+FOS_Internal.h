@@ -51,9 +51,7 @@ typedef void (^FOSRequestPostProcessor)(id<NSObject> originalJsonResult, id<NSOb
  * @param postProcessor A block that will be executed after the json results have been processed,
  *                      but before marking the operation as finished.
  *
- * @discussion
- *
- * Subclasses should be very careful about overriding this method.  Since this method
+ * @discussion Subclasses should be very careful about overriding this method.  Since this method
  * changes the operation's state to finished, this will allow any NSOperations that are
  * dependent upon this operation to start.  Those operations might be running on different
  * threads, so any code that is executed after calling this method must not be code

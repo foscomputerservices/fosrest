@@ -43,9 +43,7 @@
  *
  * @constant FOSRESTConfigSaveOfflineChanges Causes any changes made while the user is offline (logged out) to the database.  The default behavior is to not save changes.
  *
- * @discussion
- *
- * These configuration options turn on optional behaviors of the FOSREST service.
+ * @discussion These configuration options turn on optional behaviors of the FOSREST service.
  */
 typedef NS_OPTIONS(NSUInteger, FOSRESTConfigOptions) {
     FOSRESTConfigOptionsNone = (0),

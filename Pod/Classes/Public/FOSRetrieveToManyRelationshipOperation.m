@@ -146,21 +146,21 @@
             FOSCachedManagedObject *owner = (FOSCachedManagedObject *)[moc objectWithID:ownerId];
 
             NSAssert(owner != nil, @"Unable to locate owner object!");
-            NSAssert(_relationship.isOwnershipRelationship, @"Not an ownership relationship???");
+            NSAssert(blockSelf->_relationship.isOwnershipRelationship, @"Not an ownership relationship???");
 
             id relationshipMutableSet = nil;
-            if (_relationship.isOrdered) {
-                relationshipMutableSet = [owner mutableOrderedSetValueForKey:_relationship.name];
+            if (blockSelf->_relationship.isOrdered) {
+                relationshipMutableSet = [owner mutableOrderedSetValueForKey:blockSelf->_relationship.name];
             }
             else {
-                relationshipMutableSet = [owner mutableSetValueForKey:_relationship.name];
+                relationshipMutableSet = [owner mutableSetValueForKey:blockSelf->_relationship.name];
             }
 
             BOOL encounteredErrors = NO;
 
             // There no longer exist any relations, so make sure to clear the local relationships.
-            if (_childRetrieveCMOOps.count == 0) {
-                if (!_mergeResults) {
+            if (blockSelf->_childRetrieveCMOOps.count == 0) {
+                if (!blockSelf->_mergeResults) {
                     id<NSFastEnumeration> deadCMOs = [relationshipMutableSet mutableCopy];
 
                     for (FOSCachedManagedObject *nextDeadCMO in deadCMOs) {
@@ -183,8 +183,8 @@
             }
             else {
                 // Gather the, now realized, entities
-                NSMutableSet *newEntries = [NSMutableSet setWithCapacity:_childRetrieveCMOOps.count];
-                for (FOSRetrieveCMOOperation *nextOp in _childRetrieveCMOOps) {
+                NSMutableSet *newEntries = [NSMutableSet setWithCapacity:blockSelf->_childRetrieveCMOOps.count];
+                for (FOSRetrieveCMOOperation *nextOp in blockSelf->_childRetrieveCMOOps) {
 
                     // If the op was cancelled, we won't include it in our result set.
                     // One way that an op can be cancelled is if it was marked as deleted
@@ -211,7 +211,7 @@
                             [newEntries addObject:nextCMO];
 
                             // Set Inverse relationship
-                            NSRelationshipDescription *inverse = _relationship.inverseRelationship;
+                            NSRelationshipDescription *inverse = blockSelf->_relationship.inverseRelationship;
                             if (!inverse.isToMany) {
                                 Class managedClass = NSClassFromString([inverse.entity managedObjectClassName]);
                                 FOSForcePullType forcePull = [managedClass forcePullForRelationship:inverse givenJSON:nextCMO.originalJson];
@@ -236,18 +236,18 @@
                             }
                         }
                         else {
-                            if (!_relationship.isOptional) {
+                            if (!blockSelf->_relationship.isOptional) {
                                 NSAssert(nextOp.error != nil, @"Should only get here on an error!");
                                 NSAssert(blockSelf.error != nil, @"We should have an error as one of our deps has an error.");
 
                                 encounteredErrors = YES;
-                                _ignoreDependentErrors = NO;
+                                blockSelf->_ignoreDependentErrors = NO;
                                 break;
                             }
                             else {
                                 FOSLogWarning(@"IGNORING ERROR: during to-many fetch operation %@ to entity %@: %@",
-                                      _relationship.name, _relationship.entity.name, nextOp.error.description);
-                                _ignoreDependentErrors = YES;
+                                      blockSelf->_relationship.name, blockSelf->_relationship.entity.name, nextOp.error.description);
+                                blockSelf->_ignoreDependentErrors = YES;
                             }
                         }
                     }
@@ -261,8 +261,8 @@
                     [relationshipMutableSet unionSet:newEntries];
 
                     // Sort the ordered set
-                    if (_relationship.isOrdered) {
-                        NSString *orderProp = _relationship.jsonOrderProp;
+                    if (blockSelf->_relationship.isOrdered) {
+                        NSString *orderProp = blockSelf->_relationship.jsonOrderProp;
                         NSArray *sortKeys = [orderProp componentsSeparatedByString:@","];
                         NSMutableArray *sortDescs = [NSMutableArray arrayWithCapacity:sortKeys.count];
 

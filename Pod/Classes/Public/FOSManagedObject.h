@@ -49,9 +49,7 @@
  * receiver's entity.jsonIsStaticTableEntity property along
  * with allowing subclasses to add their own logic.
  *
- * @discussion
- *
- * Subclasses that override this property should consult
+ * @discussion Subclasses that override this property should consult
  * [super isReadOnly] first and then add their own
  * logic if YES is returned.
  */

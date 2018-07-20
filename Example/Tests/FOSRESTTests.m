@@ -28,7 +28,7 @@
 //
 
 #import "FOSRESTTests.h"
-#import "FOSREST.h"
+#import "FOSRest.h"
 #import "User.h"
 
 @implementation FOSRESTTests

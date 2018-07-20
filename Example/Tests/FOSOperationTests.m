@@ -29,7 +29,7 @@
 
 #import <XCTest/XCTest.h>
 #import "FOSRESTTests.h"
-#import "FOSREST.h"
+#import "FOSRest.h"
 
 typedef void (^FOSOpKVOHandler)(NSString *keyPath, id object, NSDictionary *change, void *context);
 
